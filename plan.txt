@@ -1,0 +1,102 @@
+the-susmita-collection/
+│
+├── app/
+│   ├── layout.tsx
+│   ├── page.tsx
+│   ├── globals.css
+│   │
+│   ├── shop/
+│   │   └── page.tsx
+│   │
+│   ├── sarees/
+│   │   └── page.tsx
+│   │
+│   ├── kurtis/
+│   │   └── page.tsx
+│   │
+│   ├── nightwear/
+│   │   └── page.tsx
+│   │
+│   ├── product/
+│   │   └── [slug]/
+│   │       └── page.tsx
+│   │
+│   ├── cart/
+│   │   └── page.tsx
+│   │
+│   ├── checkout/
+│   │   └── page.tsx
+│   │
+│   ├── about/
+│   │   └── page.tsx
+│   │
+│   ├── contact/
+│   │   └── page.tsx
+│   │
+│   └── api/
+│       ├── products/
+│       │   └── route.ts
+│       ├── orders/
+│       │   └── route.ts
+│       └── contact/
+│           └── route.ts
+│
+├── components/
+│   ├── layout/
+│   │   ├── Header.tsx
+│   │   ├── Footer.tsx
+│   │   ├── Navbar.tsx
+│   │   └── MobileMenu.tsx
+│   │
+│   ├── home/
+│   │   ├── Hero.tsx
+│   │   ├── Categories.tsx
+│   │   ├── FeaturedProducts.tsx
+│   │   ├── NewArrivals.tsx
+│   │   └── Newsletter.tsx
+│   │
+│   ├── product/
+│   │   ├── ProductCard.tsx
+│   │   ├── ProductGrid.tsx
+│   │   ├── ProductGallery.tsx
+│   │   ├── ProductInfo.tsx
+│   │   └── AddToCart.tsx
+│   │
+│   └── ui/
+│       ├── Button.tsx
+│       ├── Modal.tsx
+│       ├── Loader.tsx
+│       └── Pagination.tsx
+│
+├── lib/
+│   ├── db.ts
+│   ├── utils.ts
+│   └── validations.ts
+│
+├── models/
+│   ├── Product.ts
+│   ├── Category.ts
+│   └── Order.ts
+│
+├── types/
+│   ├── product.ts
+│   ├── category.ts
+│   └── order.ts
+│
+├── public/
+│   ├── images/
+│   │   ├── logo/
+│   │   ├── banners/
+│   │   ├── sarees/
+│   │   ├── kurtis/
+│   │   └── nightwear/
+│   │
+│   └── icons/
+│
+├── .env.local
+├── .gitignore
+├── next.config.ts
+├── package.json
+├── postcss.config.mjs
+├── tsconfig.json
+└── README.md

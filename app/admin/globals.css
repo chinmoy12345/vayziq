@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f7f8fa;
+  --foreground: #20242b;
+  --admin-ink: #20242b;
+  --admin-muted: #68707d;
+  --admin-border: #e6e8ed;
+  --admin-surface: #ffffff;
+  --admin-canvas: #f7f8fa;
+  --admin-accent: #a87567;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--admin-canvas);
+  color: var(--admin-ink);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+.admin-page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 1.75rem;
+}
+
+.admin-content {
+  background:
+    radial-gradient(circle at 100% 0%, rgb(168 117 103 / 0.055), transparent 30rem),
+    var(--admin-canvas);
+}
+
+.admin-content :is(input, select, textarea):focus-visible,
+.admin-content button:focus-visible,
+.admin-content a:focus-visible {
+  outline: 2px solid rgb(168 117 103 / 0.6);
+  outline-offset: 2px;
+}
+
+.admin-page-eyebrow {
+  margin-bottom: 0.45rem;
+  color: var(--admin-accent);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.admin-page-title {
+  color: var(--admin-ink);
+  font-size: 1.625rem;
+  font-weight: 650;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+}
+
+.admin-page-description {
+  margin-top: 0.5rem;
+  color: var(--admin-muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+  .admin-page-header { align-items: flex-start; flex-direction: column; }
+}

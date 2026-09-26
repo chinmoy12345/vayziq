@@ -1,0 +1,725 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma-suppliers"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =====================================================
+// ENUMS
+// =====================================================
+
+enum UserStatus {
+  active
+  inactive
+  suspended
+}
+
+enum CategoryStatus {
+  active
+  inactive
+}
+
+// =====================================================
+// USER
+// =====================================================
+
+model User {
+  id           Int        @id @default(autoincrement())
+  name         String
+  email        String     @unique
+  mobile       String?    @unique
+  passwordHash String
+  status       UserStatus @default(active)
+
+  // Dynamic RBAC
+  roles                    UserRole[]
+  inventoryMovements       InventoryMovement[] @relation("InventoryMovementActor")
+  purchasesCreated         Purchase[]          @relation("PurchaseCreator")
+  supplierPaymentsRecorded SupplierPayment[]   @relation("SupplierPaymentRecorder")
+  orders                   Order[]
+  addresses                Address[]
+  cartItems                CartItem[]
+  wishlistItems            WishlistItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+}
+
+// =====================================================
+// ROLE
+// =====================================================
+
+model Role {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  slug        String  @unique
+  description String?
+
+  // Users assigned to this role
+  users UserRole[]
+
+  // Permissions assigned to this role
+  permissions RolePermission[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// =====================================================
+// USER ↔ ROLE
+// =====================================================
+
+model UserRole {
+  id     Int @id @default(autoincrement())
+  userId Int
+  roleId Int
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, roleId])
+  @@index([userId])
+  @@index([roleId])
+}
+
+// =====================================================
+// PERMISSION
+// =====================================================
+
+model Permission {
+  id          Int     @id @default(autoincrement())
+  module      String
+  action      String
+  name        String?
+  description String?
+
+  // Roles having this permission
+  roles RolePermission[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([module, action])
+  @@index([module])
+}
+
+// =====================================================
+// ROLE ↔ PERMISSION
+// =====================================================
+
+model RolePermission {
+  id           Int @id @default(autoincrement())
+  roleId       Int
+  permissionId Int
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@unique([roleId, permissionId])
+  @@index([roleId])
+  @@index([permissionId])
+}
+
+// =====================================================
+// CATEGORY
+// =====================================================
+
+model Category {
+  id          Int            @id @default(autoincrement())
+  name        String
+  slug        String         @unique
+  description String?
+  image       String?
+  status      CategoryStatus @default(active)
+  featured    Boolean        @default(false)
+  sortOrder   Int            @default(0)
+  parentId    Int?
+
+  parent   Category?  @relation("CategoryTree", fields: [parentId], references: [id], onDelete: SetNull)
+  children Category[] @relation("CategoryTree")
+  products Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([featured])
+  @@index([sortOrder])
+  @@index([parentId])
+}
+
+// =====================================================
+// PRODUCT ENUMS
+// =====================================================
+
+enum ProductStatus {
+  active
+  draft
+}
+
+// =====================================================
+// PRODUCT
+// =====================================================
+
+model Product {
+  id   Int    @id @default(autoincrement())
+  name String
+  slug String @unique
+
+  sku String @unique
+
+  description String?
+  videoUrl    String?
+
+  price        Decimal  @db.Decimal(12, 2)
+  comparePrice Decimal? @db.Decimal(12, 2)
+
+  stock        Int @default(0)
+  reorderLevel Int @default(5)
+
+  status ProductStatus @default(draft)
+
+  featured Boolean @default(false)
+
+  hasVariations      Boolean @default(false)
+  returnEnabled      Boolean @default(true)
+  replacementEnabled Boolean @default(true)
+  returnDays         Int     @default(7)
+  replacementDays    Int     @default(7)
+
+  // Product Images
+  images ProductImage[]
+
+  // Category
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  // Dynamic variation options
+  options ProductOption[]
+
+  // Product variants
+  variants           ProductVariant[]
+  inventoryMovements InventoryMovement[]
+  purchaseItems      PurchaseItem[]
+  orderItems         OrderItem[]
+  cartItems          CartItem[]
+  wishlistItems      WishlistItem[]
+  reviews            Review[]
+  engagement         ProductEngagement?
+  likes              ProductLike[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([status])
+  @@index([featured])
+  @@index([sku])
+}
+
+// =====================================================
+model ProductEngagement {
+  productId  Int      @id
+  likeCount  Int      @default(0)
+  shareCount Int      @default(0)
+  updatedAt  DateTime @updatedAt
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model ProductLike {
+  productId Int
+  visitorId String   @db.VarChar(36)
+  createdAt DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@id([productId, visitorId])
+  @@index([visitorId])
+}
+
+// PRODUCT IMAGE
+// =====================================================
+
+model ProductImage {
+  id Int @id @default(autoincrement())
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  image     String
+  sortOrder Int    @default(0)
+
+  createdAt DateTime @default(now())
+
+  @@index([productId])
+  @@index([sortOrder])
+}
+
+// =====================================================
+// PRODUCT OPTION
+// Example:
+// Size
+// Color
+// Fabric
+// Pattern
+// =====================================================
+
+model ProductOption {
+  id Int @id @default(autoincrement())
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  name String
+
+  sortOrder Int @default(0)
+
+  values ProductOptionValue[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([productId, name])
+  @@index([productId])
+}
+
+// =====================================================
+// PRODUCT OPTION VALUE
+// Example:
+//
+// Size:
+//   S
+//   M
+//   L
+//   XL
+//
+// Color:
+//   Red
+//   Blue
+//   Black
+// =====================================================
+
+model ProductOptionValue {
+  id Int @id @default(autoincrement())
+
+  optionId Int
+  option   ProductOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
+
+  value String
+
+  sortOrder Int @default(0)
+
+  createdAt DateTime @default(now())
+
+  variantValues ProductVariantValue[]
+
+  @@unique([optionId, value])
+  @@index([optionId])
+}
+
+// =====================================================
+// PRODUCT VARIANT
+//
+// Example:
+//
+// KUR-001-S-RED
+// KUR-001-M-RED
+// KUR-001-L-RED
+// =====================================================
+
+model ProductVariant {
+  id Int @id @default(autoincrement())
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  sku String @unique
+
+  price Decimal @db.Decimal(12, 2)
+
+  stock        Int @default(0)
+  reorderLevel Int @default(5)
+
+  inventoryMovements InventoryMovement[]
+  purchaseItems      PurchaseItem[]
+  variantValues      ProductVariantValue[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
+  @@index([stock])
+}
+
+// =====================================================
+// VARIANT ↔ OPTION VALUE
+//
+// Example:
+//
+// Variant:
+// KUR-001-M-RED
+//
+// Values:
+// Size = M
+// Color = Red
+// =====================================================
+
+model ProductVariantValue {
+  id Int @id @default(autoincrement())
+
+  variantId     Int
+  optionValueId Int
+
+  variant     ProductVariant     @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  optionValue ProductOptionValue @relation(fields: [optionValueId], references: [id], onDelete: Cascade)
+
+  @@unique([variantId, optionValueId])
+  @@index([variantId])
+  @@index([optionValueId])
+}
+
+enum OrderStatus {
+  pending
+  confirmed
+  processing
+  shipped
+  partially_delivered
+  delivered
+  cancelled
+}
+
+enum PaymentStatus {
+  pending
+  paid
+  failed
+  refunded
+}
+
+model Address {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  fullName   String
+  mobile     String
+  line1      String
+  line2      String?
+  city       String
+  state      String
+  postalCode String
+  isDefault  Boolean  @default(false)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orders     Order[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Order {
+  id                 Int                 @id @default(autoincrement())
+  orderNumber        String              @unique
+  razorpayOrderId    String?             @unique
+  razorpayPaymentId  String?             @unique
+  userId             Int
+  addressId          Int?
+  status             OrderStatus         @default(pending)
+  paymentStatus      PaymentStatus       @default(pending)
+  subtotal           Decimal             @db.Decimal(12, 2)
+  shipping           Decimal             @default(0) @db.Decimal(12, 2)
+  discount           Decimal             @default(0) @db.Decimal(12, 2)
+  total              Decimal             @db.Decimal(12, 2)
+  couponCode         String?
+  user               User                @relation(fields: [userId], references: [id], onDelete: Restrict)
+  address            Address?            @relation(fields: [addressId], references: [id], onDelete: SetNull)
+  items              OrderItem[]
+  inventoryMovements InventoryMovement[]
+  shipments          Shipment[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
+
+model OrderItem {
+  id                 Int             @id @default(autoincrement())
+  orderId            Int
+  productId          Int
+  productName        String
+  sku                String
+  price              Decimal         @db.Decimal(12, 2)
+  quantity           Int
+  options            Json?
+  shipmentId         Int?
+  shipment           Shipment?       @relation(fields: [shipmentId], references: [id], onDelete: Restrict)
+  returnEnabled      Boolean         @default(true)
+  replacementEnabled Boolean         @default(true)
+  returnDays         Int             @default(7)
+  replacementDays    Int             @default(7)
+  serviceRequest     ServiceRequest?
+  order              Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product            Product         @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+model InventoryMovement {
+  id            Int      @id @default(autoincrement())
+  productId     Int
+  variantId     Int?
+  orderId       Int?
+  actorId       Int?
+  supplierId    Int?
+  purchaseId    Int?
+  productName   String
+  sku           String
+  variantLabel  String?
+  delta         Int
+  previousStock Int
+  newStock      Int
+  reason        String
+  note          String?
+  createdAt     DateTime @default(now())
+
+  product  Product         @relation(fields: [productId], references: [id], onDelete: Restrict)
+  variant  ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+  order    Order?          @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  actor    User?           @relation("InventoryMovementActor", fields: [actorId], references: [id], onDelete: SetNull)
+  supplier Supplier?       @relation(fields: [supplierId], references: [id], onDelete: SetNull)
+  purchase Purchase?       @relation(fields: [purchaseId], references: [id], onDelete: SetNull)
+
+  @@index([productId, createdAt])
+  @@index([variantId, createdAt])
+  @@index([orderId, reason])
+  @@index([reason, createdAt])
+  @@index([supplierId, createdAt])
+  @@index([purchaseId])
+}
+
+enum ShipmentStatus {
+  shipped
+  delivered
+}
+
+model Shipment {
+  id             Int            @id @default(autoincrement())
+  orderId        Int
+  order          Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  items          OrderItem[]
+  carrier        String
+  trackingNumber String
+  status         ShipmentStatus @default(shipped)
+  shippedAt      DateTime       @default(now())
+  deliveredAt    DateTime?
+
+  @@index([orderId])
+}
+
+enum ServiceRequestKind {
+  return
+  replacement
+}
+
+enum ServiceRequestStatus {
+  requested
+  approved
+  rejected
+  completed
+}
+
+model ServiceRequest {
+  id          Int                  @id @default(autoincrement())
+  orderItemId Int                  @unique
+  item        OrderItem            @relation(fields: [orderItemId], references: [id], onDelete: Restrict)
+  kind        ServiceRequestKind
+  status      ServiceRequestStatus @default(requested)
+  reason      String
+  adminNote   String?
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+}
+
+model CartItem {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId Int
+  quantity  Int      @default(1)
+  options   Json?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, productId])
+  @@index([userId])
+}
+
+model WishlistItem {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+  @@index([userId])
+}
+
+model Coupon {
+  rules           Json?
+  id              Int       @id @default(autoincrement())
+  code            String    @unique
+  description     String?
+  type            String    @default("percentage")
+  value           Decimal   @db.Decimal(12, 2)
+  minimumOrder    Decimal?  @db.Decimal(12, 2)
+  maximumDiscount Decimal?  @db.Decimal(12, 2)
+  usageLimit      Int?
+  usageCount      Int       @default(0)
+  startsAt        DateTime?
+  expiresAt       DateTime?
+  active          Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([active])
+}
+
+model Banner {
+  id        Int      @id @default(autoincrement())
+  title     String
+  subtitle  String?
+  image     String
+  link      String?
+  // Controls which storefront hero consumes this banner (for example, home or shop).
+  placement String   @default("home")
+  active    Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([active])
+  @@index([sortOrder])
+  @@index([placement, active, sortOrder])
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  productId Int
+  userId    Int?
+  name      String
+  email     String?
+  rating    Int
+  comment   String
+  approved  Boolean  @default(false)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
+  @@index([approved])
+}
+
+model ContactMessage {
+  id          Int      @id @default(autoincrement())
+  name        String
+  email       String
+  mobile      String?
+  orderNumber String?
+  subject     String?
+  message     String
+  resolved    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([resolved])
+}
+
+model StoreSetting {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique
+  value     Json
+  updatedAt DateTime @updatedAt
+}
+
+model Supplier {
+  id          Int                 @id @default(autoincrement())
+  name        String
+  contactName String?
+  phone       String?
+  email       String?
+  address     String?
+  gstNumber   String?
+  notes       String?
+  active      Boolean             @default(true)
+  purchases   Purchase[]
+  payments    SupplierPayment[]
+  movements   InventoryMovement[]
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  @@index([name])
+  @@index([active])
+}
+
+model Purchase {
+  id             Int                 @id @default(autoincrement())
+  purchaseNumber String              @unique
+  supplierId     Int
+  createdById    Int?
+  total          Decimal             @db.Decimal(12, 2)
+  note           String?
+  receivedAt     DateTime            @default(now())
+  supplier       Supplier            @relation(fields: [supplierId], references: [id], onDelete: Restrict)
+  createdBy      User?               @relation("PurchaseCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  items          PurchaseItem[]
+  payments       SupplierPayment[]
+  movements      InventoryMovement[]
+
+  @@index([supplierId, receivedAt])
+  @@index([receivedAt])
+}
+
+model PurchaseItem {
+  id           Int             @id @default(autoincrement())
+  purchaseId   Int
+  productId    Int
+  variantId    Int?
+  productName  String
+  sku          String
+  variantLabel String?
+  quantity     Int
+  unitCost     Decimal         @db.Decimal(12, 2)
+  total        Decimal         @db.Decimal(12, 2)
+  purchase     Purchase        @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+  product      Product         @relation(fields: [productId], references: [id], onDelete: Restrict)
+  variant      ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+
+  @@index([purchaseId])
+  @@index([productId, variantId])
+  @@index([sku])
+}
+
+model SupplierPayment {
+  id           Int      @id @default(autoincrement())
+  supplierId   Int
+  purchaseId   Int
+  recordedById Int?
+  amount       Decimal  @db.Decimal(12, 2)
+  method       String
+  reference    String?
+  note         String?
+  paidAt       DateTime @default(now())
+  supplier     Supplier @relation(fields: [supplierId], references: [id], onDelete: Restrict)
+  purchase     Purchase @relation(fields: [purchaseId], references: [id], onDelete: Restrict)
+  recordedBy   User?    @relation("SupplierPaymentRecorder", fields: [recordedById], references: [id], onDelete: SetNull)
+
+  @@index([supplierId, paidAt])
+  @@index([purchaseId, paidAt])
+}

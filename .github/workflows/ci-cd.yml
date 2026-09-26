@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  # Cancel superseded checks on the same branch or pull request.
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Lint, test, and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: 'true'
+      NEXT_TELEMETRY_DISABLED: '1'
+      # CI-only placeholders; no production credentials or database changes.
+      DATABASE_URL: postgresql://ci:ci@127.0.0.1:5432/susmita_ci
+      JWT_SECRET: github-actions-build-only-do-not-use-in-production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --include=dev --no-audit --no-fund
+      - name: Generate Prisma client
+        run: npx --no-install prisma generate
+      - name: Lint
+        run: npm run lint
+      - name: Test
+        run: node --test tests/*.test.cjs
+      - name: Type check
+        run: |
+          npx --no-install next typegen
+          npx --no-install tsc --noEmit
+      - name: Production build
+        # npm run build includes db:sync; CI must not modify a database.
+        run: npx --no-install next build
+

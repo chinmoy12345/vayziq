@@ -1,0 +1,19 @@
+import Link from "next/link";
+import { ChevronRight, Package, ShoppingBag } from "lucide-react";
+import { getCurrentUser } from "@/lib/auth";
+import prisma from "@/lib/db";
+
+
+const money = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 });
+const date = new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "short", year: "numeric" });
+
+export default async function OrdersPage() {
+  const session = await getCurrentUser();
+  const userId = Number(session?.sub);
+  const orders = Number.isInteger(userId) ? await prisma.order.findMany({ where: { userId }, orderBy: { createdAt: "desc" }, include: { items: { select: { quantity: true } } } }) : [];
+  return <main><div className="mb-6"><p className="text-sm text-gray-500">My Account</p><h1 className="mt-1 text-2xl font-semibold text-gray-900">My Orders</h1><p className="mt-1 text-sm text-gray-500">Track and manage your purchases.</p></div>
+    {orders.length ? <div className="space-y-4">{orders.map((order) => { const itemCount = order.items.reduce((sum, item) => sum + item.quantity, 0); return <div key={order.id} className="overflow-hidden rounded-2xl border border-gray-200 bg-white"><div className="flex flex-col gap-4 border-b border-gray-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between"><div className="flex items-center gap-3"><div className="grid h-10 w-10 place-items-center rounded-xl bg-[#b56f6f]/10"><Package className="h-5 w-5 text-[#9b5c5c]" /></div><div><p className="text-sm font-semibold text-gray-900">Order #{order.orderNumber}</p><p className="mt-1 text-xs text-gray-500">Placed on {date.format(order.createdAt)}</p></div></div><span className="w-fit rounded-full bg-[#b56f6f]/10 px-3 py-1 text-xs font-medium capitalize text-[#9b5c5c]">{order.status.replaceAll("_", " ")}</span></div><div className="flex flex-col gap-4 px-5 py-4 sm:flex-row sm:items-center sm:justify-between"><p className="text-sm text-gray-600">{itemCount} {itemCount === 1 ? "item" : "items"} · <strong className="text-gray-900">{money.format(Number(order.total))}</strong></p><Link className="inline-flex items-center justify-center gap-1 rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-700 hover:border-[#c98a8a] hover:text-[#9b5c5c]" href={`/account/orders/${order.orderNumber}`}>View Details <ChevronRight className="h-4 w-4" /></Link></div></div>; })}</div> : <EmptyOrders />}
+  </main>;
+}
+
+function EmptyOrders() { return <div className="rounded-2xl border border-gray-200 bg-white px-6 py-16 text-center"><div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-[#b56f6f]/10"><ShoppingBag className="h-6 w-6 text-[#9b5c5c]" /></div><h2 className="mt-4 text-lg font-semibold text-gray-900">No orders yet</h2><p className="mx-auto mt-2 max-w-sm text-sm text-gray-500">Your placed orders will appear here.</p><Link href="/shop" className="mt-6 inline-flex rounded-xl bg-[#9b5c5c] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#874e4e]">Start Shopping</Link></div>; }
