@@ -5,11 +5,13 @@ import ProductCard, {
 interface ProductGridProps {
   products: Product[];
   columns?: 2 | 3 | 4;
+  className?: string;
 }
 
 export default function ProductGrid({
   products,
   columns = 3,
+  className = "",
 }: ProductGridProps) {
   const gridColumns = {
     2: "grid-cols-2",
@@ -38,6 +40,7 @@ export default function ProductGrid({
       className={`
         grid
         ${gridColumns[columns]}
+        ${className}
         gap-x-4
         gap-y-10
         sm:gap-x-5

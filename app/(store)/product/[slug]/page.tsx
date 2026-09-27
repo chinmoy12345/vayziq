@@ -114,7 +114,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     },
     ...(product.reviews.length ? { aggregateRating: { "@type": "AggregateRating", ratingValue: averageRating.toFixed(1), reviewCount: product.reviews.length } } : {}),
   };
-  return <main className="min-h-screen bg-[#FFFDFC]">
+  return <main className="product-home-body min-h-screen bg-[#FFFDFC]">
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productStructuredData).replace(/</g, "\\u003c") }} />
     <nav aria-label="Breadcrumb" className="border-b border-[#E8DADA] bg-white">
       <div className="mx-auto flex max-w-7xl items-center gap-2 overflow-hidden px-5 py-4 text-[10px] tracking-[0.08em] text-[#9A8888] sm:px-8 lg:px-10">

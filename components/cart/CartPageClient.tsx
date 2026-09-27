@@ -146,7 +146,7 @@ export default function CartPageClient({ visibility }: { visibility: HomepageVis
   };
 
   return (
-    <main className="min-h-screen bg-[#FFFDFC]">
+    <main className="store-cart cart-home-body min-h-screen bg-[#FFFDFC]">
       {authOpen && <AuthModal open onClose={() => setAuthOpen(false)} onSuccess={() => { setAuthOpen(false); router.push("/checkout"); router.refresh(); }} />}
 
       {wishlistMessage && (
@@ -160,7 +160,7 @@ export default function CartPageClient({ visibility }: { visibility: HomepageVis
       ===================================================== */}
 
       {visibility.cartPageHeader && (
-        <section className="border-b border-[#E8DADA] bg-[#F8EFEC]">
+        <section className="cart-home-hero border-b border-[#E8DADA] bg-[#F8EFEC]">
           <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8 lg:px-10">
             <p className="mb-3 text-[10px] font-semibold tracking-[0.3em] text-[#B56F6F]">YOUR BAG</p>
             <h1 className="font-serif text-5xl leading-none text-[#2B2525] sm:text-6xl">Shopping Cart</h1>
@@ -173,7 +173,7 @@ export default function CartPageClient({ visibility }: { visibility: HomepageVis
           CART
       ===================================================== */}
 
-      <section className="mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:px-10">
+      <section className="cart-home-content mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:px-10">
 
         {cartItems.length === 0 ? (
 
@@ -181,7 +181,7 @@ export default function CartPageClient({ visibility }: { visibility: HomepageVis
              EMPTY CART
           ================================================= */
 
-          <div className="flex min-h-[420px] items-center justify-center border border-[#E8DADA] bg-white">
+          <div className="cart-empty-card flex min-h-[420px] items-center justify-center border border-[#E8DADA] bg-white">
 
             <div className="max-w-md px-6 py-10 text-center">
 
@@ -219,7 +219,7 @@ export default function CartPageClient({ visibility }: { visibility: HomepageVis
 
         ) : (
 
-          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_360px]">
+          <div className="cart-layout grid gap-10 lg:grid-cols-[minmax(0,1fr)_360px]">
 
             {/* =================================================
                 CART ITEMS
@@ -252,14 +252,14 @@ export default function CartPageClient({ visibility }: { visibility: HomepageVis
 
                   <div
                     key={cartLineKey(item)}
-                    className="flex gap-4 py-6 sm:gap-6"
+                    className="cart-line flex gap-4 py-6 sm:gap-6"
                   >
 
                     {/* IMAGE */}
 
                     <Link
                       href={`/product/${item.slug ?? item.id}`}
-                      className="h-32 w-24 shrink-0 overflow-hidden bg-[#F8EFEC] sm:h-40 sm:w-32"
+                      className="cart-line-image h-32 w-24 shrink-0 overflow-hidden bg-[#F8EFEC] sm:h-40 sm:w-32"
                     >
                       <ProgressiveImage
                         src={item.image}
@@ -270,7 +270,7 @@ export default function CartPageClient({ visibility }: { visibility: HomepageVis
 
                     {/* INFO */}
 
-                    <div className="flex min-w-0 flex-1 flex-col">
+                    <div className="cart-line-info flex min-w-0 flex-1 flex-col">
 
                       <p className="text-[10px] font-semibold tracking-[0.15em] text-[#B56F6F]">
                         {item.category}
@@ -316,7 +316,7 @@ export default function CartPageClient({ visibility }: { visibility: HomepageVis
 
                         {/* QUANTITY */}
 
-                        <div className="flex h-9 items-center border border-[#E8DADA] bg-white">
+                        <div className="cart-quantity flex h-9 items-center border border-[#E8DADA] bg-white">
 
                           <button
                             type="button"
@@ -411,17 +411,17 @@ export default function CartPageClient({ visibility }: { visibility: HomepageVis
                 ORDER SUMMARY
             ================================================= */}
 
-            <aside className="h-fit border border-[#E8DADA] bg-[#F8EFEC] p-6 sm:p-7">
+            <aside className="cart-summary h-fit border border-[#E8DADA] bg-[#F8EFEC] p-6 sm:p-7">
 
               <h2 className="font-serif text-2xl text-[#2B2525]">
                 Order Summary
               </h2>
 
               <p role="alert" className="text-xs text-red-700">{priceError}</p>
-              {visibility.cartOffers && <>
+              {visibility.cartOffers && <div className="cart-offers">
                 <OfferSelector items={cartItems} offers={productOffers} loading={offersLoading} error={offersError} subtotal={subtotal} code={offerCode} onChange={code => { setOfferCode(code); localStorage.setItem("tantuka-offer", code); }} />
                 {discount > 0 && <p className="flex justify-between text-sm text-emerald-800"><span>Offer discount</span><span>−{formatPrice(discount)}</span></p>}
-              </>}
+              </div>}
               {/* SUMMARY */}
 
               <div className="mt-6 space-y-4 border-b border-[#DECACA] pb-6">

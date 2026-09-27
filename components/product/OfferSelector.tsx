@@ -10,7 +10,14 @@ export default function OfferSelector({ subtotal, code, onChange, items, offers:
   const [input, setInput] = useState("");
   const [error, setError] = useState("");
   const saving = offerDiscount(code, subtotal, productOffers, items);
-  function open() { setSelected(saving ? code : ""); setInput(""); setError(""); dialog.current?.showModal(); }
+  function open() {
+    setSelected(saving ? code : "");
+    setInput("");
+    setError("");
+    const offerList = dialog.current?.querySelector("fieldset");
+    if (offerList) offerList.scrollTop = 0;
+    dialog.current?.showModal();
+  }
   function check() {
     const normalized = input.trim().toUpperCase();
     const offer = productOffers.find(item => item.code === normalized);

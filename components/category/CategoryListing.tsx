@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { ArrowDownUp, SlidersHorizontal, X } from "lucide-react";
 import CategoryFilters, {
   CategoryFilterConfig,
 } from "./CategoryFilters";
@@ -40,6 +41,7 @@ export default function CategoryListing({
 
   const [mobileFiltersOpen, setMobileFiltersOpen] =
     useState(false);
+  const [mobileSortOpen, setMobileSortOpen] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<string[]>(() => { const category = [...(filters.subcategories ?? []), ...(filters.categories ?? [])].find(item => item.slug === initialCategorySlug && initialCategorySlug); return category?.slug ? [category.slug] : []; });
   const [priceRange, setPriceRange] = useState({ min: 0, max: defaultMaxPrice });
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
@@ -58,7 +60,7 @@ export default function CategoryListing({
     const matchesSize = selectedSizes.length === 0 || selectedSizes.some((size) => product.filterValues?.sizes.includes(size));
     const matchesColor = selectedColors.length === 0 || selectedColors.some((color) => product.filterValues?.colors.includes(color));
     return matchesCategory && matchesSize && matchesColor && price >= priceRange.min && price <= priceRange.max;
-  }), [filtersEnabled, products, priceRange, selectedCategories, selectedColors, selectedSizes, showFullFilters]);
+  }), [filtersEnabled, products, priceRange, selectedCategories, selectedColors, selectedSizes]);
 
   const sortedProducts = useMemo(() => {
     const items = [...filteredProducts];
@@ -114,7 +116,7 @@ export default function CategoryListing({
   return (
     <section
       id="category-products"
-      className="bg-[#FFFDFC]"
+      className={`bg-[#FFFDFC] ${showFullFilters ? "shop-category-listing" : ""}`}
     >
       <div
         className="
@@ -142,6 +144,7 @@ export default function CategoryListing({
             )
           }
           className="
+            hidden
             mb-5
             flex
             h-11
@@ -184,16 +187,21 @@ export default function CategoryListing({
           {filtersEnabled && <aside
             id="product-filter-sidebar"
             className={`
-              lg:sticky
-              lg:top-24
-              lg:self-start
               ${
                 mobileFiltersOpen
-                  ? "block"
+                  ? "fixed inset-0 z-[180] block overflow-y-auto bg-white p-5"
                   : "hidden lg:block"
               }
+              lg:sticky
+              lg:top-24
+              lg:z-auto
+              lg:self-start
+              lg:overflow-visible
+              lg:bg-transparent
+              lg:p-0
             `}
           >
+            <div className="mb-4 flex items-center justify-between lg:hidden"><p className="text-lg font-extrabold text-[#111]">Filters</p><button type="button" onClick={() => setMobileFiltersOpen(false)} className="grid h-10 w-10 place-items-center rounded-full bg-[#f7f7f7] text-[#111]" aria-label="Close filters"><X className="h-5 w-5" /></button></div>
             <CategoryFilters
               filters={filters}
               selectedCategories={selectedCategories}
@@ -258,7 +266,7 @@ export default function CategoryListing({
 
               {/* Sort */}
 
-              <div className="flex items-center gap-2">
+              <div className="hidden items-center gap-2 sm:flex">
 
                 <label
                   htmlFor="category-sort"
@@ -353,10 +361,7 @@ export default function CategoryListing({
                 PRODUCT GRID
             ================================================= */}
 
-            <ProductGrid
-              products={visibleProducts}
-              columns={4}
-            />
+            <ProductGrid products={visibleProducts} columns={4} className={showFullFilters ? "shop-product-grid" : undefined} />
 
             {sortedProducts.length === 0 && <div className="border border-dashed border-[#E8DADA] bg-white px-6 py-16 text-center"><p className="font-serif text-xl text-[#3B3333]">No products found</p><p className="mt-2 text-sm text-[#8A7777]">Try adjusting your filters.</p><button className="mt-5 text-xs font-semibold tracking-wide text-[#B56F6F] hover:underline" onClick={() => { setSelectedCategories([]); setPriceRange({ min: 0, max: defaultMaxPrice }); setSelectedSizes([]); setSelectedColors([]); }} type="button">CLEAR FILTERS</button></div>}
 
@@ -541,6 +546,10 @@ export default function CategoryListing({
         </div>
 
       </div>
+      {filtersEnabled && <><div className="h-16 lg:hidden" aria-hidden="true" />
+        {mobileSortOpen && <div className="fixed inset-x-3 bottom-[76px] z-[170] rounded-xl border border-[#e8e8e8] bg-white p-2 shadow-2xl lg:hidden" role="dialog" aria-label="Sort products">{([['featured', 'Featured'], ['newest', 'Newest'], ['price-low', 'Price: Low to High'], ['price-high', 'Price: High to Low'], ['popular', 'Most Popular']] as const).map(([value, label]) => <button key={value} type="button" onClick={() => { setSortBy(value); setVisibleCount(PRODUCTS_PER_BATCH); setMobileSortOpen(false); }} className={`flex min-h-11 w-full items-center rounded-lg px-4 text-left text-sm ${sortBy === value ? "bg-[#fff1c8] font-bold text-[#111]" : "text-[#333] hover:bg-[#f7f7f7]"}`}>{label}</button>)}</div>}
+        <div className="fixed inset-x-0 bottom-0 z-[165] flex h-[68px] border-t border-[#e8e8e8] bg-white shadow-[0_-5px_18px_rgba(0,0,0,.09)] lg:hidden"><button type="button" onClick={() => setMobileSortOpen(open => !open)} className="flex flex-1 items-center justify-center gap-2 border-r border-[#e8e8e8] text-sm font-bold text-[#111]"><ArrowDownUp className="h-5 w-5 text-[#b77e00]" />Sort<span className="text-[10px] font-normal text-[#777]">{sortBy === "featured" ? "Featured" : sortBy === "newest" ? "Newest" : sortBy === "price-low" ? "Low to High" : sortBy === "price-high" ? "High to Low" : "Popular"}</span></button><button type="button" onClick={() => { setMobileFiltersOpen(true); setMobileSortOpen(false); }} className="flex flex-1 items-center justify-center gap-2 text-sm font-bold text-[#111]"><SlidersHorizontal className="h-5 w-5 text-[#b77e00]" />Filter</button></div>
+      </>}
     </section>
   );
 }

@@ -1,251 +1,35 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { ArrowRight, ChevronDown } from "lucide-react";
-import type { StoreNavigationCategory } from "@/lib/store-navigation";
-import type { StoreMenuSettings } from "@/lib/store-menu-settings";
+import { useEffect } from "react";
+import { ChevronRight, CircleUserRound, House, Layers, ShieldCheck, Sparkles, Tag, Truck, Undo2, X } from "lucide-react";
+interface MobileMenuProps { isOpen: boolean; onClose: () => void; userName: string | null; onSignIn: () => void; showQuickNav?: boolean; }
 
-interface MobileMenuProps {
-  isOpen: boolean;
-  onClose: () => void;
-  brandName: string;
-  cartCount: number;
-  userName: string | null;
-  onSignIn: () => void;
-  categories?: StoreNavigationCategory[];
-  menuSettings: StoreMenuSettings;
-}
+const quickItems = [["Home", "/", House], ["Categories", "/shop", Layers], ["Deals", "/offers", Tag], ["For You", "/shop", Sparkles]] as const;
+const primaryItems = [["Home", "/"], ["Men", "/shop"], ["Women", "/shop"], ["Joggers", "/shop"], ["Hoodies", "/shop"], ["T-Shirts", "/shop"], ["Tracksuits", "/shop"], ["Accessories", "/shop"], ["New Arrivals", "/shop?sort=newest"], ["Watch & Buy", "/watch-buy"]] as const;
 
+export default function MobileMenu({ isOpen, onClose, userName, onSignIn, showQuickNav = true }: MobileMenuProps) {
+  useEffect(() => {
+    if (!isOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") onClose(); };
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", closeOnEscape);
+    return () => { document.body.style.overflow = ""; window.removeEventListener("keydown", closeOnEscape); };
+  }, [isOpen, onClose]);
 
-
-function UserIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      className="h-5 w-5"
-    >
-      <circle cx="12" cy="8" r="3.5" />
-      <path
-        d="M5 20c.8-3.5 3.2-5.5 7-5.5s6.2 2 7 5.5"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function HeartIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      className="h-5 w-5"
-    >
-      <path
-        d="M20.8 8.7c0 5.5-8.8 10.3-8.8 10.3S3.2 14.2 3.2 8.7A4.7 4.7 0 0 1 12 6.1a4.7 4.7 0 0 1 8.8 2.6Z"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function BagIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      className="h-5 w-5"
-    >
-      <path
-        d="M5 8.5h14l-.8 11H5.8L5 8.5Z"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M9 9V6a3 3 0 0 1 6 0v3"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-export default function MobileMenu({
-  isOpen,
-  onClose,
-  brandName,
-  cartCount,
-  userName,
-  onSignIn,
-  categories,
-  menuSettings,
-}: MobileMenuProps) {
-  const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
-  return (
-    <div
-      inert={!isOpen}
-      aria-hidden={!isOpen}
-      className={`
-        overflow-x-hidden border-t border-neutral-100 bg-white
-        transition-all duration-300 ease-in-out
-        lg:hidden
-        ${
-          isOpen
-            ? "max-h-[calc(100dvh-140px)] overflow-y-auto overscroll-contain opacity-100"
-            : "max-h-0 overflow-y-hidden opacity-0"
-        }
-      `}
-    >
-      <div className="mx-auto max-w-7xl px-5 sm:px-6">
-
-        {/* Navigation */}
-        <nav aria-label="Mobile navigation" className="py-4">
-          <p className="mb-2 px-1 text-[9px] font-semibold uppercase tracking-[0.2em] text-[#A37878]">Discover the collection</p>
-          {menuSettings.home && <Link href="/" onClick={onClose} className="mb-2 flex min-h-12 items-center justify-between rounded-lg px-3 text-sm font-medium text-[#3B3333] transition hover:bg-[#FAF4F1]">
-            <span>Home</span><ArrowRight className="h-4 w-4 text-[#A37878]" />
-          </Link>}
-          <div className="space-y-2">
-            {(categories ?? []).map((category) => {
-              const hasChildren = Boolean(category.children?.length);
-              const expanded = expandedCategory === category.slug;
-              const panelId = `mobile-subcategories-${category.slug}`;
-              return <section key={category.slug} className="overflow-hidden rounded-xl border border-[#EEE4E0] bg-white">
-                <div className="flex min-h-12 items-center">
-                  <Link href={`/${category.slug}`} onClick={onClose} className="flex min-h-12 min-w-0 flex-1 items-center px-3 text-sm font-medium text-[#3B3333] transition hover:text-[#965B5B]">
-                    <span>{category.name}</span>
-                  </Link>
-                  {hasChildren && <button type="button" aria-label={`${expanded ? "Hide" : "Show"} ${category.name} subcategories`} aria-expanded={expanded} aria-controls={panelId} onClick={() => setExpandedCategory(expanded ? null : category.slug)} className="mr-2 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[#806B68] transition hover:bg-[#FAF4F1] hover:text-[#965B5B] focus-visible:outline-2 focus-visible:outline-[#B56F6F]">
-                    <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`} />
-                  </button>}
-                </div>
-                {hasChildren && <div id={panelId} hidden={!expanded} className="border-t border-[#F0E8E5] bg-[#FCF9F7] p-2.5">
-                  <div className="grid grid-cols-2 gap-2">
-                    {category.children?.slice(0, 10).map((child) => <Link key={child.slug} href={`/${child.slug}`} onClick={onClose} className="flex min-h-10 items-center justify-between gap-1 rounded-lg border border-[#F0E7E3] bg-white px-2.5 py-2 text-[11px] leading-4 text-[#665858] transition hover:border-[#D9BDB8] hover:bg-[#FFFDFC] hover:text-[#8F5555]">
-                      <span>{child.name}</span><ArrowRight className="h-3 w-3 shrink-0 text-[#B69B96]" />
-                    </Link>)}
-                  </div>
-                </div>}
-              </section>;
-            })}
-          </div>
-          {menuSettings.watchBuy && <Link href="/watch-buy" onClick={onClose} className="mb-2 flex min-h-12 items-center justify-between rounded-lg border border-[#EEE4E0] bg-white px-3 text-sm font-medium text-[#3B3333] transition hover:bg-[#FAF4F1] hover:text-[#965B5B]">
-            <span>Watch &amp; Buy</span><ArrowRight className="h-4 w-4 text-[#A37878]" />
-          </Link>}
-          {menuSettings.shop && <Link href="/shop" onClick={onClose} className="mt-2 flex min-h-12 items-center justify-between rounded-lg bg-[#2B2525] px-3 text-sm font-medium text-white transition hover:bg-[#493B3B]">
-            <span>Shop all</span><ArrowRight className="h-4 w-4" />
-          </Link>}
-        </nav>
-        {/* Account Actions */}
-        <div className="grid grid-cols-2 gap-3 py-5">
-
-          {/* Account */}
-          <Link
-            href="/account"
-            onClick={(event) => {
-              onClose();
-              if (!userName) {
-                event.preventDefault();
-                onSignIn();
-              }
-            }}
-            className="
-              col-span-2 flex min-h-14 items-center justify-center
-              gap-3 rounded-xl
-              border border-[#E8DADA] bg-[#F8EFEC]
-              px-4 py-3.5
-              text-sm font-semibold
-              tracking-wide
-              text-[#854F4F]
-              transition
-              hover:border-[#B56F6F]
-              hover:bg-[#F3E3DE]
-              focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#B56F6F]
-            "
-          >
-            <UserIcon />
-            <span className="px-1 text-center">{userName ? "My Account" : "Sign In / Sign Up"}</span>
-          </Link>
-
-          {/* Wishlist */}
-          <Link
-            href="/account/wishlist"
-            onClick={onClose}
-            className="
-              flex min-h-14 items-center justify-center
-              gap-2 rounded-xl
-              border border-neutral-200
-              py-4
-              text-xs font-medium
-              tracking-wide
-              text-neutral-700
-              transition
-              hover:border-neutral-400
-              hover:bg-neutral-50
-            "
-          >
-            <HeartIcon />
-            <span>Wishlist</span>
-          </Link>
-
-          {/* Cart */}
-          <Link
-            href="/cart"
-            aria-label={`Bag, ${cartCount} ${cartCount === 1 ? "item" : "items"}`}
-            onClick={onClose}
-            className="
-              relative flex min-h-14 items-center justify-center
-              gap-2 rounded-xl
-              border border-neutral-200
-              py-4
-              text-xs font-medium
-              tracking-wide
-              text-neutral-700
-              transition
-              hover:border-neutral-400
-              hover:bg-neutral-50
-            "
-          >
-            <span className="relative">
-              <BagIcon />
-
-              <span
-                className="
-                  absolute -right-2 -top-2
-                  flex h-4 min-w-4
-                  items-center justify-center
-                  rounded-full
-                  bg-[#B56F6F]
-                  px-1
-                  text-[8px]
-                  font-semibold
-                  text-white
-                "
-              >
-                {cartCount}
-              </span>
-            </span>
-
-            <span>Bag</span>
-          </Link>
-        </div>
-
-        {/* Bottom Brand Message */}
-        <div className="border-t border-neutral-100 py-5 text-center">
-          <p className="font-serif text-lg text-neutral-800">
-            {brandName}
-          </p>
-
-          <p className="mt-1 text-[9px] tracking-[0.3em] text-neutral-400">
-            ELEGANCE • STYLE • EVERYDAY
-          </p>
-        </div>
-
-      </div>
-    </div>
-  );
+  return <>
+    {showQuickNav && <nav className="flex h-11 items-center gap-1 overflow-x-auto bg-[#111] px-2 text-white scrollbar-none lg:hidden" aria-label="Mobile quick navigation">
+      {quickItems.map(([label, href, Icon], index) => <Link key={label} href={href} className={`flex h-8 shrink-0 items-center gap-1.5 rounded-lg px-3 text-[11px] font-semibold ${index === 0 ? "bg-white text-[#111]" : "text-white/85"}`} aria-current={index === 0 ? "page" : undefined}><Icon className="h-3.5 w-3.5" />{label}</Link>)}
+    </nav>}
+    <div className={`fixed inset-0 z-[200] bg-black/45 transition-opacity duration-300 lg:hidden ${isOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`} aria-hidden="true" onClick={onClose} />
+    <aside className={`fixed bottom-0 left-0 top-0 z-[201] w-[min(86vw,360px)] overflow-y-auto rounded-r-[24px] bg-white p-4 shadow-2xl transition-transform duration-300 ease-out lg:hidden ${isOpen ? "translate-x-0" : "-translate-x-[102%]"}`} aria-label="Mobile navigation" aria-hidden={!isOpen}>
+      <div className="flex h-[53px] items-center justify-between"><Link href="/" onClick={onClose}><Image src="/vayziq/vayziq-logo.png" alt="VAYZIQ" width={236} height={73} className="h-auto w-28" /></Link><button type="button" onClick={onClose} className="p-1 text-[#111]" aria-label="Close menu"><X className="h-6 w-6" /></button></div>
+      <button type="button" onClick={() => { onClose(); if (!userName) onSignIn(); }} className="my-2 flex w-full items-center gap-3 rounded-[10px] bg-[#f7f7f7] p-3 text-left text-[11px] text-[#111]"><CircleUserRound className="h-[22px] w-[22px]" /><span>Hello,<br /><b className="text-[12px]">{userName ?? "Sign In / Sign Up"}</b></span><ChevronRight className="ml-auto h-4 w-4" /></button>
+      <nav className="grid" aria-label="Main mobile menu">{primaryItems.map(([label, href], index) => <Link key={label} href={href} onClick={onClose} className={`flex h-[39px] items-center justify-between rounded-lg px-3 text-[12px] text-[#111] ${index === 0 ? "bg-[#fff1c8] font-bold" : ""}`}>{label}<ChevronRight className="h-[15px] w-[15px]" /></Link>)}</nav>
+      <nav className="my-3 border-y border-[#e8e8e8] py-2" aria-label="Customer shortcuts">{[["Track Order", "/account/orders"], ["Wishlist", "/account/wishlist"], ["My Account", "/account"], ["Help & Support", "/contact"], ["About VAYZIQ", "/about"]].map(([label, href]) => <Link key={label} href={href} onClick={onClose} className="flex h-[39px] items-center justify-between rounded-lg px-3 text-[12px] text-[#111]">{label}<ChevronRight className="h-[15px] w-[15px]" /></Link>)}</nav>
+      <div className="mt-4 grid grid-cols-3 gap-1.5"><span className="rounded-md bg-[#f7f7f7] p-2 text-center text-[8px] text-[#222]"><Truck className="mx-auto mb-1 h-5 w-5" />Free Shipping</span><span className="rounded-md bg-[#f7f7f7] p-2 text-center text-[8px] text-[#222]"><Undo2 className="mx-auto mb-1 h-5 w-5" />7-Day Returns</span><span className="rounded-md bg-[#f7f7f7] p-2 text-center text-[8px] text-[#222]"><ShieldCheck className="mx-auto mb-1 h-5 w-5" />Secure Payments</span></div>
+      <div className="mt-4 border-t border-[#e8e8e8] px-1 pt-4 text-[12px] text-[#111]">Follow Us <div className="mt-2 text-[17px]">◎　▶　f　p</div></div>
+    </aside>
+  </>;
 }

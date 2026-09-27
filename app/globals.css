@@ -25,6 +25,171 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* The homepage owns its original VAYZIQ chrome; other storefront pages use the shared one. */
+body:has(.vayziq-home) > header,
+body:has(.vayziq-home) > footer,
+body:has(.vayziq-home) .store-footer {
+  display: none;
+}
+
+/* Shared VAYZIQ chrome for every customer-facing storefront page. */
+.store-utility {
+  background: #000 !important;
+  border-bottom: 1px solid #000;
+  color: #fff !important;
+}
+
+.store-header {
+  border-color: #e8e8e8 !important;
+  background: rgba(255, 255, 255, .96) !important;
+}
+
+.store-footer {
+  background: #050505 !important;
+  color: #d8d8d8 !important;
+}
+
+.store-footer [class~="bg-[#B56F6F]"] {
+  background-color: #fbb606 !important;
+  color: #111 !important;
+}
+
+.store-footer [class~="text-[#B56F6F]"],
+.store-footer [class~="text-[#C58A8A]"],
+.store-footer [class~="hover:text-[#D99A9A]"]:hover {
+  color: #fbb606 !important;
+}
+
+.store-footer [class~="hover:bg-[#B56F6F]"]:hover {
+  background-color: #fbb606 !important;
+  color: #111 !important;
+}
+
+.store-footer [class~="hover:border-[#B56F6F]"]:hover {
+  border-color: #fbb606 !important;
+}
+
+.store-footer .font-serif {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 800;
+  letter-spacing: -.035em;
+}
+
+.store-footer [class~="text-[#A99595]"],
+.store-footer [class~="text-[#B9A6A6]"] {
+  color: #c8c8c8 !important;
+}
+
+.store-footer [class~="text-[#806D6D]"],
+.store-footer [class~="text-[#8F7D7D]"] {
+  color: #9b9b9b !important;
+}
+
+/* Cart uses the same neutral VAYZIQ storefront system without changing its pricing logic. */
+.store-cart { background: #fff !important; }
+.store-cart [class~="bg-[#F8EFEC]"] { background-color: #f7f7f7 !important; }
+.store-cart [class~="bg-[#FFFDFC]"] { background-color: #fff !important; }
+.store-cart [class~="border-[#E8DADA]"],
+.store-cart [class~="border-[#DECACA]"] { border-color: #e8e8e8 !important; }
+.store-cart [class~="divide-[#E8DADA]"] > :not([hidden]) ~ :not([hidden]) { border-color: #e8e8e8 !important; }
+.store-cart [class~="bg-[#B56F6F]"] { background-color: #fbb606 !important; color: #111 !important; }
+.store-cart [class~="hover:bg-[#9F5E5E]"]:hover { background-color: #e3a400 !important; color: #111 !important; }
+.store-cart [class~="text-[#B56F6F]"] { color: #b77e00 !important; }
+.store-cart [class~="hover:text-[#B56F6F]"]:hover { color: #b77e00 !important; }
+.store-cart .font-serif { font-family: Arial, Helvetica, sans-serif; font-weight: 800; letter-spacing: -.03em; }
+
+/* Cart body follows the same crisp VAYZIQ content pattern as the homepage. */
+.cart-home-body { color: #111; }
+.cart-home-body > section:first-of-type { background: #fff !important; border-color: #e8e8e8 !important; }
+.cart-home-body > section:first-of-type > div { padding-top: 28px !important; padding-bottom: 28px !important; }
+.cart-home-body h1 { font-family: Arial, Helvetica, sans-serif !important; font-size: clamp(32px, 4vw, 52px) !important; font-weight: 800 !important; letter-spacing: -.055em !important; color: #111 !important; }
+.cart-home-body h2 { font-family: Arial, Helvetica, sans-serif !important; color: #111 !important; }
+.cart-home-body [class~="bg-[#F8EFEC]"] { background: #f7f7f7 !important; }
+.cart-home-body aside { border-radius: 12px; border-color: #e8e8e8 !important; }
+.cart-home-body aside [class~="border-b"] { border-color: #e8e8e8 !important; }
+.cart-home-body [class~="divide-y"] > * { border-color: #e8e8e8 !important; }
+.cart-home-body [class~="overflow-hidden"] > img { object-fit: contain; padding: 6px; }
+.cart-home-body button[class*="bg-[#B56F6F]"] { border-radius: 8px; }
+
+/* Full homepage-style cart composition. */
+.cart-home-body { background: #fff !important; }
+.cart-home-hero { position: relative; overflow: hidden; background: linear-gradient(112deg, #fff 0%, #f7f7f7 72%, #fff1bf 100%) !important; }
+.cart-home-hero::after { content: ""; position: absolute; right: -74px; bottom: -105px; width: 245px; height: 245px; border: 34px solid #00db98; border-radius: 50%; opacity: .18; }
+.cart-home-hero > div { position: relative; z-index: 1; max-width: 1440px !important; }
+.cart-home-hero p:first-child { color: #fbb606 !important; font-family: Arial, Helvetica, sans-serif !important; font-size: 10px !important; font-weight: 800 !important; letter-spacing: .22em !important; }
+.cart-home-content { max-width: 1440px !important; padding-top: 34px !important; padding-bottom: 52px !important; }
+.cart-layout { gap: 28px !important; }
+.cart-layout > div:first-child { min-width: 0; }
+.cart-line { margin-bottom: 12px; padding: 16px !important; border: 1px solid #e8e8e8; border-radius: 12px; background: #fff; transition: box-shadow .2s ease, border-color .2s ease; }
+.cart-line:hover { border-color: #d6d6d6; box-shadow: 0 8px 24px rgba(0,0,0,.05); }
+.cart-line-image { border-radius: 9px; background: #f7f7f7 !important; }
+.cart-line-image img { object-fit: contain !important; padding: 6px; }
+.cart-line-info > p:first-child { color: #b77e00 !important; font-size: 9px !important; font-weight: 800 !important; }
+.cart-line-info h2 { font-size: 18px !important; font-weight: 800 !important; letter-spacing: -.03em; }
+.cart-quantity { height: 36px !important; overflow: hidden; border-radius: 7px; border-color: #dedede !important; }
+.cart-quantity button:hover { background: #fff1c8 !important; }
+.cart-summary { position: sticky; top: 116px; overflow: hidden; border: 1px solid #e4e4e4 !important; border-radius: 14px; background: #111 !important; color: #fff; box-shadow: 0 12px 32px rgba(0,0,0,.1); }
+.cart-summary h2, .cart-summary span, .cart-summary div { color: inherit; }
+.cart-summary [class~="text-[#6D5B5B]"], .cart-summary [class~="text-[#2B2525]"], .cart-summary [class~="text-[#756565]"], .cart-summary [class~="text-[#8A7777]"] { color: rgba(255,255,255,.78) !important; }
+.cart-summary [class~="border-b"], .cart-summary [class~="border-t"] { border-color: rgba(255,255,255,.16) !important; }
+.cart-summary [class~="bg-[#B56F6F]"] { background: #fbb606 !important; color: #111 !important; border-radius: 8px; }
+.cart-summary [class~="bg-[#B56F6F]"] * { color: #111 !important; }
+.cart-summary [class~="border"] { border-color: rgba(255,255,255,.16) !important; }
+.cart-empty-card { border-radius: 14px; border-style: dashed !important; border-color: #d8d8d8 !important; background: #fafafa !important; }
+@media (max-width: 1023px) { .cart-summary { position: static; } }
+@media (max-width: 640px) { .cart-home-hero > div { padding-top: 24px !important; padding-bottom: 24px !important; }.cart-line { padding: 12px !important; }.cart-line-image { width: 92px !important; height: 122px !important; }.cart-line-info h2 { font-size: 16px !important; }.cart-home-content { padding-top: 22px !important; } }
+
+/* Keep the summary readable against the homepage's light card surface. */
+.store-cart .cart-summary { background: #fff !important; color: #111 !important; }
+.store-cart .cart-summary h2, .store-cart .cart-summary span, .store-cart .cart-summary div { color: #111 !important; }
+.store-cart .cart-summary [class~="text-[#6D5B5B]"], .store-cart .cart-summary [class~="text-[#756565]"], .store-cart .cart-summary [class~="text-[#8A7777]"] { color: #5a5a5a !important; }
+.store-cart .cart-summary [class~="border-b"], .store-cart .cart-summary [class~="border-t"], .store-cart .cart-summary [class~="border"] { border-color: #e8e8e8 !important; }
+
+/* Offer action and product category use the same compact VAYZIQ accent. */
+.cart-home-body .cart-line-info > p:first-child,
+.cart-home-body .cart-summary button[class~="text-[#9F5E5E]"] { color: #fbb606 !important; font-family: Arial, Helvetica, sans-serif !important; font-weight: 800 !important; letter-spacing: .08em; }
+
+/* Cart-only offer selector/modal, aligned with the VAYZIQ card system. */
+.cart-offers > div > div { border-color: #e8e8e8 !important; background: #f7f7f7 !important; }
+.cart-offers > div > div > span { color: #111 !important; }
+.cart-offers dialog { border-color: #e8e8e8 !important; border-radius: 14px !important; background: #fff !important; color: #111 !important; font-family: Arial, Helvetica, sans-serif !important; }
+.cart-offers dialog > div > div:first-child, .cart-offers dialog > div > div:last-child { border-color: #e8e8e8 !important; background: #f7f7f7 !important; }
+.cart-offers dialog h2 { font-family: Arial, Helvetica, sans-serif !important; font-weight: 800 !important; letter-spacing: -.04em; color: #111 !important; }
+.cart-offers dialog input:focus { border-color: #fbb606 !important; box-shadow: 0 0 0 2px rgba(251,182,6,.16) !important; }
+.cart-offers dialog button[class~="border-[#B56F6F]"] { border-color: #fbb606 !important; color: #111 !important; }
+.cart-offers dialog label:has(input:checked) { border-color: #fbb606 !important; background: #fff8dd !important; }
+.cart-offers dialog input[type="radio"] { accent-color: #fbb606 !important; }
+.cart-offers dialog button[class~="bg-[#B56F6F]"] { border-radius: 8px !important; background: #fbb606 !important; color: #111 !important; }
+.cart-offers dialog [class~="bg-[#FAF5F2]"] { background: #f7f7f7 !important; }
+.cart-offers dialog [class~="text-[#4F4444]"] { color: #111 !important; }
+.cart-offers dialog [class~="text-[#8A7777]"] { color: #666 !important; }
+.cart-offers dialog [class~="text-[#9F5E5E]"], .cart-offers dialog [class~="text-[#975858]"] { color: #b77e00 !important; }
+.cart-offers dialog label { border-color: #e8e8e8 !important; background: #fff !important; color: #111 !important; }
+.cart-offers dialog label:hover { border-color: #fbb606 !important; }
+.cart-offers dialog button:disabled { background: #f7d978 !important; color: #7c5d00 !important; opacity: 1 !important; }
+
+/* Product detail page uses the same VAYZIQ surface, typography and accents. */
+.product-home-body { background: #fff !important; color: #111; }
+.product-home-body .font-serif { font-family: Arial, Helvetica, sans-serif !important; font-weight: 800; letter-spacing: -.035em; }
+.product-home-body [class~="bg-[#FFFDFC]"] { background: #fff !important; }
+.product-home-body [class~="bg-[#F8EFEC]"] { background: #f7f7f7 !important; }
+.product-home-body [class~="border-[#E8DADA]"], .product-home-body [class~="border-[#DECACA]"] { border-color: #e8e8e8 !important; }
+.product-home-body [class~="text-[#2B2525]"], .product-home-body [class~="text-[#3B3333]"], .product-home-body [class~="text-[#4F4444]"] { color: #111 !important; }
+.product-home-body [class~="text-[#756565]"], .product-home-body [class~="text-[#6D5B5B]"], .product-home-body [class~="text-[#8A7777]"], .product-home-body [class~="text-[#9A8888]"] { color: #666 !important; }
+.product-home-body [class~="text-[#B56F6F]"], .product-home-body [class~="text-[#9F5E5E]"] { color: #b77e00 !important; }
+.product-home-body [class~="bg-[#B56F6F]"] { background: #fbb606 !important; border-color: #fbb606 !important; color: #111 !important; border-radius: 8px; }
+.product-home-body [class~="bg-[#B56F6F]"] * { color: #111 !important; }
+.product-home-body [class~="border-[#B56F6F]"] { border-color: #fbb606 !important; }
+.product-home-body [class~="hover:bg-[#F8EFEC]"]:hover { background: #fff1c8 !important; }
+.product-home-body [class~="rounded-2xl"] { border-radius: 14px !important; }
+
+/* Bigger, denser product cards for the mobile Shop listing. */
+@media (max-width: 767px) {
+  .shop-category-listing > div { padding-left: 12px !important; padding-right: 12px !important; }
+  .shop-product-grid { gap: 12px !important; }
+  .shop-product-grid article > div:first-child { border-radius: 10px; }
+}
+
 @keyframes wishlist-heart-pop {
   0% { transform: scale(1); }
   45% { transform: scale(1.42); }
