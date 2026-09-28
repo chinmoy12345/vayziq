@@ -120,24 +120,6 @@ export default function SettingsPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
-  useEffect(() => {
-    void fetch("/api/admin/store-branding", { cache: "no-store" })
-      .then(async (response) => ({ response, body: await response.json() as { data?: { name?: string; logo?: string; email: string; phone: string; whatsapp: string; hours: string; address: string; pincode: string } } }))
-      .then(({ response, body }) => {
-        if (!response.ok || !body.data) throw new Error("Unable to load settings");
-        setEmail(body.data.email);
-        setPhone(body.data.phone);
-        setWhatsapp(body.data.whatsapp);
-        setHours(body.data.hours);
-        setAddress(body.data.address);
-        setPincode(body.data.pincode);
-        setIsLoaded(true);
-        setStoreName(body.data.name || "Tantuka");
-        setStoreLogo(body.data.logo || "/uploads/branding/tantuka-wordmark-classic.png");
-      })
-      .catch(() => setStatusMessage("Brand settings could not be loaded. Please try again."));
-  }, []);
-
   const [tagline, setTagline] = useState(
     "Sarees • Kurtis • Nightwear"
   );
@@ -155,6 +137,24 @@ export default function SettingsPage() {
   );
 
   const [pincode, setPincode] = useState("");
+
+  useEffect(() => {
+    void fetch("/api/admin/store-branding", { cache: "no-store" })
+      .then(async (response) => ({ response, body: await response.json() as { data?: { name?: string; logo?: string; email: string; phone: string; whatsapp: string; hours: string; address: string; pincode: string } } }))
+      .then(({ response, body }) => {
+        if (!response.ok || !body.data) throw new Error("Unable to load settings");
+        setEmail(body.data.email);
+        setPhone(body.data.phone);
+        setWhatsapp(body.data.whatsapp);
+        setHours(body.data.hours);
+        setAddress(body.data.address);
+        setPincode(body.data.pincode);
+        setIsLoaded(true);
+        setStoreName(body.data.name || "Tantuka");
+        setStoreLogo(body.data.logo || "/uploads/branding/tantuka-wordmark-classic.png");
+      })
+      .catch(() => setStatusMessage("Brand settings could not be loaded. Please try again."));
+  }, []);
 
   const [facebook, setFacebook] = useState(
     "https://facebook.com/"

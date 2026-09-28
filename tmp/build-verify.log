@@ -1,0 +1,265 @@
+
+> the-susmita-collection@0.1.0 build
+> npm run db:sync && prisma generate && next build
+
+
+> the-susmita-collection@0.1.0 db:sync
+> prisma db execute --schema prisma/schema.prisma --file prisma/patches/razorpay-order-fields.sql && prisma db push --skip-generate && prisma db execute --schema prisma/schema.prisma --file prisma/patches/managed-offers.sql && prisma db execute --schema prisma/schema.prisma --file prisma/patches/category-banner-placements.sql && prisma db execute --schema prisma/schema.prisma --file prisma/patches/quantity-offers.sql && prisma db execute --schema prisma/schema.prisma --file prisma/patches/inventory-opening-stock.sql
+
+warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+For more information, see: https://pris.ly/prisma-config
+
+Script executed successfully.
+warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+For more information, see: https://pris.ly/prisma-config
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+Datasource "db": PostgreSQL database "the_susmita_collection", schema "public" at "localhost:5432"
+
+The database is already in sync with the Prisma schema.
+
+warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+For more information, see: https://pris.ly/prisma-config
+
+Script executed successfully.
+warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+For more information, see: https://pris.ly/prisma-config
+
+Script executed successfully.
+warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+For more information, see: https://pris.ly/prisma-config
+
+Script executed successfully.
+warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+For more information, see: https://pris.ly/prisma-config
+
+Script executed successfully.
+warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+For more information, see: https://pris.ly/prisma-config
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+
+✔ Generated Prisma Client (v6.19.3) to .\lib\generated\prisma-suppliers in 173ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Need your database queries to be 1000x faster? Accelerate offers you that and more: https://pris.ly/tip-2-accelerate
+
+▲ Next.js 16.3.4 (Turbopack)
+- Environments: .env.local, .env
+✓ Running next.config.ts took 41ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 3.7s
+  Skipping validation of types
+  Finished TypeScript config validation in 17ms ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/38) ...
+  Generating static pages using 7 workers (9/38) 
+  Generating static pages using 7 workers (18/38) 
+  Generating static pages using 7 workers (28/38) 
+✓ Generating static pages using 7 workers (38/38) in 932ms
+Turbopack build encountered 2 warnings:
+./lib/generated/prisma-suppliers/index.js:628:20
+Warning: Dynamic filesystem access causes tracing of the whole project
+  [90m626 |[0m   }) ?? alternativePaths[[35m0[0m]
+  [90m627 |[0m
+[33m[1m>[0m [90m628 |[0m   config.dirname = path.join(process.cwd(), alternativePath)
+  [90m    |[0m                    [33m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m629 |[0m   config.isBundled = [36mtrue[0m
+  [90m630 |[0m }
+  [90m631 |[0m
+
+Static analysis determined that this filesystem access causes the whole project to be traced and included in the output.
+This is usually unintentional and leads to all source files (including the public folder) to be deployed as part of the server code.
+This can slow down deployments or lead to failures when size limits are exceeded.
+To resolve this, you can
+- make sure the path is statically scoped to some subfolder, for example path.join(process.cwd(), 'data', bar), or
+- only use them in development, or
+- opt out by adding an ignore comment to the highlighted call: path.join(/*turbopackIgnore: true*/ ...), or
+- remove them.
+
+Import traces:
+  #1 [App Route]:
+    ./lib/generated/prisma-suppliers/index.js
+    ./app/api/admin/suppliers/route.ts
+
+  #2 [App Route]:
+    ./lib/generated/prisma-suppliers/index.js
+    ./lib/generated/prisma-suppliers/index.js
+    ./app/api/orders/[id]/route.ts
+
+  #3 [Server Component]:
+    ./lib/generated/prisma-suppliers/index.js
+    ./lib/db.ts
+    ./app/(store)/account/orders/page.tsx
+
+
+./lib/generated/prisma-suppliers/runtime/library.js:7:1711
+Warning: Dynamic filesystem access causes tracing of the whole project
+  [90m 5 |[0m ...[35m31[0m?[35m3[0m:[35m2[0m:[35m1[0m}[36mif[0m([32m"CI"[0m[36min[0m [33mG[0m)[36mreturn[0m[[32m"TRAVIS"[0m,[32m"CIRCLECI"[0m,[32m"APPVEYOR"[0m,[32m"GITLAB_CI"[0m,[32m"GITHUB_ACTIONS"[0m.[32m..[0m
+  [90m 6 |[0m ...
+[33m[1m>[0m [90m 7 |[0m ...process.cwd(),[32m".env.vault"[0m);[36mreturn[0m [33mFi[0m.existsSync(r)?r:[36mnull[0m}[36mfunction[0m [33mPs[0m(e){[36mreturn[0m e[[35m0[0m]==.[32m..[0m
+  [90m   |[0m                                       [33m[1m^^^^^^^^^^^^^^^^[0m
+  [90m 8 |[0m ...d:i,selections:o}=n.match(r);[36mreturn[0m i&&o&&[33mObject[0m.keys(o).forEach(s=>t(s,o[s])),i}[36mif[0m(ui(...
+  [90m 9 |[0m ...[36mrn[0m{libssl:o,strategy:[32m"ldconfig"[0m}}[36mlet[0m i=[36mawait[0m [33mYt[0m([32m"openssl version -v"[0m);[36mif[0m(i){ee([32m`Found o...[0m
+  [90m10 |[0m ...raseUp:()=>[33mSc[0m,exitAlternativeScreen:()=>[33mOc[0m,iTerm:()=>[33mLc[0m,image:()=>[33mNc[0m,link:()=>_c,scroll...
+
+Static analysis determined that this filesystem access causes the whole project to be traced and included in the output.
+This is usually unintentional and leads to all source files (including the public folder) to be deployed as part of the server code.
+This can slow down deployments or lead to failures when size limits are exceeded.
+To resolve this, you can
+- make sure the path is statically scoped to some subfolder, for example path.join(process.cwd(), 'data', bar), or
+- only use them in development, or
+- opt out by adding an ignore comment to the highlighted call: fs.existsSync(/*turbopackIgnore: true*/ ...), or
+- remove them.
+
+Import traces:
+  #1 [App Route]:
+    ./lib/generated/prisma-suppliers/runtime/library.js
+    ./lib/generated/prisma-suppliers/index.js
+    ./app/api/orders/[id]/route.ts
+
+  #2 [App Route]:
+    ./lib/generated/prisma-suppliers/runtime/library.js
+    ./lib/generated/prisma-suppliers/index.js
+    ./app/api/admin/suppliers/route.ts
+
+  #3 [Server Component]:
+    ./lib/generated/prisma-suppliers/runtime/library.js
+    ./lib/generated/prisma-suppliers/index.js
+    ./lib/db.ts
+    ./app/(store)/account/orders/page.tsx
+
+
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+├ ○ /_not-found
+├ ƒ /[categorySlug]
+├ ƒ /about
+├ ƒ /account
+├ ƒ /account/addresses
+├ ƒ /account/orders
+├ ƒ /account/orders/[id]
+├ ƒ /account/profile
+├ ƒ /account/wishlist
+├ ○ /admin/audit
+├ ○ /admin/banners
+├ ƒ /admin/banners/[id]
+├ ○ /admin/banners/new
+├ ○ /admin/blog
+├ ○ /admin/brands
+├ ○ /admin/categories
+├ ƒ /admin/categories/[id]/edit
+├ ○ /admin/categories/new
+├ ○ /admin/coupons
+├ ƒ /admin/coupons/[id]
+├ ○ /admin/coupons/new
+├ ○ /admin/customers
+├ ƒ /admin/customers/[id]
+├ ○ /admin/customers/new
+├ ƒ /admin/dashboard
+├ ○ /admin/delivery-zips
+├ ○ /admin/homepage
+├ ƒ /admin/inventory
+├ ○ /admin/login
+├ ○ /admin/orders
+├ ƒ /admin/orders/[id]
+├ ○ /admin/products
+├ ƒ /admin/products/[id]/edit
+├ ○ /admin/products/new
+├ ○ /admin/returns
+├ ○ /admin/reviews
+├ ƒ /admin/reviews/[id]
+├ ƒ /admin/roles
+├ ○ /admin/settings
+├ ƒ /admin/suppliers
+├ ƒ /api/account/addresses
+├ ƒ /api/account/order-items/[id]/invoice
+├ ƒ /api/account/profile
+├ ƒ /api/account/service-requests
+├ ƒ /api/account/wishlist
+├ ƒ /api/admin/access
+├ ƒ /api/admin/audit
+├ ƒ /api/admin/blog
+├ ƒ /api/admin/brands
+├ ƒ /api/admin/delivery-zips
+├ ƒ /api/admin/homepage-settings
+├ ƒ /api/admin/inventory
+├ ƒ /api/admin/product-search
+├ ƒ /api/admin/roles
+├ ƒ /api/admin/roles/assignments
+├ ƒ /api/admin/service-requests
+├ ƒ /api/admin/store-branding
+├ ƒ /api/admin/store-branding/upload
+├ ƒ /api/admin/storefront-menu
+├ ƒ /api/admin/suppliers
+├ ƒ /api/auth/admin/login
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/me
+├ ƒ /api/auth/register
+├ ƒ /api/auth/send-otp
+├ ƒ /api/auth/verify-otp
+├ ƒ /api/banners
+├ ƒ /api/banners/[id]
+├ ƒ /api/cart
+├ ƒ /api/cart/availability
+├ ƒ /api/cart/quote
+├ ƒ /api/categories
+├ ƒ /api/categories/[id]
+├ ƒ /api/checkout
+├ ƒ /api/contact
+├ ƒ /api/coupons
+├ ƒ /api/coupons/[id]
+├ ƒ /api/customers
+├ ƒ /api/customers/[id]
+├ ƒ /api/delivery-estimate
+├ ƒ /api/offers
+├ ƒ /api/orders
+├ ƒ /api/orders/[id]
+├ ƒ /api/orders/[id]/service-requests
+├ ƒ /api/orders/[id]/shipments
+├ ƒ /api/payments/razorpay/create-order
+├ ƒ /api/payments/razorpay/verify
+├ ƒ /api/products
+├ ƒ /api/products/[id]
+├ ƒ /api/products/[id]/engagement
+├ ƒ /api/products/[id]/service-policy
+├ ƒ /api/reviews
+├ ƒ /api/reviews/eligibility
+├ ƒ /api/upload/banner
+├ ƒ /api/upload/category
+├ ƒ /api/upload/product
+├ ○ /apple-icon.png
+├ ƒ /blog
+├ ƒ /blog/[slug]
+├ ƒ /cart
+├ ƒ /checkout
+├ ƒ /contact
+├ ○ /icon.png
+├ ƒ /login
+├ ƒ /manifest.webmanifest
+├ ƒ /offers/[id]
+├ ƒ /privacy
+├ ƒ /product/[slug]
+├ ƒ /register
+├ ƒ /returns
+├ ○ /robots.txt
+├ ƒ /search
+├ ƒ /shipping
+├ ƒ /shop
+├ ƒ /sitemap.xml
+├ ƒ /watch-buy
+└ ƒ /wishlist
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

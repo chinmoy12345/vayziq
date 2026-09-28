@@ -1,9 +1,6 @@
-import { StoreName } from "@/components/StoreBranding";
-
-// app/register/page.tsx
-
 "use client";
 
+import { StoreName } from "@/components/StoreBranding";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
