@@ -1,6 +1,6 @@
 "use client";
 import { useEffect,useState,type Dispatch,type SetStateAction } from "react";
-type Item = { id:number|string; price:number; quantity:number; variantId?:number; size?:string; color?:string };
+type Item = { id:number|string; price?:number; quantity:number; variantId?:number; size?:string; color?:string };
 export function useCartPrices<T extends Item>(items:T[],setItems:Dispatch<SetStateAction<T[]>>) {
  const [error,setError]=useState("");
  const signature=JSON.stringify(items.map(({id,quantity,variantId,size,color})=>({id,quantity,variantId,size,color})));

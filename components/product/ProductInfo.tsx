@@ -57,6 +57,9 @@ export default function ProductInfo({
 
   const variant = product.variants?.find(v => (!v.values.size || v.values.size === selectedSize) && (!(v.values.color || v.values.colour) || (v.values.color || v.values.colour) === selectedColor));
   const sellingPrice = variant?.price ?? product.basePrice ?? Number(product.price.replace(/[^\d.]/g, ""));
+  const selectedVariantStock = variant?.stock ?? 0;
+  const canPurchase = !product.variants?.length || Boolean(variant && selectedVariantStock > 0);
+  const colorSwatches: Record<string, string> = { Black: "#151515", Olive: "#647056", White: "#f5f5f3", Grey: "#a6a8aa", Gray: "#a6a8aa", Navy: "#233550", Beige: "#d8c7aa" };
   const [quantity, setQuantity] = useState(1);
 
   const [wishlist, setWishlist] = useState(false);
@@ -286,10 +289,13 @@ export default function ProductInfo({
             <div className="mt-3 flex flex-wrap gap-3">
 
               {product.colors.map(
-                (color, index) => (
+                (color, index) => {
+                  const colorOutOfStock = Boolean(product.variants?.length && !product.variants.some((item) => (item.values.color || item.values.colour) === color && item.stock > 0));
+                  return (
                   <button
                     key={color}
                     type="button"
+                    disabled={colorOutOfStock}
                     onClick={() =>
                       setSelectedColor(color)
                     }
@@ -303,7 +309,9 @@ export default function ProductInfo({
                       text-xs
                       transition
                       ${
-                        selectedColor === color
+                        colorOutOfStock
+                          ? "cursor-not-allowed border-[#e8e8e8] bg-[#f7f7f7] text-[#9a9a9a] opacity-60"
+                          : selectedColor === color
                           ? "border-[#B56F6F] bg-[#F8EFEC]"
                           : "border-[#E8DADA] bg-white hover:border-[#C99A9A]"
                       }
@@ -313,24 +321,19 @@ export default function ProductInfo({
                       className="h-4 w-4 rounded-full border border-black/10"
                       style={{
                         backgroundColor:
-                          [
-                            "#D88A8A",
-                            "#405A78",
-                            "#648A6A",
-                            "#C7A4B8",
-                          ][index % 4],
+                          colorSwatches[color] ?? ["#D88A8A", "#405A78", "#648A6A", "#C7A4B8"][index % 4],
                       }}
                     />
 
                     {color}
 
-                    {selectedColor === color && (
+                    {selectedColor === color && !colorOutOfStock && (
                       <Check
                         className="h-3.5 w-3.5 text-[#B56F6F]"
                       />
                     )}
                   </button>
-                )
+                ); }
               )}
 
             </div>
@@ -373,10 +376,12 @@ export default function ProductInfo({
 
             <div className="mt-3 flex flex-wrap gap-2">
 
-              {product.sizes.map((size) => (
-                <button
+              {product.sizes.map((size) => {
+                const sizeOutOfStock = Boolean(product.variants?.length && !product.variants.some((item) => item.values.size === size && (!(item.values.color || item.values.colour) || (item.values.color || item.values.colour) === selectedColor) && item.stock > 0));
+                return <button
                   key={size}
                   type="button"
+                  disabled={sizeOutOfStock}
                   onClick={() =>
                     setSelectedSize(size)
                   }
@@ -391,17 +396,21 @@ export default function ProductInfo({
                     text-xs
                     transition
                     ${
-                      selectedSize === size
+                      sizeOutOfStock
+                        ? "cursor-not-allowed border-[#e8e8e8] bg-[#f7f7f7] text-[#9a9a9a] line-through opacity-65"
+                        : selectedSize === size
                         ? "border-[#B56F6F] bg-[#B56F6F] text-white"
                         : "border-[#E8DADA] bg-white text-[#4F4444] hover:border-[#B56F6F]"
                     }
                   `}
                 >
-                  {size}
+                  {size}{sizeOutOfStock && <span className="ml-1 text-[8px] no-underline">Out</span>}
                 </button>
-              ))}
+              })}
 
             </div>
+
+            {product.variants?.length ? <p className={`mt-3 text-xs font-semibold ${canPurchase ? "text-emerald-700" : "text-rose-700"}`}>{canPurchase ? `${selectedVariantStock} item${selectedVariantStock === 1 ? "" : "s"} available in this variant` : "This selected variation is out of stock"}</p> : null}
 
           </div>
         )}
@@ -439,11 +448,12 @@ export default function ProductInfo({
             type="button"
             onClick={() =>
               setQuantity((value) =>
-                Math.min(10, value + 1)
+                Math.min(variant ? Math.max(1, Math.min(10, variant.stock)) : 10, value + 1)
               )
             }
             className="flex h-full w-11 items-center justify-center text-[#5E5151] transition hover:bg-[#F8EFEC]"
             aria-label="Increase quantity"
+          disabled={!canPurchase || quantity >= Math.min(10, selectedVariantStock)}
           >
             <Plus className="h-4 w-4" />
           </button>
@@ -461,6 +471,7 @@ export default function ProductInfo({
         <button
           type="button"
           onClick={addToBag}
+          disabled={!canPurchase || quantity > selectedVariantStock}
           className="
             flex
             h-13
@@ -476,7 +487,7 @@ export default function ProductInfo({
             tracking-[0.18em]
             text-white
             transition
-            hover:bg-[#9F5E5E]
+            hover:bg-[#9F5E5E] disabled:cursor-not-allowed disabled:border-[#d6d6d6] disabled:bg-[#e6e6e6] disabled:text-[#777]
           "
         >
           <ShoppingBag
@@ -492,6 +503,7 @@ export default function ProductInfo({
         <button
           type="button"
           onClick={buyNow}
+          disabled={!canPurchase || quantity > selectedVariantStock}
           className="
             flex
             h-13
@@ -507,7 +519,7 @@ export default function ProductInfo({
             tracking-[0.18em]
             text-white
             transition
-            hover:bg-[#3B3333]
+            hover:bg-[#3B3333] disabled:cursor-not-allowed disabled:border-[#d6d6d6] disabled:bg-[#e6e6e6] disabled:text-[#777]
           "
         >
           {buyingNow

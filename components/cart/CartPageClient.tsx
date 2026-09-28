@@ -32,14 +32,21 @@ interface CartItem {
   color?: string;
 }
 
+type StockStatus = { stock: number; available: boolean; requested: number };
+
 export default function CartPageClient({ visibility }: { visibility: HomepageVisibility }) {
   const { offers: productOffers, loading: offersLoading, error: offersError } = useOffers();
   const router = useRouter();
   const [authOpen, setAuthOpen] = useState(false);
   const [checkingSession, setCheckingSession] = useState(false);
   const [checkoutError, setCheckoutError] = useState("");
+  const [stockStatus, setStockStatus] = useState<Record<string, StockStatus>>({});
   async function proceedToCheckout() {
     if (checkingSession) return;
+    if (hasUnavailableItems) {
+      setCheckoutError("Remove or update the out-of-stock item before checkout.");
+      return;
+    }
     setCheckingSession(true); setCheckoutError("");
     try {
       const response = await fetch("/api/auth/me", { cache: "no-store" });
@@ -82,6 +89,32 @@ export default function CartPageClient({ visibility }: { visibility: HomepageVis
     window.dispatchEvent(new Event("cart-updated"));
   }, [cartItems, cartLoaded]);
 
+  const stockSignature = JSON.stringify(cartItems.map(({ id, variantId, quantity, size, color }) => ({ id, variantId, quantity, size, color })));
+  useEffect(() => {
+    if (!cartLoaded) return;
+    const itemsForStock = JSON.parse(stockSignature) as Array<Pick<CartItem, "id" | "variantId" | "quantity" | "size" | "color">>;
+    if (!itemsForStock.length) return;
+    const controller = new AbortController();
+    fetch("/api/cart/availability", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ items: itemsForStock.map(({ id, variantId, quantity }) => ({ id, variantId, quantity })) }),
+      signal: controller.signal,
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message);
+        const next: Record<string, StockStatus> = {};
+        data.availability.forEach((line: { id: number; variantId?: number; stock: number; available: boolean; requested: number }, index: number) => {
+          const item = itemsForStock[index];
+          if (item) next[cartLineKey(item)] = { stock: line.stock, available: line.available, requested: line.requested };
+        });
+        setStockStatus(next);
+      })
+      .catch(() => { if (!controller.signal.aborted) setStockStatus({}); });
+    return () => controller.abort();
+  }, [cartLoaded, stockSignature]);
+
   const updateQuantity = (id: string, change: number) => {
     setCartItems((items) =>
       items.map((item) => {
@@ -89,9 +122,11 @@ export default function CartPageClient({ visibility }: { visibility: HomepageVis
           return item;
         }
 
+        const maxStock = stockStatus[id]?.stock;
+        const nextQuantity = Math.max(1, item.quantity + change);
         return {
           ...item,
-          quantity: Math.max(1, item.quantity + change),
+          quantity: change > 0 && typeof maxStock === "number" ? Math.min(nextQuantity, maxStock) : nextQuantity,
         };
       })
     );
@@ -120,6 +155,9 @@ export default function CartPageClient({ visibility }: { visibility: HomepageVis
   };
 
   const priceError = useCartPrices(cartItems, setCartItems);
+  const unavailableItems = cartItems.filter((item) => stockStatus[cartLineKey(item)]?.available === false);
+  const hasUnavailableItems = unavailableItems.length > 0;
+  const checkingStock = cartItems.length > 0 && Object.keys(stockStatus).length !== cartItems.length;
   const subtotal = useMemo(() => {
     return cartItems.reduce(
       (total, item) => total + item.price * item.quantity,
@@ -310,6 +348,17 @@ export default function CartPageClient({ visibility }: { visibility: HomepageVis
                         {formatPrice(item.price)}
                       </p>
 
+                      {stockStatus[cartLineKey(item)]?.available === false && (
+                        <p role="alert" className="mt-2 inline-flex w-fit items-center rounded-full bg-rose-50 px-2.5 py-1 text-[10px] font-bold tracking-[0.08em] text-rose-700">
+                          {stockStatus[cartLineKey(item)]?.stock === 0 ? "OUT OF STOCK" : `ONLY ${stockStatus[cartLineKey(item)]?.stock} AVAILABLE`}
+                        </p>
+                      )}
+                      {stockStatus[cartLineKey(item)]?.available && stockStatus[cartLineKey(item)]?.stock <= 5 && (
+                        <p className="mt-2 text-[10px] font-semibold tracking-[0.08em] text-amber-700">
+                          ONLY {stockStatus[cartLineKey(item)]?.stock} LEFT
+                        </p>
+                      )}
+
                       {/* BOTTOM */}
 
                       <div className="mt-auto flex items-end justify-between gap-3 pt-4">
@@ -342,7 +391,8 @@ export default function CartPageClient({ visibility }: { visibility: HomepageVis
                             onClick={() =>
                               updateQuantity(cartLineKey(item), 1)
                             }
-                            className="flex h-full w-9 items-center justify-center text-[#6D5B5B] transition hover:bg-[#F8EFEC]"
+                            disabled={stockStatus[cartLineKey(item)]?.stock === 0 || (typeof stockStatus[cartLineKey(item)]?.stock === "number" && item.quantity >= stockStatus[cartLineKey(item)]!.stock)}
+                            className="flex h-full w-9 items-center justify-center text-[#6D5B5B] transition hover:bg-[#F8EFEC] disabled:cursor-not-allowed disabled:opacity-40"
                             aria-label="Increase quantity"
                           >
                             <Plus
@@ -418,6 +468,11 @@ export default function CartPageClient({ visibility }: { visibility: HomepageVis
               </h2>
 
               <p role="alert" className="text-xs text-red-700">{priceError}</p>
+              {hasUnavailableItems && (
+                <p role="alert" className="mt-3 rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-xs leading-5 text-rose-800">
+                  {unavailableItems.length === 1 ? "An item in your cart is out of stock." : `${unavailableItems.length} items in your cart are out of stock.`} Remove or update them to proceed.
+                </p>
+              )}
               {visibility.cartOffers && <div className="cart-offers">
                 <OfferSelector items={cartItems} offers={productOffers} loading={offersLoading} error={offersError} subtotal={subtotal} code={offerCode} onChange={code => { setOfferCode(code); localStorage.setItem("tantuka-offer", code); }} />
                 {discount > 0 && <p className="flex justify-between text-sm text-emerald-800"><span>Offer discount</span><span>−{formatPrice(discount)}</span></p>}
@@ -465,16 +520,16 @@ export default function CartPageClient({ visibility }: { visibility: HomepageVis
               <button
                 type="button"
                 onClick={proceedToCheckout}
-                disabled={checkingSession}
-                aria-busy={checkingSession}
-                className="flex h-12 w-full items-center justify-center gap-3 bg-[#B56F6F] text-[10px] font-semibold tracking-[0.18em] text-white transition hover:bg-[#9F5E5E] hover:shadow-lg disabled:cursor-wait disabled:opacity-60"
+                disabled={checkingSession || checkingStock || hasUnavailableItems}
+                aria-busy={checkingSession || checkingStock}
+                className="flex h-12 w-full items-center justify-center gap-3 bg-[#B56F6F] text-[10px] font-semibold tracking-[0.18em] text-white transition hover:bg-[#9F5E5E] hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <ShoppingBag
                   className="h-4 w-4"
                   strokeWidth={1.5}
                 />
 
-                {checkingSession ? "PLEASE WAIT…" : "PROCEED TO CHECKOUT"}
+                {checkingStock ? "CHECKING STOCK…" : checkingSession ? "PLEASE WAIT…" : hasUnavailableItems ? "UPDATE OUT-OF-STOCK ITEMS" : "PROCEED TO CHECKOUT"}
               </button>
               {checkoutError && <p role="alert" className="mt-3 text-xs text-rose-700">{checkoutError}</p>}
 
