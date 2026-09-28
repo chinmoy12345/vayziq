@@ -53,16 +53,16 @@ export default async function AccountLayout({
   if (!user) redirect("/");
 
   return (
-    <div className="min-h-screen bg-[#faf8f6]">
+    <div className="min-h-screen bg-[#fbfbfb]">
       <div className="mx-auto flex max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:px-8">
 
         {/* Desktop Sidebar */}
         <aside className="hidden w-64 shrink-0 md:block">
-          <div className="sticky top-6 rounded-2xl border border-gray-200 bg-white p-4">
+          <div className="sticky top-6 rounded-2xl border border-[#e8e8e8] bg-white p-4 shadow-[0_8px_28px_rgba(0,0,0,.04)]">
 
             {/* Account Title */}
             <div className="border-b border-gray-100 px-3 pb-4">
-              <p className="text-xs font-medium uppercase tracking-wider text-gray-400">
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#b77e00]">
                 My Account
               </p>
 
@@ -84,8 +84,8 @@ export default async function AccountLayout({
                       group flex items-center gap-3 rounded-xl
                       px-3 py-2.5 text-sm font-medium
                       text-gray-600 transition
-                      hover:bg-[#b56f6f]/10
-                      hover:text-[#9b5c5c]
+                      hover:bg-[#fff1c8]
+                      hover:text-[#111]
                     "
                   >
                     <Icon className="h-4.5 w-4.5 shrink-0" />
@@ -122,8 +122,8 @@ export default async function AccountLayout({
                       flex items-center gap-2 rounded-xl
                       px-3 py-2 text-xs font-medium
                       text-gray-600 whitespace-nowrap
-                      transition hover:bg-[#b56f6f]/10
-                      hover:text-[#9b5c5c]
+                      transition hover:bg-[#fff1c8]
+                      hover:text-[#111]
                     "
                   >
                     <Icon className="h-4 w-4" />
