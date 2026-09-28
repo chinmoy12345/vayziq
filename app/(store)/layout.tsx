@@ -19,7 +19,7 @@ export default async function StoreLayout({ children }: Readonly<{ children: Rea
         productCardRating: visibility.productCardRating,
         productCardCarousel: visibility.productCardCarousel,
       }}>
-        <main className="min-h-screen">{children}</main>
+        <main className="storefront-shell min-h-screen">{children}</main>
       </ProductCardSettingsProvider>
       <Footer branding={branding} settings={{
         newsletter: visibility.footerNewsletter,
