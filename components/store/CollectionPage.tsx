@@ -5,29 +5,34 @@ import { getQuantityOfferSlides } from "@/components/store/promo-slides";
 import { getActiveBanners, getStoreFilters, getStoreProducts, toCardProduct, type BannerPlacement } from "@/lib/storefront";
 import type { BannerSlide } from "@/components/store/BannerSlider";
 
-const CATEGORY_FEATURE_BANNERS: Record<string, BannerSlide> = {
-  sarees: {
-    title: "Sarees, woven to be remembered",
-    subtitle: "Heritage-inspired weaves for celebrations and everyday elegance.",
-    image: "/images/category-banners/sarees.webp",
-    link: "/sarees",
-    overlayText: true,
-  },
-  kurtis: {
-    title: "Easy elegance, every day",
-    subtitle: "Printed and embroidered kurtis made for effortless style.",
-    image: "/images/category-banners/kurtis.webp",
-    link: "/kurtis",
-    overlayText: true,
-  },
-  nightwear: {
-    title: "Slow down in softer style",
-    subtitle: "Comfort-first nightwear for the quieter moments of your day.",
-    image: "/images/category-banners/nightwear.webp",
-    link: "/nightwear",
-    overlayText: true,
-  },
+const shopFeatureBanner: BannerSlide = {
+  title: "Move freely. Live boldly.",
+  subtitle: "Everyday essentials designed for comfort, confidence and movement.",
+  image: "/vayziq/hero-paired-v2.png",
+  link: "/shop",
+  overlayText: true,
 };
+
+function categoryFeatureBanner(slug: string, title: string): BannerSlide {
+  const label = title.replace(/^Men's\s+|^Women's\s+/i, "");
+  const normalized = `${slug} ${title}`.toLowerCase();
+  const image = normalized.includes("women") || normalized.includes("hoodie")
+    ? "/vayziq/category-women.png"
+    : normalized.includes("jogger")
+      ? "/vayziq/category-joggers.png"
+      : normalized.includes("t-shirt")
+        ? "/vayziq/product-tshirt.png"
+        : normalized.includes("accessor") || normalized.includes("track")
+          ? "/vayziq/fashion-grid.png"
+          : "/vayziq/category-men.png";
+  return {
+    title: `${label}, made to move`,
+    subtitle: "Premium everyday wear with a clean fit, soft comfort and bold VAYZIQ attitude.",
+    image,
+    link: `/${slug}`,
+    overlayText: true,
+  };
+}
 
 interface CollectionPageProps {
   categorySlug?: string;
@@ -51,7 +56,7 @@ export default async function CollectionPage(props: CollectionPageProps) {
   const promoSlides = bannerPlacement
     ? getQuantityOfferSlides(categorySlug ? title : "the collection", categorySlug ? `/${categorySlug}` : "/shop")
     : [];
-  const categoryFeatureBanner = categorySlug ? CATEGORY_FEATURE_BANNERS[categorySlug] : undefined;
-  const slides = [...(categoryFeatureBanner ? [categoryFeatureBanner] : []), ...banner, ...promoSlides];
+  const featureBanner = categorySlug ? categoryFeatureBanner(categorySlug, title) : shopFeatureBanner;
+  const slides = [featureBanner, ...banner, ...promoSlides];
   return <main className="shop-home-body min-h-screen bg-[#FFFDFC]"><Breadcrumbs title={title} isShop={bannerPlacement === "shop"} category={showFullFilters && categorySlug ? products.find(product => product.category.slug === categorySlug)?.category.name : undefined} /><PageBanner banners={slides} title={title} category={Boolean(categorySlug) || bannerPlacement === "shop"} /><CategoryListing key={categorySlug ?? "all"} initialCategorySlug={categorySlug} products={products.map(toCardProduct)} productCount={products.length} filters={filters} showFullFilters={showFullFilters} showProductFilters={showProductFilters} /></main>;
 }

@@ -146,7 +146,7 @@ export default function SettingsPage() {
     "Discover elegant sarees, stylish kurtis and comfortable nightwear for every occasion."
   );
 
-  const [email, setEmail] = useState("hello.tantuka@gmail.com");
+  const [email, setEmail] = useState("hello.vayziq@gmail.com");
   const [phone, setPhone] = useState("+91 9330755055");
   const [whatsapp, setWhatsapp] = useState("+91 9330755055");
 

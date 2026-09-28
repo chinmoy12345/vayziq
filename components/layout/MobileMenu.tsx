@@ -9,7 +9,7 @@ import type { HeaderCategory } from "@/components/home/HomeHeader";
 interface MobileMenuProps { isOpen: boolean; onClose: () => void; userName: string | null; onSignIn: () => void; showQuickNav?: boolean; categories?: HeaderCategory[]; }
 
 const quickItems = [["Home", "/", House], ["Categories", "/shop", Layers], ["Deals", "/offers", Tag], ["For You", "/shop", Sparkles]] as const;
-const primaryItems = [["Home", "/"], ["New Arrivals", "/shop?sort=newest"], ["Watch & Buy", "/watch-buy"]] as const;
+const primaryItems = [["Home", "/"], ["New Arrivals", "/shop?sort=newest"]] as const;
 
 export default function MobileMenu({ isOpen, onClose, userName, onSignIn, showQuickNav = true, categories = [] }: MobileMenuProps) {
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function MobileMenu({ isOpen, onClose, userName, onSignIn, showQu
         {categories.map((category) => <Link key={category.id} href={`/${category.slug}`} onClick={onClose} className="flex h-[39px] items-center justify-between rounded-lg px-3 text-[12px] text-[#111]">{category.name}<ChevronRight className="h-[15px] w-[15px]" /></Link>)}
         {primaryItems.slice(1).map(([label, href]) => <Link key={label} href={href} onClick={onClose} className="flex h-[39px] items-center justify-between rounded-lg px-3 text-[12px] text-[#111]">{label}<ChevronRight className="h-[15px] w-[15px]" /></Link>)}
       </nav>
-      <nav className="my-3 border-y border-[#e8e8e8] py-2" aria-label="Customer shortcuts">{[["Track Order", "/account/orders"], ["Wishlist", "/account/wishlist"], ["My Account", "/account"], ["Help & Support", "/contact"], ["About VAYZIQ", "/about"]].map(([label, href]) => <Link key={label} href={href} onClick={onClose} className="flex h-[39px] items-center justify-between rounded-lg px-3 text-[12px] text-[#111]">{label}<ChevronRight className="h-[15px] w-[15px]" /></Link>)}</nav>
+      <nav className="my-3 border-y border-[#e8e8e8] py-2" aria-label="Customer shortcuts">{[["Track Order", "/account/orders"], ["Wishlist", "/account/wishlist"], ["My Account", "/account"], ["Help & Support", "/contact"]].map(([label, href]) => <Link key={label} href={href} onClick={onClose} className="flex h-[39px] items-center justify-between rounded-lg px-3 text-[12px] text-[#111]">{label}<ChevronRight className="h-[15px] w-[15px]" /></Link>)}</nav>
       <div className="mt-4 grid grid-cols-3 gap-1.5"><span className="rounded-md bg-[#f7f7f7] p-2 text-center text-[8px] text-[#222]"><Truck className="mx-auto mb-1 h-5 w-5" />Free Shipping</span><span className="rounded-md bg-[#f7f7f7] p-2 text-center text-[8px] text-[#222]"><Undo2 className="mx-auto mb-1 h-5 w-5" />7-Day Returns</span><span className="rounded-md bg-[#f7f7f7] p-2 text-center text-[8px] text-[#222]"><ShieldCheck className="mx-auto mb-1 h-5 w-5" />Secure Payments</span></div>
       <div className="mt-4 border-t border-[#e8e8e8] px-1 pt-4 text-[12px] text-[#111]">Follow Us <div className="mt-2 text-[17px]">◎　▶　f　p</div></div>
     </aside>

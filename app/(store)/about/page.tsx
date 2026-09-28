@@ -8,6 +8,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 import Link from "next/link";
+import VayziqPageBanner from "@/components/store/VayziqPageBanner";
 
 const HeartIcon = () => (
   <svg
@@ -61,9 +62,10 @@ const CheckIcon = () => (
 
 export default function AboutPage() {
   return (
-    <div className="bg-white text-[#292321]">
+    <div className="vayziq-content-page bg-white text-[#292321]">
+      <VayziqPageBanner eyebrow="Our Story" title="About VAYZIQ" description="Premium everyday wear made to move freely and live boldly." image="/vayziq/hero-paired-v2.png" />
       {/* Hero */}
-      <section className="border-b border-[#eee6e1] bg-[#faf8f6]">
+      <section className="hidden border-b border-[#eee6e1] bg-[#faf8f6]">
         <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:px-10 lg:py-20">
           <div className="mx-auto max-w-3xl text-center">
             <p className="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-[#b56f6f]">

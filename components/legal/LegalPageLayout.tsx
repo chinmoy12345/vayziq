@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import VayziqPageBanner from "@/components/store/VayziqPageBanner";
 
 type LegalPageLayoutProps = {
   eyebrow: string;
@@ -27,8 +28,9 @@ export default function LegalPageLayout({
   lastUpdated,
 }: LegalPageLayoutProps) {
   return (
-    <main className="min-h-screen bg-white">
-      <section className="border-b border-[#eee6e1] bg-[#faf8f6]">
+    <main className="vayziq-content-page min-h-screen bg-white">
+      <VayziqPageBanner eyebrow={eyebrow} title={title} description={description} />
+      <section className="hidden border-b border-[#eee6e1] bg-[#faf8f6]">
         <div className="mx-auto max-w-6xl px-5 py-10 sm:px-6 sm:py-12 lg:px-8 lg:py-14">
           <Link
             href="/"

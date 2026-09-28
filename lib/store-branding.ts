@@ -14,7 +14,7 @@ export type StoreBranding = {
 
 export const DEFAULT_STORE_BRANDING: StoreBranding = {
   name: "Tantuka",
-  email: "hello.tantuka@gmail.com",
+  email: "hello.vayziq@gmail.com",
   phone: "+91 9330755055",
   whatsapp: "+91 9330755055",
   hours: "24*7",

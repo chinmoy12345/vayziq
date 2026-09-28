@@ -16,6 +16,6 @@ export default function HomeFooter() {
       <div className={styles.footerSocial}><span>Follow Us</span><div><a href="#" aria-label="Instagram">◎</a><a href="#" aria-label="YouTube">▶</a><a href="#" aria-label="Facebook">f</a><a href="#" aria-label="Pinterest">p</a></div></div>
       {submitted && <span role="status">Thanks for subscribing!</span>}
     </section>
-    <div className={styles.footerBottom}><p>© {new Date().getFullYear()} VAYZIQ. All rights reserved.</p><nav><Link href="/shop">Shop</Link><Link href="/contact">Contact</Link><Link href="/shipping">Shipping</Link><Link href="/returns">Returns</Link><Link href="/privacy">Privacy</Link></nav></div>
+    <div className={styles.footerBottom}><p>© {new Date().getFullYear()} VAYZIQ. All rights reserved.</p><nav><Link href="/shop">Shop</Link><Link href="/about">About</Link><Link href="/contact">Contact</Link><Link href="/shipping">Shipping</Link><Link href="/returns">Returns</Link><Link href="/privacy">Privacy</Link></nav></div>
   </footer>;
 }
