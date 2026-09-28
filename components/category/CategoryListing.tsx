@@ -361,7 +361,7 @@ export default function CategoryListing({
                 PRODUCT GRID
             ================================================= */}
 
-            <ProductGrid products={visibleProducts} columns={4} className={showFullFilters ? "shop-product-grid" : undefined} />
+            <ProductGrid products={visibleProducts} columns={4} className={showFullFilters ? "shop-product-grid" : "collection-product-grid"} />
 
             {sortedProducts.length === 0 && <div className="border border-dashed border-[#E8DADA] bg-white px-6 py-16 text-center"><p className="font-serif text-xl text-[#3B3333]">No products found</p><p className="mt-2 text-sm text-[#8A7777]">Try adjusting your filters.</p><button className="mt-5 text-xs font-semibold tracking-wide text-[#B56F6F] hover:underline" onClick={() => { setSelectedCategories([]); setPriceRange({ min: 0, max: defaultMaxPrice }); setSelectedSizes([]); setSelectedColors([]); }} type="button">CLEAR FILTERS</button></div>}
 

@@ -146,7 +146,9 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
         id: `product-${product.id}`,
         product,
       })),
-      ...EDITORIAL_REELS.map((reel, index) => ({ ...reel, product: editorialProducts[index] })),
+      // Legacy editorial clips remain as an empty-state fallback only. Once a
+      // product reel exists, Watch & Buy shows the actual VAYZIQ catalogue.
+      ...(products.length ? [] : EDITORIAL_REELS.map((reel, index) => ({ ...reel, product: editorialProducts[index] }))),
     ],
     [products, editorialProducts],
   );

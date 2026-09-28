@@ -190,6 +190,25 @@ body:has(.vayziq-home) .store-footer {
   .shop-product-grid article > div:first-child { border-radius: 10px; }
 }
 
+/* Shop body: the same crisp VAYZIQ visual system used on the homepage. */
+.shop-home-body { background: #fff !important; color: #111; }
+.shop-home-body .font-serif { font-family: Arial, Helvetica, sans-serif !important; font-weight: 800; letter-spacing: -.03em; }
+.shop-home-body [class~="bg-[#FFFDFC]"], .shop-home-body [class~="bg-[#F8EFEC]"], .shop-home-body [class~="bg-[#F5E9E7]"] { background: #f7f7f7 !important; }
+.shop-home-body [class~="border-[#E8DADA]"], .shop-home-body [class~="border-[#DCCACA]"] { border-color: #e8e8e8 !important; }
+.shop-home-body [class~="text-[#2B2525]"], .shop-home-body [class~="text-[#3B3333]"], .shop-home-body [class~="text-[#4F4444]"] { color: #111 !important; }
+.shop-home-body [class~="text-[#756565]"], .shop-home-body [class~="text-[#6D5B5B]"], .shop-home-body [class~="text-[#8A7777]"], .shop-home-body [class~="text-[#9A8888]"] { color: #666 !important; }
+.shop-home-body [class~="text-[#B56F6F]"], .shop-home-body [class~="text-[#9F5E5E]"], .shop-home-body [class~="text-[#B08B8B]"] { color: #b77e00 !important; }
+.shop-home-body [class~="bg-[#B56F6F]"] { background: #fbb606 !important; color: #111 !important; }
+.shop-home-body [class~="bg-[#B56F6F]"] * { color: #111 !important; }
+.shop-home-body [class~="border-[#B56F6F]"] { border-color: #fbb606 !important; }
+.shop-home-body [aria-roledescription="carousel"] { background: #f7f7f7 !important; }
+.shop-home-body [aria-roledescription="carousel"] [class~="bg-[#B56F6F]"] { background: #fbb606 !important; }
+.shop-home-body .shop-product-grid article > div:first-child { border-radius: 10px; background: #f7f7f7 !important; }
+.shop-home-body .shop-product-grid article h3 { font-family: Arial, Helvetica, sans-serif !important; font-weight: 800; color: #111 !important; }
+.shop-home-body .collection-product-grid article > div:first-child { border-radius: 10px; background: #f7f7f7 !important; }
+.shop-home-body .collection-product-grid article h3 { font-family: Arial, Helvetica, sans-serif !important; font-weight: 800; color: #111 !important; }
+@media (max-width: 767px) { .shop-home-body .collection-product-grid { gap: 12px !important; }.shop-home-body .collection-product-grid article > div:first-child { border-radius: 10px; } }
+
 @keyframes wishlist-heart-pop {
   0% { transform: scale(1); }
   45% { transform: scale(1.42); }

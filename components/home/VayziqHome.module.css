@@ -60,6 +60,9 @@
 @media(max-width:767px){.tools>a{display:grid}.search button{display:none!important}}
 @media(min-width:768px){.mobileSearch{display:none!important}}
 
+/* Best Seller photography fills one consistent card frame without distortion. */
+.productImage img{object-fit:cover!important;object-position:center!important;padding:0!important}
+
 /* The utility bar scrolls away; the main navigation remains fixed. */
 .chrome{position:static}.chrome .header{position:sticky;top:0;z-index:150}.chrome .mobileTopNav{position:static}
 @media(max-width:767px){.chrome .mobileTopNav{position:sticky;top:62px;z-index:149}}
@@ -72,3 +75,8 @@
 
 /* HomeHeader is rendered both inside .home and independently on Cart. */
 .chrome *{box-sizing:border-box}.chrome a{text-decoration:none;color:inherit}.chrome button{font:inherit;cursor:pointer}
+
+/* Database-backed Men/Women navigation with accessible sub-category flyouts. */
+.navDropdown{position:relative;align-self:stretch;display:flex;align-items:center}.navDropdown>a{gap:4px}.navDropdown>a>svg{width:13px;height:13px;transition:transform .18s}.navDropdown:focus-within>a>svg,.navDropdown:hover>a>svg{transform:rotate(180deg)}
+.categoryDropdown{position:absolute;top:calc(100% - 1px);left:50%;z-index:180;width:230px;padding:9px;border:1px solid var(--line);border-radius:0 0 12px 12px;background:#fff;box-shadow:0 14px 30px rgba(0,0,0,.13);visibility:hidden;opacity:0;transform:translate(-50%,-5px);pointer-events:none;transition:opacity .16s ease,transform .16s ease,visibility .16s}.categoryDropdownOpen{visibility:visible;opacity:1;transform:translate(-50%,0);pointer-events:auto}.desktopNav .categoryDropdown>div{height:auto;display:flex;align-items:center;justify-content:space-between;padding:5px 7px 9px;border-bottom:1px solid var(--line);margin-bottom:3px}.categoryDropdown>div span{font-size:9px;font-weight:800;letter-spacing:.12em;color:#777}.desktopNav .categoryDropdown>div a{height:auto;border:0;display:flex;align-items:center;gap:1px;font-size:10px;font-weight:800;color:#111}.desktopNav .categoryDropdown>div a svg{width:13px;height:13px}.desktopNav .categoryDropdown>a{height:34px;border:0;display:flex;align-items:center;justify-content:space-between;padding:0 7px;border-radius:6px;font-size:11px;font-weight:650;transition:background .16s,color .16s}.desktopNav .categoryDropdown>a:hover,.desktopNav .categoryDropdown>a:focus-visible{background:#fff1c8;color:#111}.desktopNav .categoryDropdown>a svg{width:14px;height:14px}
+@media(max-width:767px){.navDropdown,.categoryDropdown{display:none}}
