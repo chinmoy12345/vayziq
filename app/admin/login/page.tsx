@@ -1,7 +1,7 @@
 "use client";
 import { StoreName } from "@/components/StoreBranding";
 
-
+import Image from "next/image";
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -80,13 +80,14 @@ export default function AdminLoginPage() {
             href="/"
             className="inline-block"
           >
-            <h1 className="font-serif text-3xl tracking-[0.18em] text-[#292321]">
-              SUSMITA&apos;S
-            </h1>
-
-            <p className="mt-1 text-[11px] uppercase tracking-[0.35em] text-[#8d7167]">
-              Collection
-            </p>
+            <Image
+              src="/vayziq/vayziq-logo.png"
+              alt="VAYZIQ"
+              width={236}
+              height={73}
+              priority
+              className="h-auto w-40 sm:w-44"
+            />
           </Link>
 
           <div className="mt-6">

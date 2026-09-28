@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -62,13 +63,14 @@ export default function AdminHeader({
 
           {/* Brand */}
           <Link href="/admin/dashboard">
-            <h1 className="font-serif text-xl tracking-[0.12em]">
-              SUSMITA&apos;S
-            </h1>
-
-            <p className="mt-0.5 text-[9px] uppercase tracking-[0.28em] text-[#96766a]">
-              Collection · Admin
-            </p>
+            <Image
+              src="/vayziq/vayziq-logo.png"
+              alt="VAYZIQ Admin"
+              width={236}
+              height={73}
+              priority
+              className="h-auto w-28 sm:w-32"
+            />
           </Link>
         </div>
 

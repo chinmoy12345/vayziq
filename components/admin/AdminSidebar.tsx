@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
 
@@ -352,13 +353,13 @@ export default function AdminSidebar({
           <aside className="relative h-full w-[280px] bg-white shadow-2xl">
             <div className="flex h-[72px] items-center justify-between border-b border-[#eee6e1] px-5">
               <Link href="/admin/dashboard" onClick={onClose}>
-                <h1 className="font-serif text-xl tracking-[0.12em]">
-                  SUSMITA&apos;S
-                </h1>
-
-                <p className="mt-0.5 text-[9px] uppercase tracking-[0.28em] text-[#96766a]">
-                  Collection · Admin
-                </p>
+                <Image
+                  src="/vayziq/vayziq-logo.png"
+                  alt="VAYZIQ Admin"
+                  width={236}
+                  height={73}
+                  className="h-auto w-32"
+                />
               </Link>
 
               <button
