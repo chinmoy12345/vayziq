@@ -15,6 +15,13 @@ const sectionSettings: { key: SettingKey; label: string; description: string }[]
   { key: "newsletter", label: "Join our world of elegance", description: "Show the homepage newsletter signup section." },
 ];
 
+const optionalHomeSettings: { key: SettingKey; label: string; description: string }[] = [
+  { key: "trendingNow", label: "Trending Now", description: "Show the Trending Now product section on the homepage." },
+  { key: "trendingCategories", label: "Trending Categories", description: "Show the Men's Edit and Women's Edit category section on the homepage." },
+  { key: "shopByMood", label: "Shop by Mood", description: "Show the Shop by Mood section on the homepage." },
+  { key: "trustBenefits", label: "Shopping benefits", description: "Show the shipping, returns, quality and payment reassurance strip on the homepage." },
+];
+
 const footerSettings: { key: SettingKey; label: string; description: string }[] = [
   { key: "footerNewsletter", label: "Footer newsletter", description: "Show the email signup area at the top of the footer." },
   { key: "footerBrand", label: "Footer brand and social links", description: "Show the brand description and social media icons." },
@@ -49,7 +56,7 @@ const productDetailSettings: { key: SettingKey; label: string; description: stri
   { key: "productDetailRelated", label: "You may also like", description: "Show related products below product details." },
 ];
 
-const defaults: HomepageVisibility = { customerReviews: true, newArrivals: true, watchAndBuy: true, featuredCollection: true, offerZone: true, newsletter: true, footerNewsletter: true, footerBrand: true, footerShopLinks: true, footerInformationLinks: true, footerContact: true, footerBottomBar: true, productCardRating: true, productCardCarousel: true, productDetailRating: true, productDetailOffers: true, productDetailVideo: true, productDetailDelivery: true, productDetailDescription: true, productDetailReviews: true, productDetailRelated: true, cartPageHeader: true, cartItemCount: true, cartClearButton: true, cartSaveForLater: true, cartOffers: true, cartShippingMessage: true, cartTrustBenefits: true };
+const defaults: HomepageVisibility = { customerReviews: true, newArrivals: true, watchAndBuy: true, featuredCollection: true, offerZone: true, newsletter: true, trendingNow: false, trendingCategories: false, shopByMood: false, trustBenefits: false, footerNewsletter: true, footerBrand: true, footerShopLinks: true, footerInformationLinks: true, footerContact: true, footerBottomBar: true, productCardRating: true, productCardCarousel: true, productDetailRating: true, productDetailOffers: true, productDetailVideo: true, productDetailDelivery: true, productDetailDescription: true, productDetailReviews: true, productDetailRelated: true, cartPageHeader: true, cartItemCount: true, cartClearButton: true, cartSaveForLater: true, cartOffers: true, cartShippingMessage: true, cartTrustBenefits: true };
 
 export default function HomepageControls() {
   const [settings, setSettings] = useState<HomepageVisibility>(defaults);
@@ -83,7 +90,7 @@ export default function HomepageControls() {
     }
   }
 
-  function rows(items: typeof sectionSettings) {
+  function rows(items: { key: SettingKey; label: string; description: string }[]) {
     return items.map(item => <label key={item.key} className="flex cursor-pointer items-center justify-between gap-4 border-b border-[#f0e9e5] px-5 py-4 last:border-0 sm:px-6">
       <span><span className="block text-sm font-medium text-[#292321]">{item.label}</span><span className="mt-1 block text-xs leading-5 text-[#857974]">{item.description}</span></span>
       <input type="checkbox" role="switch" checked={settings[item.key]} disabled={loading || saving} onChange={event => setSettings(current => ({ ...current, [item.key]: event.target.checked }))} className="h-5 w-9 shrink-0 cursor-pointer accent-[#9b5c5c] disabled:cursor-wait" aria-label={`Show ${item.label}`} />
@@ -93,6 +100,7 @@ export default function HomepageControls() {
   return <main className="min-h-[calc(100vh-72px)] bg-[#faf8f6] p-4 sm:p-6 lg:p-8"><div className="mx-auto max-w-4xl"><div className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#a87567]">Storefront</p><h1 className="mt-1 text-2xl font-semibold tracking-tight text-[#292321]">Storefront controls</h1><p className="mt-2 text-sm text-[#857974]">Manage visible storefront sections, cart options, product features and footer content.</p></div><button type="button" onClick={() => void save()} disabled={loading || saving} className="inline-flex min-h-11 items-center rounded-lg bg-[#292321] px-5 text-sm font-medium text-white hover:bg-[#403936] disabled:opacity-50">{saving ? "Saving…" : "Save changes"}</button></div>
     {message && <p role="status" className="mt-5 rounded-lg border border-[#e7d3cb] bg-[#fff8f5] px-4 py-3 text-sm text-[#7d5e57]">{message}</p>}
     <section className="mt-7 overflow-hidden rounded-xl border border-[#eee6e1] bg-white shadow-sm"><div className="border-b border-[#eee6e1] px-5 py-4 sm:px-6"><h2 className="font-semibold text-[#292321]">Homepage sections</h2><p className="mt-1 text-xs text-[#958b86]">Hidden sections are removed from the homepage.</p></div>{loading ? <p className="p-6 text-sm text-[#857974]">Loading settings…</p> : rows(sectionSettings)}</section>
+    <section className="mt-5 overflow-hidden rounded-xl border border-[#eee6e1] bg-white shadow-sm"><div className="border-b border-[#eee6e1] px-5 py-4 sm:px-6"><h2 className="font-semibold text-[#292321]">Optional home page sections</h2><p className="mt-1 text-xs text-[#958b86]">These sections are hidden by default and affect only the home page.</p></div>{loading ? <p className="p-6 text-sm text-[#857974]">Loading settings…</p> : rows(optionalHomeSettings)}</section>
     <section className="mt-5 overflow-hidden rounded-xl border border-[#eee6e1] bg-white shadow-sm"><div className="border-b border-[#eee6e1] px-5 py-4 sm:px-6"><h2 className="font-semibold text-[#292321]">Product card features</h2><p className="mt-1 text-xs text-[#958b86]">These settings apply to product cards across the storefront.</p></div>{loading ? <p className="p-6 text-sm text-[#857974]">Loading settings…</p> : rows(cardSettings)}</section>
     <section className="mt-5 overflow-hidden rounded-xl border border-[#eee6e1] bg-white shadow-sm"><div className="border-b border-[#eee6e1] px-5 py-4 sm:px-6"><h2 className="font-semibold text-[#292321]">Cart page</h2><p className="mt-1 text-xs text-[#958b86]">Choose which optional elements shoppers see on the cart page.</p></div>{loading ? <p className="p-6 text-sm text-[#857974]">Loading settings…</p> : rows(cartPageSettings)}</section>
     <section className="mt-5 overflow-hidden rounded-xl border border-[#eee6e1] bg-white shadow-sm"><div className="border-b border-[#eee6e1] px-5 py-4 sm:px-6"><h2 className="font-semibold text-[#292321]">Product details page</h2><p className="mt-1 text-xs text-[#958b86]">Choose which sections appear on every product details page.</p></div>{loading ? <p className="p-6 text-sm text-[#857974]">Loading settings…</p> : rows(productDetailSettings)}</section>

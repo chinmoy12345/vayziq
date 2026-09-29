@@ -125,22 +125,22 @@ export default function CategoryFilters({
           items-center
           justify-between
           border
-          border-[#E8DADA]
-          bg-[#FFFDFC]
+          border-[#e3e3e3]
+          bg-white
           px-4
           text-[10px]
           font-semibold
           tracking-[0.12em]
-          text-[#3B3333]
+          text-[#111]
           transition
-          hover:border-[#B56F6F]
-          hover:text-[#B56F6F]
+          hover:border-[#111]
+          hover:text-[#111]
           lg:hidden
         "
       >
         <span>FILTERS</span>
 
-        <span className="text-base text-[#B56F6F]">
+        <span className="text-base text-[#b77e00]">
           {mobileOpen ? "−" : "+"}
         </span>
       </button>}
@@ -154,8 +154,8 @@ export default function CategoryFilters({
           max-h-[65dvh] overflow-y-auto overscroll-contain
           [scrollbar-gutter:stable] lg:max-h-[calc(100dvh-7rem)]
           border
-          border-[#E8DADA]
-          bg-[#FFFDFC]
+          border-[#e3e3e3]
+          bg-white
           ${embedded ? "block" : `lg:block ${mobileOpen ? "block" : "hidden"}`}
         `}
       >
@@ -166,21 +166,21 @@ export default function CategoryFilters({
 
         <div
           className="
-            sticky top-0 z-10 bg-[#FFFDFC]
+            sticky top-0 z-10 bg-white
             flex
             items-center
             justify-between
             border-b
-            border-[#E8DADA]
+            border-[#e3e3e3]
             px-4
             py-4
           "
         >
           <h2
             className="
-              font-serif
+              font-sans font-extrabold
               text-lg
-              text-[#2B2525]
+              text-[#111]
             "
           >
             Filters
@@ -193,9 +193,9 @@ export default function CategoryFilters({
               text-[9px]
               font-semibold
               tracking-[0.12em]
-              text-[#9A7777]
+              text-[#777]
               transition
-              hover:text-[#B56F6F]
+              hover:text-[#b77e00]
             "
           >
             CLEAR ALL
@@ -209,8 +209,8 @@ export default function CategoryFilters({
           ================================================= */}
 
           {showCategories && ((filters.subcategories?.length ?? 0) > 0 || (filters.categories?.length ?? 0) > 0) && (
-            <div className="border-b border-[#E8DADA] py-5">
-              <h3 className="mb-4 font-serif text-sm font-semibold text-[#2B2525]">{filters.subcategories?.length ? "Shop by category" : "Category"}</h3>
+            <div className="border-b border-[#e3e3e3] py-5">
+              <h3 className="mb-4 font-sans text-sm font-extrabold text-[#111]">{filters.subcategories?.length ? "Shop by category" : "Category"}</h3>
               <div className="space-y-2">
                 {(filters.subcategories ?? filters.categories ?? []).map((item) => {
                   const key = item.slug ?? item.name;
@@ -220,7 +220,7 @@ export default function CategoryFilters({
                       if (item.name === "All Products") { setSelectedCategories([]); onCategoriesChange?.([]); return; }
                       const next = activeCategories.includes(key) ? activeCategories.filter((value) => value !== key) : [...activeCategories, key];
                       setSelectedCategories(next); onCategoriesChange?.(next);
-                    }} className="h-4 w-4 accent-[#B56F6F]" /><span>{item.name}</span></span>
+                    }} className="h-4 w-4 accent-[#111]" /><span>{item.name}</span></span>
                     {item.count !== undefined && <span className="text-[11px] tabular-nums text-[#A18E8E]">{item.count}</span>}
                   </label>;
                 })}
@@ -232,15 +232,15 @@ export default function CategoryFilters({
               PRICE
           ================================================= */}
 
-          <div className="border-b border-[#E8DADA] py-5">
+          <div className="border-b border-[#e3e3e3] py-5">
 
             <h3
               className="
                 mb-5
-                font-serif
+                font-sans
                 text-sm
                 font-semibold
-                text-[#2B2525]
+                text-[#111]
               "
             >
               Price Range
@@ -255,15 +255,15 @@ export default function CategoryFilters({
 
           {showFabrics && filters.fabrics &&
             filters.fabrics.length > 0 && (
-              <div className="border-b border-[#E8DADA] py-5">
+              <div className="border-b border-[#e3e3e3] py-5">
 
                 <h3
                   className="
                     mb-4
-                    font-serif
+                    font-sans
                     text-sm
                     font-semibold
-                    text-[#2B2525]
+                    text-[#111]
                   "
                 >
                   Fabric
@@ -303,7 +303,7 @@ export default function CategoryFilters({
                             w-4
                             rounded
                             border-[#CDBBBB]
-                            accent-[#B56F6F]
+                            accent-[#111]
                           "
                         />
 
@@ -329,15 +329,15 @@ export default function CategoryFilters({
 
           {filters.sizes &&
             filters.sizes.length > 0 && (
-              <div className="border-b border-[#E8DADA] py-5">
+              <div className="border-b border-[#e3e3e3] py-5">
 
                 <h3
                   className="
                     mb-4
-                    font-serif
+                    font-sans
                     text-sm
                     font-semibold
-                    text-[#2B2525]
+                    text-[#111]
                   "
                 >
                   Size
@@ -370,8 +370,8 @@ export default function CategoryFilters({
                           transition
                           ${
                             active
-                              ? "border-[#B56F6F] bg-[#B56F6F] text-white"
-                              : "border-[#E8DADA] bg-[#FFFDFC] text-[#5F5252] hover:border-[#B56F6F] hover:text-[#B56F6F]"
+                              ? "border-[#111] bg-[#111] text-white"
+                              : "border-[#e3e3e3] bg-white text-[#333] hover:border-[#111] hover:text-[#111]"
                           }
                         `}
                       >
@@ -390,15 +390,15 @@ export default function CategoryFilters({
 
           {filters.colors &&
             filters.colors.length > 0 && (
-              <div className="border-b border-[#E8DADA] py-5">
+              <div className="border-b border-[#e3e3e3] py-5">
 
                 <h3
                   className="
                     mb-4
-                    font-serif
+                    font-sans
                     text-sm
                     font-semibold
-                    text-[#2B2525]
+                    text-[#111]
                   "
                 >
                   Color
@@ -430,7 +430,7 @@ export default function CategoryFilters({
                           text-[#5F5252]
                           ${
                             active
-                              ? "font-semibold text-[#B56F6F]"
+                              ? "font-semibold text-[#111]"
                               : ""
                           }
                         `}
@@ -444,8 +444,8 @@ export default function CategoryFilters({
                             border
                             ${
                               active
-                                ? "border-[#B56F6F] ring-2 ring-[#B56F6F]/20"
-                                : "border-[#D6C7C7]"
+                                ? "border-[#111] ring-2 ring-[#fbb606]/50"
+                                : "border-[#d6d6d6]"
                             }
                           `}
                           style={{
@@ -476,10 +476,10 @@ export default function CategoryFilters({
                 <h3
                   className="
                     mb-4
-                    font-serif
+                    font-sans
                     text-sm
                     font-semibold
-                    text-[#2B2525]
+                    text-[#111]
                   "
                 >
                   Occasion
@@ -520,7 +520,7 @@ export default function CategoryFilters({
                             w-4
                             rounded
                             border-[#CDBBBB]
-                            accent-[#B56F6F]
+                            accent-[#111]
                           "
                         />
 

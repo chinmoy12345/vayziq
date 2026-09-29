@@ -81,6 +81,7 @@ export default function ProductCard({
   const [wishAnimating, setWishAnimating] = useState(false);
   const [wishlistMessage, setWishlistMessage] = useState<string | null>(null);
   const [imageIndex, setImageIndex] = useState(0);
+  const [addedToCart, setAddedToCart] = useState(false);
   const galleryImages = product.images?.length ? product.images : [product.image];
   const currentImage = galleryImages[imageIndex] ?? product.image;
   const productSlug = product.slug ?? product.name
@@ -121,14 +122,24 @@ export default function ProductCard({
     window.setTimeout(() => setWishlistMessage(null), 2600);
   };
 
+  const addToCart = () => {
+    const savedCart = JSON.parse(localStorage.getItem("susmita-cart") ?? "[]") as Array<{ id: number; quantity: number }>;
+    const existing = savedCart.find((item) => item.id === Number(product.id));
+    const item = { id: Number(product.id), slug: productSlug, name: product.name, category: product.category, price: Number(product.price.replace(/[^\d.]/g, "")), image: product.image, quantity: 1 };
+    localStorage.setItem("susmita-cart", JSON.stringify(existing ? savedCart.map((cartItem) => cartItem === existing ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem) : [...savedCart, item]));
+    window.dispatchEvent(new Event("cart-updated"));
+    setAddedToCart(true);
+    window.setTimeout(() => setAddedToCart(false), 1800);
+  };
+
   return (
-    <article className="group min-w-0">
+    <article className="group flex min-w-0 flex-col rounded-xl border border-[#e5e5e5] bg-white p-2 shadow-sm transition hover:-translate-y-0.5 hover:border-[#cfcfcf] hover:shadow-lg">
 
       {/* ===================================================
           IMAGE
       =================================================== */}
 
-      <div className="relative overflow-hidden bg-[#F5E9E7]">
+      <div className="relative overflow-hidden rounded-lg bg-[#F5E9E7]">
 
         <Link
           href={`/product/${productSlug}`}
@@ -246,7 +257,7 @@ export default function ProductCard({
           PRODUCT INFORMATION
       =================================================== */}
 
-      <div className="min-w-0 pt-3 sm:pt-4">
+      <div className="flex min-w-0 flex-1 flex-col px-1 pt-3 sm:pt-4">
 
         {/* Category */}
         <p
@@ -309,6 +320,7 @@ export default function ProductCard({
           )}
           {product.oldPrice && Number(product.oldPrice.replace(/[^0-9.]/g, "")) > Number(product.price.replace(/[^0-9.]/g, "")) && <span className="text-[10px] font-medium text-emerald-700">{Math.round((1 - Number(product.price.replace(/[^0-9.]/g, "")) / Number(product.oldPrice.replace(/[^0-9.]/g, ""))) * 100)}% OFF</span>}
         </div>
+        <button type="button" onClick={addToCart} className="mt-auto min-h-10 w-full rounded-md bg-[#111] px-3 py-2.5 text-xs font-bold text-white transition hover:bg-[#2b2b2b]">{addedToCart ? "Added to Cart ✓" : "Add to Cart"}</button>
 
       </div>
     </article>
