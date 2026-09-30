@@ -187,6 +187,7 @@ export default function ProductCard({
           <span aria-label={`Image ${imageIndex + 1} of ${galleryImages.length}`} className="absolute bottom-3 right-3 z-10 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-medium text-[#514343] shadow-sm">{imageIndex + 1} / {galleryImages.length}</span>
         </>}
         {cardSettings.productCardRating && product.rating !== undefined && (product.reviews ?? 0) > 0 && <div aria-label={`${product.rating.toFixed(1)} out of 5 from ${product.reviews} reviews`} className="absolute bottom-3 left-3 z-10 inline-flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1.5 text-[10px] font-medium text-[#4C4141] shadow-sm"><span className="text-[#B56F6F]"><StarIcon /></span><span>{product.rating.toFixed(1)}</span><span className="text-[#A89999]">|</span><span>{product.reviews}</span></div>}
+        {(product.filterValues?.colors?.length ?? 0) > 0 && <span className="absolute bottom-3 right-3 z-10 flex items-center pl-2" aria-label={`${product.filterValues?.colors.length} colors available`}>{product.filterValues!.colors.slice(0, 3).map((color) => <i key={color} title={color} style={{ backgroundColor: color }} className="-ml-2 h-4 w-4 rounded-full border-2 border-white shadow-sm" />)}{product.filterValues!.colors.length > 3 && <b className="-ml-1 grid h-[18px] min-w-[18px] place-items-center rounded-full border-2 border-white bg-[#111] px-1 text-[8px] font-extrabold leading-none text-white">+{product.filterValues!.colors.length - 3}</b>}</span>}
         {/* View Product button hidden on request; restore by uncommenting:
         <Link href={`/product/${productSlug}`} className="absolute bottom-3 left-3 right-3 flex h-10 items-center justify-center bg-white/95 text-[9px] font-semibold tracking-[0.16em] text-[#3B3333] opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 hover:bg-[#B56F6F] hover:text-white">VIEW PRODUCT</Link>
         */}
@@ -320,7 +321,7 @@ export default function ProductCard({
           )}
           {product.oldPrice && Number(product.oldPrice.replace(/[^0-9.]/g, "")) > Number(product.price.replace(/[^0-9.]/g, "")) && <span className="text-[10px] font-medium text-emerald-700">{Math.round((1 - Number(product.price.replace(/[^0-9.]/g, "")) / Number(product.oldPrice.replace(/[^0-9.]/g, ""))) * 100)}% OFF</span>}
         </div>
-        <button type="button" onClick={addToCart} className="mt-auto min-h-10 w-full rounded-md bg-[#111] px-3 py-2.5 text-xs font-bold text-white transition hover:bg-[#2b2b2b]">{addedToCart ? "Added to Cart ✓" : "Add to Cart"}</button>
+        <button type="button" onClick={addToCart} className="mt-3 min-h-10 w-full rounded-md bg-[#111] px-3 py-2.5 text-xs font-bold text-white transition hover:bg-[#2b2b2b]">{addedToCart ? "Added to Cart ✓" : "Add to Cart"}</button>
 
       </div>
     </article>

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
   ChevronRight,
+  Clock3,
   Heart,
   Minus,
   PackageCheck,
@@ -16,6 +17,7 @@ import {
   Undo2,
   X,
 } from "lucide-react";
+import type { BlogPost } from "@/lib/blog";
 import type { VayziqHomeData, VayziqHomeProduct } from "@/lib/vayziq-home-data";
 import type { HomepageVisibility } from "@/lib/homepage-settings";
 import ProductVideo from "@/components/product/ProductVideo";
@@ -74,6 +76,12 @@ function ProductCard({
         {product.rating !== "New" && (
           <span className={styles.ratingBadge}>★ {product.rating}</span>
         )}
+        {product.colors.length > 0 && (
+          <span className={styles.productColorStack} aria-label={`${product.colors.length} ${product.colors.length === 1 ? "color" : "colors"} available`}>
+            {product.colors.slice(0, 3).map((color) => <i key={color} style={{ backgroundColor: color }} title={color} />)}
+            {product.colors.length > 3 && <b>+{product.colors.length - 3}</b>}
+          </span>
+        )}
         {badge && !product.discountPercent && <span>{badge}</span>}
       </Link>
       <button
@@ -89,17 +97,6 @@ function ProductCard({
         <strong>{product.price}</strong>
         {product.oldPrice && <del>{product.oldPrice}</del>}
       </div>
-      {product.colors.length > 0 && (
-        <div className={styles.productMeta}>
-          {product.colors.slice(0, 3).map((color) => (
-            <i key={color} style={{ backgroundColor: color }} title={color} />
-          ))}
-          <span className={styles.colorCount}>
-            {product.colors.length}{" "}
-            {product.colors.length === 1 ? "Color" : "Colors"}
-          </span>
-        </div>
-      )}
       {onAddToCart && (
         <button
           type="button"
@@ -116,9 +113,11 @@ function ProductCard({
 export default function VayziqHome({
   initialData,
   visibility,
+  journalPosts,
 }: {
   initialData: VayziqHomeData;
   visibility: HomepageVisibility;
+  journalPosts: BlogPost[];
 }) {
   const [bannerStart, setBannerStart] = useState(0);
   const [liked, setLiked] = useState<number[]>([]);
@@ -456,7 +455,7 @@ export default function VayziqHome({
           </>
         )}
         <SectionHeading title="Watch & Buy" />
-        <section className={styles.watch}>
+        <section id="watch-buy" className={styles.watch}>
           {watchProducts.map((product) => (
             <article key={product.id}>
               <Image
@@ -499,6 +498,37 @@ export default function VayziqHome({
                 </div>
               );
             })}
+          </section>
+        )}
+        {journalPosts.length > 0 && (
+          <section className={styles.journalSection} aria-labelledby="journal-heading">
+            <div className={styles.journalHeading}>
+              <div>
+                <p>STYLE NOTES</p>
+                <h2 id="journal-heading">From the Journal</h2>
+              </div>
+              <Link href="/blog">View All <ChevronRight /></Link>
+            </div>
+            <div className={styles.journalGrid}>
+              {journalPosts.map((post) => (
+                <article key={post.slug} className={styles.journalCard}>
+                  <Link href={`/blog/${post.slug}`}>
+                    <div className={styles.journalImage}>
+                      {post.image.startsWith("data:") ? (
+                        <img src={post.image} alt={post.imageAlt} />
+                      ) : (
+                        <Image src={post.image} alt={post.imageAlt} fill sizes="(max-width: 767px) 78vw, 31vw" quality={90} />
+                      )}
+                    </div>
+                    <div className={styles.journalContent}>
+                      <p>{post.category}</p>
+                      <h3>{post.title}</h3>
+                      <span><Clock3 /> {post.readTime}</span>
+                    </div>
+                  </Link>
+                </article>
+              ))}
+            </div>
           </section>
         )}
         <HomeFooter />

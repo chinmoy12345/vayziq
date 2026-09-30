@@ -12,7 +12,7 @@ import styles from "./VayziqHome.module.css";
 export type HeaderCategory = { id: number; name: string; slug: string; parentId: number | null; parent?: { id: number; name: string; slug: string } | null; children?: HeaderCategory[] };
 type HeaderUser = { id: number; name: string | null; email: string | null; mobile: string | null };
 const desktopMenu = ["New Arrivals"];
-const mobileQuickMenu = [["Home", House, "/"], ["Categories", Layers, "/shop"], ["Deals", Tag, "/offers"], ["For You", Sparkles, "/shop"]] as const;
+const mobileQuickMenu = [["Home", House, "/"], ["Categories", Layers, "/categories"], ["Deals", Tag, "/offers"], ["Watch & Buy", Sparkles, "/watch-buy"]] as const;
 
 export default function HomeHeader() {
   const [drawerOpen, setDrawerOpen] = useState(false);

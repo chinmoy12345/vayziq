@@ -239,6 +239,23 @@ body:has(.vayziq-home) .store-footer {
 
 /* The storefront uses the available canvas on ultra-wide monitors while admin
    pages intentionally keep their dashboard-width containers. */
+/* Keep standard storefront pages aligned with the homepage content width on
+   ordinary desktop screens. The ultra-wide rule below deliberately takes over
+   once there is more canvas available. */
+@media (min-width:1024px) and (max-width:1599px){
+  .storefront-shell .max-w-7xl,
+  .storefront-shell .max-w-6xl{max-width:1440px!important}
+}
+
 @media(min-width:1600px){.storefront-shell .max-w-7xl,.storefront-shell .max-w-6xl{max-width:none!important}.storefront-shell .max-w-7xl,.storefront-shell .max-w-6xl,.cart-home-body>section>div{padding-left:clamp(48px,4vw,112px)!important;padding-right:clamp(48px,4vw,112px)!important}.shop-home-body [aria-label="Breadcrumb"] ol{max-width:none!important;padding-left:clamp(48px,4vw,112px)!important;padding-right:clamp(48px,4vw,112px)!important}.product-home-body .max-w-7xl{max-width:none!important}}
 
 @media(min-width:1600px){.storefront-shell .text-xs{font-size:.8rem!important}.storefront-shell .text-sm{font-size:.95rem!important}.storefront-shell .text-base{font-size:1.08rem!important}.storefront-shell .text-lg{font-size:1.2rem!important}.storefront-shell h1{line-height:1.05}.storefront-shell h2{line-height:1.15}}
+
+/* The expandable Men/Women rows must match every other primary mobile-menu row. */
+@media (max-width: 1023px) {
+  aside[aria-label="Mobile navigation"] nav[aria-label="Main mobile menu"] > div > button,
+  aside[aria-label="Mobile navigation"] nav[aria-label="Main mobile menu"] > div > a {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+  }
+}
