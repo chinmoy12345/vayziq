@@ -17,7 +17,7 @@ const permissionByHref: Record<string, string> = {
   "/admin/orders": "orders.view", "/admin/audit": "audit.view", "/admin/returns": "returns.view",
   "/admin/delivery-zips": "delivery-zips.view", "/admin/customers": "customers.view",
   "/admin/homepage": "storefront.view", "/admin/brands": "brands.view", "/admin/coupons": "coupons.view",
-  "/admin/banners": "banners.view", "/admin/blog": "blog.view", "/admin/reviews": "reviews.view",
+  "/admin/banners": "banners.view", "/admin/reels": "storefront.view", "/admin/blog": "blog.view", "/admin/reviews": "reviews.view",
   "/admin/settings": "settings.view",
 };
 
@@ -187,6 +187,16 @@ const marketingItems: MenuItem[] = [
       <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
         <path d="M4 4h16v16H4z" />
         <path d="M8 8h8M8 12h8M8 16h5" />
+      </svg>
+    ),
+  },
+  {
+    label: "Reel Manager",
+    href: "/admin/reels",
+    icon: (
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <rect x="3" y="4" width="18" height="16" rx="3" />
+        <path d="m10 9 5 3-5 3V9Z" />
       </svg>
     ),
   },

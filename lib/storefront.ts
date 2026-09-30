@@ -153,8 +153,11 @@ async function getProductEngagementCounts(productIds: number[]) {
 }
 
 export const getWatchBuyProducts = cache(async (limit: number | null = 6) => {
+  const { getStoreReels } = await import("@/lib/reels");
+  const managedReels = (await getStoreReels()).filter((reel) => reel.enabled && reel.productId !== null);
+  const managedProductIds = managedReels.flatMap((reel) => reel.productId === null ? [] : [reel.productId]);
   const products = await prisma.product.findMany({
-    where: { status: "active", videoUrl: { not: null }, category: { status: "active" } },
+    where: { status: "active", category: { status: "active" }, OR: [{ videoUrl: { not: null } }, ...(managedProductIds.length ? [{ id: { in: managedProductIds } }] : [])] },
     include: {
       category: true,
       images: { orderBy: { sortOrder: "asc" }, take: 1 },
@@ -164,18 +167,31 @@ export const getWatchBuyProducts = cache(async (limit: number | null = 6) => {
   });
   const engagements = await getProductEngagementCounts(products.map((product) => product.id));
 
-  return products.flatMap((product) => product.videoUrl ? [{
+  const mapped = products.flatMap((product) => {
+    const reel = managedReels.find((item) => item.productId === product.id);
+    const videoUrl = reel?.videoUrl || product.videoUrl;
+    return videoUrl ? [{
     id: product.id,
     slug: product.slug,
     name: product.name,
     category: product.category.name,
     price: Number(product.price),
     comparePrice: product.comparePrice ? Number(product.comparePrice) : null,
-    image: product.images[0]?.image ?? FALLBACK_IMAGE,
-    videoUrl: product.videoUrl,
+    image: reel?.poster || product.images[0]?.image || FALLBACK_IMAGE,
+    videoUrl,
+    reelTitle: reel?.title,
+    reelBadge: reel?.badge,
+    reelCta: reel?.cta,
     likeCount: engagements.get(product.id)?.likeCount ?? 0,
     shareCount: engagements.get(product.id)?.shareCount ?? 0,
-  }] : []);
+    }] : [];
+  });
+  const ordered = [...mapped].sort((a, b) => {
+    const first = managedReels.findIndex((reel) => reel.productId === a.id);
+    const second = managedReels.findIndex((reel) => reel.productId === b.id);
+    return (first < 0 ? 9999 : first) - (second < 0 ? 9999 : second);
+  });
+  return limit === null ? ordered : ordered.slice(0, limit);
 });
 
 export const getEditorialWatchBuyProducts = cache(async () => {

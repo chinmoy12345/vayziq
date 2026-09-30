@@ -190,6 +190,51 @@ body:has(.vayziq-home) .store-footer {
   .shop-product-grid article > div:first-child { border-radius: 10px; }
 }
 
+
+/* Watch & Buy shares the homepage canvas and white merchandising surface. */
+.watch-buy-desktop { background: #fff !important; }
+@media (min-width: 768px) {
+  .watch-buy-desktop { padding-top: 20px !important; }
+  .watch-buy-desktop > div { max-width: 1440px !important; padding-left: 32px !important; padding-right: 32px !important; }
+  .watch-buy-desktop > div > div:first-child,
+  .watch-buy-desktop > div > nav,
+  .watch-buy-desktop [aria-label="Watch and Buy filters"] + div { background: transparent !important; padding-left: 0 !important; padding-right: 0 !important; }
+  .watch-buy-desktop h2 { font-size: 27px !important; letter-spacing: -1px !important; }
+}
+@media (max-width: 767px) {
+  .watch-buy-desktop { background: #fff !important; }
+  .watch-buy-desktop > div > div:first-child { margin: 0 !important; padding: 20px 16px 8px !important; }
+  .watch-buy-desktop [aria-label="Watch and Buy filters"] { margin: 0 !important; padding-left: 16px !important; padding-right: 16px !important; }
+  .watch-buy-desktop .watch-reel-feed { padding-left: 16px !important; padding-right: 16px !important; }
+  .watch-buy-desktop .watch-reel-feed article a {
+    position: absolute !important;
+    right: 14px;
+    bottom: 14px;
+    display: grid !important;
+    width: 30px !important;
+    min-height: 30px !important;
+    margin: 0 !important;
+    place-items: center;
+    border-radius: 7px !important;
+    background: #fbb606 !important;
+    color: #111 !important;
+    padding: 0 !important;
+  }
+  .watch-buy-desktop .watch-reel-feed .watch-buy-cta-label { display: none !important; }
+}
+
+/* Desktop cards use the same compact Watch & Buy treatment as the homepage. */
+@media (min-width: 768px) {
+  .watch-buy-desktop .watch-reel-feed { gap: 14px !important; }
+  .watch-buy-desktop .watch-reel-feed article { overflow: hidden; border-radius: 12px !important; background: #f7f7f7 !important; }
+  .watch-buy-desktop .watch-reel-feed article > div:first-child button { aspect-ratio: 2 / 3 !important; }
+  .watch-buy-desktop .watch-reel-feed article > div:last-child { margin-top: -64px !important; padding: 8px 10px 10px !important; background: linear-gradient(transparent,rgba(0,0,0,.78) 40%) !important; }
+  .watch-buy-desktop .watch-reel-feed article h3 { font-size: 12px !important; color: #fff !important; }
+  .watch-buy-desktop .watch-reel-feed article a { position: absolute; right: 10px; bottom: 10px; display: grid; width: 27px; min-height: 27px !important; place-items: center; border-radius: 5px !important; background: #fbb606 !important; color: #111 !important; padding: 0 !important; }
+  .watch-buy-desktop .watch-reel-feed .watch-buy-cta-label { display: none; }
+  .watch-buy-desktop .watch-reel-feed .watch-buy-bag { width: 15px; height: 15px; }
+}
+
 /* Shop body: the same crisp VAYZIQ visual system used on the homepage. */
 .shop-home-body { background: #fff !important; color: #111; }
 .shop-home-body .font-serif { font-family: Arial, Helvetica, sans-serif !important; font-weight: 800; letter-spacing: -.03em; }
@@ -258,4 +303,85 @@ body:has(.vayziq-home) .store-footer {
     font-size: 14px !important;
     font-weight: 600 !important;
   }
+}
+
+/* Watch & Buy desktop treatment: mirrors the dedicated shoppable-reels layout. */
+@media (min-width: 1024px) {
+  .watch-buy-desktop { background: #fff !important; }
+  .watch-buy-desktop > div { max-width: 1440px !important; }
+  .watch-buy-desktop > div > div:first-child { margin: 0 0 10px !important; padding: 26px 30px 5px; border-radius: 12px 12px 0 0; background: linear-gradient(105deg,#fff0d2 0%,#ffdfe7 52%,#e4d4ff 100%); }
+  .watch-buy-desktop h2 { font-family: Arial,Helvetica,sans-serif !important; font-size: 42px !important; font-weight: 900 !important; letter-spacing: -2px; color: #111 !important; }
+  .watch-buy-desktop h2::first-letter { color:#111; }
+  .watch-buy-desktop > div > nav { margin: 0 !important; padding: 10px 30px 14px; background: linear-gradient(105deg,#fff0d2 0%,#ffdfe7 52%,#e4d4ff 100%); }
+  .watch-buy-desktop [aria-label="Watch and Buy filters"] button { box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  .watch-buy-desktop [aria-label="Watch and Buy filters"] + div { padding: 12px 30px 24px; border-radius: 0 0 12px 12px; background: linear-gradient(105deg,#fff0d2 0%,#ffdfe7 52%,#e4d4ff 100%); }
+  .watch-buy-desktop article { border: 0 !important; border-radius: 12px !important; background: #161616 !important; box-shadow: 0 5px 12px rgba(0,0,0,.14) !important; }
+  .watch-buy-desktop article > div:first-child button { aspect-ratio: 9/13 !important; }
+  .watch-buy-desktop article > div:last-child { min-height: 0 !important; margin-top: -78px; position: relative; z-index: 2; padding: 10px !important; color: #fff; background: linear-gradient(transparent,rgba(0,0,0,.93) 38%); }
+  .watch-buy-desktop article h3,.watch-buy-desktop article div span { color:#fff !important; }
+  .watch-buy-desktop article a { margin-top: 8px !important; min-height: 32px !important; border-radius: 7px !important; background:#fff !important; color:#111 !important; font-size:10px !important; }
+}
+
+/* Mobile Watch & Buy is a one-reel-per-screen, vertically swipable feed. */
+@media (max-width: 767px) {
+  .watch-buy-desktop { padding: 12px 0 24px !important; background: linear-gradient(145deg,#fff0d2,#ffdfe7 52%,#e4d4ff) !important; }
+  .watch-buy-desktop > div { padding: 0 !important; }
+  .watch-buy-desktop > div > div:first-child { display: flex !important; margin: 0 12px !important; padding: 22px 18px 10px; border-radius: 16px 16px 0 0; background: transparent; }
+  .watch-buy-desktop h2 { font-family: Arial,Helvetica,sans-serif !important; font-size: 36px !important; font-weight: 900 !important; letter-spacing: -1.8px; color: #111 !important; }
+  .watch-buy-desktop [aria-label="Watch and Buy filters"] { display: flex !important; flex-wrap: nowrap; overflow-x: auto; margin: 0 12px !important; padding: 10px 6px 13px; gap: 8px; scrollbar-width: none; }
+  .watch-buy-desktop [aria-label="Watch and Buy filters"]::-webkit-scrollbar { display:none; }
+  .watch-buy-desktop [aria-label="Watch and Buy filters"] button { flex:none; background:#fff; color:#111; box-shadow:0 2px 6px rgba(0,0,0,.09); }
+  .watch-buy-desktop [aria-label="Watch and Buy filters"] button:first-child { background:#111; color:#fff; }
+  .watch-buy-desktop .watch-reel-feed { display: flex !important; height: auto; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; gap: 12px !important; padding: 0 12vw 8px !important; scrollbar-width: none; }
+  .watch-buy-desktop .watch-reel-feed::-webkit-scrollbar { display: none; }
+  .watch-buy-desktop .watch-reel-feed article { min-width: 76vw; min-height: 0; scroll-snap-align: center; position: relative; border: 0 !important; border-radius: 18px !important; background: #111 !important; box-shadow: 0 8px 20px rgba(0,0,0,.18); }
+  .watch-buy-desktop .watch-reel-feed article > div:first-child button { aspect-ratio: 9 / 16 !important; }
+  .watch-buy-desktop .watch-reel-feed article > div:last-child { position: absolute; z-index: 3; right: 0; bottom: 0; left: 0; min-height: 0 !important; padding: 76px 14px 14px !important; background: linear-gradient(transparent,rgba(0,0,0,.94) 48%); }
+  .watch-buy-desktop .watch-reel-feed article h3 { color: #fff !important; font-size: 14px !important; }
+  .watch-buy-desktop .watch-reel-feed article a { margin-top: 12px !important; min-height: 42px !important; background: #fff !important; color: #111 !important; font-size: 12px !important; }
+}
+
+/* Align the video page with the standard home-page white canvas. */
+.watch-buy-desktop { background: #fff !important; }
+@media (min-width: 768px) {
+  .watch-buy-desktop > div { max-width: 1440px !important; padding-left: 32px !important; padding-right: 32px !important; }
+  .watch-buy-desktop > div > div:first-child, .watch-buy-desktop > div > nav, .watch-buy-desktop [aria-label="Watch and Buy filters"] + div { background: transparent !important; padding-left: 0 !important; padding-right: 0 !important; }
+  .watch-buy-desktop h2 { font-size: 27px !important; letter-spacing: -1px !important; }
+  .watch-buy-desktop .watch-buy-page-header nav {
+    position: relative;
+    border-top: 0 !important;
+  }
+  .watch-buy-desktop .watch-buy-page-header nav::before {
+    position: absolute;
+    right: 50%;
+    top: 0;
+    left: 50%;
+    width: 100vw;
+    height: 1px;
+    content: "";
+    transform: translateX(-50%);
+    background: #e8e8e8;
+  }
+}
+@media (max-width: 767px) {
+  .watch-buy-desktop { background: #fff !important; }
+  .watch-buy-desktop > div > div:first-child { margin: 0 !important; padding: 20px 16px 8px !important; }
+  .watch-buy-desktop [aria-label="Watch and Buy filters"] { margin: 0 !important; padding-left: 16px !important; padding-right: 16px !important; }
+  .watch-buy-desktop .watch-reel-feed { padding-left: 16px !important; padding-right: 16px !important; }
+  /* The mobile reel action stays as one compact bag button. */
+  .watch-buy-desktop .watch-reel-feed article a {
+    position: absolute !important;
+    right: 14px !important;
+    bottom: 14px !important;
+    display: grid !important;
+    width: 30px !important;
+    min-height: 30px !important;
+    margin: 0 !important;
+    place-items: center !important;
+    border-radius: 7px !important;
+    background: #fbb606 !important;
+    color: #111 !important;
+    padding: 0 !important;
+  }
+  .watch-buy-desktop .watch-reel-feed .watch-buy-cta-label { display: none !important; }
 }

@@ -23,7 +23,6 @@ export default async function WatchBuyPage() {
         <WatchAndBuy products={products} editorialProducts={editorialProducts} viewAll />
       ) : (
         <section className="mx-auto max-w-3xl px-5 py-24 text-center">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[#9F5E5E]">Style, in motion</p>
           <h1 className="mt-3 font-serif text-4xl text-[#2B2525]">Watch &amp; Buy</h1>
           <p className="mt-4 text-sm leading-6 text-[#756565]">Product videos will appear here as they are added to the collection.</p>
           <Link href="/shop" className="mt-7 inline-flex min-h-11 items-center justify-center rounded-lg bg-[#B56F6F] px-6 text-xs font-semibold uppercase tracking-[0.1em] text-white">Explore the collection</Link>

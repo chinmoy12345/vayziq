@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, Heart, Play, Share2, ShoppingBag, X, Clipboard, MoreHorizontal, MessageCircle, Send, Mail } from "lucide-react";
+import { ArrowLeft, ArrowRight, Heart, Play, Share2, ShoppingBag, X, Clipboard, MoreHorizontal, MessageCircle, Send, Mail, Sparkles } from "lucide-react";
 import ProductVideo from "@/components/product/ProductVideo";
 
 type WatchProductSummary = {
@@ -16,6 +16,9 @@ type WatchProductSummary = {
   image: string;
   likeCount: number;
   shareCount: number;
+  reelTitle?: string;
+  reelBadge?: "None" | "Trending" | "New" | "Bestseller" | "Must Have";
+  reelCta?: string;
 };
 type WatchProduct = WatchProductSummary & { videoUrl: string };
 
@@ -127,7 +130,7 @@ const formatPrice = (price: number) =>
   }).format(price);
 
 function reelTitle(reel: Reel) {
-  return reel.kind === "product" ? reel.product.name : reel.product?.name ?? reel.title;
+  return reel.kind === "product" ? reel.product.reelTitle || reel.product.name : (reel.product?.reelTitle || reel.product?.name || reel.title);
 }
 
 function reelVideoUrl(reel: Reel) {
@@ -160,7 +163,16 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
   const [shareMessage, setShareMessage] = useState("");
   const [sharingProduct, setSharingProduct] = useState<WatchProductSummary | null>(null);
   const [moreShareOpen, setMoreShareOpen] = useState(false);
-  const activeReel = activeIndex === null ? null : reels[activeIndex];
+  const [activeAudience, setActiveAudience] = useState<"women" | "men">("men");
+  const filteredReels = useMemo(() => {
+    const matching = reels.filter((reel) => {
+      const category = (reel.kind === "product" ? reel.product.category : reel.product?.category ?? reel.category).toLowerCase();
+      return activeAudience === "women" ? category.includes("women") : category.includes("men") && !category.includes("women");
+    });
+    return matching.length ? matching : reels;
+  }, [activeAudience, reels]);
+  const visibleReels = viewAll ? filteredReels : reels;
+  const activeReel = activeIndex === null ? null : visibleReels[activeIndex];
   const activeProduct = activeReel?.kind === "product" ? activeReel.product : activeReel?.kind === "editorial" ? activeReel.product ?? null : null;
 
   useEffect(() => {
@@ -277,6 +289,11 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
   useEffect(() => {
     const track = trackRef.current;
     if (!track || typeof IntersectionObserver === "undefined") return;
+    // Desktop cards are previews only; videos start only after an explicit click.
+    if (window.matchMedia("(min-width: 768px)").matches) {
+      setPlayingReels([]);
+      return;
+    }
     const observer = new IntersectionObserver((entries) => {
       setPlayingReels((current) => {
         const next = new Set(current);
@@ -312,8 +329,8 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
   }, [activeIndex, reels.length]);
 
   function moveActive(direction: number) {
-    if (activeIndex === null || reels.length === 0) return;
-    setActiveIndex((activeIndex + direction + reels.length) % reels.length);
+    if (activeIndex === null || visibleReels.length === 0) return;
+    setActiveIndex((activeIndex + direction + visibleReels.length) % visibleReels.length);
   }
 
   function openReel(index: number) {
@@ -323,25 +340,18 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
   return (
     <section
       aria-labelledby="watch-buy-title"
-      className="bg-[#F8F1EE] py-12 sm:py-16 lg:py-20"
+      className="watch-buy-desktop bg-white py-8 sm:py-10 lg:py-12"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-10">
-        <div className="mb-6 flex items-end justify-between gap-4 sm:mb-8">
-          <div>
-            <p className="text-[10px] font-semibold tracking-[0.24em] text-[#9F5E5E]">
-              STYLE, IN MOTION
-            </p>
-            <h2
-              id="watch-buy-title"
-              className="mt-2 font-serif text-3xl text-[#2B2525] sm:text-4xl"
-            >
-              Watch &amp; Buy
-            </h2>
-            <p className="mt-2 max-w-xl text-sm leading-6 text-[#756565]">
-              Watch a look, then explore the piece and its details.
-            </p>
+        <header className={viewAll ? "watch-buy-page-header mb-3 bg-white" : "mb-6 flex items-end justify-between gap-4 sm:mb-8"}>
+          <div className={viewAll ? "flex items-end justify-between gap-4 px-4 pb-4 pt-5" : ""}>
+            <div>
+              <h2 id="watch-buy-title" className={`${viewAll ? "text-[30px]" : "mt-2 text-3xl"} font-serif text-[#2B2525] sm:text-4xl`}>Watch &amp; Buy</h2>
+              <p className="mt-1 max-w-xl text-sm leading-5 text-[#756565]">Watch a look, then explore the piece and its details.</p>
+            </div>
+            {viewAll && <Sparkles className="mb-1 h-6 w-6 shrink-0 text-[#f5b400]" aria-hidden="true" />}
           </div>
-          <div className="flex items-center gap-2">
+          {!viewAll && <div className="flex items-center gap-2">
             {!viewAll && (
               <Link href="/watch-buy" className="mr-1 text-xs font-semibold text-[#9F5E5E] underline-offset-4 hover:underline sm:mr-3 sm:text-sm">
                 View all
@@ -365,16 +375,21 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
               <ArrowRight className="h-4 w-4" />
             </button>
           </div>
-          </div>
-        </div>
+          </div>}
+          {viewAll && <nav className="border-t border-[#eee7dc] px-4 py-3" aria-label="Watch and Buy category switch">
+            <div className="inline-flex rounded-xl border border-[#e7ded2] bg-white p-1.5 shadow-sm">
+              {(["men", "women"] as const).map((audience) => <button key={audience} type="button" onClick={() => { setActiveAudience(audience); setActiveIndex(null); }} className={`min-w-[98px] rounded-lg px-5 py-2.5 text-sm font-bold capitalize transition ${activeAudience === audience ? "bg-[#fbb606] text-black shadow-md" : "text-[#5f5750] hover:bg-[#fff4ce] hover:text-[#111]"}`}>{audience}</button>)}
+            </div>
+          </nav>}
+        </header>
 
         <div
           ref={trackRef}
           className={viewAll
-            ? "grid grid-cols-2 gap-3 pb-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4"
+            ? "watch-reel-feed grid grid-cols-2 gap-3 pb-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4"
             : "flex snap-x snap-mandatory gap-3 overflow-x-auto pb-3 sm:gap-5 [scrollbar-width:thin] [scrollbar-color:#D8C8C4_transparent]"}
         >
-          {reels.map((reel, index) => {
+          {visibleReels.map((reel, index) => {
             const product = reel.kind === "product" ? reel.product : reel.product ?? null;
             const isPlaying = activeIndex === null && playingReels.includes(reel.id);
             const discount = product?.comparePrice && product.comparePrice > product.price
@@ -415,6 +430,18 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
                       />
                     )}
                     <span className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/20" />
+                    {viewAll && (
+                      <span className={`absolute left-2 top-2 rounded px-2 py-1 text-[10px] font-bold text-white ${["bg-red-500", "bg-violet-600", "bg-orange-500", "bg-[#2c241e]"][index % 4]}`}>
+                        {product?.reelBadge && product.reelBadge !== "None" ? product.reelBadge : ["🔥 Trending", "New", "Bestseller", "Must Have"][index % 4]}
+                      </span>
+                    )}
+                    {viewAll && product && (
+                      <span className="absolute right-2 top-14 flex flex-col items-center gap-2 text-white">
+                        <span className="flex flex-col items-center gap-0.5"><Heart className="h-4 w-4 fill-white" /><small className="text-[8px] font-semibold">{product.likeCount || "1.2K"}</small></span>
+                        <span className="flex flex-col items-center gap-0.5"><MessageCircle className="h-4 w-4" /><small className="text-[8px] font-semibold">230</small></span>
+                        <span className="flex flex-col items-center gap-0.5"><Share2 className="h-4 w-4" /><small className="text-[8px] font-semibold">{product.shareCount || "1.1K"}</small></span>
+                      </span>
+                    )}
 
                     {!isPlaying && (
                       <span className="absolute inset-0 flex items-center justify-center">
@@ -427,22 +454,18 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
 
                 </div>
                 <div className="min-h-[166px] p-3 sm:p-4">
-                  <h3 className="line-clamp-2 min-h-10 text-xs font-medium leading-5 text-[#332B2B] sm:text-sm">
-                    {reelTitle(reel)}
-                  </h3>
                   {product ? (
                     <>
-                      <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1">
-                        <span className="text-sm font-semibold text-[#2B2525]">
-                          {formatPrice(product.price)}
-                        </span>
-                        {product.comparePrice && product.comparePrice > product.price && (
-                          <span className="text-[10px] text-[#968989] line-through">
-                            {formatPrice(product.comparePrice)}
-                          </span>
-                        )}
+                      <div className="mt-2 flex items-end gap-2">
+                        <div className="relative h-9 w-7 shrink-0 overflow-hidden rounded bg-white/20">
+                          <Image src={product.image} alt="" fill sizes="28px" className="object-cover" />
+                        </div>
+                        <div className="min-w-0">
+                          <h3 className="line-clamp-1 min-h-0 text-xs font-medium leading-4 text-[#332B2B] sm:text-sm">{reelTitle(reel)}</h3>
+                          <span className="text-sm font-semibold text-[#2B2525]">{formatPrice(product.price)}</span>
+                        </div>
                       </div>
-                      {discount > 0 && (
+                      {discount > 0 && !viewAll && (
                         <span className="mt-2 inline-flex rounded bg-emerald-500 px-2 py-1 text-[10px] font-semibold text-white">
                           {discount}% off
                         </span>
@@ -453,7 +476,7 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
                         className="mt-3 inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-lg bg-[#B56F6F] px-3 text-[10px] font-semibold uppercase tracking-[0.08em] text-white transition hover:bg-[#9E5B5B] sm:text-[11px]"
                       >
                         <ShoppingBag className="h-3.5 w-3.5" />
-                        Add to cart
+                        <span className="watch-buy-cta-label">{product.reelCta || "Shop Now"}</span>
                       </Link>
                     </>
                   ) : (
