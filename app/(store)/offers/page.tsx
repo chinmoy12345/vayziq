@@ -27,6 +27,11 @@ function DealContent() {
   return (
     <div className="relative z-10 mx-auto max-w-[1440px] bg-[linear-gradient(135deg,#fffdf7_0%,#fff6df_48%,#fffdf7_100%)] px-4 pb-8 pt-4 sm:px-6 sm:py-10 lg:px-8">
       {SHOW_DEAL_TEXT && <div><p className="text-xs font-extrabold uppercase tracking-[.16em] text-[#b77e00]">Deals</p><h1 className="mt-2 text-3xl font-extrabold tracking-tight text-[#111] sm:text-4xl">Offers &amp; Discounts</h1><p className="mt-3 max-w-2xl text-sm leading-6 text-[#666]">Use one active offer per order. Choose an offer and continue shopping to apply it in your cart.</p></div>}
+      <section className="relative mb-7 min-h-[210px] overflow-hidden border-2 border-[#181411] bg-[#211d19] p-5 text-white shadow-[5px_5px_0_#fbb606] sm:min-h-[260px] sm:p-8">
+        <Image src="/uploads/banners/offer-saree-editorial.png" alt="Seasonal VAYZIQ offers" fill priority sizes="(max-width: 1440px) 100vw, 1440px" className="object-cover object-center opacity-70" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/10" />
+        <div className="relative z-10 max-w-xl"><p className="text-[10px] font-extrabold uppercase tracking-[.22em] text-[#fbb606]">VAYZIQ offer edit</p><h1 className="mt-3 text-3xl font-black tracking-[-.05em] sm:text-5xl">More looks. More value.</h1><p className="mt-3 max-w-md text-sm leading-6 text-white/85">Explore limited-time savings, bundle pricing and buy-more offers. Apply one code at checkout.</p><Link href="/shop" className="mt-5 inline-flex min-h-10 items-center gap-2 border-2 border-[#fbb606] bg-[#fbb606] px-4 text-xs font-extrabold uppercase tracking-[.08em] text-[#111] transition hover:bg-white">Shop offers <ArrowRight className="h-4 w-4" /></Link></div>
+      </section>
       <div className="mb-5 flex items-center gap-3 sm:mb-7"><span className="h-px flex-1 bg-[#d8cba9]" /><h1 className="shrink-0 text-lg font-black tracking-[-.04em] text-[#211d19] sm:text-2xl">Exclusive savings</h1><span className="h-px flex-1 bg-[#d8cba9]" /></div>
       {loading && <p className="mt-10 text-sm text-[#666]">Loading offers…</p>}
       {error && <p role="alert" className="mt-10 text-sm text-red-700">{error}</p>}

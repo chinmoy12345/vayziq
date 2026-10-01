@@ -8,7 +8,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
 import CollectionPage from "@/components/store/CollectionPage";
 
-export default async function ShopPage({ searchParams }: { searchParams: Promise<{ category?: string }> }) {
-  const { category } = await searchParams;
-  return <CollectionPage categorySlug={category} title="Shop" eyebrow="THE COLLECTION" subtitle="Style for every moment." description="Explore our complete collection, thoughtfully selected for comfort, elegance and everyday beauty." image="/uploads/banners/home-saree-editorial.png" showFullFilters bannerPlacement="shop" />;
+export default async function ShopPage({ searchParams }: { searchParams: Promise<{ category?: string; sort?: string }> }) {
+  const { category, sort } = await searchParams;
+  const newest = sort === "newest";
+  return <CollectionPage categorySlug={category} title={newest ? "New Arrivals" : "Shop"} eyebrow={newest ? "JUST IN" : "THE COLLECTION"} subtitle={newest ? "The latest drops, selected for you." : "Style for every moment."} description={newest ? "Discover the newest active products added to VAYZIQ." : "Explore our complete collection, thoughtfully selected for comfort, elegance and everyday beauty."} image="/uploads/banners/home-saree-editorial.png" showFullFilters bannerPlacement="shop" newest={newest} />;
 }

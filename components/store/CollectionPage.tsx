@@ -44,12 +44,13 @@ interface CollectionPageProps {
   showFullFilters?: boolean;
   showProductFilters?: boolean;
   bannerPlacement?: Exclude<BannerPlacement, "home">;
+  newest?: boolean;
 }
 
 export default async function CollectionPage(props: CollectionPageProps) {
-  const { categorySlug, title, showFullFilters = false, showProductFilters = false, bannerPlacement } = props;
+  const { categorySlug, title, showFullFilters = false, showProductFilters = false, bannerPlacement, newest = false } = props;
   const [products, filters, banner] = await Promise.all([
-    getStoreProducts({ categorySlug: showFullFilters ? undefined : categorySlug }),
+    getStoreProducts({ categorySlug: showFullFilters ? undefined : categorySlug, newest }),
     showFullFilters || showProductFilters ? getStoreFilters(showFullFilters ? undefined : categorySlug) : Promise.resolve({}),
     bannerPlacement ? getActiveBanners(bannerPlacement) : Promise.resolve([]),
   ]);

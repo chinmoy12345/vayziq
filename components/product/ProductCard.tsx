@@ -146,10 +146,11 @@ export default function ProductCard({
   };
 
   const addToCart = () => {
-    const savedCart = JSON.parse(localStorage.getItem("susmita-cart") ?? "[]") as Array<{ id: number; quantity: number; options?: Record<string, string> }>;
-    const optionKey = JSON.stringify(selectedOptions);
-    const existing = savedCart.find((item) => item.id === Number(product.id) && JSON.stringify(item.options ?? {}) === optionKey);
-    const item = { id: Number(product.id), slug: productSlug, name: product.name, category: product.category, price: Number(product.price.replace(/[^\d.]/g, "")), image: product.image, quantity: cartQuantity, options: selectedOptions };
+    const savedCart = JSON.parse(localStorage.getItem("susmita-cart") ?? "[]") as Array<{ id: number; quantity: number; size?: string; color?: string; options?: Record<string, string> }>;
+    const size = selectedOptions.Size ?? selectedOptions.size ?? "";
+    const color = selectedOptions.Color ?? selectedOptions.Colour ?? selectedOptions.color ?? selectedOptions.colour ?? "";
+    const existing = savedCart.find((item) => item.id === Number(product.id) && item.size === size && item.color === color);
+    const item = { id: Number(product.id), slug: productSlug, name: product.name, category: product.category, price: Number(product.price.replace(/[^\d.]/g, "")), image: product.image, quantity: cartQuantity, size, color, options: selectedOptions };
     const nextQuantity = (existing?.quantity ?? 0) + cartQuantity;
     localStorage.setItem("susmita-cart", JSON.stringify(existing ? savedCart.map((cartItem) => cartItem === existing ? { ...cartItem, quantity: nextQuantity } : cartItem) : [...savedCart, item]));
     window.dispatchEvent(new Event("cart-updated"));
