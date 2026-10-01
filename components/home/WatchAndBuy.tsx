@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, Heart, Play, Share2, ShoppingBag, X, Clipboard, MoreHorizontal, MessageCircle, Send, Mail, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowRight, Heart, Play, Share2, ShoppingBag, X, Clipboard, MoreHorizontal, MessageCircle, Send, Mail, Sparkles, Volume2, VolumeX } from "lucide-react";
 import ProductVideo from "@/components/product/ProductVideo";
 
 type WatchProductSummary = {
@@ -141,6 +141,18 @@ function reelPoster(reel: Reel) {
   return reel.kind === "product" ? reel.product.image : reel.image;
 }
 
+function reelDestination(reel: Reel) {
+  const product = reel.kind === "product" ? reel.product : reel.product;
+  if (product) return `/product/${product.slug}`;
+  const category = (reel.kind === "editorial" ? reel.category : reel.product.category).toLowerCase();
+  if (category.includes("saree")) return "/shop?category=sarees";
+  if (category.includes("kurti")) return "/shop?category=kurtis";
+  if (category.includes("nightwear")) return "/shop?category=nightwear";
+  if (category.includes("men")) return "/men";
+  if (category.includes("women")) return "/women";
+  return "/shop";
+}
+
 export default function WatchAndBuy({ products, editorialProducts = [], viewAll = false }: { products: WatchProduct[]; editorialProducts?: WatchProductSummary[]; viewAll?: boolean }) {
   const reels = useMemo<Reel[]>(
     () => [
@@ -164,6 +176,7 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
   const [sharingProduct, setSharingProduct] = useState<WatchProductSummary | null>(null);
   const [moreShareOpen, setMoreShareOpen] = useState(false);
   const [activeAudience, setActiveAudience] = useState<"women" | "men">("men");
+  const [reelsMuted, setReelsMuted] = useState(true);
   const filteredReels = useMemo(() => {
     const matching = reels.filter((reel) => {
       const category = (reel.kind === "product" ? reel.product.category : reel.product?.category ?? reel.category).toLowerCase();
@@ -180,6 +193,8 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
       try {
         const saved = window.localStorage.getItem("tantuka-watch-buy-likes");
         if (saved) setLikedProducts(JSON.parse(saved) as string[]);
+        const savedSound = window.localStorage.getItem("vayziq-watch-buy-muted");
+        if (savedSound !== null) setReelsMuted(savedSound !== "false");
 
       } catch {
         // Keep reactions usable when browser storage is disabled.
@@ -187,6 +202,18 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
     });
     return () => window.cancelAnimationFrame(frame);
   }, []);
+
+  function toggleReelSound() {
+    setReelsMuted((current) => {
+      const next = !current;
+      try {
+        window.localStorage.setItem("vayziq-watch-buy-muted", String(next));
+      } catch {
+        // The current session still keeps the selected sound preference.
+      }
+      return next;
+    });
+  }
 
   function engagementVisitorId() {
     const key = "tantuka-engagement-visitor";
@@ -333,7 +360,14 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
     setActiveIndex((activeIndex + direction + visibleReels.length) % visibleReels.length);
   }
 
-  function openReel(index: number) {
+  function openReel(index: number, reel: Reel) {
+    // On mobile, a reel is a direct shopping discovery surface. It never
+    // opens a player modal: the tap takes the shopper to its linked product
+    // (or the relevant category for editorial-only clips).
+    if (window.matchMedia("(max-width: 767px)").matches) {
+      window.location.assign(reelDestination(reel));
+      return;
+    }
     setActiveIndex(index);
   }
 
@@ -406,8 +440,8 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
                   <button
                     type="button"
                     data-reel-id={reel.id}
-                    onClick={() => openReel(index)}
-                    aria-label={`Play ${reelTitle(reel)}`}
+                    onClick={() => openReel(index, reel)}
+                    aria-label={`Open ${reelTitle(reel)}`}
                     className="group relative block aspect-[9/14] w-full overflow-hidden bg-[#2B2525] text-left"
                   >
                     {isPlaying ? (
@@ -418,7 +452,8 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
                         autoPlay
                         loop
                         controls={false}
-                        className="absolute inset-0 h-full w-full object-cover"
+                        muted={reelsMuted}
+                        className="pointer-events-none absolute inset-0 h-full w-full object-cover"
                       />
                     ) : (
                       <Image
@@ -444,13 +479,24 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
                     )}
 
                     {!isPlaying && (
-                      <span className="absolute inset-0 flex items-center justify-center">
+                      <span className="watch-play-overlay absolute inset-0 flex items-center justify-center">
                         <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/70 bg-black/35 text-white shadow-lg transition group-hover:scale-105 group-hover:bg-[#B56F6F]">
                           <Play className="ml-0.5 h-5 w-5 fill-current" />
                         </span>
                       </span>
                     )}
                   </button>
+                  {isPlaying && (
+                    <button
+                      type="button"
+                      onClick={toggleReelSound}
+                      aria-label={reelsMuted ? "Unmute video" : "Mute video"}
+                      aria-pressed={!reelsMuted}
+                      className="absolute left-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-white/30 bg-black/45 text-white backdrop-blur-sm md:hidden"
+                    >
+                      {reelsMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                    </button>
+                  )}
 
                 </div>
                 <div className="min-h-[166px] p-3 sm:p-4">
@@ -529,7 +575,7 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
       )}
       {activeReel && (
         <div
-          className="fixed inset-0 z-[120] flex items-center justify-center bg-black/75 p-3 backdrop-blur-[2px] sm:p-6"
+          className="fixed inset-0 z-[120] flex items-center justify-center bg-black/75 p-3 backdrop-blur-[3px] sm:p-8"
           onMouseDown={(event) => {
             if (event.target === event.currentTarget) setActiveIndex(null);
           }}
@@ -547,17 +593,26 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
               role="dialog"
               aria-modal="true"
               aria-label={`${reelTitle(activeReel)} video`}
-              className="relative flex max-h-[calc(100dvh-24px)] w-[min(360px,calc(100vw-32px))] flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
+              className="relative w-[min(360px,calc(100vw-32px))] overflow-hidden rounded-2xl bg-[#201B1B] shadow-2xl sm:w-[min(330px,calc(100vw-48px))] sm:rounded-[18px]"
             >
               <button
                 type="button"
                 aria-label="Close video"
                 onClick={() => setActiveIndex(null)}
-                className="absolute right-3 top-3 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-black/50 text-white transition hover:bg-black/70"
+                className="absolute right-3 top-3 z-30 flex h-9 w-9 items-center justify-center rounded-full bg-[#111]/90 text-white shadow-lg transition hover:bg-[#B56F6F]"
               >
                 <X className="h-5 w-5" />
               </button>
-              <div className="relative h-[min(68dvh,540px)] max-h-[calc(100dvh-190px)] w-full shrink-0 bg-[#201B1B]">
+              <button
+                type="button"
+                onClick={toggleReelSound}
+                aria-label={reelsMuted ? "Unmute video" : "Mute video"}
+                aria-pressed={!reelsMuted}
+                className="absolute left-3 top-3 z-30 flex h-9 w-9 items-center justify-center rounded-full bg-black/70 text-white shadow-lg transition hover:bg-[#B56F6F]"
+              >
+                {reelsMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+              </button>
+              <div className="relative h-[min(76dvh,620px)] w-full bg-[#201B1B]">
                 <ProductVideo
                   key={reelVideoUrl(activeReel)}
                   url={reelVideoUrl(activeReel)}
@@ -565,7 +620,8 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
                   poster={reelPoster(activeReel)}
                   autoPlay
                   loop
-                  className="absolute inset-0 h-full w-full object-contain"
+                  muted={reelsMuted}
+                  className="absolute inset-0 h-full w-full object-cover"
                 />
                 {activeProduct && (
                   <div className="absolute right-3 top-16 z-10 flex flex-col gap-2">
@@ -579,72 +635,30 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
                     </button>
                   </div>
                 )}
-              </div>
-              <div className="shrink-0 border-t border-[#EEE5E2] bg-white p-4">
-                {activeProduct ? (
-                  <>
-                    <p className="text-[9px] font-semibold uppercase tracking-[0.16em] text-[#9F5E5E]">
-                      {activeProduct.category}
-                    </p>
-                    <div className="mt-1 flex items-start justify-between gap-3">
-                      <div>
-                        <h3 className="line-clamp-2 text-sm font-medium leading-5 text-[#332B2B]">
-                          {activeProduct.name}
-                        </h3>
-                        <div className="mt-1 flex flex-wrap items-center gap-2">
-                          <span className="text-sm font-semibold text-[#2B2525]">
-                            {formatPrice(activeProduct.price)}
-                          </span>
-                          {activeProduct.comparePrice && activeProduct.comparePrice > (activeProduct.price) && (
-                            <span className="text-[10px] text-[#968989] line-through">
-                              {formatPrice(activeProduct.comparePrice)}
-                            </span>
-                          )}
-                        </div>
+                <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black via-black/80 to-transparent px-3 pb-3 pt-12 text-white">
+                  {activeProduct ? (
+                    <div className="flex items-center gap-2.5">
+                      <div className="relative h-11 w-9 shrink-0 overflow-hidden rounded-md border border-white/20 bg-white/10">
+                        <Image src={activeProduct.image} alt="" fill sizes="36px" className="object-cover" />
                       </div>
-                      {activeProduct.comparePrice && activeProduct.comparePrice > (activeProduct.price) && (
-                        <span className="shrink-0 rounded bg-emerald-500 px-2 py-1 text-[9px] font-semibold text-white">
-                          {Math.round((1 - (activeProduct.price) / activeProduct.comparePrice) * 100)}% off
-                        </span>
-                      )}
+                      <Link href={`/product/${activeProduct.slug}`} onClick={() => setActiveIndex(null)} className="min-w-0 flex-1 rounded focus:outline-none focus:ring-2 focus:ring-white/80">
+                        <h3 className="truncate text-[13px] font-medium leading-4 text-white">{activeProduct.name}</h3>
+                        <div className="mt-0.5 flex items-center gap-1.5">
+                          <span className="text-sm font-extrabold text-white">{formatPrice(activeProduct.price)}</span>
+                          {activeProduct.comparePrice && activeProduct.comparePrice > activeProduct.price && <span className="text-[9px] text-white/55 line-through">{formatPrice(activeProduct.comparePrice)}</span>}
+                        </div>
+                      </Link>
+                      <Link href={`/product/${activeProduct.slug}`} onClick={() => setActiveIndex(null)} aria-label={`Shop ${activeProduct.name}`} className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#FBB606] text-[#171312] transition hover:bg-white">
+                        <ShoppingBag className="h-4 w-4" />
+                      </Link>
                     </div>
-                    <Link
-                      href={`/product/${activeProduct.slug}`}
-                      onClick={() => setActiveIndex(null)}
-                      className="mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-[#B56F6F] px-4 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-[#9E5B5B]"
-                    >
-                      <ShoppingBag className="h-4 w-4" />
-                      Add to cart
-                    </Link>
-                  </>
-                ) : activeReel.kind === "editorial" ? (
-                  <>
-                    <p className="text-[9px] font-semibold uppercase tracking-[0.16em] text-[#9F5E5E]">
-                      {activeReel.category}
-                    </p>
-                    <h3 className="mt-1 text-sm font-medium text-[#332B2B]">
-                      {activeReel.title}
-                    </h3>
-                    <p className="mt-1 text-[10px] text-[#817575]">
-                      Video by{" "}
-                      <a
-                        href={activeReel.sourceUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="underline underline-offset-2 hover:text-[#9F5E5E]"
-                      >
-                        {activeReel.source}
-                      </a>
-                    </p>
-                    <Link
-                      href="/sarees"
-                      onClick={() => setActiveIndex(null)}
-                      className="mt-3 inline-flex min-h-10 w-full items-center justify-center rounded-lg bg-[#B56F6F] px-4 text-[10px] font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-[#9E5B5B]"
-                    >
-                      Explore sarees
-                    </Link>
-                  </>
-                ) : null}
+                  ) : activeReel.kind === "editorial" ? (
+                    <div>
+                      <p className="text-[9px] font-bold uppercase tracking-[0.16em] text-[#F8C24A]">{activeReel.category}</p>
+                      <h3 className="mt-0.5 truncate text-sm font-medium text-white">{activeReel.title}</h3>
+                    </div>
+                  ) : null}
+                </div>
               </div>
             </section>
             <button

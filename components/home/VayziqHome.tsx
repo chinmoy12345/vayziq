@@ -25,6 +25,7 @@ import HomeHeader from "./HomeHeader";
 import HomeFooter from "./HomeFooter";
 import styles from "./VayziqHome.module.css";
 import wishlistStyles from "./WishlistButton.module.css";
+import sectionWidthStyles from "./HomeSectionWidth.module.css";
 
 function SectionHeading({
   title,
@@ -288,7 +289,7 @@ export default function VayziqHome({
           </div>
         </section>
         <SectionHeading title="Best Sellers" />
-        <section className={`${styles.productGrid} ${styles.fourProductGrid}`}>
+        <section className={`${styles.productGrid} ${styles.fourProductGrid} ${sectionWidthStyles.fullWidthProductGrid}`}>
           {bestSellers.map((product) => (
             <ProductCard
               key={product.id}
@@ -301,7 +302,7 @@ export default function VayziqHome({
           ))}
         </section>
         <SectionHeading title="New Arrivals" />
-        <section className={`${styles.productGrid} ${styles.fourProductGrid}`}>
+        <section className={`${styles.productGrid} ${styles.fourProductGrid} ${sectionWidthStyles.fullWidthProductGrid}`}>
           {newArrivals.map((product) => (
             <ProductCard
               key={product.id}
@@ -314,7 +315,7 @@ export default function VayziqHome({
           ))}
         </section>
         <section
-          className={styles.collectionShowcase}
+          className={`${styles.collectionShowcase} ${sectionWidthStyles.wideMerchSection}`}
           aria-labelledby="collection-heading"
         >
           <div className={styles.collectionShowcaseHead}>
@@ -370,7 +371,7 @@ export default function VayziqHome({
           </>
         )}
         {offerBanner && (
-          <section className={styles.offerSection}>
+          <section className={`${styles.offerSection} ${sectionWidthStyles.wideMerchSection}`}>
             <Link
               href={offerBanner.href}
               className={styles.offerBanner}
@@ -389,7 +390,7 @@ export default function VayziqHome({
         {visibility.trendingCategories && (
           <>
             <SectionHeading title="Trending Categories" />
-            <section className={styles.genderCategoryGrid}>
+            <section className={`${styles.genderCategoryGrid} ${sectionWidthStyles.wideMerchSection}`}>
               {featuredCategories.map((category) => (
                 <Link
                   className={styles.genderCategoryCard}
@@ -418,7 +419,7 @@ export default function VayziqHome({
           </>
         )}
         <SectionHeading title="You May Like" />
-        <section className={`${styles.productGrid} ${styles.fourProductGrid}`}>
+        <section className={`${styles.productGrid} ${styles.fourProductGrid} ${sectionWidthStyles.fullWidthProductGrid}`}>
           {recommendations.map((product) => (
             <ProductCard
               key={product.id}
@@ -502,7 +503,7 @@ export default function VayziqHome({
           </section>
         )}
         {journalPosts.length > 0 && (
-          <section className={styles.journalSection} aria-labelledby="journal-heading">
+          <section className={`${styles.journalSection} ${sectionWidthStyles.wideMerchSection}`} aria-labelledby="journal-heading">
             <div className={styles.journalHeading}>
               <div>
                 <p>STYLE NOTES</p>

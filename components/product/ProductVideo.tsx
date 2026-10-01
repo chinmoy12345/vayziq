@@ -8,6 +8,7 @@ export default function ProductVideo({
   autoPlay = false,
   controls = true,
   loop = false,
+  muted,
 }: {
   url: string;
   title: string;
@@ -16,9 +17,12 @@ export default function ProductVideo({
   autoPlay?: boolean;
   controls?: boolean;
   loop?: boolean;
+  /** When omitted, autoplay videos start muted for browser compatibility. */
+  muted?: boolean;
 }) {
   const video = parseProductVideoUrl(url);
   if (!video) return null;
+  const shouldMute = muted ?? autoPlay;
 
   if (video.kind === "file") {
     return (
@@ -26,11 +30,11 @@ export default function ProductVideo({
         className={className}
         controls={controls}
         playsInline
-        preload="metadata"
+        preload={autoPlay ? "auto" : "metadata"}
         poster={poster}
         aria-label={title}
         autoPlay={autoPlay}
-        muted={autoPlay}
+        muted={shouldMute}
         loop={loop}
       >
         <source src={video.sourceUrl} />
@@ -42,8 +46,8 @@ export default function ProductVideo({
   const embedUrl = new URL(video.embedUrl!);
   if (autoPlay) {
     embedUrl.searchParams.set("autoplay", "1");
-    embedUrl.searchParams.set("mute", "1");
   }
+  embedUrl.searchParams.set("mute", shouldMute ? "1" : "0");
   if (!controls) embedUrl.searchParams.set("controls", "0");
   if (loop) {
     embedUrl.searchParams.set("loop", "1");

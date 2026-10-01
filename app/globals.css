@@ -223,6 +223,27 @@ body:has(.vayziq-home) .store-footer {
   .watch-buy-desktop .watch-reel-feed .watch-buy-cta-label { display: none !important; }
 }
 
+/* Final Vayziq premium finish: shared depth, rhythm and interaction quality. */
+:root { --vayziq-ink: #151515; --vayziq-paper: #fffdf9; --vayziq-line: #e9e5df; --vayziq-gold: #fbb606; --vayziq-mint: #10d9a0; }
+html { scroll-behavior: smooth; }
+body { min-width: 320px; background: var(--vayziq-paper); color: var(--vayziq-ink); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+::selection { background: #ffe08a; color: #111; }
+:where(a, button, input, select, textarea):focus-visible { outline: 3px solid rgba(251,182,6,.72); outline-offset: 3px; }
+.storefront-shell { background: radial-gradient(circle at 100% 0%, rgba(16,217,160,.05), transparent 24rem), linear-gradient(180deg, #fff 0%, var(--vayziq-paper) 100%); }
+.store-header { box-shadow: 0 1px 0 rgba(21,21,21,.04), 0 8px 24px rgba(21,21,21,.035); backdrop-filter: blur(16px); }
+.store-utility { letter-spacing: .01em; }
+.store-footer { border-top: 1px solid rgba(251,182,6,.28); }
+.shop-home-body .shop-product-grid article, .shop-home-body .collection-product-grid article { transition: transform .24s ease, box-shadow .24s ease; }
+@media (hover:hover) { .shop-home-body .shop-product-grid article:hover, .shop-home-body .collection-product-grid article:hover { transform: translateY(-4px); box-shadow: 0 13px 30px rgba(20,16,12,.10); } }
+.product-home-body, .cart-home-body { background: radial-gradient(circle at 98% 2%, rgba(251,182,6,.07), transparent 21rem), #fff !important; }
+.product-home-body button, .cart-home-body button, .shop-home-body button { transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease, border-color .18s ease; }
+@media (hover:hover) { .product-home-body button:not(:disabled):active, .cart-home-body button:not(:disabled):active, .shop-home-body button:not(:disabled):active { transform: scale(.98); } }
+@media (max-width: 767px) { .storefront-shell { background: #fff; } .store-header { box-shadow: 0 1px 10px rgba(21,21,21,.05); } }
+
+/* Mobile Watch & Buy is a direct-discovery carousel: autoplay the visible
+   reel and use the entire video surface as the product/category link. */
+@media (max-width: 767px) { .watch-buy-desktop .watch-play-overlay { display: none !important; } }
+
 /* Desktop cards use the same compact Watch & Buy treatment as the homepage. */
 @media (min-width: 768px) {
   .watch-buy-desktop .watch-reel-feed { gap: 14px !important; }
