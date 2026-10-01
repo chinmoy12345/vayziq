@@ -1,0 +1,45 @@
+"use client";
+
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import type { BlogContent, BlogPost, BlogSection } from "@/lib/blog";
+
+const blankPost = (): BlogPost => ({ slug: "", title: "", excerpt: "", category: "Style Notes", date: new Date().toLocaleDateString("en-CA"), readTime: "4 min read", image: "", imageAlt: "", seoTitle: "", seoDescription: "", seoKeywords: "", published: false, sections: [{ title: "", body: [""] }] });
+const slugify = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+export default function BlogEditor({ slug }: { slug: string }) {
+  const [content, setContent] = useState<BlogContent | null>(null);
+  const [post, setPost] = useState<BlogPost | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const isNew = slug === "new";
+
+  useEffect(() => { void fetch("/api/admin/blog", { cache: "no-store" }).then(async response => { const payload = await response.json() as { data?: BlogContent; message?: string }; if (!response.ok || !payload.data) throw new Error(payload.message || "Could not load the article."); setContent(payload.data); const found = isNew ? blankPost() : payload.data.posts.find(item => item.slug === slug); if (!found) throw new Error("Article not found."); setPost(found); }).catch(reason => setError(reason instanceof Error ? reason.message : "Could not load the article.")); }, [isNew, slug]);
+
+  const patch = (value: Partial<BlogPost>) => setPost(current => current ? { ...current, ...value } : current);
+  const patchSection = (index: number, value: Partial<BlogSection>) => patch({ sections: (post?.sections ?? []).map((section, sectionIndex) => sectionIndex === index ? { ...section, ...value } : section) });
+
+  async function upload(file: File | undefined, sectionIndex?: number) {
+    if (!file) return;
+    setUploading(true); setError("");
+    try { const form = new FormData(); form.set("file", file); const response = await fetch("/api/upload/banner", { method: "POST", body: form }); const payload = await response.json() as { image?: string; message?: string }; if (!response.ok || !payload.image) throw new Error(payload.message || "Image upload failed."); if (sectionIndex === undefined) patch({ image: payload.image }); else patchSection(sectionIndex, { image: payload.image }); } catch (reason) { setError(reason instanceof Error ? reason.message : "Image upload failed."); } finally { setUploading(false); }
+  }
+
+  async function save() {
+    if (!content || !post) return;
+    setSaving(true); setError(""); setMessage("");
+    const next = { ...post, title: post.title.trim(), slug: slugify(post.slug || post.title) };
+    try { const posts = isNew ? [...content.posts, next] : content.posts.map(item => item.slug === slug ? next : item); const response = await fetch("/api/admin/blog", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...content, posts }) }); const payload = await response.json() as { message?: string }; if (!response.ok) throw new Error(payload.message || "Could not save the article."); if (isNew) { window.location.assign(`/admin/blog/${next.slug}`); return; } setMessage("Article saved."); } catch (reason) { setError(reason instanceof Error ? reason.message : "Could not save the article."); } finally { setSaving(false); }
+  }
+
+  if (!post) return <main className="min-h-[calc(100vh-72px)] bg-[#faf8f6] p-6 text-sm text-[#857974]">{error || "Loading article editor…"}</main>;
+  return <main className="min-h-[calc(100vh-72px)] bg-[#faf8f6] p-4 sm:p-6 lg:p-8"><div className="mx-auto max-w-5xl"><header className="flex flex-wrap items-end justify-between gap-4"><div><Link href="/admin/blog" className="text-sm text-[#8c6b60]">← Back to articles</Link><h1 className="mt-2 text-2xl font-semibold tracking-tight text-[#292321]">{isNew ? "Add article" : "Edit article"}</h1><p className="mt-1 text-sm text-[#857974]">Create the story, upload images, and publish when ready.</p></div><button type="button" onClick={() => void save()} disabled={saving || uploading} className="h-11 rounded-lg bg-[#292321] px-5 text-sm font-medium text-white disabled:opacity-50">{saving ? "Saving…" : "Save article"}</button></header>{error && <p className="mt-5 rounded-lg bg-rose-50 p-3 text-sm text-rose-800">{error}</p>}{message && <p className="mt-5 rounded-lg bg-emerald-50 p-3 text-sm text-emerald-800">{message}</p>}
+    <section className="mt-6 space-y-6 rounded-xl border border-[#eee6e1] bg-white p-5 shadow-sm sm:p-6"><div className="grid gap-4 sm:grid-cols-2"><Field label="Title"><input value={post.title} onChange={event => patch({ title: event.target.value, ...(!post.slug ? { slug: slugify(event.target.value) } : {}) })} /></Field><Field label="URL slug"><input value={post.slug} onChange={event => patch({ slug: slugify(event.target.value) })} /></Field><Field label="Category"><input value={post.category} onChange={event => patch({ category: event.target.value })} /></Field><Field label="Reading time"><input value={post.readTime} onChange={event => patch({ readTime: event.target.value })} /></Field><Field label="Publish date"><input type="date" value={post.date} onChange={event => patch({ date: event.target.value })} /></Field><label className="flex items-end gap-2 pb-3 text-sm font-medium"><input type="checkbox" checked={post.published} onChange={event => patch({ published: event.target.checked })} /> Publish article</label><div className="sm:col-span-2"><Field label="Excerpt"><textarea rows={3} value={post.excerpt} onChange={event => patch({ excerpt: event.target.value })} /></Field></div></div>
+      <div className="border-t pt-5"><h2 className="font-semibold">Cover image</h2><div className="mt-3 grid gap-3 sm:grid-cols-2"><Field label="Upload image"><input type="file" accept="image/png,image/jpeg,image/webp" disabled={uploading} onChange={event => void upload(event.target.files?.[0])} /></Field><Field label="Image alt text"><input value={post.imageAlt} onChange={event => patch({ imageAlt: event.target.value })} /></Field></div>{post.image && <img src={post.image} alt="Cover preview" className="mt-4 max-h-72 rounded-lg object-cover" />}</div>
+      <div className="border-t pt-5"><div className="flex items-center justify-between"><div><h2 className="font-semibold">Article content</h2><p className="mt-1 text-xs text-[#857974]">Use sections for readable, SEO-friendly content. Each section can include an image.</p></div><button type="button" onClick={() => patch({ sections: [...post.sections, { title: "", body: [""] }] })} className="rounded-lg border px-3 py-2 text-xs">Add section</button></div><div className="mt-4 space-y-4">{post.sections.map((section, index) => <div key={index} className="rounded-lg border bg-[#fcfaf9] p-4"><Field label={`Section ${index + 1} heading`}><input value={section.title} onChange={event => patchSection(index, { title: event.target.value })} /></Field><div className="mt-3"><Field label="Paragraphs"><textarea rows={7} value={section.body.join("\n\n")} onChange={event => patchSection(index, { body: event.target.value.split(/\n\s*\n/).map(value => value.trim()).filter(Boolean) })} /></Field></div><div className="mt-3 grid gap-3 sm:grid-cols-2"><Field label="Optional inline image"><input type="file" accept="image/png,image/jpeg,image/webp" disabled={uploading} onChange={event => void upload(event.target.files?.[0], index)} /></Field><Field label="Inline image alt text"><input value={section.imageAlt ?? ""} onChange={event => patchSection(index, { imageAlt: event.target.value })} /></Field></div>{section.image && <img src={section.image} alt="Inline preview" className="mt-3 max-h-48 rounded-lg object-cover" />}</div>)}</div></div>
+      <div className="border-t pt-5"><h2 className="font-semibold">Search &amp; social SEO</h2><div className="mt-3 grid gap-4 sm:grid-cols-2"><Field label="SEO title"><input value={post.seoTitle ?? ""} onChange={event => patch({ seoTitle: event.target.value })} /></Field><Field label="SEO keywords"><input value={post.seoKeywords ?? ""} onChange={event => patch({ seoKeywords: event.target.value })} /></Field><div className="sm:col-span-2"><Field label="SEO description"><textarea rows={3} value={post.seoDescription ?? ""} onChange={event => patch({ seoDescription: event.target.value })} /></Field></div></div></div>
+    </section></div></main>;
+}
+function Field({ label, children }: { label: string; children: React.ReactNode }) { return <label className="block text-sm font-medium text-[#625954]">{label}<span className="mt-2 block [&_input]:h-11 [&_input]:w-full [&_input]:rounded-lg [&_input]:border [&_input]:border-[#ded6d1] [&_input]:bg-white [&_input]:px-3 [&_textarea]:w-full [&_textarea]:rounded-lg [&_textarea]:border [&_textarea]:border-[#ded6d1] [&_textarea]:p-3 [&_input[type=file]]:h-auto [&_input[type=file]]:px-0">{children}</span></label>; }

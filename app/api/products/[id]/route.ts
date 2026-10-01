@@ -299,6 +299,10 @@ export async function GET(
         featured:
           product.featured,
 
+        badgeEnabled: product.badgeEnabled,
+        badgeText: product.badgeText ?? "",
+        badgeTone: product.badgeTone,
+
         hasVariations:
           product.hasVariations,
 
@@ -373,6 +377,9 @@ export async function PUT(
       stock,
       status,
       featured,
+      badgeEnabled,
+      badgeText,
+      badgeTone,
       images = [],
       hasVariations = false,
       variationOptions = [],
@@ -382,6 +389,10 @@ export async function PUT(
     const videoInput = String(videoUrl ?? "").trim();
     const productVideo = videoInput ? parseProductVideoUrl(videoInput) : null;
     if (videoInput && !productVideo) return NextResponse.json({ success: false, message: "Use a YouTube, Vimeo, or direct MP4/WebM/OGG video URL." }, { status: 400 });
+    const normalizedBadgeText = String(badgeText ?? "").trim().slice(0, 32);
+    const allowedBadgeTones = ["dark", "new", "sale", "popular", "neutral"];
+    const normalizedBadgeTone = allowedBadgeTones.includes(String(badgeTone)) ? String(badgeTone) : "dark";
+    if (badgeEnabled && !normalizedBadgeText) return NextResponse.json({ success: false, message: "Enter badge text before enabling the product badge." }, { status: 400 });
 
     // =================================================
     // BASIC VALIDATION
@@ -978,6 +989,10 @@ export async function PUT(
                 Boolean(
                   featured
                 ),
+
+              badgeEnabled: Boolean(badgeEnabled),
+              badgeText: normalizedBadgeText || null,
+              badgeTone: normalizedBadgeTone,
 
               hasVariations:
                 Boolean(

@@ -214,11 +214,15 @@ export default function CategoryFilters({
               <div className="space-y-2">
                 {(filters.subcategories ?? filters.categories ?? []).map((item) => {
                   const key = item.slug ?? item.name;
-                  const checked = item.name === "All Products" ? activeCategories.length === 0 : activeCategories.includes(key);
+                  const categoryItems = filters.subcategories ?? filters.categories ?? [];
+                  const allCategoryKey = categoryItems.find((entry) => entry.name.startsWith("All "))?.slug;
+                  const isAllCategory = item.name.startsWith("All ");
+                  const checked = isAllCategory ? activeCategories.length === 0 || activeCategories.includes(key) : activeCategories.includes(key);
                   return <label key={key} className={`flex cursor-pointer items-center justify-between gap-3 rounded-md py-2 text-xs text-[#5F5252] transition hover:bg-[#F8F3F0] ${item.name.startsWith("All ") ? "px-2.5 font-medium" : "px-2"}`}>
                     <span className="flex items-center gap-2.5"><input type="checkbox" checked={checked} onChange={() => {
-                      if (item.name === "All Products") { setSelectedCategories([]); onCategoriesChange?.([]); return; }
-                      const next = activeCategories.includes(key) ? activeCategories.filter((value) => value !== key) : [...activeCategories, key];
+                      if (isAllCategory) { setSelectedCategories([]); onCategoriesChange?.([]); return; }
+                      const withoutAll = allCategoryKey ? activeCategories.filter((value) => value !== allCategoryKey) : activeCategories;
+                      const next = withoutAll.includes(key) ? withoutAll.filter((value) => value !== key) : [...withoutAll, key];
                       setSelectedCategories(next); onCategoriesChange?.(next);
                     }} className="h-4 w-4 accent-[#111]" /><span>{item.name}</span></span>
                     {item.count !== undefined && <span className="text-[11px] tabular-nums text-[#A18E8E]">{item.count}</span>}

@@ -22,10 +22,13 @@ export interface Product {
   images?: string[];
   oldPrice?: string;
   badge?: string;
+  badgeTone?: string;
   rating?: number;
   reviews?: number;
   createdAt?: string;
   filterValues?: { sizes: string[]; colors: string[] };
+  options?: { name: string; values: string[] }[];
+  inStock?: boolean;
 }
 
 /* =========================================================
@@ -67,6 +70,10 @@ function StarIcon() {
   );
 }
 
+function productBadge(product: Product) {
+  return product.badge ?? null;
+}
+
 /* =========================================================
    PRODUCT CARD
 ========================================================= */
@@ -82,8 +89,17 @@ export default function ProductCard({
   const [wishlistMessage, setWishlistMessage] = useState<string | null>(null);
   const [imageIndex, setImageIndex] = useState(0);
   const [addedToCart, setAddedToCart] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [cartAdded, setCartAdded] = useState(false);
+  const [cartQuantity, setCartQuantity] = useState(1);
+  const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
   const galleryImages = product.images?.length ? product.images : [product.image];
   const currentImage = galleryImages[imageIndex] ?? product.image;
+  const badge = productBadge(product);
+  const price = Number(product.price.replace(/[^0-9.]/g, ""));
+  const oldPrice = Number(product.oldPrice?.replace(/[^0-9.]/g, "") ?? 0);
+  const discountPercent = oldPrice > price ? Math.round((1 - price / oldPrice) * 100) : null;
+  const inStock = product.inStock !== false;
   const productSlug = product.slug ?? product.name
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
@@ -122,17 +138,28 @@ export default function ProductCard({
     window.setTimeout(() => setWishlistMessage(null), 2600);
   };
 
+  const openCartPopup = () => {
+    setSelectedOptions(Object.fromEntries((product.options ?? []).filter((option) => option.values.length).map((option) => [option.name, option.values[0]])));
+    setCartQuantity(1);
+    setCartAdded(false);
+    setCartOpen(true);
+  };
+
   const addToCart = () => {
-    const savedCart = JSON.parse(localStorage.getItem("susmita-cart") ?? "[]") as Array<{ id: number; quantity: number }>;
-    const existing = savedCart.find((item) => item.id === Number(product.id));
-    const item = { id: Number(product.id), slug: productSlug, name: product.name, category: product.category, price: Number(product.price.replace(/[^\d.]/g, "")), image: product.image, quantity: 1 };
-    localStorage.setItem("susmita-cart", JSON.stringify(existing ? savedCart.map((cartItem) => cartItem === existing ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem) : [...savedCart, item]));
+    const savedCart = JSON.parse(localStorage.getItem("susmita-cart") ?? "[]") as Array<{ id: number; quantity: number; options?: Record<string, string> }>;
+    const optionKey = JSON.stringify(selectedOptions);
+    const existing = savedCart.find((item) => item.id === Number(product.id) && JSON.stringify(item.options ?? {}) === optionKey);
+    const item = { id: Number(product.id), slug: productSlug, name: product.name, category: product.category, price: Number(product.price.replace(/[^\d.]/g, "")), image: product.image, quantity: cartQuantity, options: selectedOptions };
+    const nextQuantity = (existing?.quantity ?? 0) + cartQuantity;
+    localStorage.setItem("susmita-cart", JSON.stringify(existing ? savedCart.map((cartItem) => cartItem === existing ? { ...cartItem, quantity: nextQuantity } : cartItem) : [...savedCart, item]));
     window.dispatchEvent(new Event("cart-updated"));
+    setCartAdded(true);
     setAddedToCart(true);
     window.setTimeout(() => setAddedToCart(false), 1800);
   };
 
   return (
+    <>
     <article className="group flex min-w-0 flex-col rounded-xl border border-[#e5e5e5] bg-white p-2 shadow-sm transition hover:-translate-y-0.5 hover:border-[#cfcfcf] hover:shadow-lg">
 
       {/* ===================================================
@@ -184,7 +211,6 @@ export default function ProductCard({
         {cardSettings.productCardCarousel && galleryImages.length > 1 && <>
           <button type="button" aria-label="Show previous product image" onClick={() => setImageIndex(index => (index - 1 + galleryImages.length) % galleryImages.length)} className="absolute left-2 top-1/2 z-10 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full border border-[#E8DADA] bg-white/95 text-[#514343] shadow-sm transition hover:bg-[#B56F6F] hover:text-white md:opacity-0 md:group-hover:opacity-100"><svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="m15 18-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
           <button type="button" aria-label="Show next product image" onClick={() => setImageIndex(index => (index + 1) % galleryImages.length)} className="absolute right-2 top-1/2 z-10 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full border border-[#E8DADA] bg-white/95 text-[#514343] shadow-sm transition hover:bg-[#B56F6F] hover:text-white md:opacity-0 md:group-hover:opacity-100"><svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="m9 18 6-6-6-6" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
-          <span aria-label={`Image ${imageIndex + 1} of ${galleryImages.length}`} className="absolute bottom-3 right-3 z-10 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-medium text-[#514343] shadow-sm">{imageIndex + 1} / {galleryImages.length}</span>
         </>}
         {cardSettings.productCardRating && product.rating !== undefined && (product.reviews ?? 0) > 0 && <div aria-label={`${product.rating.toFixed(1)} out of 5 from ${product.reviews} reviews`} className="absolute bottom-3 left-3 z-10 inline-flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1.5 text-[10px] font-medium text-[#4C4141] shadow-sm"><span className="text-[#B56F6F]"><StarIcon /></span><span>{product.rating.toFixed(1)}</span><span className="text-[#A89999]">|</span><span>{product.reviews}</span></div>}
         {(product.filterValues?.colors?.length ?? 0) > 0 && <span className="absolute bottom-3 right-3 z-10 flex items-center pl-2" aria-label={`${product.filterValues?.colors.length} colors available`}>{product.filterValues!.colors.slice(0, 3).map((color) => <i key={color} title={color} style={{ backgroundColor: color }} className="-ml-2 h-4 w-4 rounded-full border-2 border-white shadow-sm" />)}{product.filterValues!.colors.length > 3 && <b className="-ml-1 grid h-[18px] min-w-[18px] place-items-center rounded-full border-2 border-white bg-[#111] px-1 text-[8px] font-extrabold leading-none text-white">+{product.filterValues!.colors.length - 3}</b>}</span>}
@@ -195,24 +221,31 @@ export default function ProductCard({
             BADGE
         ================================================= */}
 
-        {product.badge && (
+        {badge && (
           <span
-            className="
+            className={`
               absolute
-              left-3
-              top-3
-              bg-[#B56F6F]
-              px-3
+              left-2.5
+              top-2.5
+              ${product.badgeTone === "new" ? "bg-violet-600" : product.badgeTone === "sale" ? "bg-orange-500" : product.badgeTone === "popular" ? "bg-rose-500" : product.badgeTone === "neutral" ? "bg-slate-200 text-slate-700" : "bg-[#292321]"}
+              rounded-full
+              border
+              border-white/30
+              px-2.5
               py-1.5
-              text-[9px]
-              font-semibold
-              tracking-[0.12em]
-              text-white
-            "
+              text-[10px]
+              font-bold
+              uppercase
+              tracking-[0.1em]
+              shadow-sm
+              ${product.badgeTone === "neutral" ? "" : "text-white"}
+            `}
           >
-            {product.badge}
+            {badge}
           </span>
         )}
+
+        {!inStock && <span className="absolute inset-x-3 bottom-3 z-20 rounded-md bg-black/75 px-3 py-2 text-center text-[10px] font-bold uppercase tracking-[0.14em] text-white backdrop-blur-sm">Out of stock</span>}
 
         {/* =================================================
             WISHLIST
@@ -290,8 +323,6 @@ export default function ProductCard({
             {product.name}
           </h3>
         </Link>
-        {product.colorCount ? <p className="mt-2 text-[11px] text-[#8A7777]">{product.colorCount} {product.colorCount === 1 ? "Color" : "Colors"} Available</p> : null}
-
         {/* =================================================
             PRICE
         ================================================= */}
@@ -319,11 +350,24 @@ export default function ProductCard({
               {product.oldPrice}
             </span>
           )}
-          {product.oldPrice && Number(product.oldPrice.replace(/[^0-9.]/g, "")) > Number(product.price.replace(/[^0-9.]/g, "")) && <span className="text-[10px] font-medium text-emerald-700">{Math.round((1 - Number(product.price.replace(/[^0-9.]/g, "")) / Number(product.oldPrice.replace(/[^0-9.]/g, ""))) * 100)}% OFF</span>}
+          {discountPercent && <span className="rounded bg-[#fff0bd] px-1.5 py-0.5 text-[10px] font-bold text-[#926300]">{discountPercent}% OFF</span>}
         </div>
-        <button type="button" onClick={addToCart} className="mt-3 min-h-10 w-full rounded-md bg-[#111] px-3 py-2.5 text-xs font-bold text-white transition hover:bg-[#2b2b2b]">{addedToCart ? "Added to Cart ✓" : "Add to Cart"}</button>
+        <button type="button" disabled={!inStock} onClick={openCartPopup} className={`mt-3 min-h-10 w-full rounded-md px-3 py-2.5 text-xs font-bold transition ${inStock ? "bg-[#111] text-white hover:bg-[#2b2b2b]" : "cursor-not-allowed bg-[#e8e5e3] text-[#827773]"}`}>{inStock ? (addedToCart ? "Added to Cart ✓" : "Add to Cart") : "Out of Stock"}</button>
 
       </div>
     </article>
+    {cartOpen && (
+      <div className="fixed inset-0 z-[250] grid place-items-center bg-black/50 p-4 backdrop-blur-[3px]" role="dialog" aria-modal="true" aria-labelledby={`cart-title-${product.id}`} onMouseDown={() => setCartOpen(false)}>
+        <section className="relative max-h-[calc(100dvh-32px)] w-full max-w-[760px] overflow-auto rounded-2xl bg-white p-5 shadow-[0_18px_55px_rgba(0,0,0,.28)] sm:p-6" onMouseDown={(event) => event.stopPropagation()}>
+          <button type="button" onClick={() => setCartOpen(false)} aria-label="Close" className="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full bg-[#f3f3f3] text-lg text-[#111]">×</button>
+          <div className={`grid gap-2 ${galleryImages.length === 1 ? "grid-cols-1" : "grid-cols-3"}`}>
+            {galleryImages.slice(0, 3).map((image, index) => <div key={`${image}-${index}`} className="overflow-hidden rounded-lg bg-[#f4f4f4]"><img src={image} alt={`${product.name} view ${index + 1}`} className="h-[145px] w-full object-cover sm:h-[250px]" /></div>)}
+          </div>
+          <div className="mt-5 pr-8"><p className="text-[10px] font-extrabold tracking-[.12em] text-[#777]">{cartAdded ? "ADDED TO BAG" : product.category.toUpperCase()}</p><h2 id={`cart-title-${product.id}`} className="mt-1 text-lg font-semibold leading-tight text-[#111]">{product.name}</h2><strong className="mt-2 block text-[17px] text-[#111]">{product.price}</strong>{product.oldPrice && <del className="ml-2 text-[13px] text-[#888]">{product.oldPrice}</del>}</div>
+          {cartAdded ? <div className="mt-5"><Link href="/cart" className="flex min-h-11 items-center justify-center rounded-lg bg-[#fbb606] text-[13px] font-extrabold text-[#111]">View Cart</Link><button type="button" onClick={() => setCartOpen(false)} className="mt-2 flex min-h-11 w-full items-center justify-center rounded-lg border border-[#d7d7d7] bg-white text-[13px] font-extrabold text-[#111]">Continue Shopping</button></div> : <><div className="mt-5 space-y-4 border-t border-[#ececec] pt-4">{(product.options ?? []).filter((option) => option.values.length).map((option) => <div key={option.name}><p className="mb-2 text-[10px] font-extrabold uppercase tracking-[.12em] text-[#666]">{option.name}</p><div className="flex flex-wrap gap-2">{option.values.map((value) => <button key={value} type="button" onClick={() => setSelectedOptions((current) => ({ ...current, [option.name]: value }))} className={`min-w-11 rounded-md border px-3 py-2 text-xs font-bold transition ${selectedOptions[option.name] === value ? "border-[#111] bg-[#111] text-white" : "border-[#d6d6d6] bg-white text-[#333] hover:border-[#111]"}`}>{value}</button>)}</div></div>)}</div><div className="mt-5 flex items-center justify-between border-y border-[#ececec] py-3"><span className="text-sm font-bold text-[#333]">Quantity</span><div className="flex items-center gap-4"><button type="button" onClick={() => setCartQuantity((quantity) => Math.max(1, quantity - 1))} className="grid h-8 w-8 place-items-center rounded-full border border-[#d8d8d8] text-lg" aria-label="Decrease quantity">−</button><b className="text-sm">{cartQuantity}</b><button type="button" onClick={() => setCartQuantity((quantity) => quantity + 1)} className="grid h-8 w-8 place-items-center rounded-full border border-[#d8d8d8] text-lg" aria-label="Increase quantity">+</button></div></div><button type="button" onClick={addToCart} className="mt-5 flex min-h-11 w-full items-center justify-center rounded-lg bg-[#fbb606] text-[13px] font-extrabold text-[#111]">Add to Bag</button></>}
+        </section>
+      </div>
+    )}
+    </>
   );
 }

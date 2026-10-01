@@ -56,6 +56,7 @@ function ProductCard({
   badge?: string;
   framed?: boolean;
 }) {
+  const dynamicBadge = badge || product.badge || null;
   return (
     <article
       className={`${styles.productCard}${framed ? ` ${styles.framedProductCard}` : ""}`}
@@ -68,11 +69,12 @@ function ProductCard({
           sizes="(max-width: 767px) 46vw, 17vw"
           quality={100}
         />
-        {product.discountPercent && (
-          <span className={styles.discountBadge}>
-            {product.discountPercent}% OFF
+        {dynamicBadge && (
+          <span className={`${styles.discountBadge} ${product.badgeTone === "new" ? styles.badgeNew : product.badgeTone === "sale" ? styles.badgeSale : product.badgeTone === "popular" ? styles.badgePopular : product.badgeTone === "neutral" ? styles.badgeNeutral : ""}`}>
+            {dynamicBadge}
           </span>
         )}
+        {!product.inStock && <span className={styles.outOfStockBadge}>Out of Stock</span>}
         {product.rating !== "New" && (
           <span className={styles.ratingBadge}>★ {product.rating}</span>
         )}
@@ -82,7 +84,6 @@ function ProductCard({
             {product.colors.length > 3 && <b>+{product.colors.length - 3}</b>}
           </span>
         )}
-        {badge && !product.discountPercent && <span>{badge}</span>}
       </Link>
       <button
         type="button"
@@ -96,14 +97,16 @@ function ProductCard({
       <div className={styles.priceRow}>
         <strong>{product.price}</strong>
         {product.oldPrice && <del>{product.oldPrice}</del>}
+        {product.discountPercent && <span className={styles.offerPercent}>{product.discountPercent}% OFF</span>}
       </div>
       {onAddToCart && (
         <button
           type="button"
-          className={styles.addToCartButton}
+          className={`${styles.addToCartButton}${product.inStock ? "" : ` ${styles.addToCartDisabled}`}`}
           onClick={onAddToCart}
+          disabled={!product.inStock}
         >
-          Add to Cart
+          {product.inStock ? "Add to Cart" : "Out of Stock"}
         </button>
       )}
     </article>
@@ -292,7 +295,6 @@ export default function VayziqHome({
               liked={liked.includes(product.id)}
               onLike={() => toggleLike(product.id)}
               onAddToCart={() => openCartPopup(product)}
-              badge="Best Seller"
               framed
             />
           ))}
@@ -306,7 +308,6 @@ export default function VayziqHome({
               liked={liked.includes(product.id)}
               onLike={() => toggleLike(product.id)}
               onAddToCart={() => openCartPopup(product)}
-              badge="New Arrival"
               framed
             />
           ))}
@@ -361,7 +362,6 @@ export default function VayziqHome({
                     product={product}
                     liked={liked.includes(product.id)}
                     onLike={() => toggleLike(product.id)}
-                    badge="Trending"
                   />
                 ))}
               </div>

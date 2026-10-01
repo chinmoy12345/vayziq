@@ -22,6 +22,9 @@ type ApiProduct = {
   stock: number;
   status: "active" | "draft";
   featured: boolean;
+  badgeEnabled?: boolean;
+  badgeText?: string | null;
+  badgeTone?: string | null;
 
   category?: {
     id: number;
@@ -46,6 +49,8 @@ type Product = {
   status: ProductStatus;
   image: string;
   featured: boolean;
+  badgeText?: string;
+  badgeTone?: string;
 };
 
 // =====================================================
@@ -130,6 +135,9 @@ export default function ProductsPage() {
             featured: Boolean(
               item.featured
             ),
+
+            badgeText: item.badgeEnabled && item.badgeText ? item.badgeText : undefined,
+            badgeTone: item.badgeEnabled && item.badgeText ? item.badgeTone ?? "dark" : undefined,
           }));
 
         if (!cancelled) {
@@ -619,6 +627,12 @@ export default function ProductsPage() {
                                 {product.featured && (
                                   <span className="rounded-full bg-[#b56f6f]/10 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-[#b56f6f]">
                                     Featured
+                                  </span>
+                                )}
+
+                                {product.badgeText && (
+                                  <span className={`rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide ${product.badgeTone === "new" ? "bg-violet-100 text-violet-700" : product.badgeTone === "sale" ? "bg-orange-100 text-orange-700" : product.badgeTone === "popular" ? "bg-rose-100 text-rose-700" : product.badgeTone === "neutral" ? "bg-slate-100 text-slate-700" : "bg-[#292321] text-white"}`}>
+                                    {product.badgeText}
                                   </span>
                                 )}
 

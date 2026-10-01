@@ -7,7 +7,7 @@ const globalForPrisma = globalThis as unknown as {
 
 // Bump this when Prisma's generated data model changes. During `next dev`, the
 // global singleton can otherwise keep a client generated from an older schema.
-const PRISMA_SCHEMA_VERSION = "managed-offers-v8-suppliers";
+const PRISMA_SCHEMA_VERSION = "product-badges-v9-suppliers";
 
 const prisma =
   globalForPrisma.prismaSchemaVersion === PRISMA_SCHEMA_VERSION

@@ -33,6 +33,7 @@ interface ProductInfoData {
   material: string;
   sizes?: string[];
   colors?: string[];
+  stock?: number;
   slug?: string;
   image?: string;
 }
@@ -58,7 +59,7 @@ export default function ProductInfo({
   const variant = product.variants?.find(v => (!v.values.size || v.values.size === selectedSize) && (!(v.values.color || v.values.colour) || (v.values.color || v.values.colour) === selectedColor));
   const sellingPrice = variant?.price ?? product.basePrice ?? Number(product.price.replace(/[^\d.]/g, ""));
   const selectedVariantStock = variant?.stock ?? 0;
-  const canPurchase = !product.variants?.length || Boolean(variant && selectedVariantStock > 0);
+  const canPurchase = product.variants?.length ? Boolean(variant && selectedVariantStock > 0) : (product.stock ?? 0) > 0;
   const colorSwatches: Record<string, string> = { Black: "#151515", Olive: "#647056", White: "#f5f5f3", Grey: "#a6a8aa", Gray: "#a6a8aa", Navy: "#233550", Beige: "#d8c7aa" };
   const [quantity, setQuantity] = useState(1);
 

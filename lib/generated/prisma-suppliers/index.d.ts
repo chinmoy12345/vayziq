@@ -11418,6 +11418,9 @@ export namespace Prisma {
     reorderLevel: number | null
     status: $Enums.ProductStatus | null
     featured: boolean | null
+    badgeEnabled: boolean | null
+    badgeText: string | null
+    badgeTone: string | null
     hasVariations: boolean | null
     returnEnabled: boolean | null
     replacementEnabled: boolean | null
@@ -11441,6 +11444,9 @@ export namespace Prisma {
     reorderLevel: number | null
     status: $Enums.ProductStatus | null
     featured: boolean | null
+    badgeEnabled: boolean | null
+    badgeText: string | null
+    badgeTone: string | null
     hasVariations: boolean | null
     returnEnabled: boolean | null
     replacementEnabled: boolean | null
@@ -11464,6 +11470,9 @@ export namespace Prisma {
     reorderLevel: number
     status: number
     featured: number
+    badgeEnabled: number
+    badgeText: number
+    badgeTone: number
     hasVariations: number
     returnEnabled: number
     replacementEnabled: number
@@ -11511,6 +11520,9 @@ export namespace Prisma {
     reorderLevel?: true
     status?: true
     featured?: true
+    badgeEnabled?: true
+    badgeText?: true
+    badgeTone?: true
     hasVariations?: true
     returnEnabled?: true
     replacementEnabled?: true
@@ -11534,6 +11546,9 @@ export namespace Prisma {
     reorderLevel?: true
     status?: true
     featured?: true
+    badgeEnabled?: true
+    badgeText?: true
+    badgeTone?: true
     hasVariations?: true
     returnEnabled?: true
     replacementEnabled?: true
@@ -11557,6 +11572,9 @@ export namespace Prisma {
     reorderLevel?: true
     status?: true
     featured?: true
+    badgeEnabled?: true
+    badgeText?: true
+    badgeTone?: true
     hasVariations?: true
     returnEnabled?: true
     replacementEnabled?: true
@@ -11667,6 +11685,9 @@ export namespace Prisma {
     reorderLevel: number
     status: $Enums.ProductStatus
     featured: boolean
+    badgeEnabled: boolean
+    badgeText: string | null
+    badgeTone: string
     hasVariations: boolean
     returnEnabled: boolean
     replacementEnabled: boolean
@@ -11709,6 +11730,9 @@ export namespace Prisma {
     reorderLevel?: boolean
     status?: boolean
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: boolean
+    badgeTone?: boolean
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -11745,6 +11769,9 @@ export namespace Prisma {
     reorderLevel?: boolean
     status?: boolean
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: boolean
+    badgeTone?: boolean
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -11769,6 +11796,9 @@ export namespace Prisma {
     reorderLevel?: boolean
     status?: boolean
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: boolean
+    badgeTone?: boolean
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -11793,6 +11823,9 @@ export namespace Prisma {
     reorderLevel?: boolean
     status?: boolean
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: boolean
+    badgeTone?: boolean
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -11803,7 +11836,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "sku" | "description" | "videoUrl" | "price" | "comparePrice" | "stock" | "reorderLevel" | "status" | "featured" | "hasVariations" | "returnEnabled" | "replacementEnabled" | "returnDays" | "replacementDays" | "categoryId" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "sku" | "description" | "videoUrl" | "price" | "comparePrice" | "stock" | "reorderLevel" | "status" | "featured" | "badgeEnabled" | "badgeText" | "badgeTone" | "hasVariations" | "returnEnabled" | "replacementEnabled" | "returnDays" | "replacementDays" | "categoryId" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     images?: boolean | Product$imagesArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
@@ -11855,6 +11888,9 @@ export namespace Prisma {
       reorderLevel: number
       status: $Enums.ProductStatus
       featured: boolean
+      badgeEnabled: boolean
+      badgeText: string | null
+      badgeTone: string
       hasVariations: boolean
       returnEnabled: boolean
       replacementEnabled: boolean
@@ -12310,6 +12346,9 @@ export namespace Prisma {
     readonly reorderLevel: FieldRef<"Product", 'Int'>
     readonly status: FieldRef<"Product", 'ProductStatus'>
     readonly featured: FieldRef<"Product", 'Boolean'>
+    readonly badgeEnabled: FieldRef<"Product", 'Boolean'>
+    readonly badgeText: FieldRef<"Product", 'String'>
+    readonly badgeTone: FieldRef<"Product", 'String'>
     readonly hasVariations: FieldRef<"Product", 'Boolean'>
     readonly returnEnabled: FieldRef<"Product", 'Boolean'>
     readonly replacementEnabled: FieldRef<"Product", 'Boolean'>
@@ -41149,6 +41188,9 @@ export namespace Prisma {
     reorderLevel: 'reorderLevel',
     status: 'status',
     featured: 'featured',
+    badgeEnabled: 'badgeEnabled',
+    badgeText: 'badgeText',
+    badgeTone: 'badgeTone',
     hasVariations: 'hasVariations',
     returnEnabled: 'returnEnabled',
     replacementEnabled: 'replacementEnabled',
@@ -42204,6 +42246,9 @@ export namespace Prisma {
     reorderLevel?: IntFilter<"Product"> | number
     status?: EnumProductStatusFilter<"Product"> | $Enums.ProductStatus
     featured?: BoolFilter<"Product"> | boolean
+    badgeEnabled?: BoolFilter<"Product"> | boolean
+    badgeText?: StringNullableFilter<"Product"> | string | null
+    badgeTone?: StringFilter<"Product"> | string
     hasVariations?: BoolFilter<"Product"> | boolean
     returnEnabled?: BoolFilter<"Product"> | boolean
     replacementEnabled?: BoolFilter<"Product"> | boolean
@@ -42239,6 +42284,9 @@ export namespace Prisma {
     reorderLevel?: SortOrder
     status?: SortOrder
     featured?: SortOrder
+    badgeEnabled?: SortOrder
+    badgeText?: SortOrderInput | SortOrder
+    badgeTone?: SortOrder
     hasVariations?: SortOrder
     returnEnabled?: SortOrder
     replacementEnabled?: SortOrder
@@ -42277,6 +42325,9 @@ export namespace Prisma {
     reorderLevel?: IntFilter<"Product"> | number
     status?: EnumProductStatusFilter<"Product"> | $Enums.ProductStatus
     featured?: BoolFilter<"Product"> | boolean
+    badgeEnabled?: BoolFilter<"Product"> | boolean
+    badgeText?: StringNullableFilter<"Product"> | string | null
+    badgeTone?: StringFilter<"Product"> | string
     hasVariations?: BoolFilter<"Product"> | boolean
     returnEnabled?: BoolFilter<"Product"> | boolean
     replacementEnabled?: BoolFilter<"Product"> | boolean
@@ -42312,6 +42363,9 @@ export namespace Prisma {
     reorderLevel?: SortOrder
     status?: SortOrder
     featured?: SortOrder
+    badgeEnabled?: SortOrder
+    badgeText?: SortOrderInput | SortOrder
+    badgeTone?: SortOrder
     hasVariations?: SortOrder
     returnEnabled?: SortOrder
     replacementEnabled?: SortOrder
@@ -42343,6 +42397,9 @@ export namespace Prisma {
     reorderLevel?: IntWithAggregatesFilter<"Product"> | number
     status?: EnumProductStatusWithAggregatesFilter<"Product"> | $Enums.ProductStatus
     featured?: BoolWithAggregatesFilter<"Product"> | boolean
+    badgeEnabled?: BoolWithAggregatesFilter<"Product"> | boolean
+    badgeText?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    badgeTone?: StringWithAggregatesFilter<"Product"> | string
     hasVariations?: BoolWithAggregatesFilter<"Product"> | boolean
     returnEnabled?: BoolWithAggregatesFilter<"Product"> | boolean
     replacementEnabled?: BoolWithAggregatesFilter<"Product"> | boolean
@@ -44656,6 +44713,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -44690,6 +44750,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -44723,6 +44786,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -44757,6 +44823,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -44791,6 +44860,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -44813,6 +44885,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -44835,6 +44910,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -47423,6 +47501,9 @@ export namespace Prisma {
     reorderLevel?: SortOrder
     status?: SortOrder
     featured?: SortOrder
+    badgeEnabled?: SortOrder
+    badgeText?: SortOrder
+    badgeTone?: SortOrder
     hasVariations?: SortOrder
     returnEnabled?: SortOrder
     replacementEnabled?: SortOrder
@@ -47457,6 +47538,9 @@ export namespace Prisma {
     reorderLevel?: SortOrder
     status?: SortOrder
     featured?: SortOrder
+    badgeEnabled?: SortOrder
+    badgeText?: SortOrder
+    badgeTone?: SortOrder
     hasVariations?: SortOrder
     returnEnabled?: SortOrder
     replacementEnabled?: SortOrder
@@ -47480,6 +47564,9 @@ export namespace Prisma {
     reorderLevel?: SortOrder
     status?: SortOrder
     featured?: SortOrder
+    badgeEnabled?: SortOrder
+    badgeText?: SortOrder
+    badgeTone?: SortOrder
     hasVariations?: SortOrder
     returnEnabled?: SortOrder
     replacementEnabled?: SortOrder
@@ -52808,6 +52895,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -52841,6 +52931,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -52976,6 +53069,9 @@ export namespace Prisma {
     reorderLevel?: IntFilter<"Product"> | number
     status?: EnumProductStatusFilter<"Product"> | $Enums.ProductStatus
     featured?: BoolFilter<"Product"> | boolean
+    badgeEnabled?: BoolFilter<"Product"> | boolean
+    badgeText?: StringNullableFilter<"Product"> | string | null
+    badgeTone?: StringFilter<"Product"> | string
     hasVariations?: BoolFilter<"Product"> | boolean
     returnEnabled?: BoolFilter<"Product"> | boolean
     replacementEnabled?: BoolFilter<"Product"> | boolean
@@ -53674,6 +53770,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -53707,6 +53806,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -53755,6 +53857,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -53788,6 +53893,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -53820,6 +53928,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -53853,6 +53964,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -53901,6 +54015,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -53934,6 +54051,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -53966,6 +54086,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -53999,6 +54122,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -54047,6 +54173,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -54080,6 +54209,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -54112,6 +54244,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -54145,6 +54280,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -54218,6 +54356,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -54251,6 +54392,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -54404,6 +54548,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -54437,6 +54584,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -54582,6 +54732,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -54615,6 +54768,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -55386,6 +55542,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -55419,6 +55578,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -55577,6 +55739,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -55610,6 +55775,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -55642,6 +55810,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -55675,6 +55846,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -55901,6 +56075,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -55934,6 +56111,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -56443,6 +56623,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -56476,6 +56659,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -56570,6 +56756,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -56603,6 +56792,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -56675,6 +56867,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -56708,6 +56903,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -56802,6 +57000,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -56835,6 +57036,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -56867,6 +57071,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -56900,6 +57107,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -56948,6 +57158,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -56981,6 +57194,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -57519,6 +57735,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -57552,6 +57771,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -57664,6 +57886,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -57697,6 +57922,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -58424,6 +58652,9 @@ export namespace Prisma {
     reorderLevel?: number
     status?: $Enums.ProductStatus
     featured?: boolean
+    badgeEnabled?: boolean
+    badgeText?: string | null
+    badgeTone?: string
     hasVariations?: boolean
     returnEnabled?: boolean
     replacementEnabled?: boolean
@@ -58487,6 +58718,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -58520,6 +58754,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -58553,6 +58790,9 @@ export namespace Prisma {
     reorderLevel?: IntFieldUpdateOperationsInput | number
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
+    badgeText?: NullableStringFieldUpdateOperationsInput | string | null
+    badgeTone?: StringFieldUpdateOperationsInput | string
     hasVariations?: BoolFieldUpdateOperationsInput | boolean
     returnEnabled?: BoolFieldUpdateOperationsInput | boolean
     replacementEnabled?: BoolFieldUpdateOperationsInput | boolean

@@ -71,6 +71,9 @@ export default function NewProductPage() {
 
   const [featured, setFeatured] =
     useState(false);
+  const [badgeEnabled, setBadgeEnabled] = useState(false);
+  const [badgeText, setBadgeText] = useState("");
+  const [badgeTone, setBadgeTone] = useState("dark");
 
   // ===================================================
   // IMAGES
@@ -747,6 +750,9 @@ export default function NewProductPage() {
           : "draft",
 
       featured,
+      badgeEnabled,
+      badgeText,
+      badgeTone,
 
       // Uploaded images contain permanent URLs after
       // the upload API replaces their blob previews.
@@ -1745,6 +1751,27 @@ export default function NewProductPage() {
                       </span>
 
                     </label>
+
+                    <div className="rounded-lg border border-[#eee6e1] p-3">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-xs font-medium text-[#514945]">Storefront badge</p>
+                          <p className="mt-1 text-[11px] leading-4 text-[#aaa09a]">A controlled label shown on product cards. It is independent from size, fit and other product options.</p>
+                        </div>
+                        <input type="checkbox" checked={badgeEnabled} onChange={(e) => setBadgeEnabled(e.target.checked)} className="mt-0.5 h-4 w-4 accent-[#b56f6f]" aria-label="Enable storefront badge" />
+                      </div>
+                      <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                        <input value={badgeText} maxLength={32} disabled={!badgeEnabled} onChange={(e) => setBadgeText(e.target.value)} placeholder="e.g. Best seller" className={inputClass} />
+                        <select value={badgeTone} disabled={!badgeEnabled} onChange={(e) => setBadgeTone(e.target.value)} className={inputClass}>
+                          <option value="dark">Signature dark</option>
+                          <option value="new">New arrival</option>
+                          <option value="sale">Offer</option>
+                          <option value="popular">Popular</option>
+                          <option value="neutral">Neutral</option>
+                        </select>
+                      </div>
+                      {badgeEnabled && badgeText.trim() && <span className={`mt-3 inline-flex rounded-md px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.1em] ${badgeTone === "new" ? "bg-violet-600 text-white" : badgeTone === "sale" ? "bg-orange-500 text-white" : badgeTone === "popular" ? "bg-rose-500 text-white" : badgeTone === "neutral" ? "bg-slate-200 text-slate-700" : "bg-[#292321] text-white"}`}>{badgeText}</span>}
+                    </div>
 
                   </div>
                 </section>

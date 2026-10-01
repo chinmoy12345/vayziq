@@ -40,7 +40,10 @@ function normalizePost(value: unknown): BlogPost | null {
   for (const raw of value.sections) {
     if (!isRecord(raw) || typeof raw.title !== "string" || raw.title.length > 160 || !Array.isArray(raw.body) || raw.body.length > 100) return null;
     if (raw.body.some((paragraph) => typeof paragraph !== "string" || paragraph.length > 5000)) return null;
-    sections.push({ title: raw.title.trim(), body: (raw.body as string[]).map((paragraph) => paragraph.trim()).filter(Boolean) });
+    const image = typeof raw.image === "string" ? raw.image.trim() : "";
+    const imageAlt = typeof raw.imageAlt === "string" ? raw.imageAlt.trim() : "";
+    if ((image && !validImage(image)) || image.length > postLimits.image || imageAlt.length > postLimits.imageAlt) return null;
+    sections.push({ title: raw.title.trim(), body: (raw.body as string[]).map((paragraph) => paragraph.trim()).filter(Boolean), image: image || undefined, imageAlt: imageAlt || undefined });
   }
   return {
     slug, title: (value.title as string).trim(), excerpt: (value.excerpt as string).trim(),

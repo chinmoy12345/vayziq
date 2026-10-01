@@ -187,6 +187,11 @@ model Product {
 
   featured Boolean @default(false)
 
+  // Storefront merchandising badge. Managed independently from product options.
+  badgeEnabled Boolean @default(false)
+  badgeText    String?
+  badgeTone    String  @default("dark")
+
   hasVariations Boolean @default(false)
   returnEnabled Boolean @default(true)
   replacementEnabled Boolean @default(true)

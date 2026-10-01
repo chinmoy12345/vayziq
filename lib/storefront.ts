@@ -1,7 +1,7 @@
 import { productColors } from "@/lib/product-colors";
 import { getStoreMenuSettings } from "@/lib/store-menu-settings";
 import type { Prisma } from "@/lib/generated/prisma-suppliers";
-type StoreProduct = Prisma.ProductGetPayload<{ include: { category: { include: { parent: { select: { slug: true } } } }; images: true; options: { include: { values: true } } } }>;
+type StoreProduct = Prisma.ProductGetPayload<{ include: { category: { include: { parent: { select: { slug: true } } } }; images: true; options: { include: { values: true } }; variants: { include: { variantValues: { include: { optionValue: { include: { option: true } } } } } } } }>;
 type StoreCardProduct = StoreProduct & { cardRating?: number; cardReviewCount?: number };
 import { cache } from "react";
 
@@ -50,6 +50,7 @@ export const getStoreProducts = cache(async (options?: {
       category: { include: { parent: { select: { slug: true } } } },
       images: { orderBy: { sortOrder: "asc" } },
       options: { include: { values: { orderBy: { sortOrder: "asc" } } } },
+      variants: { include: { variantValues: { include: { optionValue: { include: { option: true } } } } } },
     },
     orderBy: options?.newest ? { createdAt: "desc" } : [{ featured: "desc" }, { createdAt: "desc" }],
     take: options?.take,
@@ -130,9 +131,12 @@ export const toCardProduct = (product: StoreCardProduct): Product => ({
   images: product.images.map(image => image.image),
   rating: product.cardRating,
   reviews: product.cardReviewCount,
-  badge: product.featured ? "FEATURED" : undefined,
+  badge: product.badgeEnabled && product.badgeText ? product.badgeText : undefined,
+  badgeTone: product.badgeEnabled && product.badgeText ? product.badgeTone : undefined,
   createdAt: product.createdAt.toISOString(),
   filterValues: productFilterValues(product),
+  options: product.options.map(option => ({ name: option.name, values: option.values.map(value => value.value) })),
+  inStock: product.hasVariations ? product.variants.some(variant => variant.stock > 0) : product.stock > 0,
   colorCount: productColors(product).length,
 });
 

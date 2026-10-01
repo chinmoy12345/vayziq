@@ -10,6 +10,7 @@ interface ProductGalleryProps {
   images: string[];
   name: string;
   badge?: string;
+  badgeTone?: string;
 }
 
 export default function ProductGallery({
@@ -17,6 +18,7 @@ export default function ProductGallery({
   images,
   name,
   badge,
+  badgeTone,
 }: ProductGalleryProps) {
   const [wishlist, setWishlist] = useState(false);
   const [wishAnimating, setWishAnimating] = useState(false);
@@ -138,20 +140,15 @@ export default function ProductGallery({
 
               {index === 0 && badge && (
                 <span
-                  className="
+                  className={`
                     pointer-events-none
                     absolute
                     left-4
                     top-4
                     z-10
-                    bg-[#B56F6F]
-                    px-3
-                    py-1.5
-                    text-[9px]
-                    font-semibold
-                    tracking-[0.15em]
-                    text-white
-                  "
+                    rounded-full border border-white/30 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] shadow-sm
+                    ${badgeTone === "new" ? "bg-violet-600 text-white" : badgeTone === "sale" ? "bg-orange-500 text-white" : badgeTone === "popular" ? "bg-rose-500 text-white" : badgeTone === "neutral" ? "bg-slate-100 text-slate-700" : "bg-[#292321] text-white"}
+                  `}
                 >
                   {badge}
                 </span>

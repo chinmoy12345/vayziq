@@ -2,7 +2,7 @@ import prisma from "@/lib/db";
 
 export type VayziqHomeBanner = { image: string; alt: string; href: string };
 export type VayziqHomeCategory = { id: number; name: string; slug: string; image: string };
-export type VayziqHomeProduct = { id: number; name: string; slug: string; price: string; oldPrice: string | null; discountPercent: number | null; image: string; images: string[]; category: string; colors: string[]; options: { name: string; values: string[] }[]; rating: string; videoUrl: string | null };
+export type VayziqHomeProduct = { id: number; name: string; slug: string; price: string; oldPrice: string | null; discountPercent: number | null; image: string; images: string[]; category: string; colors: string[]; options: { name: string; values: string[] }[]; rating: string; videoUrl: string | null; badge: string | null; badgeTone: string | null; inStock: boolean };
 export type VayziqHomeData = { banners: VayziqHomeBanner[]; categories: VayziqHomeCategory[]; products: VayziqHomeProduct[] };
 
 const fallbackBanners: VayziqHomeBanner[] = [
@@ -24,7 +24,7 @@ export async function getVayziqHomeData(): Promise<VayziqHomeData> {
     }),
     prisma.product.findMany({
       where: { status: "active", category: { status: "active" } },
-      include: { images: { orderBy: { sortOrder: "asc" }, take: 3 }, category: true, options: { include: { values: { orderBy: { sortOrder: "asc" } } } } },
+      include: { images: { orderBy: { sortOrder: "asc" }, take: 3 }, category: true, options: { include: { values: { orderBy: { sortOrder: "asc" } } } }, variants: { select: { stock: true } } },
       orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
       take: 12,
     }),
@@ -58,6 +58,9 @@ export async function getVayziqHomeData(): Promise<VayziqHomeData> {
       options: product.options.map((option) => ({ name: option.name, values: option.values.map((value) => value.value) })),
       rating: ratings.get(product.id) ?? "New",
       videoUrl: product.videoUrl,
+      badge: product.badgeEnabled && product.badgeText ? product.badgeText : null,
+      badgeTone: product.badgeEnabled && product.badgeText ? product.badgeTone : null,
+      inStock: product.hasVariations ? product.variants.some((variant) => variant.stock > 0) : product.stock > 0,
     })),
   };
 }

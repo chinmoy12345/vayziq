@@ -67,7 +67,7 @@ export default function NewArrivals({ products }: { products: Product[] }) {
           "
         >
 
-          {products.map((product) => <ProductCard key={product.id} product={{ ...product, badge: "NEW" }} />)}
+          {products.map((product) => <ProductCard key={product.id} product={product} />)}
 
         </div>
 

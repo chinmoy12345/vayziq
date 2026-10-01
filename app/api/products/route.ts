@@ -86,6 +86,9 @@ export async function POST(request: NextRequest) {
       stock,
       status,
       featured,
+      badgeEnabled,
+      badgeText,
+      badgeTone,
       images = [],
       hasVariations = false,
       variationOptions = [],
@@ -95,6 +98,10 @@ export async function POST(request: NextRequest) {
     const videoInput = String(videoUrl ?? "").trim();
     const productVideo = videoInput ? parseProductVideoUrl(videoInput) : null;
     if (videoInput && !productVideo) return NextResponse.json({ success: false, message: "Use a YouTube, Vimeo, or direct MP4/WebM/OGG video URL." }, { status: 400 });
+    const normalizedBadgeText = String(badgeText ?? "").trim().slice(0, 32);
+    const allowedBadgeTones = ["dark", "new", "sale", "popular", "neutral"];
+    const normalizedBadgeTone = allowedBadgeTones.includes(String(badgeTone)) ? String(badgeTone) : "dark";
+    if (badgeEnabled && !normalizedBadgeText) return NextResponse.json({ success: false, message: "Enter badge text before enabling the product badge." }, { status: 400 });
     // =====================================================
     // VALIDATION
     // =====================================================
@@ -250,6 +257,9 @@ export async function POST(request: NextRequest) {
               : "draft",
 
           featured: Boolean(featured),
+          badgeEnabled: Boolean(badgeEnabled),
+          badgeText: normalizedBadgeText || null,
+          badgeTone: normalizedBadgeTone,
           ...policy,
 
           hasVariations:

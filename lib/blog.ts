@@ -2,7 +2,7 @@ import { cache } from "react";
 import type { Prisma } from "@/lib/generated/prisma-suppliers";
 import prisma from "@/lib/db";
 
-export type BlogSection = { title: string; body: string[] };
+export type BlogSection = { title: string; body: string[]; image?: string; imageAlt?: string };
 export type BlogPost = {
   slug: string; title: string; excerpt: string; category: string; date: string;
   readTime: string; image: string; imageAlt: string; sections: BlogSection[];
@@ -75,7 +75,7 @@ function normalizePost(value: unknown): BlogPost | null {
   const sections = Array.isArray(row.sections) ? row.sections.flatMap((value): BlogSection[] => {
     const section = record(value);
     if (!section || typeof section.title !== "string" || !Array.isArray(section.body)) return [];
-    return [{ title: section.title, body: section.body.filter((paragraph): paragraph is string => typeof paragraph === "string") }];
+    return [{ title: section.title, body: section.body.filter((paragraph): paragraph is string => typeof paragraph === "string"), image: stringValue(section.image), imageAlt: stringValue(section.imageAlt) }];
   }) : [];
   return {
     slug, title, excerpt: stringValue(row.excerpt), category: stringValue(row.category, "Style Notes"),
