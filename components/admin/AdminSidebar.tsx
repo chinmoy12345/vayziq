@@ -364,11 +364,11 @@ export default function AdminSidebar({
             <div className="flex h-[72px] items-center justify-between border-b border-[#eee6e1] px-5">
               <Link href="/admin/dashboard" onClick={onClose}>
                 <Image
-                  src="/vayziq/vayziq-logo.png"
-                  alt="VAYZIQ Admin"
-                  width={236}
-                  height={73}
-                  className="h-auto w-32"
+                  src="/vayziq/vayziq-logo-final.svg"
+                  alt="Vayziq Admin"
+                  width={420}
+                  height={96}
+                  className="h-auto w-36"
                 />
               </Link>
 

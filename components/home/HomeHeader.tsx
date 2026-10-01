@@ -8,6 +8,7 @@ import { ChevronDown, ChevronRight, CircleUserRound, Heart, House, Layers, LogOu
 import MobileMenu from "@/components/layout/MobileMenu";
 import AuthModal from "@/components/auth/AuthModal";
 import styles from "./VayziqHome.module.css";
+import brandingStyles from "./HeaderBranding.module.css";
 
 export type HeaderCategory = { id: number; name: string; slug: string; parentId: number | null; parent?: { id: number; name: string; slug: string } | null; children?: HeaderCategory[] };
 type HeaderUser = { id: number; name: string | null; email: string | null; mobile: string | null };
@@ -67,7 +68,7 @@ export default function HomeHeader() {
   };
   return <div className={`${styles.home} ${styles.chrome}`}>
     <div className={styles.utility}><span><Truck /> Free Shipping on Orders over ₹999</span><span><Undo2 /> Easy 7-Day Returns</span><span><ShieldCheck /> 100% Original Products</span><span className={styles.utilityEnd}>Track Order　|　Help　|　🇮🇳 INR</span></div>
-    <header className={`${styles.header} ${isPinned ? styles.fixedHeader : ""}`}><button className={styles.menuButton} onClick={() => setDrawerOpen(true)} aria-label="Open menu"><Menu /></button><Link href="/"><Image className={styles.logo} src="/vayziq/vayziq-logo.png" alt="VAYZIQ" width={236} height={73} priority /></Link><nav className={styles.desktopNav} aria-label="Primary navigation">{menuCategories.map(category => {
+    <header className={`${styles.header} ${isPinned ? styles.fixedHeader : ""}`}><button className={styles.menuButton} onClick={() => setDrawerOpen(true)} aria-label="Open menu"><Menu /></button><Link href="/"><Image className={`${styles.logo} ${brandingStyles.logo}`} src="/vayziq/vayziq-logo-final.svg" alt="Vayziq" width={420} height={96} priority /></Link><nav className={styles.desktopNav} aria-label="Primary navigation">{menuCategories.map(category => {
       const isOpen = openCategory === category.slug;
       return <div key={category.id} className={styles.navDropdown} onMouseEnter={() => setOpenCategory(category.slug)} onMouseLeave={() => setOpenCategory(null)} onFocus={() => setOpenCategory(category.slug)} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setOpenCategory(null); }}>
         <Link href={`/${category.slug}`} className={isCategoryActive(category) ? styles.navActive : ""} aria-current={isCategoryActive(category) ? "page" : undefined} aria-haspopup={category.children?.length ? "menu" : undefined} aria-expanded={category.children?.length ? isOpen : undefined}>{category.name}{Boolean(category.children?.length) && <ChevronDown />}</Link>

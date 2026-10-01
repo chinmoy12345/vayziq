@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 96" role="img" aria-labelledby="title desc">
+  <title id="title">VAYZIQ</title><desc id="desc">VAYZIQ robotic wordmark</desc>
+  <path d="M8 26h11v11H8zM8 58h11v11H8z" fill="#fbb606"/>
+  <path d="M14 31h14M14 63h14" fill="none" stroke="#111111" stroke-width="4" stroke-linecap="round"/>
+  <text x="34" y="67" fill="#111111" font-family="Arial Black,Arial,sans-serif" font-size="54" font-weight="900" letter-spacing="-3">VAYZIQ</text>
+  <path d="M320 22h11v11h-11zM320 61h11v11h-11z" fill="#10d9a0"/>
+  <path d="M310 27h11M310 66h11" fill="none" stroke="#111111" stroke-width="4" stroke-linecap="round"/>
+</svg>

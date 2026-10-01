@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 96" role="img" aria-labelledby="title desc">
+  <title id="title">Vayziq</title><desc id="desc">Vayziq final modern robotic logo</desc>
+  <rect x="4" y="12" width="72" height="72" rx="18" fill="#111111"/>
+  <path d="M18 28h12l10 29 10-29h12L45 68H35L18 28Z" fill="#fff"/>
+  <path d="M51 55h12l-6 10h-12z" fill="#10d9a0"/>
+  <path d="M16 18h12v6H16zM52 18h12v6H52z" fill="#fbb606"/>
+  <text x="90" y="65" fill="#111111" font-family="Arial Black,Arial,sans-serif" font-size="53" font-weight="900" letter-spacing="-2">Vayziq</text>
+  <path d="M385 27h17v6h-17zM385 63h17v6h-17z" fill="#fbb606"/>
+</svg>

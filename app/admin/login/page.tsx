@@ -81,12 +81,12 @@ export default function AdminLoginPage() {
             className="inline-block"
           >
             <Image
-              src="/vayziq/vayziq-logo.png"
-              alt="VAYZIQ"
-              width={236}
-              height={73}
+              src="/vayziq/vayziq-logo-final.svg"
+              alt="Vayziq"
+              width={420}
+              height={96}
               priority
-              className="h-auto w-40 sm:w-44"
+              className="h-auto w-48 sm:w-52"
             />
           </Link>
 

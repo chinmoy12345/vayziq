@@ -64,12 +64,12 @@ export default function AdminHeader({
           {/* Brand */}
           <Link href="/admin/dashboard">
             <Image
-              src="/vayziq/vayziq-logo.png"
-              alt="VAYZIQ Admin"
-              width={236}
-              height={73}
+              src="/vayziq/vayziq-logo-final.svg"
+              alt="Vayziq Admin"
+              width={420}
+              height={96}
               priority
-              className="h-auto w-28 sm:w-32"
+              className="h-auto w-32 sm:w-36"
             />
           </Link>
         </div>
