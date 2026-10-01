@@ -45,13 +45,14 @@ interface CollectionPageProps {
   showProductFilters?: boolean;
   bannerPlacement?: Exclude<BannerPlacement, "home">;
   newest?: boolean;
+  productIds?: number[];
 }
 
 export default async function CollectionPage(props: CollectionPageProps) {
-  const { categorySlug, title, showFullFilters = false, showProductFilters = false, bannerPlacement, newest = false } = props;
+  const { categorySlug, title, showFullFilters = false, showProductFilters = false, bannerPlacement, newest = false, productIds } = props;
   const [products, filters, banner] = await Promise.all([
-    getStoreProducts({ categorySlug: showFullFilters ? undefined : categorySlug, newest }),
-    showFullFilters || showProductFilters ? getStoreFilters(showFullFilters ? undefined : categorySlug) : Promise.resolve({}),
+    getStoreProducts({ categorySlug: showFullFilters ? undefined : categorySlug, newest, productIds }),
+    showFullFilters || showProductFilters ? getStoreFilters(showFullFilters ? undefined : categorySlug, productIds) : Promise.resolve({}),
     bannerPlacement ? getActiveBanners(bannerPlacement) : Promise.resolve([]),
   ]);
   const promoSlides = bannerPlacement
@@ -59,5 +60,5 @@ export default async function CollectionPage(props: CollectionPageProps) {
     : [];
   const featureBanner = categorySlug ? categoryFeatureBanner(categorySlug, title) : shopFeatureBanner;
   const slides = [featureBanner, ...banner, ...promoSlides];
-  return <main className="shop-home-body min-h-screen bg-[#FFFDFC]"><Breadcrumbs title={title} isShop={bannerPlacement === "shop"} category={showFullFilters && categorySlug ? products.find(product => product.category.slug === categorySlug)?.category.name : undefined} /><PageBanner banners={slides} title={title} category={Boolean(categorySlug) || bannerPlacement === "shop"} /><CategoryListing key={categorySlug ?? "all"} initialCategorySlug={categorySlug} products={products.map(toCardProduct)} productCount={products.length} filters={filters} showFullFilters={showFullFilters} showProductFilters={showProductFilters} /></main>;
+  return <main className="shop-home-body min-h-screen bg-[#FFFDFC]"><Breadcrumbs title={title} isShop={bannerPlacement === "shop"} category={showFullFilters && categorySlug ? products.find(product => product.category.slug === categorySlug)?.category.name : undefined} /><PageBanner banners={slides} title={title} category={Boolean(categorySlug) || bannerPlacement === "shop"} /><CategoryListing key={`${categorySlug ?? "all"}-${productIds?.join("-") ?? "all-products"}`} initialCategorySlug={categorySlug} products={products.map(toCardProduct)} productCount={products.length} filters={filters} showFullFilters={showFullFilters} showProductFilters={showProductFilters} /></main>;
 }

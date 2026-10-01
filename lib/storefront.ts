@@ -37,11 +37,13 @@ export const getStoreProducts = cache(async (options?: {
   featured?: boolean;
   take?: number;
   newest?: boolean;
+  productIds?: number[];
 }) => {
   const products = await prisma.product.findMany({
     where: {
       status: "active",
       ...(options?.featured ? { featured: true } : {}),
+      ...(options?.productIds?.length ? { id: { in: options.productIds } } : {}),
       ...(options?.categorySlug
         ? { category: { status: "active", OR: [{ slug: options.categorySlug }, { parent: { is: { slug: options.categorySlug } } }] } }
         : {}),
@@ -218,14 +220,14 @@ export const getEditorialWatchBuyProducts = cache(async () => {
     shareCount: engagements.get(product.id)?.shareCount ?? 0,
   }));
 });
-export async function getStoreFilters(categorySlug?: string): Promise<CategoryFilterConfig> {
+export async function getStoreFilters(categorySlug?: string, productIds?: number[]): Promise<CategoryFilterConfig> {
   const [categories, products, currentCategory] = await Promise.all([
     prisma.category.findMany({
       where: { status: "active", parentId: null },
       orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
       select: { name: true, slug: true },
     }),
-    getStoreProducts({ categorySlug }),
+    getStoreProducts({ categorySlug, productIds }),
     categorySlug
       ? prisma.category.findFirst({
           where: { slug: categorySlug, status: "active" },

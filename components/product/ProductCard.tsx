@@ -259,16 +259,18 @@ export default function ProductCard({
           onClick={() => void toggleWishlist()}
           className={`
             absolute
-            right-3
-            top-3
+            right-2.5
+            top-2.5
             flex
             h-10
             w-10
             items-center
             justify-center
             rounded-full
+            border
+            border-white/80
             text-[#5A4B4B]
-            shadow-sm
+            shadow-[0_2px_8px_rgba(0,0,0,0.14)]
             backdrop-blur-sm
             transition-all
             duration-300

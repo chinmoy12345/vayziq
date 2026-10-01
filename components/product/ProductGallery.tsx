@@ -172,26 +172,33 @@ export default function ProductGallery({
               : "Add to wishlist"
           }
           aria-pressed={wishlist}
-          className="
+          className={`
             absolute
-            right-5
-            top-5
+            right-2.5
+            top-2.5
             z-20
             flex
-            h-11
-            w-11
+            h-10
+            w-10
             items-center
             justify-center
-            bg-white
-            shadow-sm
-            transition
-            hover:bg-[#F8EFEC]
-          "
+            rounded-full
+            border
+            border-white/80
+            bg-white/95
+            shadow-[0_2px_8px_rgba(0,0,0,0.14)]
+            backdrop-blur-sm
+            transition-all
+            duration-300
+            hover:bg-[#B56F6F]
+            hover:text-white
+            ${wishlist ? "bg-[#B56F6F] text-white hover:bg-[#9f5e5e]" : ""}
+          `}
         >
           <Heart
             className={`h-5 w-5 transition ${wishAnimating ? "wishlist-heart-pop" : ""} ${
               wishlist
-                ? "fill-[#B56F6F] text-[#B56F6F]"
+                ? "fill-current text-white"
                 : "text-[#4F4444]"
             }`}
             strokeWidth={1.4}

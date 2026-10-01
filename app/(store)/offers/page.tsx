@@ -1,72 +1,50 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Check, Tag, TicketPercent } from "lucide-react";
+import { ArrowRight, Check, Gift, ShoppingBag, Sparkles, Tag, TicketPercent } from "lucide-react";
 import { useOffers } from "@/lib/use-offers";
-import { offerTerms, offerTitle } from "@/lib/product-offers";
+import { offerTerms, offerTitle, type ProductOffer } from "@/lib/product-offers";
 
-// Campaign heading copy can be enabled later without removing the offer cards.
-const SHOW_DEAL_TEXT = false;
+type DealTheme = { panel: string; soft: string; ink: string; accent: string; label: string; icon: typeof Gift };
 
-export default function OffersPage() {
-  return (
-    <main className="min-h-[calc(100vh-64px)] bg-[#fffdf7]">
-      <DealContent />
-    </main>
-  );
+function themeFor(offer: ProductOffer): DealTheme {
+  if (offer.type === "buy_get") return { panel: "from-[#ff4a57] via-[#fa654d] to-[#ffbc43]", soft: "bg-[#fff1dd]", ink: "text-[#271312]", accent: "bg-[#271312] text-white", label: "Buy & get", icon: Gift };
+  if (offer.type === "quantity_price") return { panel: "from-[#1a766d] via-[#129d88] to-[#74d8bd]", soft: "bg-[#e0f8ef]", ink: "text-[#062e29]", accent: "bg-[#062e29] text-white", label: "Bundle price", icon: ShoppingBag };
+  if (offer.type === "quantity_discount") return { panel: "from-[#171717] via-[#343434] to-[#f6b800]", soft: "bg-[#fff5cf]", ink: "text-[#171717]", accent: "bg-[#f6b800] text-[#171717]", label: "More in bag", icon: Sparkles };
+  if (offer.type === "percentage") return { panel: "from-[#402c92] via-[#7c3fd2] to-[#e55bb4]", soft: "bg-[#f3eaff]", ink: "text-[#24123e]", accent: "bg-[#24123e] text-white", label: "Limited saving", icon: TicketPercent };
+  return { panel: "from-[#075b95] via-[#1690c6] to-[#73d7ee]", soft: "bg-[#e1f6fc]", ink: "text-[#06344f]", accent: "bg-[#06344f] text-white", label: "Cart reward", icon: Tag };
 }
 
-function DealContent() {
+function saveOffer(code: string) { localStorage.setItem("tantuka-offer", code); }
+function offerShopHref(offer: ProductOffer) {
+  const ids = offer.rules?.productIds ?? [];
+  return ids.length ? `/shop?products=${ids.join(",")}` : "/shop";
+}
+
+export default function OffersPage() {
   const { offers, loading, error } = useOffers();
+  const spotlight = offers.slice(0, 3);
 
-  function saveOffer(code: string) {
-    localStorage.setItem("tantuka-offer", code);
-  }
-
-  return (
-    <div className="relative z-10 mx-auto max-w-[1440px] bg-[linear-gradient(135deg,#fffdf7_0%,#fff6df_48%,#fffdf7_100%)] px-4 pb-8 pt-4 sm:px-6 sm:py-10 lg:px-8">
-      {SHOW_DEAL_TEXT && <div><p className="text-xs font-extrabold uppercase tracking-[.16em] text-[#b77e00]">Deals</p><h1 className="mt-2 text-3xl font-extrabold tracking-tight text-[#111] sm:text-4xl">Offers &amp; Discounts</h1><p className="mt-3 max-w-2xl text-sm leading-6 text-[#666]">Use one active offer per order. Choose an offer and continue shopping to apply it in your cart.</p></div>}
-      <section className="relative mb-7 min-h-[210px] overflow-hidden border-2 border-[#181411] bg-[#211d19] p-5 text-white shadow-[5px_5px_0_#fbb606] sm:min-h-[260px] sm:p-8">
-        <Image src="/uploads/banners/offer-saree-editorial.png" alt="Seasonal VAYZIQ offers" fill priority sizes="(max-width: 1440px) 100vw, 1440px" className="object-cover object-center opacity-70" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/10" />
-        <div className="relative z-10 max-w-xl"><p className="text-[10px] font-extrabold uppercase tracking-[.22em] text-[#fbb606]">VAYZIQ offer edit</p><h1 className="mt-3 text-3xl font-black tracking-[-.05em] sm:text-5xl">More looks. More value.</h1><p className="mt-3 max-w-md text-sm leading-6 text-white/85">Explore limited-time savings, bundle pricing and buy-more offers. Apply one code at checkout.</p><Link href="/shop" className="mt-5 inline-flex min-h-10 items-center gap-2 border-2 border-[#fbb606] bg-[#fbb606] px-4 text-xs font-extrabold uppercase tracking-[.08em] text-[#111] transition hover:bg-white">Shop offers <ArrowRight className="h-4 w-4" /></Link></div>
+  return <main className="min-h-[calc(100vh-64px)] bg-[#fffdf9] text-[#171312]">
+    <div className="mx-auto max-w-[1440px] px-4 pb-10 pt-4 sm:px-6 sm:pt-8 lg:px-8">
+      <section className="relative overflow-hidden rounded-[28px] bg-[#171312] px-6 py-8 text-white shadow-[0_18px_50px_rgba(31,22,17,.18)] sm:px-10 sm:py-12">
+        <div className="absolute -right-20 -top-24 h-80 w-80 rounded-full bg-[#fbb606] opacity-95 blur-3xl" />
+        <div className="absolute bottom-[-100px] left-[42%] h-64 w-64 rounded-full border-[28px] border-[#d65db1]/80" />
+        <div className="relative z-10 max-w-2xl"><p className="text-[11px] font-extrabold uppercase tracking-[.22em] text-[#fbb606]">VAYZIQ value edit</p><h1 className="mt-3 text-4xl font-black tracking-[-.06em] sm:text-6xl">Offers that feel worth it.</h1><p className="mt-4 max-w-xl text-sm leading-6 text-white/80 sm:text-base">Fresh price drops, bundle value and buy-get rewards—choose one offer in your cart and it is calculated before payment.</p><Link href="/shop" className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-5 text-xs font-extrabold uppercase tracking-[.08em] text-[#171312] transition hover:bg-[#fbb606]">Explore styles <ArrowRight className="h-4 w-4" /></Link></div>
       </section>
-      <div className="mb-5 flex items-center gap-3 sm:mb-7"><span className="h-px flex-1 bg-[#d8cba9]" /><h1 className="shrink-0 text-lg font-black tracking-[-.04em] text-[#211d19] sm:text-2xl">Exclusive savings</h1><span className="h-px flex-1 bg-[#d8cba9]" /></div>
-      {loading && <p className="mt-10 text-sm text-[#666]">Loading offers…</p>}
-      {error && <p role="alert" className="mt-10 text-sm text-red-700">{error}</p>}
-      {!loading && !error && !offers.length && (
-        <div className="mt-10 rounded-xl border border-dashed border-[#ddd] bg-white p-10 text-center">
-          <Tag className="mx-auto h-8 w-8 text-[#b77e00]" />
-          <p className="mt-3 font-bold text-[#111]">No active offers right now.</p>
-          <p className="mt-1 text-sm text-[#666]">Please check back soon for new deals.</p>
-        </div>
-      )}
-      <section className={`${SHOW_DEAL_TEXT ? "mt-8" : "mt-0"} -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-3 [scrollbar-width:none] sm:mx-0 sm:grid sm:overflow-visible sm:px-0 sm:pb-0 sm:grid-cols-2 lg:grid-cols-3`}>
-        {offers.map((offer, index) => (
-          <article key={offer.code} className="group relative isolate flex min-h-[350px] min-w-[242px] snap-center flex-col overflow-hidden rounded-none border-[3px] border-[#181411] p-3 shadow-[5px_5px_0_#181411] transition duration-300 hover:-translate-y-1 hover:shadow-[8px_8px_0_#fbb606] sm:min-w-0 sm:p-4">
-            <Image
-              src={index % 2 ? "/uploads/banners/offer-saree-editorial.png" : "/uploads/banners/offer-nightwear-editorial.png"}
-              alt=""
-              fill
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              className="-z-20 object-cover object-center transition duration-500 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/90 via-black/40 to-black/5" />
-            <div className="flex items-start justify-between gap-3">
-              <span className="inline-flex items-center gap-1.5 bg-[#fbb606] px-2 py-1 text-[9px] font-extrabold uppercase tracking-[.08em] text-[#111]"><TicketPercent className="h-3.5 w-3.5" />{offerTitle(offer)}</span>
-              <span className="grid h-8 w-8 place-items-center border border-white/40 bg-black/20 text-white backdrop-blur-sm"><Tag className="h-4 w-4" /></span>
-            </div>
-            <div className="mt-auto">
-              <p className="text-[9px] font-bold uppercase tracking-[.2em] text-white/70">Exclusive code</p>
-              <h2 className="mt-1 break-words bg-white px-2 py-1 text-xl font-black tracking-[-.04em] text-[#111]">{offer.code}</h2>
-              {offer.description && <p className="mt-2 line-clamp-2 text-sm leading-5 text-white/90">{offer.description}</p>}
-              <div className="mt-4 border-t border-white/25 pt-3"><p className="flex gap-2 text-xs leading-5 text-white/75"><Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#fbb606]" />{offerTerms(offer)}</p></div>
-              <Link href="/shop" onClick={() => saveOffer(offer.code)} className="mt-4 flex min-h-10 items-center justify-center gap-2 border-2 border-[#111] bg-[#fbb606] px-4 text-sm font-black uppercase tracking-[.04em] text-[#111] transition hover:bg-white">Use this offer <ArrowRight className="h-4 w-4" /></Link>
-            </div>
-          </article>
-        ))}
+
+      {!loading && spotlight.length > 0 && <section className="relative z-10 -mt-3 mx-auto grid max-w-5xl gap-3 sm:grid-cols-3">
+        {spotlight.map(offer => { const theme = themeFor(offer); const Icon = theme.icon; return <Link key={offer.code} href={offerShopHref(offer)} onClick={() => saveOffer(offer.code)} className={`group overflow-hidden rounded-2xl ${theme.soft} p-4 shadow-[0_8px_24px_rgba(30,20,15,.12)] transition hover:-translate-y-1`}><div className="flex items-start justify-between gap-3"><div><p className={`text-[9px] font-extrabold uppercase tracking-[.16em] ${theme.ink}`}>{theme.label}</p><p className={`mt-1 text-lg font-black tracking-[-.04em] ${theme.ink}`}>{offer.code}</p></div><span className={`grid h-9 w-9 place-items-center rounded-full ${theme.accent}`}><Icon className="h-4 w-4" /></span></div><p className={`mt-3 text-xs font-bold ${theme.ink}`}>{offerTitle(offer)}</p><span className={`mt-3 inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-[.08em] ${theme.ink}`}>Use offer <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-1" /></span></Link>; })}
+      </section>}
+
+      <div className="mt-10 flex items-center gap-3"><span className="h-px flex-1 bg-[#ddd2c4]" /><h2 className="shrink-0 text-lg font-black tracking-[-.04em] sm:text-2xl">Live offer codes</h2><span className="h-px flex-1 bg-[#ddd2c4]" /></div>
+      <p className="mx-auto mt-2 max-w-xl text-center text-xs leading-5 text-[#756565]">Select a code and it will be ready in your cart. Only one offer applies per order.</p>
+      {loading && <p className="mt-10 text-center text-sm text-[#666]">Loading offers…</p>}
+      {error && <p role="alert" className="mt-10 text-center text-sm text-red-700">{error}</p>}
+      {!loading && !error && !offers.length && <div className="mt-10 rounded-2xl border border-dashed border-[#ddd] bg-white p-10 text-center"><Tag className="mx-auto h-8 w-8 text-[#b77e00]" /><p className="mt-3 font-bold">No active offers right now.</p><p className="mt-1 text-sm text-[#666]">Please check back soon for new deals.</p></div>}
+      <section className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {offers.map(offer => { const theme = themeFor(offer); const Icon = theme.icon; return <article key={offer.code} className="group overflow-hidden rounded-[22px] border border-[#e6ddd5] bg-white shadow-[0_8px_22px_rgba(43,31,23,.07)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_16px_30px_rgba(43,31,23,.13)]"><div className={`relative min-h-[150px] overflow-hidden bg-gradient-to-br ${theme.panel} p-5 text-white`}><span className="absolute -right-5 -top-7 h-32 w-32 rounded-full border-[18px] border-white/20" /><Icon className="absolute bottom-[-12px] right-4 h-28 w-28 rotate-[-12deg] text-white/20" strokeWidth={1.15} /><div className="relative"><span className="inline-flex rounded-full bg-black/20 px-3 py-1 text-[9px] font-extrabold uppercase tracking-[.15em] backdrop-blur">{theme.label}</span><p className="mt-5 text-sm font-bold text-white/85">{offerTitle(offer)}</p><h3 className="mt-1 text-3xl font-black tracking-[-.06em]">{offer.code}</h3></div></div><div className="p-5"><p className="min-h-10 text-sm leading-5 text-[#514343]">{offer.description}</p><div className="mt-4 border-t border-[#eee5df] pt-3"><p className="flex gap-2 text-xs leading-5 text-[#756565]"><Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#b77e00]" />{offerTerms(offer)}</p></div><Link href={offerShopHref(offer)} onClick={() => saveOffer(offer.code)} className={`mt-5 flex min-h-11 items-center justify-center gap-2 rounded-xl ${theme.accent} px-4 text-xs font-extrabold uppercase tracking-[.07em] transition hover:brightness-110`}>Use this offer <ArrowRight className="h-4 w-4" /></Link></div></article>; })}
       </section>
     </div>
-  );
+  </main>;
 }

@@ -24,6 +24,7 @@ import ProductVideo from "@/components/product/ProductVideo";
 import HomeHeader from "./HomeHeader";
 import HomeFooter from "./HomeFooter";
 import styles from "./VayziqHome.module.css";
+import wishlistStyles from "./WishlistButton.module.css";
 
 function SectionHeading({
   title,
@@ -87,7 +88,7 @@ function ProductCard({
       </Link>
       <button
         type="button"
-        className={`${styles.wishlistButton}${liked ? ` ${styles.liked}` : ""}`}
+        className={`${styles.wishlistButton} ${wishlistStyles.button}${liked ? ` ${styles.liked} ${wishlistStyles.active}` : ""}`}
         onClick={onLike}
         aria-label={`Add ${product.name} to wishlist`}
       >
