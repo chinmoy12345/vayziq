@@ -468,7 +468,7 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
                     <span className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/20" />
                     {viewAll && (
                       <span className={`absolute left-2 top-2 rounded px-2 py-1 text-[10px] font-bold text-white ${["bg-red-500", "bg-violet-600", "bg-orange-500", "bg-[#2c241e]"][index % 4]}`}>
-                        {product?.reelBadge && product.reelBadge !== "None" ? product.reelBadge : ["🔥 Trending", "New", "Bestseller", "Must Have"][index % 4]}
+                        {product?.reelBadge && product.reelBadge !== "None" ? product.reelBadge : ["Trending", "New", "Bestseller", "Must Have"][index % 4]}
                       </span>
                     )}
                     {viewAll && product && (
