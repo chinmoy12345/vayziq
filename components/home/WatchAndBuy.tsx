@@ -378,7 +378,7 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-10">
         <header className={viewAll ? "watch-buy-page-header mb-3 bg-white" : "mb-6 flex items-end justify-between gap-4 sm:mb-8"}>
-          <div className={viewAll ? "flex items-end justify-between gap-4 px-4 pb-4 pt-5" : ""}>
+          <div className={viewAll ? "flex items-end justify-between gap-4 pb-4 pt-5" : ""}>
             <div>
               <h2 id="watch-buy-title" className={`${viewAll ? "text-[30px]" : "mt-2 text-3xl"} font-serif text-[#2B2525] sm:text-4xl`}>Watch &amp; Buy</h2>
               <p className="mt-1 max-w-xl text-sm leading-5 text-[#756565]">Watch a look, then explore the piece and its details.</p>
@@ -410,7 +410,7 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
             </button>
           </div>
           </div>}
-          {viewAll && <nav className="border-t border-[#eee7dc] px-4 py-3" aria-label="Watch and Buy category switch">
+          {viewAll && <nav className="border-t border-[#eee7dc] py-3" aria-label="Watch and Buy category switch">
             <div className="inline-flex rounded-xl border border-[#e7ded2] bg-white p-1.5 shadow-sm">
               {(["men", "women"] as const).map((audience) => <button key={audience} type="button" onClick={() => { setActiveAudience(audience); setActiveIndex(null); }} className={`min-w-[98px] rounded-lg px-5 py-2.5 text-sm font-bold capitalize transition ${activeAudience === audience ? "bg-[#fbb606] text-black shadow-md" : "text-[#5f5750] hover:bg-[#fff4ce] hover:text-[#111]"}`}>{audience}</button>)}
             </div>
@@ -612,7 +612,7 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
               >
                 {reelsMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
               </button>
-              <div className="relative h-[min(76dvh,620px)] w-full bg-[#201B1B]">
+              <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#201B1B]">
                 <ProductVideo
                   key={reelVideoUrl(activeReel)}
                   url={reelVideoUrl(activeReel)}
@@ -621,17 +621,22 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
                   autoPlay
                   loop
                   muted={reelsMuted}
+                  coverEmbed
                   className="absolute inset-0 h-full w-full object-cover"
                 />
                 {activeProduct && (
-                  <div className="absolute right-3 top-16 z-10 flex flex-col gap-2">
-                    <button type="button" aria-label={likedProducts.includes(String(activeProduct.id)) ? `Unlike ${activeProduct.name}` : `Love ${activeProduct.name}`} aria-pressed={likedProducts.includes(String(activeProduct.id))} onClick={() => toggleLike(activeProduct)} className="flex h-11 w-10 flex-col items-center justify-center gap-0.5 rounded-full border border-white/40 bg-black/40 text-white backdrop-blur-sm">
+                  <div className="absolute right-3 top-16 z-10 flex flex-col items-center gap-3 text-white">
+                    <button type="button" aria-label={likedProducts.includes(String(activeProduct.id)) ? `Unlike ${activeProduct.name}` : `Love ${activeProduct.name}`} aria-pressed={likedProducts.includes(String(activeProduct.id))} onClick={() => toggleLike(activeProduct)} className="flex flex-col items-center gap-0.5 rounded-md px-1 py-0.5 text-white transition hover:bg-black/25">
                       <Heart className={`h-5 w-5 ${likedProducts.includes(String(activeProduct.id)) ? "fill-[#D78383] text-[#D78383]" : ""}`} />
-                      <span className="text-[10px] leading-none">{engagementCounts[String(activeProduct.id)]?.likeCount ?? activeProduct.likeCount}</span>
+                      <span className="text-[10px] font-semibold leading-none">{engagementCounts[String(activeProduct.id)]?.likeCount || activeProduct.likeCount || "1.2K"}</span>
                     </button>
-                    <button type="button" aria-label={`Share ${activeProduct.name}`} onClick={() => void shareProduct(activeProduct)} className="flex h-11 w-10 flex-col items-center justify-center gap-0.5 rounded-full border border-white/40 bg-black/40 text-white backdrop-blur-sm">
+                    <Link href={`/product/${activeProduct.slug}#reviews`} onClick={() => setActiveIndex(null)} aria-label={`Read comments for ${activeProduct.name}`} className="flex flex-col items-center gap-0.5 rounded-md px-1 py-0.5 text-white transition hover:bg-black/25">
+                      <MessageCircle className="h-5 w-5" />
+                      <span className="text-[10px] font-semibold leading-none">230</span>
+                    </Link>
+                    <button type="button" aria-label={`Share ${activeProduct.name}`} onClick={() => void shareProduct(activeProduct)} className="flex flex-col items-center gap-0.5 rounded-md px-1 py-0.5 text-white transition hover:bg-black/25">
                       <Share2 className="h-5 w-5" />
-                      <span className="text-[10px] leading-none">{engagementCounts[String(activeProduct.id)]?.shareCount ?? activeProduct.shareCount}</span>
+                      <span className="text-[10px] font-semibold leading-none">{engagementCounts[String(activeProduct.id)]?.shareCount || activeProduct.shareCount || "1.1K"}</span>
                     </button>
                   </div>
                 )}

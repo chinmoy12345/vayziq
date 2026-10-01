@@ -374,13 +374,12 @@ body { min-width: 320px; background: var(--vayziq-paper); color: var(--vayziq-in
   }
   .watch-buy-desktop .watch-buy-page-header nav::before {
     position: absolute;
-    right: 50%;
+    right: 0;
     top: 0;
-    left: 50%;
-    width: 100vw;
+    left: 0;
+    width: auto;
     height: 1px;
     content: "";
-    transform: translateX(-50%);
     background: #e8e8e8;
   }
 }

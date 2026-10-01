@@ -9,6 +9,7 @@ export default function ProductVideo({
   controls = true,
   loop = false,
   muted,
+  coverEmbed = false,
 }: {
   url: string;
   title: string;
@@ -19,6 +20,8 @@ export default function ProductVideo({
   loop?: boolean;
   /** When omitted, autoplay videos start muted for browser compatibility. */
   muted?: boolean;
+  /** Crop hosted embeds to fill a vertical reel frame without pillarboxing. */
+  coverEmbed?: boolean;
 }) {
   const video = parseProductVideoUrl(url);
   if (!video) return null;
@@ -58,7 +61,7 @@ export default function ProductVideo({
 
   return (
     <iframe
-      className={className}
+      className={coverEmbed ? `${className} !left-1/2 !top-1/2 !h-full !w-[180%] !-translate-x-1/2 !-translate-y-1/2` : className}
       src={embedUrl.toString()}
       title={title}
       loading="lazy"
