@@ -318,7 +318,6 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
     if (!track || typeof IntersectionObserver === "undefined") return;
     // Desktop cards are previews only; videos start only after an explicit click.
     if (window.matchMedia("(min-width: 768px)").matches) {
-      setPlayingReels([]);
       return;
     }
     const observer = new IntersectionObserver((entries) => {
@@ -425,7 +424,9 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
         >
           {visibleReels.map((reel, index) => {
             const product = reel.kind === "product" ? reel.product : reel.product ?? null;
-            const isPlaying = activeIndex === null && playingReels.includes(reel.id);
+            // Keep any previously-observed mobile videos from rendering after a
+            // resize to desktop, without scheduling a synchronous effect update.
+            const isPlaying = typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches && activeIndex === null && playingReels.includes(reel.id);
             const discount = product?.comparePrice && product.comparePrice > product.price
               ? Math.round((1 - product.price / product.comparePrice) * 100)
               : 0;
