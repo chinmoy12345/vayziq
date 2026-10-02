@@ -5,8 +5,10 @@ import "./globals.css";
 export async function generateMetadata(): Promise<Metadata> {
   const branding = await getStoreBranding();
   return {
-  metadataBase: new URL("https://tantuka.in"),
-  icons: { icon: "/vayziq/favicon.svg", shortcut: "/vayziq/favicon.svg", apple: "/vayziq/favicon.svg" },
+  metadataBase: new URL("https://vayziq.com"),
+  icons: { icon: "/vayziq/vayziq-app-icon.svg", shortcut: "/vayziq/vayziq-app-icon.svg", apple: "/vayziq/vayziq-app-192.png" },
+  themeColor: "#ffffff",
+  colorScheme: "light",
   applicationName: `${branding.name}`,
   title: { default: "Women's Ethnic Wear Online", template: `%s | ${branding.name}` },
   description: `Shop women's sarees, kurtis and nightwear online at ${branding.name}. Discover thoughtful styles, new arrivals and everyday elegance, with delivery across India.`,

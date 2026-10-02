@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
+  ArrowLeft,
+  ArrowRight,
   ChevronRight,
   Clock3,
   Heart,
@@ -15,6 +17,8 @@ import {
   ShoppingBag,
   Truck,
   Undo2,
+  Volume2,
+  VolumeX,
   X,
 } from "lucide-react";
 import type { BlogPost } from "@/lib/blog";
@@ -128,6 +132,10 @@ export default function VayziqHome({
   const [liked, setLiked] = useState<number[]>([]);
   const [activeTab, setActiveTab] = useState("All");
   const [activeVideoId, setActiveVideoId] = useState<number | null>(null);
+  const [reelsMuted, setReelsMuted] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return window.localStorage.getItem("vayziq-watch-buy-muted") !== "false";
+  });
   const [cartProduct, setCartProduct] = useState<VayziqHomeProduct | null>(
     null,
   );
@@ -179,6 +187,21 @@ export default function VayziqHome({
         ? current.filter((item) => item !== id)
         : [...current, id],
     );
+  const toggleReelSound = () => setReelsMuted((current) => {
+    const next = !current;
+    try {
+      window.localStorage.setItem("vayziq-watch-buy-muted", String(next));
+    } catch {
+      // Keep the choice for this visit if storage is unavailable.
+    }
+    return next;
+  });
+  const moveActiveVideo = (direction: number) => {
+    if (!activeVideo || watchProducts.length < 2) return;
+    const currentIndex = watchProducts.findIndex((product) => product.id === activeVideo.id);
+    const nextIndex = (currentIndex + direction + watchProducts.length) % watchProducts.length;
+    setActiveVideoId(watchProducts[nextIndex].id);
+  };
   const openCartPopup = (product: VayziqHomeProduct) => {
     setCartProduct(product);
     setCartQuantity(1);
@@ -456,7 +479,7 @@ export default function VayziqHome({
             </section>
           </>
         )}
-        <SectionHeading title="Watch & Buy" />
+        <SectionHeading title="Watch & Buy" href="/watch-buy" />
         <section id="watch-buy" className={styles.watch}>
           {watchProducts.map((product) => (
             <article key={product.id}>
@@ -615,39 +638,59 @@ export default function VayziqHome({
       )}
       {activeVideo && activeVideo.videoUrl && (
         <div
-          className="fixed inset-0 z-[240] grid place-items-center bg-black/80 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[240] flex items-center justify-center bg-black/75 p-3 backdrop-blur-[3px] sm:p-8"
           onMouseDown={() => setActiveVideoId(null)}
         >
           <div
-            className="relative w-full max-w-sm overflow-hidden rounded-2xl bg-black shadow-2xl"
+            role="dialog"
+            aria-modal="true"
+            aria-label={`${activeVideo.name} video`}
+            className="relative w-[min(360px,calc(100vw-32px))] rounded-2xl bg-[#201B1B] shadow-2xl sm:w-[min(330px,calc(100vw-48px))] sm:rounded-[18px]"
             onMouseDown={(event) => event.stopPropagation()}
           >
+            {watchProducts.length > 1 && <button type="button" aria-label="Previous video" onClick={() => moveActiveVideo(-1)} className="absolute left-1 top-1/2 z-40 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-black/45 text-white transition hover:bg-[#B56F6F] sm:left-[-54px] sm:translate-x-0"><ArrowLeft className="h-5 w-5" /></button>}
             <button
               type="button"
               onClick={() => setActiveVideoId(null)}
-              className="absolute right-3 top-3 z-10 grid h-8 w-8 place-items-center rounded-full bg-white/90 text-lg font-bold text-black"
+              className="absolute right-3 top-3 z-30 flex h-9 w-9 items-center justify-center rounded-full bg-[#111]/90 text-white shadow-lg transition hover:bg-[#B56F6F]"
               aria-label="Close video"
             >
-              ×
+              <X className="h-5 w-5" />
             </button>
-            <div className="aspect-[9/16]">
+            <button
+              type="button"
+              onClick={toggleReelSound}
+              aria-label={reelsMuted ? "Unmute video" : "Mute video"}
+              aria-pressed={!reelsMuted}
+              className="absolute left-3 top-3 z-30 flex h-9 w-9 items-center justify-center rounded-full bg-black/70 text-white shadow-lg transition hover:bg-[#B56F6F]"
+            >
+              {reelsMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+            </button>
+            <div className="relative aspect-[2/3] w-full overflow-hidden rounded-2xl bg-[#201B1B] sm:rounded-[18px]">
               <ProductVideo
                 url={activeVideo.videoUrl}
                 title={`${activeVideo.name} reel`}
                 poster={activeVideo.image}
-                className="h-full w-full object-cover"
+                className="absolute inset-0 h-full w-full object-cover"
                 autoPlay
-                controls
                 loop
+                muted={reelsMuted}
+                coverEmbed
               />
+              <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black via-black/80 to-transparent px-3 pb-3 pt-12 text-white">
+                <div className="flex items-center gap-2.5">
+                  <div className="relative h-11 w-9 shrink-0 overflow-hidden rounded-md border border-white/20 bg-white/10">
+                    <Image src={activeVideo.image} alt="" fill sizes="36px" className="object-cover" />
+                  </div>
+                  <Link href={`/product/${activeVideo.slug}`} onClick={() => setActiveVideoId(null)} className="min-w-0 flex-1 rounded focus:outline-none focus:ring-2 focus:ring-white/80">
+                    <h2 className="truncate text-[13px] font-medium leading-4 text-white">{activeVideo.name}</h2>
+                    <div className="mt-0.5 flex items-center gap-1.5"><span className="text-sm font-extrabold text-white">{activeVideo.price}</span>{activeVideo.oldPrice && <span className="text-[9px] text-white/55 line-through">{activeVideo.oldPrice}</span>}</div>
+                  </Link>
+                  <Link href={`/product/${activeVideo.slug}`} onClick={() => setActiveVideoId(null)} aria-label={`Shop ${activeVideo.name}`} className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#FBB606] text-[#171312] transition hover:bg-white"><ShoppingBag className="h-4 w-4" /></Link>
+                </div>
+              </div>
             </div>
-            <Link
-              href={`/product/${activeVideo.slug}`}
-              onClick={() => setActiveVideoId(null)}
-              className="block bg-white px-4 py-3 text-center text-xs font-extrabold text-black"
-            >
-              SHOP {activeVideo.name.toUpperCase()} →
-            </Link>
+            {watchProducts.length > 1 && <button type="button" aria-label="Next video" onClick={() => moveActiveVideo(1)} className="absolute right-1 top-1/2 z-40 flex h-10 w-10 translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-black/45 text-white transition hover:bg-[#B56F6F] sm:right-[-54px] sm:translate-x-0"><ArrowRight className="h-5 w-5" /></button>}
           </div>
         </div>
       )}

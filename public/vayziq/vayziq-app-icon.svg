@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">Vayziq</title>
+  <rect width="512" height="512" rx="112" fill="#ffffff"/>
+  <rect x="80" y="80" width="352" height="352" rx="88" fill="#111111"/>
+  <path d="M141 176h59l56 157 56-157h59l-91 206h-48l-91-206Z" fill="#ffffff"/>
+  <path d="M311 304h68l-34 58h-68z" fill="#10d9a0"/>
+  <path d="M130 126h58v28h-58zM324 126h58v28h-58z" fill="#fbb606"/>
+</svg>
