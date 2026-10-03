@@ -24,6 +24,12 @@ export function couponInput(body: Record<string, unknown>) {
   const raw = body.rules && typeof body.rules === "object" && !Array.isArray(body.rules) ? body.rules as Record<string, unknown> : {};
   if (raw.productIds !== undefined && (!Array.isArray(raw.productIds) || raw.productIds.length > 1000 || raw.productIds.some(id => !Number.isSafeInteger(id) || Number(id) < 1))) throw new Error("Select valid eligible products.");
   const rules: OfferRules = { productIds: [...new Set((raw.productIds ?? []) as number[])] };
+  rules.heading = typeof raw.heading === "string" ? raw.heading.trim().slice(0, 100) : "";
+  rules.bannerImage = typeof raw.bannerImage === "string" ? raw.bannerImage.trim().slice(0, 2000) : "";
+  if (rules.bannerImage && !/^(\/[^/]|https:\/\/)/.test(rules.bannerImage)) throw new Error("Use a site image path or HTTPS banner URL.");
+  rules.showOnCards = raw.showOnCards !== false;
+  rules.priority = Number(raw.priority ?? 0);
+  if (!Number.isSafeInteger(rules.priority) || rules.priority < 0 || rules.priority > 100) throw new Error("Priority must be between 0 and 100.");
   if (type === "buy_get") {
     const buy = Number(raw.buyQuantity), get = Number(raw.getQuantity);
     if (![buy, get].every(value => Number.isSafeInteger(value) && value >= 1 && value <= 100)) throw new Error("Buy and free quantities must be whole numbers from 1 to 100.");

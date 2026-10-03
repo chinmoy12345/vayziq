@@ -1,5 +1,5 @@
 export type OfferItem = { id: number | string; price: number; quantity: number };
-export type OfferRules = { mode?: "same_price" | "selected"; freeRule?: "cheapest" | "specific"; freeProductIds?: number[]; productIds: number[]; buyQuantity?: number; getQuantity?: number; tiers?: { quantity: number; price: number }[]; priceMode?: "unit" | "bundle" };
+export type OfferRules = { heading?: string; bannerImage?: string; showOnCards?: boolean; priority?: number; mode?: "same_price" | "selected"; freeRule?: "cheapest" | "specific"; freeProductIds?: number[]; productIds: number[]; buyQuantity?: number; getQuantity?: number; tiers?: { quantity: number; price: number }[]; priceMode?: "unit" | "bundle" };
 export type ProductOffer = { code: string; description?: string; type: string; value: number; minimum: number; maximum: number | null; startsAt?: string | null; expiresAt?: string | null; rules?: OfferRules | null };
 const money = (amount: number) => "₹" + amount.toLocaleString("en-IN", { maximumFractionDigits: 2 });
 export function offerTitle(offer: ProductOffer) {

@@ -25,6 +25,7 @@ import type { BlogPost } from "@/lib/blog";
 import type { VayziqHomeData, VayziqHomeProduct } from "@/lib/vayziq-home-data";
 import type { HomepageVisibility } from "@/lib/homepage-settings";
 import ProductVideo from "@/components/product/ProductVideo";
+import ProductOfferBadges from "@/components/product/ProductOfferBadges";
 import HomeHeader from "./HomeHeader";
 import HomeFooter from "./HomeFooter";
 import styles from "./VayziqHome.module.css";
@@ -105,6 +106,7 @@ function ProductCard({
         {product.oldPrice && <del>{product.oldPrice}</del>}
         {product.discountPercent && <span className={styles.offerPercent}>{product.discountPercent}% OFF</span>}
       </div>
+      <ProductOfferBadges id={product.id} price={product.price} inStock={product.inStock} />
       {onAddToCart && (
         <button
           type="button"

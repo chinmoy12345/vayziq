@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import ProductOfferBadges from "./ProductOfferBadges";
 import { useEffect, useState } from "react";
 import ProgressiveImage from "@/components/ui/ProgressiveImage";
 import { useProductCardSettings } from "@/components/product/ProductCardSettings";
@@ -355,6 +356,7 @@ export default function ProductCard({
           )}
           {discountPercent && <span className="rounded bg-[#fff0bd] px-1.5 py-0.5 text-[10px] font-bold text-[#926300]">{discountPercent}% OFF</span>}
         </div>
+        <ProductOfferBadges id={product.id} price={product.price} inStock={inStock} />
         <button type="button" disabled={!inStock} onClick={openCartPopup} className={`mt-3 min-h-10 w-full rounded-md px-3 py-2.5 text-xs font-bold transition ${inStock ? "bg-[#111] text-white hover:bg-[#2b2b2b]" : "cursor-not-allowed bg-[#e8e5e3] text-[#827773]"}`}>{inStock ? (addedToCart ? "Added to Cart ✓" : "Add to Cart") : "Out of Stock"}</button>
 
       </div>

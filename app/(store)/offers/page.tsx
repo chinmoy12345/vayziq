@@ -17,8 +17,7 @@ function themeFor(offer: ProductOffer): DealTheme {
 
 function saveOffer(code: string) { localStorage.setItem("tantuka-offer", code); }
 function offerShopHref(offer: ProductOffer) {
-  const ids = offer.rules?.productIds ?? [];
-  return ids.length ? `/shop?products=${ids.join(",")}` : "/shop";
+  return `/offer/${encodeURIComponent(offer.code)}`;
 }
 
 export default function OffersPage() {
