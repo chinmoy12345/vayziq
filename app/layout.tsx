@@ -1,22 +1,12 @@
 import { getStoreBranding } from "@/lib/store-branding";
 import { StoreBrandingProvider } from "@/components/StoreBranding";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import { pageSeo, SITE_URL } from "@/lib/seo";
+export const viewport: Viewport = { themeColor: "#ffffff", colorScheme: "light" };
 import "./globals.css";
 export async function generateMetadata(): Promise<Metadata> {
-  const branding = await getStoreBranding();
-  return {
-  metadataBase: new URL("https://vayziq.com"),
-  icons: { icon: "/vayziq/vayziq-app-icon.svg", shortcut: "/vayziq/vayziq-app-icon.svg", apple: "/vayziq/vayziq-app-192.png" },
-  themeColor: "#ffffff",
-  colorScheme: "light",
-  applicationName: `${branding.name}`,
-  title: { default: "Women's Ethnic Wear Online", template: `%s | ${branding.name}` },
-  description: `Shop women's sarees, kurtis and nightwear online at ${branding.name}. Discover thoughtful styles, new arrivals and everyday elegance, with delivery across India.`,
-  openGraph: { type: "website", siteName: `${branding.name}`, locale: "en_IN", title: `Women's Ethnic Wear Online | ${branding.name}`, description: `Shop women's sarees, kurtis and nightwear online at ${branding.name}. Discover thoughtful styles and new arrivals, with delivery across India.`, images: [{ url: "/logo.png", alt: `${branding.name} women's fashion` }] },
-  twitter: { card: "summary", title: `Women's Ethnic Wear Online | ${branding.name}`, description: `Shop sarees, kurtis and nightwear online at ${branding.name}.` },
-  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
-  other: { "msapplication-config": "/browserconfig.xml" },
-};
+  return { ...(await pageSeo("/")), metadataBase: new URL(SITE_URL), applicationName: "Vayziq",
+    icons: { icon: "/vayziq/vayziq-app-icon.svg", shortcut: "/vayziq/vayziq-app-icon.svg", apple: "/vayziq/vayziq-app-192.png" } };
 }
 
 export default async function RootLayout({
@@ -28,7 +18,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "WebSite", name: branding.name, url: "https://tantuka.in", description: "Women's sarees, kurtis and nightwear online.", potentialAction: { "@type": "SearchAction", target: "https://tantuka.in/search?q={search_term_string}", "query-input": "required name=search_term_string" } }).replace(/</g, "\\u003c") }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "WebSite", name: branding.name, url: "https://vayziq.com", description: "Streetwear for men, women and unisex everyday style.", potentialAction: { "@type": "SearchAction", target: "https://vayziq.com/search?q={search_term_string}", "query-input": "required name=search_term_string" } }).replace(/</g, "\\u003c") }} />
         <StoreBrandingProvider branding={branding}>{children}</StoreBrandingProvider>
       </body>
     </html>

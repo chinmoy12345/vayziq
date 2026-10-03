@@ -1,4 +1,6 @@
 import { Layers } from "lucide-react";
+import { pageSeo } from "@/lib/seo";
+export async function generateMetadata() { return pageSeo("/categories"); }
 import prisma from "@/lib/db";
 import CategoryBrowser from "@/components/store/CategoryBrowser";
 

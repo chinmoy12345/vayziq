@@ -13,6 +13,7 @@ interface MenuItem {
 }
 type AdminAccess = { permissions: string[]; isSuperAdmin: boolean };
 const permissionByHref: Record<string, string> = {
+  "/admin/seo": "settings.view",
   "/admin/dashboard": "dashboard.view", "/admin/products": "products.view", "/admin/inventory": "inventory.view", "/admin/suppliers": "suppliers.view", "/admin/categories": "categories.view",
   "/admin/orders": "orders.view", "/admin/audit": "audit.view", "/admin/returns": "returns.view",
   "/admin/delivery-zips": "delivery-zips.view", "/admin/customers": "customers.view",
@@ -22,6 +23,7 @@ const permissionByHref: Record<string, string> = {
 };
 
 const menuItems: MenuItem[] = [
+  { label: "SEO Manager", href: "/admin/seo", icon: <span aria-hidden="true">◎</span> },
   {
     label: "Dashboard",
     href: "/admin/dashboard",

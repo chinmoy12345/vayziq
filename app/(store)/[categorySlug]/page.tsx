@@ -1,12 +1,14 @@
 import { getStoreBranding } from "@/lib/store-branding";
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import CollectionPage from "@/components/store/CollectionPage";
 import { getActiveCategory } from "@/lib/storefront";
 
 type Props = { params: Promise<{ categorySlug: string }> };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props) { return pageSeo("/" + (await props.params).categorySlug, await originalMetadata(props)); }
+async function originalMetadata({ params }: Props): Promise<Metadata> {
   const branding = await getStoreBranding();
   const { categorySlug } = await params;
   const category = await getActiveCategory(categorySlug);

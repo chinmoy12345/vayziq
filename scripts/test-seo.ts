@@ -1,0 +1,14 @@
+import assert from "node:assert/strict";
+import { validateSeo, protectedSeoPath, SEO_DEFAULTS } from "../lib/seo-config";
+const entry = { title: "Vayziq streetwear", description: "Streetwear for everyone", canonical: "", image: "/vayziq/vayziq-app-192.png", noindex: false };
+assert.equal(validateSeo("/shop/", entry).path, "/shop");
+assert.equal(validateSeo("/account", entry).entry.noindex, true);
+assert.equal(validateSeo("/shop", entry).entry.noindex, false);
+assert.throws(() => validateSeo("/shop?q=x", entry));
+assert.throws(() => validateSeo("/admin", entry));
+assert.throws(() => validateSeo("/shop", { ...entry, image: "javascript:alert(1)" }));
+assert.throws(() => validateSeo("/shop", { ...entry, canonical: "//external.example" }));
+assert.throws(() => validateSeo("/shop", { ...entry, title: "a".repeat(101) }));
+assert.ok(protectedSeoPath("/account/orders/123"));
+assert.ok(!/ethnic|saree|kurti|tantuka/i.test(JSON.stringify(SEO_DEFAULTS)));
+console.log("SEO validation, safe URLs, private-page guards and streetwear defaults passed.");

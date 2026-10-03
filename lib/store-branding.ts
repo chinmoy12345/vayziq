@@ -13,14 +13,14 @@ export type StoreBranding = {
 };
 
 export const DEFAULT_STORE_BRANDING: StoreBranding = {
-  name: "Tantuka",
+  name: "Vayziq",
   email: "hello.vayziq@gmail.com",
   phone: "+91 9330755055",
   whatsapp: "+91 9330755055",
   hours: "24*7",
   address: "Mumbai",
   pincode: "",
-  logo: "/uploads/branding/tantuka-wordmark-classic.png",
+  logo: "/vayziq/vayziq-logo-final.svg",
 };
 
 const REPLACED_LOGOS = new Set([

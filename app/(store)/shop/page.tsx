@@ -1,9 +1,8 @@
-import { getStoreBranding } from "@/lib/store-branding";
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const branding = await getStoreBranding();
-  return { title: "Shop Women’s Ethnic Wear", description: `Shop sarees, kurtis and nightwear at ${branding.name}. Browse the complete women’s ethnic wear collection.`, alternates: { canonical: "/shop" }, openGraph: { title: `Shop Women’s Ethnic Wear | ${branding.name}`, description: `Shop sarees, kurtis and nightwear at ${branding.name}. Browse the complete women’s ethnic wear collection.`, type: "website", url: "/shop" } };
+  return pageSeo("/shop");
 }
 
 import CollectionPage from "@/components/store/CollectionPage";

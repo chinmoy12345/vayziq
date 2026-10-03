@@ -7,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/admin/", "/account/", "/cart", "/checkout", "/login", "/register", "/wishlist", "/api/"],
     },
-    sitemap: "https://tantuka.in/sitemap.xml",
-    host: "https://tantuka.in",
+    sitemap: "https://vayziq.com/sitemap.xml",
+    host: "https://vayziq.com",
   };
 }

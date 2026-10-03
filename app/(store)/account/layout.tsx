@@ -1,3 +1,4 @@
+import { pageSeo } from "@/lib/seo";
 import type { Metadata } from "next";
 
 // app/account/layout.tsx
@@ -42,7 +43,7 @@ const menuItems = [
   },
 ];
 
-export const metadata: Metadata = { title: "My Account", robots: { index: false, follow: false } };
+export async function generateMetadata(): Promise<Metadata> { return pageSeo("/account"); }
 
 export default async function AccountLayout({
   children,

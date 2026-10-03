@@ -1,5 +1,6 @@
 import { getStoreBranding } from "@/lib/store-branding";
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Check, RefreshCw, RotateCcw, Truck } from "lucide-react";
@@ -15,7 +16,8 @@ import { getHomepageVisibility } from "@/lib/homepage-settings";
 
 type ProductPageProps = { params: Promise<{ slug: string }> };
 
-export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
+export async function generateMetadata(props: ProductPageProps) { return pageSeo("/product/" + (await props.params).slug, await originalMetadata(props)); }
+async function originalMetadata({ params }: ProductPageProps): Promise<Metadata> {
   const branding = await getStoreBranding();
   const { slug } = await params;
   const product = await prisma.product.findFirst({
@@ -107,7 +109,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     brand: { "@type": "Brand", name: `${branding.name}` },
     offers: {
       "@type": "Offer",
-      url: "https://tantuka.in/product/" + product.slug,
+      url: "https://vayziq.com/product/" + product.slug,
       priceCurrency: "INR",
       price: Number(product.price).toFixed(2),
       availability: product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",

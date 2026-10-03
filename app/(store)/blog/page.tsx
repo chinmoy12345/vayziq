@@ -1,3 +1,4 @@
+import { pageSeo } from "@/lib/seo";
 import { StoreName } from "@/components/StoreBranding";
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -7,12 +8,13 @@ import { getBlogPosts, getBlogSettings } from "@/lib/blog";
 
 export const dynamic = "force-dynamic";
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata() { return pageSeo("/blog", await originalMetadata()); }
+async function originalMetadata(): Promise<Metadata> {
   const settings = await getBlogSettings();
   return {
     title: settings.seoTitle,
     description: settings.seoDescription,
-    keywords: settings.seoKeywords.split(",").map((keyword) => keyword.trim()).filter(Boolean),
+    keywords: ["streetwear", "men's clothing", "women's clothing", "unisex style"],
     alternates: { canonical: "/blog" },
     openGraph: { title: settings.seoTitle, description: settings.seoDescription, url: "/blog", type: "website" },
   };

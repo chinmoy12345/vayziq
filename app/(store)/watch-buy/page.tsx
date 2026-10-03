@@ -1,16 +1,18 @@
+import { pageSeo } from "@/lib/seo";
 import { getStoreBranding } from "@/lib/store-branding";
 import type { Metadata } from "next";
 import Link from "next/link";
 import WatchAndBuy from "@/components/home/WatchAndBuy";
 import { getEditorialWatchBuyProducts, getWatchBuyProducts } from "@/lib/storefront";
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata() { return pageSeo("/watch-buy", await originalMetadata()); }
+async function originalMetadata(): Promise<Metadata> {
   const branding = await getStoreBranding();
   return {
   title: "Watch & Buy",
   description: "Watch our product videos and explore the pieces featured in each look.",
   alternates: { canonical: "/watch-buy" },
-  openGraph: { title: `Watch & Buy | ${branding.name}`, description: "Watch product videos and explore the sarees, kurtis and styles featured in each look.", url: "/watch-buy", type: "website" },
+  openGraph: { title: `Watch & Buy | ${branding.name}`, description: "Watch product videos and explore the streetwear styles featured in each look.", url: "/watch-buy", type: "website" },
 };
 }
 

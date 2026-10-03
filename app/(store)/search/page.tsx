@@ -1,12 +1,14 @@
+import { pageSeo } from "@/lib/seo";
 import { getStoreBranding } from "@/lib/store-branding";
 import type { Metadata } from "next";
 import CategoryListing from "@/components/category/CategoryListing";
 import { getStoreFilters, getStoreProducts, toCardProduct } from "@/lib/storefront";
 
-export async function generateMetadata({ searchParams }: { searchParams: Promise<{ q?: string }> }): Promise<Metadata> {
+export async function generateMetadata(props: Parameters<typeof originalMetadata>[0]) { return pageSeo("/search", await originalMetadata(props)); }
+async function originalMetadata({ searchParams }: { searchParams: Promise<{ q?: string }> }): Promise<Metadata> {
   const branding = await getStoreBranding();
   const query = (await searchParams).q?.trim();
-  return { title: query ? `Search results for ${query}` : "Search", description: `Search ${branding.name}’s collection of sarees, kurtis and nightwear.`, robots: { index: false, follow: true } };
+  return { title: query ? `Search results for ${query}` : "Search", description: `Search ${branding.name}’s collection of men’s, women’s and unisex streetwear.`, robots: { index: false, follow: true } };
 }
 
 export default async function SearchPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {

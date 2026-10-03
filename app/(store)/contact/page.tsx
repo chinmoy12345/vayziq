@@ -1,7 +1,9 @@
+import { pageSeo } from "@/lib/seo";
 import { getStoreBranding } from "@/lib/store-branding";
 import type { Metadata } from "next";
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata() { return pageSeo("/contact", await originalMetadata()); }
+async function originalMetadata(): Promise<Metadata> {
   const branding = await getStoreBranding();
   return { title: "Contact Us", description: `Contact ${branding.name} for help with orders, products, delivery, returns or any other shopping questions.`, alternates: { canonical: "/contact" }, openGraph: { title: `Contact Us | ${branding.name}`, description: `Contact ${branding.name} for help with orders, products, delivery, returns or any other shopping questions.`, type: "website", url: "/contact" } };
 }

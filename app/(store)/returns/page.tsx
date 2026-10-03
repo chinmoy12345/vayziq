@@ -1,8 +1,10 @@
+import { pageSeo } from "@/lib/seo";
 import { getStoreBranding } from "@/lib/store-branding";
 import { StoreName } from "@/components/StoreBranding";
 import type { Metadata } from "next";
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata() { return pageSeo("/returns", await originalMetadata()); }
+async function originalMetadata(): Promise<Metadata> {
   const branding = await getStoreBranding();
   return { title: "Returns & Exchange", description: `Learn about ${branding.name}’s return, exchange and replacement process, eligibility and timelines.`, alternates: { canonical: "/returns" }, openGraph: { title: `Returns & Exchange | ${branding.name}`, description: `Learn about ${branding.name}’s return, exchange and replacement process, eligibility and timelines.`, type: "website", url: "/returns" } };
 }

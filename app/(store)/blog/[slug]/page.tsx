@@ -1,5 +1,6 @@
 import { getStoreBranding } from "@/lib/store-branding";
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -9,7 +10,8 @@ import { getBlogPost } from "@/lib/blog";
 export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ slug: string }> };
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props) { return pageSeo("/blog/" + (await props.params).slug, await originalMetadata(props)); }
+async function originalMetadata({ params }: Props): Promise<Metadata> {
   const post = await getBlogPost((await params).slug);
   if (!post) return { title: "Story not found", robots: { index: false, follow: false } };
   return {
@@ -28,10 +30,10 @@ export default async function BlogPostPage({ params }: Props) {
   if (!post) notFound();
   const structuredData = {
     "@context": "https://schema.org", "@type": "BlogPosting", headline: post.title, description: post.seoDescription || post.excerpt,
-    image: post.image.startsWith("data:") ? post.image : "https://tantuka.in" + post.image, datePublished: new Date(post.date).toISOString(), dateModified: new Date(post.updatedAt || post.date).toISOString(),
+    image: post.image.startsWith("data:") ? post.image : new URL(post.image, "https://vayziq.com").href, datePublished: new Date(post.date).toISOString(), dateModified: new Date(post.updatedAt || post.date).toISOString(),
     author: { "@type": "Organization", name: `${branding.name}` },
-    publisher: { "@type": "Organization", name: `${branding.name}`, logo: { "@type": "ImageObject", url: "https://tantuka.in/logo.png" } },
-    mainEntityOfPage: "https://tantuka.in/blog/" + post.slug,
+    publisher: { "@type": "Organization", name: "Vayziq", logo: { "@type": "ImageObject", url: "https://vayziq.com/vayziq/vayziq-app-192.png" } },
+    mainEntityOfPage: "https://vayziq.com/blog/" + post.slug,
   };
   return <main className="min-h-screen bg-[#FFFDFC]"><article>
     <header className="mx-auto max-w-4xl px-5 pb-8 pt-10 sm:px-8 sm:pt-14">

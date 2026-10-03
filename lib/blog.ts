@@ -18,9 +18,9 @@ export const BLOG_CONTENT_KEY = "blog_content";
 export const DEFAULT_BLOG_SETTINGS: BlogSettings = {
   pageEyebrow: "Notes on getting dressed", pageTitle: "The Style Journal",
   pageIntro: "Ideas for wearing, caring for and enjoying the pieces you love.",
-  seoTitle: "Style Journal | Tantuka",
-  seoDescription: "Explore saree, kurti and nightwear styling guides from Tantuka.",
-  seoKeywords: "saree styling, kurti guide, nightwear, Indian fashion",
+  seoTitle: "Streetwear Style Journal | Vayziq",
+  seoDescription: "Explore streetwear styling, outfit inspiration and clothing care for men, women and unisex wardrobes.",
+  seoKeywords: "streetwear, oversized fits, unisex clothing, outfit styling",
 };
 
 const defaultPosts: BlogPost[] = [

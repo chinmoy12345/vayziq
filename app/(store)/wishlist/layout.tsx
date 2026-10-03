@@ -1,9 +1,7 @@
+import { pageSeo } from "@/lib/seo";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Wishlist",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> { return pageSeo("/wishlist"); }
 
 export default function PrivatePageLayout({ children }: { children: React.ReactNode }) {
   return children;

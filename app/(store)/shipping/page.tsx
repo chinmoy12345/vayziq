@@ -1,7 +1,9 @@
+import { pageSeo } from "@/lib/seo";
 import { getStoreBranding } from "@/lib/store-branding";
 import type { Metadata } from "next";
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata() { return pageSeo("/shipping", await originalMetadata()); }
+async function originalMetadata(): Promise<Metadata> {
   const branding = await getStoreBranding();
   return { title: "Shipping & Delivery", description: `Find delivery estimates, shipping charges and order delivery information for ${branding.name} purchases across India.`, alternates: { canonical: "/shipping" }, openGraph: { title: `Shipping & Delivery | ${branding.name}`, description: `Find delivery estimates, shipping charges and order delivery information for ${branding.name} purchases across India.`, type: "website", url: "/shipping" } };
 }

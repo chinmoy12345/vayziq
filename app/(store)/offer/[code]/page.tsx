@@ -1,4 +1,10 @@
 import Link from "next/link";
+import { pageSeo } from "@/lib/seo";
+export async function generateMetadata({ params }: { params: Promise<{ code: string }> }) {
+  const { code } = await params;
+  const coupon = await prisma.coupon.findUnique({ where: { code: code.toUpperCase() } });
+  return pageSeo(`/offer/${code.toUpperCase()}`, { title: coupon ? `${offerTitle(publicOffer(coupon))} | Vayziq` : "Offer unavailable | Vayziq", description: coupon ? offerTerms(publicOffer(coupon)) : undefined, robots: { index: Boolean(coupon && couponAvailable(coupon)) } });
+}
 import { notFound } from "next/navigation";
 import prisma from "@/lib/db";
 import { couponAvailable, publicOffer } from "@/lib/coupons";

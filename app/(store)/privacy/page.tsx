@@ -1,8 +1,10 @@
+import { pageSeo } from "@/lib/seo";
 import { getStoreBranding } from "@/lib/store-branding";
 import { StoreName } from "@/components/StoreBranding";
 import type { Metadata } from "next";
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata() { return pageSeo("/privacy", await originalMetadata()); }
+async function originalMetadata(): Promise<Metadata> {
   const branding = await getStoreBranding();
   return { title: "Privacy Policy", description: `Read ${branding.name}’s Privacy Policy to understand how we collect, use and protect your personal information.`, alternates: { canonical: "/privacy" }, openGraph: { title: `Privacy Policy | ${branding.name}`, description: `Read ${branding.name}’s Privacy Policy to understand how we collect, use and protect your personal information.`, type: "website", url: "/privacy" } };
 }

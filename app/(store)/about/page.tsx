@@ -1,10 +1,12 @@
+import { pageSeo } from "@/lib/seo";
 import { getStoreBranding } from "@/lib/store-branding";
 import { StoreName } from "@/components/StoreBranding";
 import type { Metadata } from "next";
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata() { return pageSeo("/about", await originalMetadata()); }
+async function originalMetadata(): Promise<Metadata> {
   const branding = await getStoreBranding();
-  return { title: "About Us", description: `Learn about ${branding.name}, our approach to women’s ethnic fashion, and the thoughtful collections we bring together.`, alternates: { canonical: "/about" }, openGraph: { title: `About Us | ${branding.name}`, description: `Learn about ${branding.name}, our approach to women’s ethnic fashion, and the thoughtful collections we bring together.`, type: "website", url: "/about" } };
+  return { title: "About Us", description: `Learn about ${branding.name}, our approach to streetwear for men, women and unisex wardrobes, and the thoughtful collections we bring together.`, alternates: { canonical: "/about" }, openGraph: { title: `About Us | ${branding.name}`, description: `Learn about ${branding.name}, our approach to streetwear for men, women and unisex wardrobes, and the thoughtful collections we bring together.`, type: "website", url: "/about" } };
 }
 
 import Link from "next/link";
@@ -134,7 +136,7 @@ export default function AboutPage() {
               <p>
                 We bring together carefully selected styles across{" "}
                 <strong className="font-medium text-[#292321]">
-                  Sarees, Kurtis and Nightwear
+                  Men, Women and Unisex
                 </strong>
                 , combining timeless designs with everyday comfort.
               </p>
@@ -237,22 +239,22 @@ export default function AboutPage() {
 
         <div className="mt-10 grid gap-5 md:grid-cols-3">
           <Link
-            href="/sarees"
+            href="/men"
             className="group rounded-2xl border border-[#eee6e1] bg-[#faf8f6] p-7 transition hover:-translate-y-1 hover:shadow-sm"
           >
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#b56f6f]">
               Collection 01
             </p>
 
-            <h3 className="mt-3 font-serif text-2xl">Sarees</h3>
+            <h3 className="mt-3 font-serif text-2xl">Men</h3>
 
             <p className="mt-3 text-sm leading-6 text-[#756c67]">
-              Elegant sarees for celebrations, occasions and everyday
+              Street-ready essentials, relaxed fits and everyday
               moments.
             </p>
 
             <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-[#292321]">
-              Explore Sarees
+              Explore Men
               <span className="transition group-hover:translate-x-1">
                 →
               </span>
@@ -260,22 +262,22 @@ export default function AboutPage() {
           </Link>
 
           <Link
-            href="/kurtis"
+            href="/women"
             className="group rounded-2xl border border-[#eee6e1] bg-[#faf8f6] p-7 transition hover:-translate-y-1 hover:shadow-sm"
           >
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#b56f6f]">
               Collection 02
             </p>
 
-            <h3 className="mt-3 font-serif text-2xl">Kurtis</h3>
+            <h3 className="mt-3 font-serif text-2xl">Women</h3>
 
             <p className="mt-3 text-sm leading-6 text-[#756c67]">
-              Comfortable and versatile kurtis designed for effortless
+              Expressive streetwear and comfortable fits for
               everyday style.
             </p>
 
             <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-[#292321]">
-              Explore Kurtis
+              Explore Women
               <span className="transition group-hover:translate-x-1">
                 →
               </span>
@@ -283,22 +285,22 @@ export default function AboutPage() {
           </Link>
 
           <Link
-            href="/nightwear"
+            href="/shop"
             className="group rounded-2xl border border-[#eee6e1] bg-[#faf8f6] p-7 transition hover:-translate-y-1 hover:shadow-sm"
           >
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#b56f6f]">
               Collection 03
             </p>
 
-            <h3 className="mt-3 font-serif text-2xl">Nightwear</h3>
+            <h3 className="mt-3 font-serif text-2xl">Unisex</h3>
 
             <p className="mt-3 text-sm leading-6 text-[#756c67]">
-              Soft, comfortable nightwear created for relaxed evenings and
-              restful nights.
+              Versatile everyday streetwear made to style
+              your way.
             </p>
 
             <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-[#292321]">
-              Explore Nightwear
+              Explore Unisex
               <span className="transition group-hover:translate-x-1">
                 →
               </span>

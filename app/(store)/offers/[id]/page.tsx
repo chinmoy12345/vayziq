@@ -1,3 +1,4 @@
+import { pageSeo } from "@/lib/seo";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Breadcrumbs from "@/components/store/Breadcrumbs";
@@ -12,7 +13,8 @@ const demoOffers = {
   "buy3save90": { title: "Buy 3 · Save ₹90", subtitle: "Save ₹90 when you add any three eligible products to your bag.", code: "BUY3SAVE90", eyebrow: "MORE TO LOVE", theme: "dark" as const },
 };
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+export async function generateMetadata(props: Parameters<typeof originalMetadata>[0]) { return pageSeo("/offers/" + (await props.params).id, await originalMetadata(props)); }
+async function originalMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
   const demoOffer = demoOffers[id.toLowerCase() as keyof typeof demoOffers];
   const bannerId = Number(id);
@@ -21,8 +23,8 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     : null;
   if (!demoOffer && !banner) return { title: "Offer not found", robots: { index: false, follow: false } };
   const title = demoOffer?.title ?? banner!.title.trim();
-  const description = (demoOffer?.subtitle ?? banner?.subtitle?.trim() ?? "Explore current offers and shop eligible styles from Tantuka’s collection.").slice(0, 160);
-  return { title, description, alternates: { canonical: "/offers/" + id }, openGraph: { title: title + " | Tantuka", description, url: "/offers/" + id, type: "website" } };
+  const description = (demoOffer?.subtitle ?? banner?.subtitle?.trim() ?? "Explore current offers and shop eligible styles from Vayziq’s collection.").slice(0, 160);
+  return { title, description, alternates: { canonical: "/offers/" + id }, openGraph: { title: title + " | Vayziq", description, url: "/offers/" + id, type: "website" } };
 }
 
 export default async function OfferZonePage({ params }: { params: Promise<{ id: string }> }) {
