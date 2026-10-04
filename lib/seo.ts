@@ -4,8 +4,13 @@ import prisma from "@/lib/db";
 import { SEO_DEFAULTS, protectedSeoPath, type SeoEntry } from "./seo-config";
 export const SITE_URL = "https://vayziq.com";
 export const getSeoEntries = cache(async () => {
-  const rows = await prisma.storeSetting.findMany({ where: { key: { startsWith: "seo:" } } });
-  return Object.fromEntries(rows.map(row => [row.key.slice(4), row.value as unknown as SeoEntry]));
+  try {
+    const rows = await prisma.storeSetting.findMany({ where: { key: { startsWith: "seo:" } } });
+    return Object.fromEntries(rows.map(row => [row.key.slice(4), row.value as unknown as SeoEntry]));
+  } catch {
+    // Metadata must fall back to the brand defaults while an offline build has no database.
+    return {} as Record<string, SeoEntry>;
+  }
 });
 export async function pageSeo(path: string, fallback: Metadata = {}): Promise<Metadata> {
   const entry = (await getSeoEntries())[path];
