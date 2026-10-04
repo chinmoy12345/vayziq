@@ -26,6 +26,7 @@ body {
 }
 
 /* The homepage owns its original VAYZIQ chrome; other storefront pages use the shared one. */
+body:has(.vayziq-home) { min-width: 0; }
 body:has(.vayziq-home) > header,
 body:has(.vayziq-home) > footer,
 body:has(.vayziq-home) .store-footer {

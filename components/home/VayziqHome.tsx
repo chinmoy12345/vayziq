@@ -28,6 +28,7 @@ import ProductVideo from "@/components/product/ProductVideo";
 import ProductOfferBadges from "@/components/product/ProductOfferBadges";
 import HomeHeader from "./HomeHeader";
 import HomeFooter from "./HomeFooter";
+import ProductCarousel from "./ProductCarousel";
 import styles from "./VayziqHome.module.css";
 import wishlistStyles from "./WishlistButton.module.css";
 import sectionWidthStyles from "./HomeSectionWidth.module.css";
@@ -73,7 +74,7 @@ function ProductCard({
           src={product.image}
           alt={product.name}
           fill
-          sizes="(max-width: 767px) 46vw, 17vw"
+          sizes="(max-width: 767px) 58vw, (max-width: 1100px) 32vw, 24vw"
           quality={100}
         />
         {dynamicBadge && (
@@ -159,9 +160,9 @@ export default function VayziqHome({
     "T-Shirts",
     "Tracksuits",
   ];
-  const bestSellers = products.slice(0, 4);
-  const newArrivals = [...products].reverse().slice(0, 4);
-  const recommendations = [...products].reverse().slice(0, 4);
+  const bestSellers = products;
+  const newArrivals = [...products].reverse();
+  const recommendations = [...products].reverse();
   const featuredCategories = categories.filter(
     (category) => category.slug === "men" || category.slug === "women",
   );
@@ -314,7 +315,7 @@ export default function VayziqHome({
           </div>
         </section>
         <SectionHeading title="Best Sellers" />
-        <section className={`${styles.productGrid} ${styles.fourProductGrid} ${sectionWidthStyles.fullWidthProductGrid}`}>
+        <ProductCarousel label="Best Sellers">
           {bestSellers.map((product) => (
             <ProductCard
               key={product.id}
@@ -325,9 +326,9 @@ export default function VayziqHome({
               framed
             />
           ))}
-        </section>
-        <SectionHeading title="New Arrivals" />
-        <section className={`${styles.productGrid} ${styles.fourProductGrid} ${sectionWidthStyles.fullWidthProductGrid}`}>
+        </ProductCarousel>
+        <SectionHeading title="New Arrivals" href="/shop?sort=newest" />
+        <ProductCarousel label="New Arrivals">
           {newArrivals.map((product) => (
             <ProductCard
               key={product.id}
@@ -338,7 +339,7 @@ export default function VayziqHome({
               framed
             />
           ))}
-        </section>
+        </ProductCarousel>
         <section
           className={`${styles.collectionShowcase} ${sectionWidthStyles.wideMerchSection}`}
           aria-labelledby="collection-heading"
@@ -382,16 +383,18 @@ export default function VayziqHome({
                   ))}
                 </div>
               </div>
-              <div className={styles.productGrid}>
+              <ProductCarousel key={activeTab} label="Trending Now" inset>
                 {trendingProducts.map((product) => (
                   <ProductCard
                     key={product.id}
                     product={product}
                     liked={liked.includes(product.id)}
                     onLike={() => toggleLike(product.id)}
+                    onAddToCart={() => openCartPopup(product)}
+                    framed
                   />
                 ))}
-              </div>
+              </ProductCarousel>
             </section>
           </>
         )}
@@ -444,7 +447,7 @@ export default function VayziqHome({
           </>
         )}
         <SectionHeading title="You May Like" />
-        <section className={`${styles.productGrid} ${styles.fourProductGrid} ${sectionWidthStyles.fullWidthProductGrid}`}>
+        <ProductCarousel label="You May Like">
           {recommendations.map((product) => (
             <ProductCard
               key={product.id}
@@ -455,7 +458,7 @@ export default function VayziqHome({
               framed
             />
           ))}
-        </section>
+        </ProductCarousel>
         {visibility.shopByMood && (
           <>
             <SectionHeading title="Shop by Mood" />
@@ -541,11 +544,7 @@ export default function VayziqHome({
                 <article key={post.slug} className={styles.journalCard}>
                   <Link href={`/blog/${post.slug}`}>
                     <div className={styles.journalImage}>
-                      {post.image.startsWith("data:") ? (
-                        <img src={post.image} alt={post.imageAlt} />
-                      ) : (
-                        <Image src={post.image} alt={post.imageAlt} fill sizes="(max-width: 767px) 78vw, 31vw" quality={90} />
-                      )}
+                      <Image src={post.image} alt={post.imageAlt} fill sizes="(max-width: 767px) 78vw, 31vw" quality={90} unoptimized={post.image.startsWith("data:")} />
                     </div>
                     <div className={styles.journalContent}>
                       <p>{post.category}</p>

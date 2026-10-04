@@ -6,12 +6,12 @@ import { ChevronLeft, ChevronRight, Tag } from "lucide-react";
 import { offerDiscount, offerTitle, offerTerms } from "@/lib/product-offers";
 
 const money = (amount: number) => "₹" + amount.toLocaleString("en-IN", { maximumFractionDigits: 2 });
-export default function ProductOffers({ price, productId, quantity }: { price: number; productId: number; quantity: number }) {
+export default function ProductOffers({ price, productId, quantity, alwaysExpanded = false }: { price: number; productId: number; quantity: number; alwaysExpanded?: boolean }) {
   const { offers: allOffers, loading: offersLoading, error: offersError } = useOffers();
   const productOffers = allOffers.filter(offer => !offer.rules?.productIds.length || offer.rules.productIds.includes(productId));
   const items = [{ id: productId, price, quantity }];
   const track = useRef<HTMLDivElement>(null);
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(alwaysExpanded);
   const [message, setMessage] = useState("");
   const best = Math.max(...productOffers.map(offer => offerDiscount(offer.code, price * quantity, productOffers, items)));
   async function copy(code: string) {
@@ -22,7 +22,7 @@ export default function ProductOffers({ price, productId, quantity }: { price: n
   return <section aria-label="Offers and discounts" className="mt-6 min-w-0 rounded-2xl border border-[#E8DADA] bg-[#FAF5F2] p-4 sm:p-5">
     <div className="flex items-center justify-between gap-2">
       <h2 className="flex items-center gap-2 font-serif text-lg text-[#4F4444]"><Tag className="h-4 w-4 shrink-0 text-[#B56F6F]" />Offers &amp; Discounts</h2>
-      <button type="button" aria-expanded={expanded} aria-controls="product-offers" onClick={() => setExpanded(!expanded)} className="min-h-11 shrink-0 text-xs font-semibold text-[#9F5E5E]">{expanded ? "Show less" : "View all " + productOffers.length}</button>
+      {!alwaysExpanded && <button type="button" aria-expanded={expanded} aria-controls="product-offers" onClick={() => setExpanded(!expanded)} className="min-h-11 shrink-0 text-xs font-semibold text-[#9F5E5E]">{expanded ? "Show less" : "View all " + productOffers.length}</button>}
     </div>
     {(offersLoading || offersError || !productOffers.length) && <p role="status" className="py-3 text-xs text-[#8A7777]">{offersLoading ? "Loading offers…" : offersError || "No active offers for this product right now."}</p>}
     <div ref={track} id="product-offers" tabIndex={0} aria-label="Available offers, scroll for more" className={expanded ? "grid gap-3" : "flex snap-x snap-mandatory gap-3 overflow-x-auto pb-3 [scrollbar-width:thin]"}>

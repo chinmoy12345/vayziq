@@ -16,6 +16,7 @@ import {
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ProductOffers from "./ProductOffers";
+import ProductOfferBadges from "./ProductOfferBadges";
 
 interface ProductInfoData {
   id: number | string;
@@ -58,6 +59,8 @@ export default function ProductInfo({
 
   const variant = product.variants?.find(v => (!v.values.size || v.values.size === selectedSize) && (!(v.values.color || v.values.colour) || (v.values.color || v.values.colour) === selectedColor));
   const sellingPrice = variant?.price ?? product.basePrice ?? Number(product.price.replace(/[^\d.]/g, ""));
+  const compareAtPrice = Number((product.oldPrice ?? "").replace(/[^\d.]/g, ""));
+  const discountPercent = compareAtPrice > sellingPrice ? Math.floor((compareAtPrice - sellingPrice) / compareAtPrice * 100) : 0;
   const selectedVariantStock = variant?.stock ?? 0;
   const canPurchase = product.variants?.length ? Boolean(variant && selectedVariantStock > 0) : (product.stock ?? 0) > 0;
   const colorSwatches: Record<string, string> = { Black: "#151515", Olive: "#647056", White: "#f5f5f3", Grey: "#a6a8aa", Gray: "#a6a8aa", Navy: "#233550", Beige: "#d8c7aa" };
@@ -70,8 +73,6 @@ export default function ProductInfo({
   const [pincode, setPincode] = useState("");
   const [deliveryMessage, setDeliveryMessage] = useState("");
   const [checkingDelivery, setCheckingDelivery] = useState(false);
-  const estimatedSubtotal = sellingPrice * quantity;
-  const amountUntilFreeShipping = Math.max(0, 999 - estimatedSubtotal);
 
   const [addedToBag, setAddedToBag] =
     useState(false);
@@ -183,7 +184,7 @@ export default function ProductInfo({
           CATEGORY
       ===================================================== */}
 
-      <p className="text-[10px] font-semibold tracking-[0.25em] text-[#B56F6F]">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-gray-500">
         {product.category}
       </p>
 
@@ -191,7 +192,7 @@ export default function ProductInfo({
           PRODUCT NAME
       ===================================================== */}
 
-      <h1 className="mt-3 max-w-xl font-serif text-3xl leading-tight text-[#2B2525] sm:text-4xl">
+      <h1 className="mt-2 max-w-xl text-2xl font-bold leading-tight tracking-tight text-[#171717] sm:text-3xl">
         {product.name}
       </h1>
 
@@ -238,27 +239,27 @@ export default function ProductInfo({
           PRICE
       ===================================================== */}
 
-      <div className="mt-6 flex flex-wrap items-center gap-3">
+      <div className="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
 
-        <span className="font-serif text-2xl text-[#2B2525]">
+        <span className="text-2xl font-bold tracking-tight text-[#171717] sm:text-[28px]">
           {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(sellingPrice)}
         </span>
 
-        {product.oldPrice && (
+        {compareAtPrice > sellingPrice && (
           <span className="text-sm text-[#9A8888] line-through">
             {product.oldPrice}
           </span>
         )}
 
-        {product.discount && (
-          <span className="text-xs font-semibold text-[#B56F6F]">
-            {product.discount}
+        {discountPercent > 0 && (
+          <span className="rounded bg-amber-50 px-2 py-1 text-xs font-bold text-amber-800">
+            {discountPercent}% OFF
           </span>
         )}
 
       </div>
 
-      <p className="mt-1 text-[10px] text-[#9A8888]">
+      <p className="mt-1 text-[11px] text-gray-500">
         Inclusive of all taxes
       </p>
 
@@ -266,7 +267,11 @@ export default function ProductInfo({
           OFFER
       ===================================================== */}
 
-      {showOffers && <ProductOffers productId={Number(product.id)} quantity={quantity} price={sellingPrice} />}
+      {showOffers && canPurchase && <div className="mt-3 border-b border-gray-200 pb-5">
+        <ProductOfferBadges id={product.id} price={String(sellingPrice)} inStock={canPurchase} />
+        <p className="mt-4 text-xs font-bold text-gray-800">All available offers &amp; conditions</p>
+        <ProductOffers productId={Number(product.id)} quantity={quantity} price={sellingPrice} alwaysExpanded />
+      </div>}
 
       {/* =====================================================
           COLOR

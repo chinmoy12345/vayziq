@@ -16,6 +16,6 @@ export default function ProductOfferBadges({ id, price, inStock = true }: { id: 
   return <Link href={`/offer/${encodeURIComponent(offer.code)}`} title={offerTerms(offer)} className="mt-2 block text-left leading-5" aria-label={`${preview.label}. ${offerTerms(offer)}`}>
     {preview.unit !== null && <span className="inline-block rounded-md border border-purple-200 bg-purple-50 px-1.5 py-0.5 text-[11px] text-purple-800">{preview.quantity === 1 ? "Get it for " : "As low as "}<b>₹{preview.unit.toLocaleString("en-IN", { maximumFractionDigits: 2 })}</b>{preview.quantity! > 1 && <span> each · buy {preview.quantity}</span>}</span>}
     <span className="mt-1 flex items-start gap-1 text-[11px] font-semibold text-green-700"><BadgePercent className="mt-0.5 h-3.5 w-3.5 shrink-0" />{preview.label}</span>
-    <span className="block text-[10px] text-gray-500">Code {offer.code} · View conditions</span>
+    <span className="block text-[10px] text-gray-500">Code {offer.code} · Explore offer</span>
   </Link>;
 }
