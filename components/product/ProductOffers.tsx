@@ -21,7 +21,7 @@ export default function ProductOffers({ price, productId, quantity, alwaysExpand
 
   return <section aria-label="Offers and discounts" className="mt-6 min-w-0 border-b border-gray-200 pb-5">
     <div className="flex items-center justify-between gap-2">
-      <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-neutral-900"><Tag className="h-4 w-4 shrink-0 text-amber-600" />All available offers &amp; conditions</h2>
+      <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-neutral-900"><Tag className="h-4 w-4 shrink-0 text-amber-600" />Offers &amp; Discounts</h2>
       {!alwaysExpanded && <button type="button" aria-expanded={expanded} aria-controls="product-offers" onClick={() => setExpanded(!expanded)} className="min-h-11 shrink-0 text-xs font-semibold text-[#9F5E5E]">{expanded ? "Show less" : "View all " + productOffers.length}</button>}
     </div>
     {(offersLoading || offersError || !productOffers.length) && <p role="status" className="py-3 text-xs text-[#8A7777]">{offersLoading ? "Loading offers…" : offersError || "No active offers for this product right now."}</p>}
