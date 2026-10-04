@@ -127,16 +127,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
       </div>
     </nav>
 
-    <div className="mx-auto max-w-7xl px-4 py-5 sm:px-8 sm:py-9 lg:px-10 lg:py-12">
-      <section aria-label={`${product.name} purchase details`} className="grid items-start gap-6 sm:gap-8 lg:grid-cols-[minmax(0,1.08fr)_minmax(360px,0.92fr)] lg:gap-10 xl:gap-14">
-        <div className="space-y-5">
+    <div className="mx-auto max-w-[1440px] px-4 pb-10 pt-0 sm:px-8 sm:pt-6 lg:px-10">
+      <section aria-label={`${product.name} purchase details`} className="grid items-start gap-5 sm:gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-10 xl:gap-12">
+        <div className="-mx-4 min-w-0 space-y-5 sm:mx-0">
           <ProductGallery productId={product.id} images={images} name={product.name} badge={product.badgeEnabled && product.badgeText ? product.badgeText : undefined} badgeTone={product.badgeTone} />
           {visibility.productDetailVideo && product.videoUrl && <section aria-labelledby="product-video-title" className="overflow-hidden rounded-xl border border-[#E8DADA] bg-white">
             <div className="px-4 py-3 sm:px-5"><h2 id="product-video-title" className="font-serif text-xl text-[#2B2525]">See this piece in motion</h2><p className="mt-1 text-xs text-[#756565]">A closer look at the fabric, finish and fit.</p></div>
             <div className="aspect-video bg-[#2B2525]"><ProductVideo url={product.videoUrl} title={`${product.name} product video`} poster={images[0]} /></div>
           </section>}
         </div>
-        <div className="min-w-0 rounded-2xl border border-[#E8DADA] bg-white p-4 shadow-sm sm:p-6 lg:sticky lg:top-24">
+        <div className="min-w-0 bg-white pb-4 lg:pl-2">
           <ProductInfo product={purchaseProduct} showRating={visibility.productDetailRating} showOffers={visibility.productDetailOffers} />
         </div>
       </section>

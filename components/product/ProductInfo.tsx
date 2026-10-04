@@ -61,7 +61,7 @@ export default function ProductInfo({
   const sellingPrice = variant?.price ?? product.basePrice ?? Number(product.price.replace(/[^\d.]/g, ""));
   const compareAtPrice = Number((product.oldPrice ?? "").replace(/[^\d.]/g, ""));
   const discountPercent = compareAtPrice > sellingPrice ? Math.floor((compareAtPrice - sellingPrice) / compareAtPrice * 100) : 0;
-  const selectedVariantStock = variant?.stock ?? 0;
+  const selectedVariantStock = product.variants?.length ? variant?.stock ?? 0 : product.stock ?? 0;
   const canPurchase = product.variants?.length ? Boolean(variant && selectedVariantStock > 0) : (product.stock ?? 0) > 0;
   const colorSwatches: Record<string, string> = { Black: "#151515", Olive: "#647056", White: "#f5f5f3", Grey: "#a6a8aa", Gray: "#a6a8aa", Navy: "#233550", Beige: "#d8c7aa" };
   const [quantity, setQuantity] = useState(1);
@@ -99,11 +99,13 @@ export default function ProductInfo({
   };
 
   const addToBag = () => {
+    if (!canPurchase || quantity > selectedVariantStock) { setActionMessage("Choose an available quantity."); return; }
     if (product.variants?.length && (!variant || variant.stock < quantity)) { setActionMessage("Choose an available variant with enough stock."); return; }
     const savedCart = JSON.parse(localStorage.getItem("susmita-cart") ?? "[]") as Array<{
       id: number | string; quantity: number; size?: string; color?: string;
     }>;
     const existing = savedCart.find((item) => item.id === product.id && item.size === selectedSize && item.color === selectedColor);
+    if ((existing?.quantity ?? 0) + quantity > selectedVariantStock) { setActionMessage("The quantity in your bag would exceed available stock."); return; }
     const item = {
       id: product.id, slug: product.slug, name: product.name, category: product.category,
       price: sellingPrice, variantId: variant?.id, image: product.image ?? "/logo.png",
@@ -156,6 +158,7 @@ export default function ProductInfo({
   };
 
   const buyNow = () => {
+    if (!canPurchase || quantity > selectedVariantStock) { setActionMessage("Choose an available quantity."); return; }
     if (product.variants?.length && (!variant || variant.stock < quantity)) {
       setActionMessage("Choose an available variant with enough stock.");
       return;
@@ -192,7 +195,7 @@ export default function ProductInfo({
           PRODUCT NAME
       ===================================================== */}
 
-      <h1 className="mt-2 max-w-xl text-2xl font-bold leading-tight tracking-tight text-[#171717] sm:text-3xl">
+      <h1 className="mt-2 max-w-xl text-xl font-semibold leading-snug tracking-tight text-[#171717] sm:text-2xl">
         {product.name}
       </h1>
 
@@ -269,8 +272,6 @@ export default function ProductInfo({
 
       {showOffers && canPurchase && <div className="mt-3 border-b border-gray-200 pb-5">
         <ProductOfferBadges id={product.id} price={String(sellingPrice)} inStock={canPurchase} />
-        <p className="mt-4 text-xs font-bold text-gray-800">All available offers &amp; conditions</p>
-        <ProductOffers productId={Number(product.id)} quantity={quantity} price={sellingPrice} alwaysExpanded />
       </div>}
 
       {/* =====================================================
@@ -454,7 +455,7 @@ export default function ProductInfo({
             type="button"
             onClick={() =>
               setQuantity((value) =>
-                Math.min(variant ? Math.max(1, Math.min(10, variant.stock)) : 10, value + 1)
+                Math.min(Math.max(1, Math.min(10, selectedVariantStock)), value + 1)
               )
             }
             className="flex h-full w-11 items-center justify-center text-[#5E5151] transition hover:bg-[#F8EFEC]"
@@ -472,7 +473,7 @@ export default function ProductInfo({
           ACTION BUTTONS
       ===================================================== */}
 
-      <div className="mt-7 grid gap-3 sm:grid-cols-2">
+      <div className="mt-6 grid grid-cols-2 gap-2 sm:gap-3">
 
         <button
           type="button"
@@ -574,6 +575,8 @@ export default function ProductInfo({
         </button>
 
       </div>
+
+      {showOffers && canPurchase && <ProductOffers productId={Number(product.id)} quantity={quantity} price={sellingPrice} alwaysExpanded />}
 
       {actionMessage && (
         <p role="status" className="wishlist-toast fixed bottom-5 right-5 z-[90] rounded-full bg-[#2B2525] px-4 py-3 text-sm font-medium text-white shadow-xl">

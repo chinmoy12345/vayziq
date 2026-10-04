@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Heart } from "lucide-react";
 import ProductImageDialog from "./ProductImageDialog";
 import ProgressiveImage from "@/components/ui/ProgressiveImage";
@@ -27,6 +27,8 @@ export default function ProductGallery({
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [activeImage, setActiveImage] = useState(0);
+  const [slide, setSlide] = useState(0);
+  const track = useRef<HTMLDivElement>(null);
 
   const galleryImages =
     images && images.length > 0 ? images : [];
@@ -101,7 +103,10 @@ export default function ProductGallery({
 
       <div className="relative">
 
-        <div className="grid grid-cols-2 gap-[2px] bg-white">
+        <div ref={track} onScroll={(event) => {
+          const element = event.currentTarget;
+          setSlide(Math.round(element.scrollLeft / element.clientWidth));
+        }} className={`flex snap-x snap-mandatory overflow-x-auto bg-white [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:grid lg:gap-2 ${galleryImages.length === 1 ? "lg:grid-cols-1" : "lg:grid-cols-2"}`}>
 
           {galleryImages.map((image, index) => (
             <button
@@ -111,11 +116,12 @@ export default function ProductGallery({
               className="
                 group
                 relative
+                w-full shrink-0 snap-center
                 aspect-[4/5]
                 overflow-hidden
                 bg-[#F8EFEC]
                 text-left
-                focus:outline-none
+                focus-visible:outline-2 focus-visible:outline-offset-[-4px]
               "
               aria-label={`Open ${name} image ${index + 1}`}
             >
@@ -158,6 +164,9 @@ export default function ProductGallery({
           ))}
 
         </div>
+        {galleryImages.length > 1 && <div className="flex justify-center gap-1 py-3 lg:hidden" aria-label="Product images">
+          {galleryImages.map((_, index) => <button key={index} type="button" aria-label={`Show image ${index + 1}`} aria-current={slide === index ? "true" : undefined} onClick={() => track.current?.scrollTo({ left: index * track.current.clientWidth, behavior: "smooth" })} className="grid h-7 w-7 place-items-center"><span className={`h-1.5 rounded-full transition-all ${slide === index ? "w-5 bg-black" : "w-1.5 bg-gray-300"}`} /></button>)}
+        </div>}
 
         {/* =====================================================
             WISHLIST

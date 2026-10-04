@@ -74,6 +74,18 @@
 
 /* A scroll container would prevent sticky positioning from following the page. */
 .home{overflow:visible}
+
+/* Keep all four trust promises visible and readable on narrow screens. */
+@media(max-width:767px){
+  .trust{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:24px 16px}
+  .trust>div{display:flex;align-items:flex-start;justify-content:flex-start;gap:8px;padding:12px 10px;text-align:left}
+  .trust>div:nth-child(4){display:flex}
+  .trust svg{width:20px;height:20px;flex:none;margin:0}
+  .trust span{min-width:0}
+  .trust b{font-size:10px;line-height:1.2;white-space:nowrap}
+  .trust small{margin-top:3px;font-size:8px;line-height:1.25}
+}
+@media(max-width:359px){.trust{padding-left:12px;padding-right:12px}.trust>div{gap:6px;padding:10px 7px}.trust b{font-size:9px}.trust small{font-size:7px}}
 .fixedHeader{position:fixed!important;top:0;left:0;right:0;width:100%;z-index:160;box-shadow:0 3px 14px rgba(0,0,0,.1)}.headerSpacer{height:64px}@media(max-width:767px){.headerSpacer{height:62px}}
 
 /* HomeHeader is rendered both inside .home and independently on Cart. */
