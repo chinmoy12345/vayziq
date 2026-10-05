@@ -5,6 +5,7 @@ import ProductOfferBadges from "./ProductOfferBadges";
 import { useEffect, useState } from "react";
 import ProgressiveImage from "@/components/ui/ProgressiveImage";
 import { useProductCardSettings } from "@/components/product/ProductCardSettings";
+import styles from "./ProductCard.module.css";
 
 /* =========================================================
    PRODUCT TYPE
@@ -162,7 +163,7 @@ export default function ProductCard({
 
   return (
     <>
-    <article className="group flex min-w-0 flex-col rounded-xl border border-[#e5e5e5] bg-white p-2 shadow-sm transition hover:-translate-y-0.5 hover:border-[#cfcfcf] hover:shadow-lg">
+    <article className={`${styles.card} group flex min-w-0 flex-col rounded-xl border border-[#e5e5e5] bg-white p-2 shadow-sm transition hover:-translate-y-0.5 hover:border-[#cfcfcf] hover:shadow-lg`}>
 
       {/* ===================================================
           IMAGE
@@ -225,7 +226,8 @@ export default function ProductCard({
 
         {badge && (
           <span
-            className={`
+            title={badge}
+            className={`${styles.badge}
               absolute
               left-2.5
               top-2.5
@@ -299,30 +301,28 @@ export default function ProductCard({
 
         {/* Category */}
         <p
-          className="
+          className={`${styles.category}
             text-[9px]
             font-medium
             uppercase
             tracking-[0.18em]
             text-[#B08B8B]
-          "
+          `}
         >
           {product.category}
         </p>
 
         {/* Product Name */}
-        <Link href={`/product/${productSlug}`}>
+        <Link href={`/product/${productSlug}`} title={product.name} className={styles.nameLink}>
           <h3
-            className="
+            className={`${styles.name}
               mt-1.5
-              line-clamp-1
-              font-serif
               text-[15px] sm:text-[17px]
               text-[#2B2525]
               transition-colors
               duration-200
               hover:text-[#B56F6F]
-            "
+            `}
           >
             {product.name}
           </h3>
@@ -331,7 +331,7 @@ export default function ProductCard({
             PRICE
         ================================================= */}
 
-        <div className="mt-2.5 flex flex-wrap items-center gap-x-2 gap-y-1">
+        <div className={`${styles.price} mt-2.5 flex flex-wrap items-center gap-x-2 gap-y-1`}>
 
           <span
             className="
@@ -343,7 +343,7 @@ export default function ProductCard({
             {product.price}
           </span>
 
-          {product.oldPrice && (
+          {oldPrice > price && (
             <span
               className="
                 text-xs
@@ -356,7 +356,7 @@ export default function ProductCard({
           )}
           {discountPercent && <span className="rounded bg-[#fff0bd] px-1.5 py-0.5 text-[10px] font-bold text-[#926300]">{discountPercent}% OFF</span>}
         </div>
-        <ProductOfferBadges id={product.id} price={product.price} inStock={inStock} />
+        <div className={styles.offers}><ProductOfferBadges id={product.id} price={product.price} inStock={inStock} /></div>
         <button type="button" disabled={!inStock} onClick={openCartPopup} className={`mt-3 min-h-10 w-full rounded-md px-3 py-2.5 text-xs font-bold transition ${inStock ? "bg-[#111] text-white hover:bg-[#2b2b2b]" : "cursor-not-allowed bg-[#e8e5e3] text-[#827773]"}`}>{inStock ? (addedToCart ? "Added to Cart ✓" : "Add to Cart") : "Out of Stock"}</button>
 
       </div>

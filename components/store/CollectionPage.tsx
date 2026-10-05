@@ -4,6 +4,7 @@ import CategoryListing from "@/components/category/CategoryListing";
 import { getQuantityOfferSlides } from "@/components/store/promo-slides";
 import { getActiveBanners, getStoreFilters, getStoreProducts, toCardProduct, type BannerPlacement } from "@/lib/storefront";
 import type { BannerSlide } from "@/components/store/BannerSlider";
+import { SITE_URL } from "@/lib/seo";
 
 const shopFeatureBanner: BannerSlide = {
   title: "Move freely. Live boldly.",
@@ -60,5 +61,20 @@ export default async function CollectionPage(props: CollectionPageProps) {
     : [];
   const featureBanner = categorySlug ? categoryFeatureBanner(categorySlug, title) : shopFeatureBanner;
   const slides = [featureBanner, ...banner, ...promoSlides];
-  return <main className="shop-home-body min-h-screen bg-[#FFFDFC]"><Breadcrumbs title={title} isShop={bannerPlacement === "shop"} category={showFullFilters && categorySlug ? products.find(product => product.category.slug === categorySlug)?.category.name : undefined} /><PageBanner banners={slides} title={title} category={Boolean(categorySlug) || bannerPlacement === "shop"} /><CategoryListing key={`${categorySlug ?? "all"}-${productIds?.join("-") ?? "all-products"}`} initialCategorySlug={categorySlug} products={products.map(toCardProduct)} productCount={products.length} filters={filters} showFullFilters={showFullFilters} showProductFilters={showProductFilters} /></main>;
+  const listedProducts = categorySlug ? products.filter(product => product.category.slug === categorySlug || product.category.parent?.slug === categorySlug) : products;
+  const structuredData = {
+    "@context": "https://schema.org", "@type": "ItemList", name: title,
+    numberOfItems: listedProducts.length,
+    itemListElement: listedProducts.slice(0, 12).map((product, index) => ({
+      "@type": "ListItem", position: index + 1, name: product.name,
+      url: `${SITE_URL}/product/${encodeURIComponent(product.slug)}`,
+    })),
+  };
+  return <main className="shop-home-body min-h-screen bg-[#FFFDFC]">
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, "\\u003c") }} />
+    <Breadcrumbs title={title} isShop={bannerPlacement === "shop"} category={showFullFilters && categorySlug ? products.find(product => product.category.slug === categorySlug)?.category.name : undefined} />
+    <PageBanner banners={slides} title={title} category={Boolean(categorySlug) || bannerPlacement === "shop"} />
+    <header className="mx-auto max-w-7xl px-5 pt-6 sm:px-8 lg:px-10"><h1 className="text-2xl font-bold tracking-tight text-neutral-900">{title}</h1><p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-600">{props.subtitle}</p></header>
+    <CategoryListing key={`${categorySlug ?? "all"}-${productIds?.join("-") ?? "all-products"}`} initialCategorySlug={categorySlug} products={products.map(toCardProduct)} productCount={products.length} filters={filters} showFullFilters={showFullFilters} showProductFilters={showProductFilters} />
+  </main>;
 }

@@ -6,7 +6,11 @@ export const viewport: Viewport = { themeColor: "#ffffff", colorScheme: "light" 
 import "./globals.css";
 export async function generateMetadata(): Promise<Metadata> {
   return { ...(await pageSeo("/")), metadataBase: new URL(SITE_URL), applicationName: "Vayziq",
-    icons: { icon: "/vayziq/vayziq-app-icon.svg", shortcut: "/vayziq/vayziq-app-icon.svg", apple: "/vayziq/vayziq-app-192.png" } };
+    icons: {
+      icon: [{ url: "/vayziq/vayziq-app-icon.svg", type: "image/svg+xml" }],
+      shortcut: [{ url: "/vayziq/vayziq-app-icon.svg", type: "image/svg+xml" }],
+      apple: [{ url: "/vayziq/vayziq-app-192.png", sizes: "192x192", type: "image/png" }],
+    } };
 }
 
 export default async function RootLayout({

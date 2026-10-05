@@ -13,7 +13,7 @@ async function originalMetadata({ params }: Props): Promise<Metadata> {
   const { categorySlug } = await params;
   const category = await getActiveCategory(categorySlug);
   if (!category) return { title: "Category not found", robots: { index: false, follow: false } };
-  const description = (category.description?.trim() || `Shop ${category.name} at ${branding.name}. Explore the latest styles, browse the collection and find a look for every occasion.`).slice(0, 160);
+  const description = (category.description?.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim() || `Shop ${category.name} at ${branding.name}. Discover streetwear and everyday clothing, compare fits and explore available colours and sizes.`).slice(0, 160);
   return {
     title: category.name,
     description,

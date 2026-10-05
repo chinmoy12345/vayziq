@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { pageSeo } from "@/lib/seo";
 
-export async function generateMetadata(): Promise<Metadata> {
-  return pageSeo("/shop");
+export async function generateMetadata({ searchParams }: { searchParams: Promise<{ category?: string; sort?: string; products?: string }> }): Promise<Metadata> {
+  const { category, sort, products } = await searchParams;
+  const metadata = await pageSeo("/shop");
+  // Parameter combinations are browsing states; the main collection remains canonical.
+  return { ...metadata, ...(category || sort || products ? { robots: { index: false, follow: true } } : {}) };
 }
 
 import CollectionPage from "@/components/store/CollectionPage";
