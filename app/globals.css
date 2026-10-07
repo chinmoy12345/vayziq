@@ -31,6 +31,19 @@ body:has(.vayziq-home) > header {
   display: none;
 }
 
+/* Storefront palette is intentionally scoped: the admin dashboard keeps its own theme. */
+.storefront-shell {
+  --store-bg: #fff;
+  --store-surface: #f7f7f7;
+  --store-ink: #111;
+  --store-muted: #666;
+  --store-line: #e8e8e8;
+  --store-accent: #fbb606;
+  background: var(--store-bg);
+  color: var(--store-ink);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
 /* Shared VAYZIQ chrome for every customer-facing storefront page. */
 .store-utility {
   background: #000 !important;
@@ -221,6 +234,19 @@ body:has(.vayziq-home) > header {
   }
   .watch-buy-desktop .watch-reel-feed .watch-buy-cta-label { display: none !important; }
 }
+
+/* Keep every customer page in the same neutral Vayziq system as the home page.
+   Semantic sale, stock, success and error colors remain owned by their components. */
+.storefront-shell { background: #fff !important; color: #111; }
+.storefront-shell :where(.font-serif) { font-family: Arial, Helvetica, sans-serif !important; }
+.storefront-shell :where([class~="bg-[#FFFDFC]"], [class~="bg-[#fffdf9]"], [class~="bg-[#fffaf7]"], [class~="bg-[#faf8f6]"], [class~="bg-[#FAF7F5]"]) { background-color: #fff !important; }
+.storefront-shell :where([class~="bg-[#F8EFEC]"], [class~="bg-[#F5E9E7]"], [class~="bg-[#F4ECE8]"], [class~="bg-[#f8f0ed]"], [class~="bg-[#f5efeb]"], [class~="bg-[#f6eeeb]"], [class~="bg-[#eee5df]"]) { background-color: #f7f7f7 !important; }
+.storefront-shell :where([class~="bg-[#B56F6F]"], [class~="bg-[#b56f6f]"], [class~="bg-[#9F5E5E]"], [class~="bg-[#9b5c5c]"]) { background-color: #fbb606 !important; color: #111 !important; }
+.storefront-shell :where([class~="bg-[#B56F6F]"], [class~="bg-[#b56f6f]"], [class~="bg-[#9F5E5E]"], [class~="bg-[#9b5c5c]"]) :where(svg, span) { color: inherit !important; }
+.storefront-shell :where([class~="bg-[#292321]"], [class~="bg-[#2B2525]"], [class~="bg-[#3B3333]"], [class~="bg-[#403936]"], [class~="bg-[#493B3B]"]) { background-color: #111 !important; }
+.storefront-shell :where([class~="text-[#292321]"], [class~="text-[#2B2525]"], [class~="text-[#3B3333]"], [class~="text-[#4F4444]"], [class~="text-[#9b5c5c]"], [class~="text-[#B56F6F]"]) { color: #111 !important; }
+.storefront-shell :where([class~="text-[#756565]"], [class~="text-[#8A7777]"], [class~="text-[#756c67]"], [class~="text-[#625a56]"], [class~="text-[#9A8888]"]) { color: #666 !important; }
+.storefront-shell :where([class~="border-[#E8DADA]"], [class~="border-[#eee6e1]"], [class~="border-[#e8ddd8]"], [class~="border-[#d8b4a0]"]) { border-color: #e8e8e8 !important; }
 
 /* Final Vayziq premium finish: shared depth, rhythm and interaction quality. */
 :root { --vayziq-ink: #151515; --vayziq-paper: #fffdf9; --vayziq-line: #e9e5df; --vayziq-gold: #fbb606; --vayziq-mint: #10d9a0; }

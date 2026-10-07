@@ -9,7 +9,7 @@ import type { HeaderCategory } from "@/components/home/HomeHeader";
 interface MobileMenuProps { isOpen: boolean; onClose: () => void; userName: string | null; onSignIn: () => void; showQuickNav?: boolean; categories?: HeaderCategory[]; }
 
 const quickItems = [["Home", "/", House], ["Categories", "/shop", Layers], ["Deals", "/offers", Tag], ["For You", "/shop", Sparkles]] as const;
-const primaryItems = [["Home", "/"], ["New Arrivals", "/shop?sort=newest"]] as const;
+const primaryItems = [["Home", "/"], ["Catalog", "/shop"], ["New Arrivals", "/shop?sort=newest"]] as const;
 
 export default function MobileMenu({ isOpen, onClose, userName, onSignIn, showQuickNav = true, categories = [] }: MobileMenuProps) {
   const [openParent, setOpenParent] = useState<string | null>(null);

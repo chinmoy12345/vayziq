@@ -43,18 +43,34 @@ export default function CartPageClient({ visibility }: { visibility: HomepageVis
   const [stockStatus, setStockStatus] = useState<Record<string, StockStatus>>({});
   async function proceedToCheckout() {
     if (checkingSession) return;
+    if (!cartItems.length) {
+      setCheckoutError("Your bag is empty. Add a product before checkout.");
+      return;
+    }
     if (hasUnavailableItems) {
       setCheckoutError("Remove or update the out-of-stock item before checkout.");
       return;
     }
     setCheckingSession(true); setCheckoutError("");
     try {
+      const availabilityResponse = await fetch("/api/cart/availability", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items: cartItems.map(({ id, variantId, quantity }) => ({ id, variantId, quantity })) }),
+      });
+      if (!availabilityResponse.ok) throw new Error("Unable to verify stock. Please try again.");
+      const availability = await availabilityResponse.json() as { availability?: Array<{ available: boolean }> };
+      if (!availability.availability || availability.availability.length !== cartItems.length || availability.availability.some((item) => !item.available)) {
+        setCheckoutError("Some items are no longer available. Update your bag before checkout.");
+        setStockStatus({});
+        return;
+      }
       const response = await fetch("/api/auth/me", { cache: "no-store" });
       if (!response.ok) throw new Error("Session check failed");
       const data = await response.json();
       if (data.user) router.push("/checkout");
       else setAuthOpen(true);
-    } catch { setCheckoutError("Unable to check your session. Please try again."); }
+    } catch (error) { setCheckoutError(error instanceof Error ? error.message : "Unable to continue to checkout. Please try again."); }
     finally { setCheckingSession(false); }
   }
 

@@ -288,7 +288,7 @@ export default function CheckoutPage() {
                 localStorage.removeItem("tantuka-offer");
                 window.dispatchEvent(new Event("cart-updated"));
               }
-              router.push(`/account/orders/${verification.orderNumber}`);
+              router.push(`/order-success/${encodeURIComponent(verification.orderNumber)}`);
               router.refresh();
             } catch (error) {
               setCheckoutMessage(error instanceof Error ? error.message : "We could not verify your payment. Please contact support if money was deducted.");
@@ -310,7 +310,7 @@ export default function CheckoutPage() {
         localStorage.removeItem("tantuka-offer");
         window.dispatchEvent(new Event("cart-updated"));
       }
-      router.push(`/account/orders/${data.orderNumber}`);
+      router.push(`/order-success/${encodeURIComponent(data.orderNumber)}`);
       router.refresh();
     } catch (error) {
       setCheckoutMessage(error instanceof Error ? error.message : "Unable to place order. Please try again.");

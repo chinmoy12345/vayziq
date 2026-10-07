@@ -22,24 +22,24 @@ async function originalMetadata(): Promise<Metadata> {
 
 export default async function BlogPage() {
   const [blogPosts, settings] = await Promise.all([getBlogPosts(), getBlogSettings()]);
-  return <main className="min-h-screen bg-[#FFFDFC]">
-    <header className="border-b border-[#E8DADA] bg-[#F8EFEC]"><div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 sm:py-20 lg:px-10">
-      <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#9F5E5E]">{settings.pageEyebrow}</p>
-      <h1 className="mt-3 font-serif text-4xl text-[#2B2525] sm:text-6xl">{settings.pageTitle}</h1>
-      <p className="mt-4 max-w-xl text-sm leading-7 text-[#756565]">{settings.pageIntro}</p>
+  return <main className="min-h-screen bg-white font-sans text-[#111]">
+    <header className="border-b border-[#e8e8e8] bg-[#f7f7f7]"><div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 sm:py-20 lg:px-10">
+      <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#a97900]">{settings.pageEyebrow}</p>
+      <h1 className="mt-3 text-4xl font-extrabold tracking-tight text-[#111] sm:text-6xl">{settings.pageTitle}</h1>
+      <p className="mt-4 max-w-xl text-sm leading-7 text-[#666]">{settings.pageIntro}</p>
     </div></header>
     <section aria-label="Latest articles" className="mx-auto max-w-7xl px-5 py-12 sm:px-8 sm:py-16 lg:px-10">
-      <div className="mb-7 flex items-end justify-between border-b border-[#E8DADA] pb-4"><div><p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#9F5E5E]">From <StoreName /></p><h2 className="mt-1 font-serif text-2xl text-[#2B2525]">Latest stories</h2></div><span className="text-xs text-[#887777]">{blogPosts.length} articles</span></div>
-      {blogPosts.length ? <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{blogPosts.map(post => <article key={post.slug} className="group overflow-hidden rounded-xl border border-[#E8DADA] bg-white transition hover:-translate-y-1 hover:shadow-lg">
+      <div className="mb-7 flex items-end justify-between border-b border-[#e8e8e8] pb-4"><div><p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#a97900]">From <StoreName /></p><h2 className="mt-1 text-2xl font-extrabold tracking-tight text-[#111]">Latest stories</h2></div><span className="text-xs text-[#666]">{blogPosts.length} articles</span></div>
+      {blogPosts.length ? <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{blogPosts.map(post => <article key={post.slug} className="group overflow-hidden rounded-xl border border-[#e8e8e8] bg-white transition hover:-translate-y-1 hover:shadow-lg">
         <Link href={"/blog/" + post.slug} className="block">
-          <div className="relative aspect-[4/3] overflow-hidden bg-[#F4ECE8]">{post.image.startsWith("data:") ? <img src={post.image} alt={post.imageAlt} className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]" /> : <Image src={post.image} alt={post.imageAlt} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover transition duration-500 group-hover:scale-[1.03]" />}</div>
-          <div className="p-5"><p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#9F5E5E]">{post.category}</p><h2 className="mt-2 font-serif text-2xl leading-snug text-[#2B2525] group-hover:text-[#965B5B]">{post.title}</h2>
-            <p className="mt-3 line-clamp-3 text-sm leading-6 text-[#756565]">{post.excerpt}</p>
-            <div className="mt-5 flex items-center justify-between border-t border-[#F0E8E5] pt-4 text-[11px] text-[#887777]"><span>{new Date(post.date + "T12:00:00").toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</span><span className="inline-flex items-center gap-1"><Clock3 className="h-3.5 w-3.5" />{post.readTime}</span></div>
-            <span className="mt-4 inline-flex items-center gap-2 text-xs font-semibold text-[#965B5B]">Read story <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-1" /></span>
+          <div className="relative aspect-[4/3] overflow-hidden bg-[#f7f7f7]"><Image src={post.image} alt={post.imageAlt} fill unoptimized={post.image.startsWith("data:")} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover transition duration-500 group-hover:scale-[1.03]" /></div>
+          <div className="p-5"><p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#a97900]">{post.category}</p><h2 className="mt-2 text-2xl font-extrabold leading-snug tracking-tight text-[#111] group-hover:text-[#a97900]">{post.title}</h2>
+            <p className="mt-3 line-clamp-3 text-sm leading-6 text-[#666]">{post.excerpt}</p>
+            <div className="mt-5 flex items-center justify-between border-t border-[#e8e8e8] pt-4 text-[11px] text-[#666]"><span>{new Date(post.date + "T12:00:00").toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</span><span className="inline-flex items-center gap-1"><Clock3 className="h-3.5 w-3.5" />{post.readTime}</span></div>
+            <span className="mt-4 inline-flex items-center gap-2 text-xs font-bold text-[#111]">Read story <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-1" /></span>
           </div>
         </Link>
-      </article>)}</div> : <p className="rounded-xl border border-[#E8DADA] bg-white p-10 text-center text-sm text-[#887777]">New stories are coming soon.</p>}
+      </article>)}</div> : <p className="rounded-xl border border-[#e8e8e8] bg-white p-10 text-center text-sm text-[#666]">New stories are coming soon.</p>}
     </section>
   </main>;
 }
