@@ -3,6 +3,7 @@
 import HomeFooter from "@/components/home/HomeFooter";
 import type { StoreBranding } from "@/lib/store-branding";
 import type { SocialLinks } from "@/lib/social-links";
+import type { FooterCategory } from "@/components/home/HomeFooter";
 
 type FooterDisplaySettings = {
   newsletter: boolean;
@@ -14,7 +15,7 @@ type FooterDisplaySettings = {
 };
 
 /** The storefront intentionally uses the same campaign footer on every customer page. */
-export default function Footer(props: { branding: StoreBranding; settings: FooterDisplaySettings; socialLinks: SocialLinks }) {
+export default function Footer(props: { branding: StoreBranding; settings: FooterDisplaySettings; socialLinks: SocialLinks; categories: FooterCategory[] }) {
   void props;
-  return <HomeFooter socialLinks={props.socialLinks} />;
+  return <HomeFooter socialLinks={props.socialLinks} categories={props.categories} />;
 }

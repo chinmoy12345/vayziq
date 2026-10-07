@@ -136,3 +136,35 @@
 
 /* Consistent premium label treatment across desktop and mobile product cards. */
 .productImage .discountBadge{top:9px;left:9px;z-index:2;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:#292321;padding:6px 9px;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+
+/* Full-width featured slider. The existing campaign banner grid remains below it. */
+.heroSlider{position:relative;width:100%;height:clamp(390px,43vw,650px);overflow:hidden;background:#171717;color:#fff;isolation:isolate}
+.heroSlide{position:absolute;inset:0;display:block;color:#fff!important;animation:heroReveal .5s ease both}
+.heroSlide img{object-fit:cover;object-position:center}
+.heroShade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.7) 0%,rgba(0,0,0,.3) 43%,rgba(0,0,0,.03) 80%)}
+.heroContent{position:absolute;inset:0 auto 0 0;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;max-width:min(600px,58vw);padding:44px max(48px,calc((100vw - 1360px)/2));text-shadow:0 2px 15px rgba(0,0,0,.3)}
+.heroEyebrow{margin-bottom:14px;color:#fbb606;font-size:11px;font-weight:800;letter-spacing:.2em}
+.heroContent strong{font-size:clamp(36px,4.3vw,66px);font-weight:850;line-height:1.02;letter-spacing:-.05em;text-wrap:balance}
+.heroCta{display:inline-flex;align-items:center;gap:12px;min-height:46px;margin-top:28px;border-radius:6px;background:#fbb606;padding:0 20px;color:#111;font-size:13px;font-weight:800;text-shadow:none;transition:background .2s,transform .2s}
+.heroSlide:hover .heroCta{background:#ffd047;transform:translateY(-2px)}
+.heroArrow{position:absolute;top:50%;z-index:2;display:grid;place-items:center;width:44px;height:44px;transform:translateY(-50%);border:1px solid rgba(255,255,255,.5);border-radius:50%;background:rgba(17,17,17,.35);color:#fff;backdrop-filter:blur(8px)}
+.heroArrow:hover{background:#fbb606;border-color:#fbb606;color:#111}
+.heroArrow svg{width:20px;height:20px}.heroPrevious{left:18px}.heroNext{right:18px}
+.heroPagination{position:absolute;right:50%;bottom:22px;z-index:2;display:flex;gap:8px;transform:translateX(50%)}
+.heroPagination button{width:8px;height:8px;border:0;border-radius:99px;background:rgba(255,255,255,.55);padding:0;transition:width .2s,background .2s}
+.heroPagination .heroDotActive{width:30px;background:#fbb606}
+@keyframes heroReveal{from{opacity:.45;transform:scale(1.015)}to{opacity:1;transform:scale(1)}}
+@media(max-width:767px){.heroSlider{height:clamp(360px,110vw,540px)}.heroSlide img{object-position:center}.heroShade{background:linear-gradient(0deg,rgba(0,0,0,.72),rgba(0,0,0,.08) 65%)}.heroContent{inset:auto 0 52px;max-width:none;justify-content:flex-end;padding:0 24px}.heroEyebrow{font-size:9px;letter-spacing:.15em}.heroContent strong{font-size:clamp(28px,8vw,42px);max-width:390px}.heroCta{min-height:42px;margin-top:18px;padding:0 16px;font-size:12px}.heroArrow{top:45%;width:36px;height:36px}.heroArrow svg{width:17px;height:17px}.heroPrevious{left:10px}.heroNext{right:10px}.heroPagination{bottom:16px}}
+@media(prefers-reduced-motion:reduce){.heroSlide{animation:none}.heroCta,.heroPagination button{transition:none}}
+
+/* Data-driven category directory between the newsletter and legal footer. */
+.footerCategories{background:#0c0c0c;border-top:1px solid #2d2d2d;color:#fff}
+.footerCategoriesInner{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:32px;max-width:1440px;margin:0 auto;padding:36px 32px 40px}
+.footerCategoryGroup{min-width:0}
+.footerCategoryTitle{display:inline-flex;align-items:center;gap:4px;color:#fff!important;font-size:14px;font-weight:800;text-decoration:none!important}
+.footerCategoryTitle svg{width:15px;height:15px;color:#fbb606;transition:transform .2s}
+.footerCategoryTitle:hover svg{transform:translateX(3px)}
+.footerCategoryGroup ul{display:grid;gap:11px;margin:17px 0 0;padding:0;list-style:none}
+.footerCategoryGroup li a{color:#bcbcbc!important;font-size:12px;line-height:1.35;text-decoration:none!important;transition:color .2s}
+.footerCategoryGroup li a:hover,.footerCategoryGroup li a:focus-visible{color:#fbb606!important}
+@media(max-width:767px){.footerCategoriesInner{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 18px;padding:30px 16px 34px}.footerCategoryTitle{font-size:13px}.footerCategoryGroup ul{gap:10px;margin-top:13px}.footerCategoryGroup li a{font-size:11px}}

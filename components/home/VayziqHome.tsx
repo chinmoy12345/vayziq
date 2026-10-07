@@ -131,6 +131,8 @@ export default function VayziqHome({
   journalPosts: BlogPost[];
 }) {
   const [bannerStart, setBannerStart] = useState(0);
+  const [heroIndex, setHeroIndex] = useState(0);
+  const [heroPaused, setHeroPaused] = useState(false);
   const [liked, setLiked] = useState<number[]>([]);
   useEffect(() => {
     let active = true;
@@ -197,6 +199,7 @@ export default function VayziqHome({
     { length: Math.min(3, banners.length) },
     (_, index) => banners[(bannerStart + index) % banners.length],
   );
+  const activeHeroBanner = banners[heroIndex % banners.length] ?? banners[0];
   const toggleLike = async (id: number) => {
     const wasLiked = liked.includes(id);
     try {
@@ -285,10 +288,43 @@ export default function VayziqHome({
     );
     return () => window.clearInterval(timer);
   }, [banners.length]);
+  useEffect(() => {
+    if (heroPaused || banners.length < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = window.setInterval(() => {
+      if (!document.hidden) setHeroIndex((index) => (index + 1) % banners.length);
+    }, 6000);
+    return () => window.clearInterval(timer);
+  }, [banners.length, heroPaused]);
   return (
     <div className={`${styles.home} vayziq-home`}>
       <HomeHeader />
       <main>
+        {activeHeroBanner && (
+          <section
+            className={styles.heroSlider}
+            aria-label="Featured collections"
+            aria-roledescription="carousel"
+            onMouseEnter={() => setHeroPaused(true)}
+            onMouseLeave={() => setHeroPaused(false)}
+            onFocusCapture={() => setHeroPaused(true)}
+            onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setHeroPaused(false); }}
+          >
+            <Link href={activeHeroBanner.href} className={styles.heroSlide} key={`hero-${heroIndex}`}>
+              <Image src={activeHeroBanner.image} alt={activeHeroBanner.alt} fill priority={heroIndex === 0} sizes="100vw" quality={90} />
+              <span className={styles.heroShade} aria-hidden="true" />
+              <span className={styles.heroContent}>
+                <span className={styles.heroEyebrow}>VAYZIQ · EVERYDAY STREETWEAR</span>
+                <strong>{activeHeroBanner.alt}</strong>
+                <span className={styles.heroCta}>Explore collection <ArrowRight size={18} /></span>
+              </span>
+            </Link>
+            {banners.length > 1 && <>
+              <button type="button" className={`${styles.heroArrow} ${styles.heroPrevious}`} onClick={() => setHeroIndex((index) => (index - 1 + banners.length) % banners.length)} aria-label="Previous featured collection"><ArrowLeft /></button>
+              <button type="button" className={`${styles.heroArrow} ${styles.heroNext}`} onClick={() => setHeroIndex((index) => (index + 1) % banners.length)} aria-label="Next featured collection"><ArrowRight /></button>
+              <div className={styles.heroPagination} aria-label="Featured collection slides">{banners.map((banner, index) => <button type="button" key={`${banner.alt}-${index}`} className={index === heroIndex ? styles.heroDotActive : ""} onClick={() => setHeroIndex(index)} aria-label={`Show featured collection ${index + 1}`} aria-current={index === heroIndex ? "true" : undefined} />)}</div>
+            </>}
+          </section>
+        )}
         <section className={styles.bannerSection} aria-label="Campaign banners">
           <div className={styles.desktopBanners}>
             {visibleBanners.map((banner, index) => (

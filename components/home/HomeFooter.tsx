@@ -6,7 +6,9 @@ import { ChevronRight } from "lucide-react";
 import type { SocialLinks } from "@/lib/social-links";
 import styles from "./VayziqHome.module.css";
 
-export default function HomeFooter({ socialLinks }: { socialLinks: SocialLinks }) {
+export type FooterCategory = { id: number; name: string; slug: string; children: { id: number; name: string; slug: string }[] };
+
+export default function HomeFooter({ socialLinks, categories }: { socialLinks: SocialLinks; categories: FooterCategory[] }) {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const visibleLinks = ([
@@ -21,6 +23,14 @@ export default function HomeFooter({ socialLinks }: { socialLinks: SocialLinks }
       <form onSubmit={subscribe}><input aria-label="Email address" type="email" required value={email} onChange={event => setEmail(event.target.value)} placeholder="Enter your email address" /><button>Subscribe <ChevronRight /></button></form>
       {submitted && <span role="status">Thanks for subscribing!</span>}
     </section>
+    {categories.length > 0 && <nav className={styles.footerCategories} aria-label="Shop categories">
+      <div className={styles.footerCategoriesInner}>
+        {categories.map((category) => <div className={styles.footerCategoryGroup} key={category.id}>
+          <Link className={styles.footerCategoryTitle} href={`/${category.slug}`}>{category.name}<ChevronRight aria-hidden="true" /></Link>
+          {category.children.length > 0 && <ul>{category.children.map((child) => <li key={child.id}><Link href={`/${child.slug}`}>{child.name}</Link></li>)}</ul>}
+        </div>)}
+      </div>
+    </nav>}
     <div className={styles.footerBottom}><p>© {new Date().getFullYear()} VAYZIQ. All rights reserved.</p><nav><Link href="/shop">Shop</Link><Link href="/about">About</Link><Link href="/contact">Contact</Link><Link href="/shipping">Shipping</Link><Link href="/returns">Returns</Link><Link href="/privacy">Privacy</Link></nav>{visibleLinks.length > 0 && <div className={styles.footerBottomSocial} aria-label="Social media">{visibleLinks.map(({ key, label, icon }) => <a key={key} href={socialLinks[key].url} target="_blank" rel="noopener noreferrer" aria-label={label} title={label}>{icon}</a>)}</div>}</div>
   </footer>;
 }
