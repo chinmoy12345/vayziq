@@ -18,6 +18,7 @@ const permissionByHref: Record<string, string> = {
   "/admin/orders": "orders.view", "/admin/audit": "audit.view", "/admin/returns": "returns.view",
   "/admin/delivery-zips": "delivery-zips.view", "/admin/customers": "customers.view",
   "/admin/homepage": "storefront.view", "/admin/brands": "brands.view", "/admin/coupons": "coupons.view",
+  "/admin/product-feeds": "storefront.view",
   "/admin/banners": "banners.view", "/admin/reels": "storefront.view", "/admin/blog": "blog.view", "/admin/reviews": "reviews.view",
   "/admin/settings": "settings.view",
 };
@@ -167,6 +168,15 @@ const marketingItems: MenuItem[] = [
         <path d="m9 9 6 6" />
         <path d="M15 9h.01" />
         <path d="M9 15h.01" />
+      </svg>
+    ),
+  },
+  {
+    label: "Product Feeds",
+    href: "/admin/product-feeds",
+    icon: (
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+        <path d="M4 5h16v14H4z" /><path d="M8 9h8M8 13h8M8 17h5" />
       </svg>
     ),
   },

@@ -11,6 +11,9 @@ const nextConfig: NextConfig = {
       { source: "/apple-icon.png", destination: "/vayziq/vayziq-app-192.png", permanent: true },
     ];
   },
+  async rewrites() {
+    return [{ source: "/feeds/meta/:slug.xml", destination: "/feeds/meta?slug=:slug" }];
+  },
 };
 
 export default nextConfig;
