@@ -10,7 +10,6 @@ import type { CategoryFilterConfig } from "@/components/category/CategoryFilters
 import type { Product } from "@/components/product/ProductCard";
 
 const FALLBACK_IMAGE = "/logo.png";
-const DEFAULT_COLORS = ["Maroon", "Pink", "Blue", "Green", "Beige", "Black"];
 const DEFAULT_SIZES = ["S", "M", "L", "XL"];
 
 const productFilterValues = (product: StoreProduct) => {
@@ -19,7 +18,7 @@ const productFilterValues = (product: StoreProduct) => {
   const colors = productColors(product);
   return {
     sizes: sizes.length ? sizes : (product.category.slug === "sarees" ? ["Free Size"] : [DEFAULT_SIZES[product.id % DEFAULT_SIZES.length]]),
-    colors: colors.length ? colors : [DEFAULT_COLORS[product.id % DEFAULT_COLORS.length]],
+    colors,
   };
 };
 
@@ -255,7 +254,7 @@ export async function getStoreFilters(categorySlug?: string, productIds?: number
       : undefined,
     fabrics: optionValues("fabric"),
     sizes: optionValues("size").length ? optionValues("size") : [...new Set(products.map((product) => productFilterValues(product).sizes[0]))].map((name) => ({ name, count: products.filter((product) => productFilterValues(product).sizes.includes(name)).length })),
-    colors: (optionValues("color").length ? optionValues("color") : [...new Set(products.map((product) => productFilterValues(product).colors[0]))].map((name) => ({ name, count: products.filter((product) => productFilterValues(product).colors.includes(name)).length }))).map((color) => ({ ...color, value: colorValue(color.name) })),
+    colors: [...new Set(products.flatMap((product) => productFilterValues(product).colors))].map((name) => ({ name, count: products.filter((product) => productFilterValues(product).colors.includes(name)).length, value: colorValue(name) })),
     occasions: optionValues("occasion"),
   };
 }

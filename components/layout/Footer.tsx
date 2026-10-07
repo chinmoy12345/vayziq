@@ -2,6 +2,7 @@
 
 import HomeFooter from "@/components/home/HomeFooter";
 import type { StoreBranding } from "@/lib/store-branding";
+import type { SocialLinks } from "@/lib/social-links";
 
 type FooterDisplaySettings = {
   newsletter: boolean;
@@ -13,7 +14,7 @@ type FooterDisplaySettings = {
 };
 
 /** The storefront intentionally uses the same campaign footer on every customer page. */
-export default function Footer(props: { branding: StoreBranding; settings: FooterDisplaySettings }) {
+export default function Footer(props: { branding: StoreBranding; settings: FooterDisplaySettings; socialLinks: SocialLinks }) {
   void props;
-  return <HomeFooter />;
+  return <HomeFooter socialLinks={props.socialLinks} />;
 }

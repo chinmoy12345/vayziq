@@ -27,7 +27,6 @@ import type { HomepageVisibility } from "@/lib/homepage-settings";
 import ProductVideo from "@/components/product/ProductVideo";
 import ProductOfferBadges from "@/components/product/ProductOfferBadges";
 import HomeHeader from "./HomeHeader";
-import HomeFooter from "./HomeFooter";
 import ProductCarousel from "./ProductCarousel";
 import styles from "./VayziqHome.module.css";
 import wishlistStyles from "./WishlistButton.module.css";
@@ -133,6 +132,20 @@ export default function VayziqHome({
 }) {
   const [bannerStart, setBannerStart] = useState(0);
   const [liked, setLiked] = useState<number[]>([]);
+  useEffect(() => {
+    let active = true;
+    const load = async () => {
+      try {
+        const response = await fetch("/api/account/wishlist", { cache: "no-store" });
+        if (!response.ok) return;
+        const data = await response.json() as { productIds: number[] };
+        if (active) setLiked(data.productIds);
+      } catch { /* Wishlist remains available when the account request fails. */ }
+    };
+    void load();
+    window.addEventListener("vayziq:auth-success", load);
+    return () => { active = false; window.removeEventListener("vayziq:auth-success", load); };
+  }, []);
   const [activeTab, setActiveTab] = useState("All");
   const [activeVideoId, setActiveVideoId] = useState<number | null>(null);
   const [reelsMuted, setReelsMuted] = useState(() => {
@@ -145,7 +158,7 @@ export default function VayziqHome({
   const [cartQuantity, setCartQuantity] = useState(1);
   const [cartOptions, setCartOptions] = useState<Record<string, string>>({});
   const [cartAdded, setCartAdded] = useState(false);
-  const { banners, categories, products } = initialData;
+  const { banners, categories, products, catalogProducts } = initialData;
   const looks = products.slice(0, 4).map((product) => product.image);
   const watchProducts = products
     .filter((product) => product.videoUrl)
@@ -184,12 +197,19 @@ export default function VayziqHome({
     { length: Math.min(3, banners.length) },
     (_, index) => banners[(bannerStart + index) % banners.length],
   );
-  const toggleLike = (id: number) =>
-    setLiked((current) =>
-      current.includes(id)
-        ? current.filter((item) => item !== id)
-        : [...current, id],
-    );
+  const toggleLike = async (id: number) => {
+    const wasLiked = liked.includes(id);
+    try {
+      const response = await fetch(wasLiked ? `/api/account/wishlist?productId=${id}` : "/api/account/wishlist", {
+        method: wasLiked ? "DELETE" : "POST",
+        headers: { "Content-Type": "application/json" },
+        ...(wasLiked ? {} : { body: JSON.stringify({ productId: id }) }),
+      });
+      if (response.status === 401) { window.dispatchEvent(new Event("vayziq:open-auth")); return; }
+      if (!response.ok) return;
+      setLiked(current => wasLiked ? current.filter(item => item !== id) : [...current, id]);
+    } catch { /* Keep the existing state if the request fails. */ }
+  };
   const toggleReelSound = () => setReelsMuted((current) => {
     const next = !current;
     try {
@@ -321,7 +341,7 @@ export default function VayziqHome({
               key={product.id}
               product={product}
               liked={liked.includes(product.id)}
-              onLike={() => toggleLike(product.id)}
+              onLike={() => void toggleLike(product.id)}
               onAddToCart={() => openCartPopup(product)}
               framed
             />
@@ -334,12 +354,35 @@ export default function VayziqHome({
               key={product.id}
               product={product}
               liked={liked.includes(product.id)}
-              onLike={() => toggleLike(product.id)}
+              onLike={() => void toggleLike(product.id)}
               onAddToCart={() => openCartPopup(product)}
               framed
             />
           ))}
         </ProductCarousel>
+        {catalogProducts.length > 0 && (
+          <section className={styles.catalogSection} aria-labelledby="our-catalog-heading">
+            <div className={styles.catalogHeading}>
+              <div>
+                <h2 id="our-catalog-heading">Our Catalog</h2>
+                <span>{catalogProducts.length} {catalogProducts.length === 1 ? "style" : "styles"} available now</span>
+              </div>
+              <Link href="/shop">Browse all <ChevronRight /></Link>
+            </div>
+            <div className={styles.catalogGrid}>
+              {catalogProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  liked={liked.includes(product.id)}
+                  onLike={() => void toggleLike(product.id)}
+                  onAddToCart={() => openCartPopup(product)}
+                  framed
+                />
+              ))}
+            </div>
+          </section>
+        )}
         <section
           className={`${styles.collectionShowcase} ${sectionWidthStyles.wideMerchSection}`}
           aria-labelledby="collection-heading"
@@ -389,7 +432,7 @@ export default function VayziqHome({
                     key={product.id}
                     product={product}
                     liked={liked.includes(product.id)}
-                    onLike={() => toggleLike(product.id)}
+                    onLike={() => void toggleLike(product.id)}
                     onAddToCart={() => openCartPopup(product)}
                     framed
                   />
@@ -453,7 +496,7 @@ export default function VayziqHome({
               key={product.id}
               product={product}
               liked={liked.includes(product.id)}
-              onLike={() => toggleLike(product.id)}
+              onLike={() => void toggleLike(product.id)}
               onAddToCart={() => openCartPopup(product)}
               framed
             />
@@ -534,7 +577,6 @@ export default function VayziqHome({
           <section className={`${styles.journalSection} ${sectionWidthStyles.wideMerchSection}`} aria-labelledby="journal-heading">
             <div className={styles.journalHeading}>
               <div>
-                <p>STYLE NOTES</p>
                 <h2 id="journal-heading">From the Journal</h2>
               </div>
               <Link href="/blog">View All <ChevronRight /></Link>
@@ -557,7 +599,6 @@ export default function VayziqHome({
             </div>
           </section>
         )}
-        <HomeFooter />
       </main>
       {cartProduct && (
         <div

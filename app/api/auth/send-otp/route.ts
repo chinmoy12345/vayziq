@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 import { createOtpChallenge, mobileOtpCookie } from "@/lib/mobileOtp";
+import { getTwilioCredentials } from "@/lib/payment-messaging-settings";
 
 export async function POST(request: NextRequest) {
   const { mobile } = await request.json();
@@ -22,14 +23,12 @@ export async function POST(request: NextRequest) {
     secure: process.env.NODE_ENV === "production",
   });
 
-  const sid = process.env.TWILIO_ACCOUNT_SID;
-  const authToken = process.env.TWILIO_AUTH_TOKEN;
-  const from = process.env.TWILIO_FROM_NUMBER;
+  const twilio = await getTwilioCredentials();
 
-  if (sid && authToken && from) {
+  if (twilio) {
     const branding = await getStoreBranding();
-    const credentials = Buffer.from(`${sid}:${authToken}`).toString("base64");
-    const smsResponse = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${sid}/Messages.json`, {
+    const credentials = Buffer.from(`${twilio.accountSid}:${twilio.authToken}`).toString("base64");
+    const smsResponse = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${twilio.accountSid}/Messages.json`, {
       method: "POST",
       headers: {
         Authorization: `Basic ${credentials}`,
@@ -37,7 +36,7 @@ export async function POST(request: NextRequest) {
       },
       body: new URLSearchParams({
         To: `+91${cleanMobile}`,
-        From: from,
+        From: twilio.fromNumber,
         Body: `Your ${branding.name} verification code is ${code}. It expires in 5 minutes.`,
       }),
     });

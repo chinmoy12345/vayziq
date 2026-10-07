@@ -37,6 +37,16 @@ export default function HomeHeader() {
   }, []);
   useEffect(() => { const refresh = () => { try { setCartCount((JSON.parse(localStorage.getItem("susmita-cart") ?? "[]") as Array<{ quantity?: number }>).reduce((total, item) => total + (item.quantity ?? 0), 0)); } catch { setCartCount(0); } }; refresh(); window.addEventListener("storage", refresh); window.addEventListener("cart-updated", refresh); return () => { window.removeEventListener("storage", refresh); window.removeEventListener("cart-updated", refresh); }; }, []);
   useEffect(() => { let active = true; fetch("/api/auth/me", { cache: "no-store" }).then(response => response.ok ? response.json() : null).then((data: { user?: HeaderUser | null } | null) => { if (active) setCurrentUser(data?.user ?? null); }).catch(() => {}); return () => { active = false; }; }, []);
+  useEffect(() => { const open = () => setAuthOpen(true); window.addEventListener("vayziq:open-auth", open); return () => window.removeEventListener("vayziq:open-auth", open); }, []);
+  useEffect(() => {
+    const onWishlistClick = (event: MouseEvent) => {
+      if (currentUser || !(event.target instanceof Element) || !event.target.closest('a[aria-label="Wishlist"]')) return;
+      event.preventDefault();
+      setAuthOpen(true);
+    };
+    document.addEventListener("click", onWishlistClick, true);
+    return () => document.removeEventListener("click", onWishlistClick, true);
+  }, [currentUser]);
   useEffect(() => {
     let active = true;
     fetch("/api/categories", { cache: "no-store" })
@@ -57,7 +67,7 @@ export default function HomeHeader() {
     return () => { active = false; };
   }, []);
   const submitSearch = (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); const query = searchQuery.trim(); setSearchOpen(false); router.push(query ? `/search?q=${encodeURIComponent(query)}` : "/search"); };
-  const completeAuthentication = async () => { const response = await fetch("/api/auth/me", { cache: "no-store" }); const data = await response.json() as { user?: HeaderUser | null }; setCurrentUser(data.user ?? null); setAuthOpen(false); setAccountOpen(Boolean(data.user)); };
+  const completeAuthentication = async () => { const response = await fetch("/api/auth/me", { cache: "no-store" }); const data = await response.json() as { user?: HeaderUser | null }; setCurrentUser(data.user ?? null); setAuthOpen(false); setAccountOpen(Boolean(data.user)); window.dispatchEvent(new Event("vayziq:auth-success")); };
   const logout = async () => { await fetch("/api/auth/logout", { method: "POST" }); setCurrentUser(null); setAccountOpen(false); router.push("/"); router.refresh(); };
   const isCategoryActive = (category: HeaderCategory) => pathname === `/${category.slug}` || Boolean(category.children?.some((child) => pathname === `/${child.slug}`));
   const isMenuActive = (item: string) => {

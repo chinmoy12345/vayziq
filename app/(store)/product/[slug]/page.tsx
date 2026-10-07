@@ -10,6 +10,7 @@ import ProductInfo from "@/components/product/ProductInfo";
 import ProductReviews from "@/components/product/ProductReviews";
 import ProductVideo from "@/components/product/ProductVideo";
 import ProductGrid from "@/components/product/ProductGrid";
+import Breadcrumbs from "@/components/store/Breadcrumbs";
 import prisma from "@/lib/db";
 import { formatPrice } from "@/lib/storefront";
 import { getHomepageVisibility } from "@/lib/homepage-settings";
@@ -119,13 +120,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   };
   return <main className="product-home-body min-h-screen bg-[#FFFDFC]">
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productStructuredData).replace(/</g, "\\u003c") }} />
-    <nav aria-label="Breadcrumb" className="border-b border-[#E8DADA] bg-white">
-      <div className="mx-auto flex max-w-7xl items-center gap-2 overflow-hidden px-5 py-4 text-[10px] tracking-[0.08em] text-[#9A8888] sm:px-8 lg:px-10">
-        <Link href="/" className="shrink-0 transition hover:text-[#B56F6F]">HOME</Link><span aria-hidden="true">/</span>
-        <Link href={`/${product.category.slug}`} className="shrink-0 transition hover:text-[#B56F6F]">{product.category.name.toUpperCase()}</Link><span aria-hidden="true">/</span>
-        <span aria-current="page" className="truncate text-[#4F4444]">{product.name.toUpperCase()}</span>
-      </div>
-    </nav>
+    <Breadcrumbs title={product.name} isShop={false} parent={{ label: product.category.name, href: `/${product.category.slug}` }} />
 
     <div className="mx-auto max-w-[1440px] px-4 pb-10 pt-0 sm:px-8 sm:pt-6 lg:px-10">
       <section aria-label={`${product.name} purchase details`} className="grid items-start gap-5 sm:gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-10 xl:gap-12">

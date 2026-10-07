@@ -1,6 +1,7 @@
 "use client";
 
 import { ChangeEvent, useEffect, useState } from "react";
+import type { SocialLinks, SocialPlatform } from "@/lib/social-links";
 
 type SettingsTab =
   | "store"
@@ -156,17 +157,30 @@ export default function SettingsPage() {
       .catch(() => setStatusMessage("Brand settings could not be loaded. Please try again."));
   }, []);
 
-  const [facebook, setFacebook] = useState(
-    "https://facebook.com/"
-  );
-
-  const [instagram, setInstagram] = useState(
-    "https://instagram.com/"
-  );
-
-  const [youtube, setYoutube] = useState(
-    "https://youtube.com/"
-  );
+  const [socialLinks, setSocialLinks] = useState<SocialLinks>({ facebook: { url: "", visible: false }, instagram: { url: "", visible: false }, youtube: { url: "", visible: false } });
+  const [socialLoaded, setSocialLoaded] = useState(false);
+  useEffect(() => {
+    void fetch("/api/admin/social-links", { cache: "no-store" })
+      .then(async response => { const body = await response.json(); if (!response.ok) throw new Error(body.message); return body.data as SocialLinks; })
+      .then(data => { setSocialLinks(data); setSocialLoaded(true); })
+      .catch(() => setStatusMessage("Social links could not be loaded. Please try again."));
+  }, []);
+  const updateSocial = (platform: SocialPlatform, value: Partial<SocialLinks[SocialPlatform]>) => setSocialLinks(current => ({ ...current, [platform]: { ...current[platform], ...value } }));
+  async function saveSocial() {
+    if (!socialLoaded) return;
+    setIsSaving(true); setStatusMessage(null);
+    try {
+      const response = await fetch("/api/admin/social-links", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(socialLinks) });
+      const body = await response.json() as { data?: SocialLinks; message?: string };
+      if (!response.ok || !body.data) throw new Error(body.message || "Unable to save social links.");
+      setSocialLinks(body.data);
+      setStatusMessage("Footer social links saved.");
+    } catch (error) {
+      setStatusMessage(error instanceof Error ? error.message : "Unable to save social links.");
+    } finally {
+      setIsSaving(false);
+    }
+  }
 
   const [currency, setCurrency] = useState("INR");
 
@@ -269,12 +283,12 @@ export default function SettingsPage() {
 
           <button
             type="button"
-            disabled={isSaving || !isLoaded}
-            onClick={handleSave}
+            disabled={isSaving || (activeTab === "social" ? !socialLoaded : !isLoaded)}
+            onClick={activeTab === "social" ? saveSocial : handleSave}
             className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-[#292321] px-5 text-sm font-medium text-white transition hover:bg-[#403936]"
           >
             <SaveIcon />
-            {isSaving ? "Saving…" : "Save Branding"}
+            {isSaving ? "Saving…" : activeTab === "social" ? "Save Social Links" : "Save Branding"}
           </button>
         </div>
 
@@ -616,52 +630,20 @@ export default function SettingsPage() {
                   </h2>
 
                   <p className="mt-1 text-xs text-[#958b86]">
-                    Add your social media profiles.
+                    Add your social profiles and choose which ones appear in the footer.
                   </p>
                 </div>
 
                 <div className="space-y-5 p-5 sm:p-6">
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-[#403936]">
-                      Facebook
-                    </label>
-
-                    <input
-                      type="url"
-                      value={facebook}
-                      onChange={(e) => setFacebook(e.target.value)}
-                      placeholder="https://facebook.com/your-page"
-                      className="h-11 w-full rounded-lg border border-[#ddd4cf] px-3.5 text-sm outline-none focus:border-[#a9837a]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-[#403936]">
-                      Instagram
-                    </label>
-
-                    <input
-                      type="url"
-                      value={instagram}
-                      onChange={(e) => setInstagram(e.target.value)}
-                      placeholder="https://instagram.com/your-page"
-                      className="h-11 w-full rounded-lg border border-[#ddd4cf] px-3.5 text-sm outline-none focus:border-[#a9837a]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-[#403936]">
-                      YouTube
-                    </label>
-
-                    <input
-                      type="url"
-                      value={youtube}
-                      onChange={(e) => setYoutube(e.target.value)}
-                      placeholder="https://youtube.com/@your-channel"
-                      className="h-11 w-full rounded-lg border border-[#ddd4cf] px-3.5 text-sm outline-none focus:border-[#a9837a]"
-                    />
-                  </div>
+                  {(["facebook", "instagram", "youtube"] as const).map(platform => (
+                    <div key={platform} className="rounded-xl border border-[#eee6e1] p-4">
+                      <div className="mb-3 flex items-center justify-between gap-3">
+                        <label htmlFor={`social-${platform}`} className="text-sm font-medium capitalize text-[#403936]">{platform === "youtube" ? "YouTube" : platform}</label>
+                        <label className="flex items-center gap-2 text-xs font-medium text-[#655b56]"><input type="checkbox" checked={socialLinks[platform].visible} onChange={event => updateSocial(platform, { visible: event.target.checked })} />Show in footer</label>
+                      </div>
+                      <input id={`social-${platform}`} type="url" value={socialLinks[platform].url} onChange={event => updateSocial(platform, { url: event.target.value })} placeholder={`https://${platform}.com/your-profile`} className="h-11 w-full rounded-lg border border-[#ddd4cf] px-3.5 text-sm outline-none focus:border-[#a9837a]" />
+                    </div>
+                  ))}
                 </div>
               </section>
             )}
@@ -749,11 +731,12 @@ export default function SettingsPage() {
             <div className="mt-6 lg:hidden">
               <button
                 type="button"
-                onClick={handleSave}
+                onClick={activeTab === "social" ? saveSocial : handleSave}
+                disabled={isSaving || (activeTab === "social" ? !socialLoaded : !isLoaded)}
                 className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-[#292321] px-5 text-sm font-medium text-white hover:bg-[#403936]"
               >
                 <SaveIcon />
-                Save Changes
+                {activeTab === "social" ? "Save Social Links" : "Save Changes"}
               </button>
             </div>
           </main>

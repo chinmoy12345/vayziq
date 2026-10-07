@@ -3,13 +3,15 @@ import Footer from "@/components/layout/Footer";
 import { ProductCardSettingsProvider } from "@/components/product/ProductCardSettings";
 import { getHomepageVisibility } from "@/lib/homepage-settings";
 import { getStoreBranding } from "@/lib/store-branding";
+import { getSocialLinks } from "@/lib/social-links";
 
 export const dynamic = "force-dynamic";
 
 export default async function StoreLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const [branding, visibility] = await Promise.all([
+  const [branding, visibility, socialLinks] = await Promise.all([
     getStoreBranding(),
     getHomepageVisibility(),
+    getSocialLinks(),
   ]);
 
   return (
@@ -21,7 +23,7 @@ export default async function StoreLayout({ children }: Readonly<{ children: Rea
       }}>
         <main className="storefront-shell min-h-screen">{children}</main>
       </ProductCardSettingsProvider>
-      <Footer branding={branding} settings={{
+      <Footer branding={branding} socialLinks={socialLinks} settings={{
         newsletter: visibility.footerNewsletter,
         brand: visibility.footerBrand,
         shopLinks: visibility.footerShopLinks,

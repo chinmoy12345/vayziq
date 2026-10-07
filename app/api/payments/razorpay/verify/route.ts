@@ -2,6 +2,7 @@ import { createHmac, timingSafeEqual } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import prisma from "@/lib/db";
+import { getRazorpayCredentials } from "@/lib/payment-messaging-settings";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -13,8 +14,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: false, message: "Please sign in to verify your payment." }, { status: 401 });
   }
 
-  const keySecret = process.env.RAZORPAY_KEY_SECRET;
-  if (!keySecret) {
+  const razorpayCredentials = await getRazorpayCredentials();
+  if (!razorpayCredentials) {
     return NextResponse.json({ success: false, message: "Online payments are not configured yet." }, { status: 503 });
   }
 
@@ -27,7 +28,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: false, message: "The payment response was incomplete." }, { status: 400 });
   }
 
-  const expectedSignature = createHmac("sha256", keySecret).update(`${razorpayOrderId}|${razorpayPaymentId}`).digest("hex");
+  const expectedSignature = createHmac("sha256", razorpayCredentials.keySecret).update(`${razorpayOrderId}|${razorpayPaymentId}`).digest("hex");
   const signatureIsValid = razorpaySignature.length === expectedSignature.length && timingSafeEqual(Buffer.from(razorpaySignature), Buffer.from(expectedSignature));
   if (!signatureIsValid) {
     return NextResponse.json({ success: false, message: "We could not verify this payment." }, { status: 400 });

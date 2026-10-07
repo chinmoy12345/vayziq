@@ -21,6 +21,7 @@ const permissionByHref: Record<string, string> = {
   "/admin/product-feeds": "storefront.view",
   "/admin/banners": "banners.view", "/admin/reels": "storefront.view", "/admin/blog": "blog.view", "/admin/reviews": "reviews.view",
   "/admin/settings": "settings.view",
+  "/admin/integrations": "settings.view",
 };
 
 const menuItems: MenuItem[] = [
@@ -139,6 +140,11 @@ const menuItems: MenuItem[] = [
 ];
 
 const marketingItems: MenuItem[] = [
+  {
+    label: "Payments & SMS",
+    href: "/admin/integrations",
+    icon: <span aria-hidden="true">⌁</span>,
+  },
   {
     label: "Storefront",
     href: "/admin/homepage",

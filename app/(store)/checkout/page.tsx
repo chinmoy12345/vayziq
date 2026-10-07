@@ -6,6 +6,7 @@ import { useOffers } from "@/lib/use-offers";
 
 import Image from "next/image";
 import OfferSelector from "@/components/product/OfferSelector";
+import Breadcrumbs from "@/components/store/Breadcrumbs";
 import { offerDiscount } from "@/lib/product-offers";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -121,6 +122,7 @@ export default function CheckoutPage() {
     useState(false);
   const [checkoutMessage, setCheckoutMessage] = useState("");
   const [checkoutReady, setCheckoutReady] = useState(false);
+  const [onlinePaymentAvailable, setOnlinePaymentAvailable] = useState(false);
 
   const [showAddressList, setShowAddressList] =
     useState(false);
@@ -154,6 +156,15 @@ export default function CheckoutPage() {
   useEffect(() => {
     const readyTimer = window.setTimeout(() => setCheckoutReady(true), 0);
     return () => window.clearTimeout(readyTimer);
+  }, []);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    void fetch("/api/payments/razorpay/availability", { cache: "no-store", signal: controller.signal })
+      .then(response => response.ok ? response.json() : null)
+      .then((data: { available?: boolean } | null) => { if (!controller.signal.aborted) setOnlinePaymentAvailable(data?.available === true); })
+      .catch(() => {});
+    return () => controller.abort();
   }, []);
 
   useEffect(() => {
@@ -254,11 +265,11 @@ export default function CheckoutPage() {
           key: data.keyId,
           amount: data.amount,
           currency: data.currency,
-          name: "Tantuka",
+          name: "Vayziq",
           description: `Order ${data.orderNumber}`,
           order_id: data.razorpayOrderId,
           prefill: data.customer,
-          theme: { color: "#9b5c5c" },
+          theme: { color: "#111111" },
           modal: { ondismiss: () => setPlacingOrder(false) },
           handler: async (payment) => {
             setPlacingOrder(true);
@@ -309,26 +320,8 @@ export default function CheckoutPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#faf8f6]">
-      {/* =====================================
-          HEADER
-      ====================================== */}
-
-      <header className="border-b border-gray-200 bg-white">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link
-            href="/"
-            className="text-lg font-semibold tracking-wide text-[#9b5c5c]"
-          >
-            Tantuka
-          </Link>
-
-          <div className="flex items-center gap-2 text-xs text-gray-500">
-            <ShieldCheck className="h-4 w-4" />
-            Secure Checkout
-          </div>
-        </div>
-      </header>
+    <main className="min-h-screen bg-[#fffdf9]">
+      <Breadcrumbs title="Checkout" isShop={false} parent={{ label: "Bag", href: "/cart" }} />
 
       {/* =====================================
           CONTENT
@@ -347,21 +340,16 @@ export default function CheckoutPage() {
 
         {/* Title */}
 
-        <div className="mb-8">
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#b57f51]">
-            Secure Checkout
-          </p>
-
-          <h1 className="mt-2 text-2xl font-semibold tracking-tight text-gray-900 sm:text-3xl">
-            Complete your order
-          </h1>
+        <div className="mb-7 flex flex-wrap items-end justify-between gap-4 border-b border-[#e8e8e8] pb-6">
+          <div><p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#a97900]">Vayziq checkout</p><h1 className="mt-2 text-2xl font-extrabold tracking-tight text-[#111] sm:text-3xl">Complete your order</h1><p className="mt-1 text-sm text-[#666]">Review your delivery, payment and order details.</p></div>
+          <div className="flex items-center gap-2 rounded-full border border-[#e5e5e5] bg-white px-3 py-2 text-xs font-semibold text-[#333]"><ShieldCheck className="h-4 w-4 text-[#168660]" /> Secure checkout</div>
         </div>
 
         {/* =====================================
             MAIN GRID
         ====================================== */}
 
-        <div className="grid gap-6 lg:grid-cols-[1fr_380px]">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
           {/* ===================================
               LEFT
           ==================================== */}
@@ -397,9 +385,9 @@ export default function CheckoutPage() {
                       !showAddressList
                     )
                   }
-                  className="text-xs font-medium text-[#9b5c5c] hover:underline"
+                  className="text-xs font-semibold text-[#111] hover:underline"
                 >
-                  Change
+                  {currentAddress ? "Change" : "Add address"}
                 </button>
               </div>
 
@@ -446,7 +434,7 @@ export default function CheckoutPage() {
 
                 {/* Address selector */}
 
-                {showAddressList && (
+                {(showAddressList || !currentAddress) && (
                   <div className="mt-4 space-y-3">
                     {addresses.map(
                       (address) => (
@@ -503,7 +491,7 @@ export default function CheckoutPage() {
                     <button
                       type="button"
                       onClick={() => { setShowAddressForm(true); setAddressError(""); }}
-                      className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-gray-300 px-4 py-3 text-sm font-medium text-gray-600 hover:border-[#c99568] hover:text-[#9b5c5c]"
+                      className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-gray-300 px-4 py-3 text-sm font-medium text-gray-600 hover:border-[#ffb900] hover:text-[#111]"
                     >
                       <Plus className="h-4 w-4" />
                       Add New Address
@@ -514,7 +502,7 @@ export default function CheckoutPage() {
                       <input className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm" onChange={(event) => setAddressForm({ ...addressForm, line1: event.target.value })} placeholder="House / street / area" required value={addressForm.line1} />
                       <input className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm" onChange={(event) => setAddressForm({ ...addressForm, line2: event.target.value })} placeholder="Landmark (optional)" value={addressForm.line2} />
                       <div className="grid gap-3 sm:grid-cols-3"><input className="rounded-lg border border-gray-200 px-3 py-2.5 text-sm" onChange={(event) => setAddressForm({ ...addressForm, city: event.target.value })} placeholder="City" required value={addressForm.city} /><input className="rounded-lg border border-gray-200 px-3 py-2.5 text-sm" onChange={(event) => setAddressForm({ ...addressForm, state: event.target.value })} placeholder="State" required value={addressForm.state} /><input className="rounded-lg border border-gray-200 px-3 py-2.5 text-sm" inputMode="numeric" maxLength={6} onChange={(event) => setAddressForm({ ...addressForm, postalCode: event.target.value.replace(/\D/g, "") })} placeholder="PIN code" required value={addressForm.postalCode} /></div>
-                      {addressError && <p className="text-xs text-red-600">{addressError}</p>}<div className="flex justify-end gap-2"><button className="rounded-lg px-3 py-2 text-xs font-medium text-gray-600" onClick={() => setShowAddressForm(false)} type="button">Cancel</button><button className="rounded-lg bg-[#9b5c5c] px-3 py-2 text-xs font-semibold text-white disabled:opacity-60" disabled={savingAddress} type="submit">{savingAddress ? "Saving..." : "Save Address"}</button></div>
+                      {addressError && <p className="text-xs text-red-600">{addressError}</p>}<div className="flex justify-end gap-2"><button className="rounded-lg px-3 py-2 text-xs font-medium text-gray-600" onClick={() => setShowAddressForm(false)} type="button">Cancel</button><button className="rounded-lg bg-[#111] px-3 py-2 text-xs font-semibold text-white disabled:opacity-60" disabled={savingAddress} type="submit">{savingAddress ? "Saving..." : "Save Address"}</button></div>
                     </form>}
                   </div>
                 )}
@@ -609,7 +597,7 @@ export default function CheckoutPage() {
                   description="Pay when your order arrives"
                 />
 
-                <PaymentOption
+                {onlinePaymentAvailable && <PaymentOption
                   selected={
                     paymentMethod === "razorpay"
                   }
@@ -621,7 +609,7 @@ export default function CheckoutPage() {
                   }
                   title="Pay Online with Razorpay"
                   description="UPI, cards, net banking & wallets"
-                />
+                />}
               </div>
             </section>
           </div>

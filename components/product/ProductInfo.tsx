@@ -148,6 +148,7 @@ export default function ProductInfo({
     });
     if (!response.ok) {
       setWishlist(!nextValue);
+      if (response.status === 401) window.dispatchEvent(new Event("vayziq:open-auth"));
       const data = await response.json().catch(() => null) as { message?: string } | null;
       setActionMessage(response.status === 401 ? "Please sign in to save products to your wishlist." : data?.message || "Wishlist could not be updated. Please try again.");
       window.setTimeout(() => setActionMessage(null), 3200);

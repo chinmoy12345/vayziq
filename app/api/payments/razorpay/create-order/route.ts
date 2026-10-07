@@ -6,6 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { isDeliveryZipAllowed } from "@/lib/delivery-zip-settings";
+import { getRazorpayCredentials } from "@/lib/payment-messaging-settings";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -19,9 +20,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: false, message: "Please sign in to make a payment." }, { status: 401 });
   }
 
-  const keyId = process.env.RAZORPAY_KEY_ID;
-  const keySecret = process.env.RAZORPAY_KEY_SECRET;
-  if (!keyId || !keySecret) {
+  const razorpayCredentials = await getRazorpayCredentials();
+  if (!razorpayCredentials) {
     return NextResponse.json({ success: false, message: "Online payments are not configured yet." }, { status: 503 });
   }
 
@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
     const razorpayResponse = await fetch("https://api.razorpay.com/v1/orders", {
       method: "POST",
       headers: {
-        Authorization: `Basic ${Buffer.from(`${keyId}:${keySecret}`).toString("base64")}`,
+        Authorization: `Basic ${Buffer.from(`${razorpayCredentials.keyId}:${razorpayCredentials.keySecret}`).toString("base64")}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
     const customer = await prisma.user.findUnique({ where: { id: userId }, select: { name: true, email: true } });
     return NextResponse.json({
       success: true,
-      keyId,
+      keyId: razorpayCredentials.keyId,
       razorpayOrderId: razorpayOrder.id,
       amount: razorpayOrder.amount,
       currency: razorpayOrder.currency,
