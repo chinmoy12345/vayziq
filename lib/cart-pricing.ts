@@ -1,9 +1,11 @@
 import prisma from "@/lib/db";
+import { effectiveQuantityLimits, getGlobalQuantityLimits } from "@/lib/quantity-limits";
 export type CartInput = { id: unknown; quantity: unknown; variantId?: unknown; size?: unknown; color?: unknown };
 export async function resolveCart(items: CartInput[]) {
   if (!Array.isArray(items) || !items.length || items.length > 100 || items.some(item => !item || !Number.isSafeInteger(Number(item.id)) || !Number.isSafeInteger(Number(item.quantity)) || Number(item.quantity) < 1 || Number(item.quantity) > 1000)) throw new Error("Invalid cart items or quantities.");
   const ids = [...new Set(items.map(item=>Number(item.id)))];
   const products = await prisma.product.findMany({ where: { id: { in: ids }, status: "active", category: { status: "active" } }, include: { variants: { include: { variantValues: { include: { optionValue: { include: { option: true } } } } } } } });
+  const globalLimits = await getGlobalQuantityLimits();
   const lines = items.map(item => {
     const product = products.find(product=>product.id===Number(item.id)); if(!product)throw new Error("A product is no longer available.");
     const size = typeof item.size === "string" ? item.size : "", color = typeof item.color === "string" ? item.color : "";
@@ -14,7 +16,10 @@ export async function resolveCart(items: CartInput[]) {
     return { product, variantId: variant?.id, price: Number(variant?.price ?? product.price), sku: variant?.sku ?? product.sku, quantity: Number(item.quantity), options: { size, color, ...(variant ? { variantId: variant.id } : {}) } };
   });
   for(const product of products) {
-    if(lines.filter(line=>line.product.id===product.id).reduce((sum,line)=>sum+line.quantity,0)>product.stock)throw new Error("One or more products do not have enough stock.");
+    const total = lines.filter(line=>line.product.id===product.id).reduce((sum,line)=>sum+line.quantity,0);
+    const limits = effectiveQuantityLimits(product, globalLimits);
+    if (total < limits.min || total > limits.max) throw new Error(`${product.name}: select ${limits.min}–${limits.max} items in total.`);
+    if(total>product.stock)throw new Error("One or more products do not have enough stock.");
     for(const variant of product.variants) if(lines.filter(line=>line.variantId===variant.id).reduce((sum,line)=>sum+line.quantity,0)>variant.stock)throw new Error("A selected variant does not have enough stock.");
   }
   return lines;

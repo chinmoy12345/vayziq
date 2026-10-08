@@ -2,6 +2,7 @@ import { requireAdminPermission } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { parseProductVideoUrl } from "@/lib/product-video";
+import { effectiveQuantityLimits, getGlobalQuantityLimits, parseQuantityOverride, validQuantityLimits } from "@/lib/quantity-limits";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -72,6 +73,10 @@ export async function POST(request: NextRequest) {
   if (!actor) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   try {
     const body = await request.json();
+    const minOrderQuantity = parseQuantityOverride(body.minOrderQuantity);
+    const maxOrderQuantity = parseQuantityOverride(body.maxOrderQuantity);
+    const limits = effectiveQuantityLimits({ minOrderQuantity, maxOrderQuantity }, await getGlobalQuantityLimits());
+    if (minOrderQuantity === undefined || maxOrderQuantity === undefined || !validQuantityLimits(limits.min, limits.max)) return NextResponse.json({ message: "Invalid minimum or maximum purchase quantity." }, { status: 400 });
     const policy = { returnEnabled: body.returnEnabled ?? true, replacementEnabled: body.replacementEnabled ?? true, returnDays: body.returnDays ?? 7, replacementDays: body.replacementDays ?? 7 };
     if (typeof policy.returnEnabled !== "boolean" || typeof policy.replacementEnabled !== "boolean" || [policy.returnDays, policy.replacementDays].some(days => !Number.isInteger(days) || days < 1 || days > 365)) return NextResponse.json({ message: "Enter valid return and replacement windows (1–365 days)." }, { status: 400 });
 
@@ -250,6 +255,8 @@ export async function POST(request: NextRequest) {
               : null,
 
           stock: Number(stock || 0),
+          minOrderQuantity,
+          maxOrderQuantity,
 
           status:
             status === "active"

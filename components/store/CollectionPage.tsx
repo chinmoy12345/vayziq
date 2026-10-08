@@ -1,8 +1,7 @@
 import Breadcrumbs from "./Breadcrumbs";
 import PageBanner from "@/components/store/PageBanner";
 import CategoryListing from "@/components/category/CategoryListing";
-import { getQuantityOfferSlides } from "@/components/store/promo-slides";
-import { getActiveBanners, getStoreFilters, getStoreProducts, toCardProduct, type BannerPlacement } from "@/lib/storefront";
+import { getActiveBanner, getStoreFilters, getStoreProducts, toCardProduct, type BannerPlacement } from "@/lib/storefront";
 import type { BannerSlide } from "@/components/store/BannerSlider";
 import { SITE_URL } from "@/lib/seo";
 
@@ -54,13 +53,15 @@ export default async function CollectionPage(props: CollectionPageProps) {
   const [products, filters, banner] = await Promise.all([
     getStoreProducts({ categorySlug: showFullFilters ? undefined : categorySlug, newest, productIds }),
     showFullFilters || showProductFilters ? getStoreFilters(showFullFilters ? undefined : categorySlug, productIds) : Promise.resolve({}),
-    bannerPlacement ? getActiveBanners(bannerPlacement) : Promise.resolve([]),
+    bannerPlacement ? getActiveBanner(bannerPlacement) : Promise.resolve(null),
   ]);
-  const promoSlides = bannerPlacement
-    ? getQuantityOfferSlides(categorySlug ? title : "the collection", categorySlug ? `/${categorySlug}` : "/shop")
-    : [];
   const featureBanner = categorySlug ? categoryFeatureBanner(categorySlug, title) : shopFeatureBanner;
-  const slides = [featureBanner, ...banner, ...promoSlides];
+  const slides: BannerSlide[] = [banner ? {
+    title: banner.title?.trim() || title,
+    subtitle: banner.subtitle,
+    image: banner.image,
+    link: banner.link || null,
+  } : featureBanner];
   const listedProducts = categorySlug ? products.filter(product => product.category.slug === categorySlug || product.category.parent?.slug === categorySlug) : products;
   const structuredData = {
     "@context": "https://schema.org", "@type": "ItemList", name: title,

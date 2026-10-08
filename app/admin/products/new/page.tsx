@@ -64,6 +64,8 @@ export default function NewProductPage() {
   const [price, setPrice] = useState("");
   const [comparePrice, setComparePrice] = useState("");
   const [stock, setStock] = useState("");
+  const [minOrderQuantity, setMinOrderQuantity] = useState("");
+  const [maxOrderQuantity, setMaxOrderQuantity] = useState("");
   const [uploading, setUploading] = useState(false);
 
   const [status, setStatus] =
@@ -743,6 +745,8 @@ export default function NewProductPage() {
       stock: hasVariations
         ? variationTotalStock
         : Number(stock),
+      minOrderQuantity: minOrderQuantity === "" ? null : Number(minOrderQuantity),
+      maxOrderQuantity: maxOrderQuantity === "" ? null : Number(maxOrderQuantity),
 
       status:
         status === "Active"
@@ -1224,6 +1228,11 @@ export default function NewProductPage() {
                     </div>
 
                     {/* SIMPLE STOCK */}
+                    <div className="mt-5 grid max-w-xl gap-4 sm:grid-cols-2">
+                      <label className="text-xs font-medium text-[#514945]">Minimum purchase quantity<input type="number" min="1" max="1000" value={minOrderQuantity} onChange={event => setMinOrderQuantity(event.target.value)} placeholder="Global default" className={`${inputClass} mt-2`} /></label>
+                      <label className="text-xs font-medium text-[#514945]">Maximum purchase quantity<input type="number" min="1" max="1000" value={maxOrderQuantity} onChange={event => setMaxOrderQuantity(event.target.value)} placeholder="Global default" className={`${inputClass} mt-2`} /></label>
+                      <p className="text-xs text-[#958b86] sm:col-span-2">Leave blank to inherit the store-wide setting.</p>
+                    </div>
 
                     {!hasVariations && (
                       <div className="mt-5 max-w-sm">

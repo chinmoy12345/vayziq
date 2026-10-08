@@ -6,9 +6,10 @@ const ts = require('typescript');
 const { NextRequest, NextResponse } = require('next/server');
 function load(file, imports = {}, globals = {}) {
   const exports = {};
-  vm.runInNewContext(ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText, { exports, Date, ...globals, require: name => imports[name] ?? require(name) });
+  vm.runInNewContext(ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText, { exports, Date, ...globals, require: name => imports[name] ?? (name === '@/lib/quantity-limits' ? quantityLimits : require(name)) });
   return exports;
 }
+const quantityLimits = { getGlobalQuantityLimits: async () => ({ min: 1, max: 10 }), effectiveQuantityLimits: (product, global) => ({ min: product.minOrderQuantity ?? global.min, max: product.maxOrderQuantity ?? global.max }) };
 const pricing = load('lib/product-offers.ts');
 const { offerDiscount } = pricing;
 const { couponInput } = load('lib/coupon-input.ts');
@@ -153,6 +154,15 @@ test('cart resolution uses variant selling price and guards invalid variants and
   assert.equal(lines[0].price,500);assert.equal(lines[0].options.variantId,11);
   await assert.rejects(resolveCart([{id:1,variantId:99,quantity:1}]));
   await assert.rejects(resolveCart([{id:1,variantId:11,quantity:4}]));
+});
+test('cart combines variants when checking global and product quantity limits', async () => {
+  const product = { id: 7, name: 'Hoodie', price: 500, stock: 20, sku: 'HD', minOrderQuantity: 3, maxOrderQuantity: 4, variants: [] };
+  const { resolveCart } = load('lib/cart-pricing.ts', { '@/lib/db': { default: { product: { findMany: async () => [product] } } } });
+  await assert.rejects(resolveCart([{ id: 7, quantity: 2 }]), /3–4/);
+  await assert.rejects(resolveCart([{ id: 7, quantity: 2 }, { id: 7, quantity: 3 }]), /3–4/);
+  assert.equal((await resolveCart([{ id: 7, quantity: 3 }]))[0].quantity, 3);
+  product.minOrderQuantity = null; product.maxOrderQuantity = null;
+  await assert.rejects(resolveCart([{ id: 7, quantity: 11 }]), /1–10/);
 });
 test('banner links reject external and executable destinations', async () => {
   const {safeBannerLink,bannerInput}=load('lib/banner-input.ts',{'@/lib/db':{default:{product:{findFirst:async()=>({slug:'red-saree'})}}}});

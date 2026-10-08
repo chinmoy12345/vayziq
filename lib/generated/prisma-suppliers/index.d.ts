@@ -154,6 +154,11 @@ export type ContactMessage = $Result.DefaultSelection<Prisma.$ContactMessagePayl
  */
 export type StoreSetting = $Result.DefaultSelection<Prisma.$StoreSettingPayload>
 /**
+ * Model ReelMedia
+ * 
+ */
+export type ReelMedia = $Result.DefaultSelection<Prisma.$ReelMediaPayload>
+/**
  * Model Supplier
  * 
  */
@@ -684,6 +689,16 @@ export class PrismaClient<
   get storeSetting(): Prisma.StoreSettingDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.reelMedia`: Exposes CRUD operations for the **ReelMedia** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ReelMedias
+    * const reelMedias = await prisma.reelMedia.findMany()
+    * ```
+    */
+  get reelMedia(): Prisma.ReelMediaDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.supplier`: Exposes CRUD operations for the **Supplier** model.
     * Example usage:
     * ```ts
@@ -1191,6 +1206,7 @@ export namespace Prisma {
     Review: 'Review',
     ContactMessage: 'ContactMessage',
     StoreSetting: 'StoreSetting',
+    ReelMedia: 'ReelMedia',
     Supplier: 'Supplier',
     Purchase: 'Purchase',
     PurchaseItem: 'PurchaseItem',
@@ -1213,7 +1229,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "role" | "userRole" | "permission" | "rolePermission" | "category" | "product" | "productEngagement" | "productLike" | "productImage" | "productOption" | "productOptionValue" | "productVariant" | "productVariantValue" | "address" | "order" | "channelVisit" | "orderItem" | "inventoryMovement" | "shipment" | "serviceRequest" | "cartItem" | "wishlistItem" | "coupon" | "banner" | "review" | "contactMessage" | "storeSetting" | "supplier" | "purchase" | "purchaseItem" | "supplierPayment"
+      modelProps: "user" | "role" | "userRole" | "permission" | "rolePermission" | "category" | "product" | "productEngagement" | "productLike" | "productImage" | "productOption" | "productOptionValue" | "productVariant" | "productVariantValue" | "address" | "order" | "channelVisit" | "orderItem" | "inventoryMovement" | "shipment" | "serviceRequest" | "cartItem" | "wishlistItem" | "coupon" | "banner" | "review" | "contactMessage" | "storeSetting" | "reelMedia" | "supplier" | "purchase" | "purchaseItem" | "supplierPayment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3289,6 +3305,80 @@ export namespace Prisma {
           }
         }
       }
+      ReelMedia: {
+        payload: Prisma.$ReelMediaPayload<ExtArgs>
+        fields: Prisma.ReelMediaFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ReelMediaFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReelMediaPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ReelMediaFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReelMediaPayload>
+          }
+          findFirst: {
+            args: Prisma.ReelMediaFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReelMediaPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ReelMediaFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReelMediaPayload>
+          }
+          findMany: {
+            args: Prisma.ReelMediaFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReelMediaPayload>[]
+          }
+          create: {
+            args: Prisma.ReelMediaCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReelMediaPayload>
+          }
+          createMany: {
+            args: Prisma.ReelMediaCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ReelMediaCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReelMediaPayload>[]
+          }
+          delete: {
+            args: Prisma.ReelMediaDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReelMediaPayload>
+          }
+          update: {
+            args: Prisma.ReelMediaUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReelMediaPayload>
+          }
+          deleteMany: {
+            args: Prisma.ReelMediaDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ReelMediaUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ReelMediaUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReelMediaPayload>[]
+          }
+          upsert: {
+            args: Prisma.ReelMediaUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReelMediaPayload>
+          }
+          aggregate: {
+            args: Prisma.ReelMediaAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateReelMedia>
+          }
+          groupBy: {
+            args: Prisma.ReelMediaGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ReelMediaGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ReelMediaCountArgs<ExtArgs>
+            result: $Utils.Optional<ReelMediaCountAggregateOutputType> | number
+          }
+        }
+      }
       Supplier: {
         payload: Prisma.$SupplierPayload<ExtArgs>
         fields: Prisma.SupplierFieldRefs
@@ -3709,6 +3799,7 @@ export namespace Prisma {
     review?: ReviewOmit
     contactMessage?: ContactMessageOmit
     storeSetting?: StoreSettingOmit
+    reelMedia?: ReelMediaOmit
     supplier?: SupplierOmit
     purchase?: PurchaseOmit
     purchaseItem?: PurchaseItemOmit
@@ -11480,6 +11571,8 @@ export namespace Prisma {
     comparePrice: Decimal | null
     stock: number | null
     reorderLevel: number | null
+    minOrderQuantity: number | null
+    maxOrderQuantity: number | null
     returnDays: number | null
     replacementDays: number | null
     categoryId: number | null
@@ -11491,6 +11584,8 @@ export namespace Prisma {
     comparePrice: Decimal | null
     stock: number | null
     reorderLevel: number | null
+    minOrderQuantity: number | null
+    maxOrderQuantity: number | null
     returnDays: number | null
     replacementDays: number | null
     categoryId: number | null
@@ -11507,6 +11602,8 @@ export namespace Prisma {
     comparePrice: Decimal | null
     stock: number | null
     reorderLevel: number | null
+    minOrderQuantity: number | null
+    maxOrderQuantity: number | null
     status: $Enums.ProductStatus | null
     featured: boolean | null
     badgeEnabled: boolean | null
@@ -11533,6 +11630,8 @@ export namespace Prisma {
     comparePrice: Decimal | null
     stock: number | null
     reorderLevel: number | null
+    minOrderQuantity: number | null
+    maxOrderQuantity: number | null
     status: $Enums.ProductStatus | null
     featured: boolean | null
     badgeEnabled: boolean | null
@@ -11559,6 +11658,8 @@ export namespace Prisma {
     comparePrice: number
     stock: number
     reorderLevel: number
+    minOrderQuantity: number
+    maxOrderQuantity: number
     status: number
     featured: number
     badgeEnabled: number
@@ -11582,6 +11683,8 @@ export namespace Prisma {
     comparePrice?: true
     stock?: true
     reorderLevel?: true
+    minOrderQuantity?: true
+    maxOrderQuantity?: true
     returnDays?: true
     replacementDays?: true
     categoryId?: true
@@ -11593,6 +11696,8 @@ export namespace Prisma {
     comparePrice?: true
     stock?: true
     reorderLevel?: true
+    minOrderQuantity?: true
+    maxOrderQuantity?: true
     returnDays?: true
     replacementDays?: true
     categoryId?: true
@@ -11609,6 +11714,8 @@ export namespace Prisma {
     comparePrice?: true
     stock?: true
     reorderLevel?: true
+    minOrderQuantity?: true
+    maxOrderQuantity?: true
     status?: true
     featured?: true
     badgeEnabled?: true
@@ -11635,6 +11742,8 @@ export namespace Prisma {
     comparePrice?: true
     stock?: true
     reorderLevel?: true
+    minOrderQuantity?: true
+    maxOrderQuantity?: true
     status?: true
     featured?: true
     badgeEnabled?: true
@@ -11661,6 +11770,8 @@ export namespace Prisma {
     comparePrice?: true
     stock?: true
     reorderLevel?: true
+    minOrderQuantity?: true
+    maxOrderQuantity?: true
     status?: true
     featured?: true
     badgeEnabled?: true
@@ -11774,6 +11885,8 @@ export namespace Prisma {
     comparePrice: Decimal | null
     stock: number
     reorderLevel: number
+    minOrderQuantity: number | null
+    maxOrderQuantity: number | null
     status: $Enums.ProductStatus
     featured: boolean
     badgeEnabled: boolean
@@ -11819,6 +11932,8 @@ export namespace Prisma {
     comparePrice?: boolean
     stock?: boolean
     reorderLevel?: boolean
+    minOrderQuantity?: boolean
+    maxOrderQuantity?: boolean
     status?: boolean
     featured?: boolean
     badgeEnabled?: boolean
@@ -11858,6 +11973,8 @@ export namespace Prisma {
     comparePrice?: boolean
     stock?: boolean
     reorderLevel?: boolean
+    minOrderQuantity?: boolean
+    maxOrderQuantity?: boolean
     status?: boolean
     featured?: boolean
     badgeEnabled?: boolean
@@ -11885,6 +12002,8 @@ export namespace Prisma {
     comparePrice?: boolean
     stock?: boolean
     reorderLevel?: boolean
+    minOrderQuantity?: boolean
+    maxOrderQuantity?: boolean
     status?: boolean
     featured?: boolean
     badgeEnabled?: boolean
@@ -11912,6 +12031,8 @@ export namespace Prisma {
     comparePrice?: boolean
     stock?: boolean
     reorderLevel?: boolean
+    minOrderQuantity?: boolean
+    maxOrderQuantity?: boolean
     status?: boolean
     featured?: boolean
     badgeEnabled?: boolean
@@ -11927,7 +12048,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "sku" | "description" | "videoUrl" | "price" | "comparePrice" | "stock" | "reorderLevel" | "status" | "featured" | "badgeEnabled" | "badgeText" | "badgeTone" | "hasVariations" | "returnEnabled" | "replacementEnabled" | "returnDays" | "replacementDays" | "categoryId" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "sku" | "description" | "videoUrl" | "price" | "comparePrice" | "stock" | "reorderLevel" | "minOrderQuantity" | "maxOrderQuantity" | "status" | "featured" | "badgeEnabled" | "badgeText" | "badgeTone" | "hasVariations" | "returnEnabled" | "replacementEnabled" | "returnDays" | "replacementDays" | "categoryId" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     images?: boolean | Product$imagesArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
@@ -11977,6 +12098,8 @@ export namespace Prisma {
       comparePrice: Prisma.Decimal | null
       stock: number
       reorderLevel: number
+      minOrderQuantity: number | null
+      maxOrderQuantity: number | null
       status: $Enums.ProductStatus
       featured: boolean
       badgeEnabled: boolean
@@ -12435,6 +12558,8 @@ export namespace Prisma {
     readonly comparePrice: FieldRef<"Product", 'Decimal'>
     readonly stock: FieldRef<"Product", 'Int'>
     readonly reorderLevel: FieldRef<"Product", 'Int'>
+    readonly minOrderQuantity: FieldRef<"Product", 'Int'>
+    readonly maxOrderQuantity: FieldRef<"Product", 'Int'>
     readonly status: FieldRef<"Product", 'ProductStatus'>
     readonly featured: FieldRef<"Product", 'Boolean'>
     readonly badgeEnabled: FieldRef<"Product", 'Boolean'>
@@ -37342,6 +37467,1035 @@ export namespace Prisma {
 
 
   /**
+   * Model ReelMedia
+   */
+
+  export type AggregateReelMedia = {
+    _count: ReelMediaCountAggregateOutputType | null
+    _avg: ReelMediaAvgAggregateOutputType | null
+    _sum: ReelMediaSumAggregateOutputType | null
+    _min: ReelMediaMinAggregateOutputType | null
+    _max: ReelMediaMaxAggregateOutputType | null
+  }
+
+  export type ReelMediaAvgAggregateOutputType = {
+    size: number | null
+  }
+
+  export type ReelMediaSumAggregateOutputType = {
+    size: number | null
+  }
+
+  export type ReelMediaMinAggregateOutputType = {
+    id: string | null
+    mimeType: string | null
+    data: Bytes | null
+    size: number | null
+    createdAt: Date | null
+  }
+
+  export type ReelMediaMaxAggregateOutputType = {
+    id: string | null
+    mimeType: string | null
+    data: Bytes | null
+    size: number | null
+    createdAt: Date | null
+  }
+
+  export type ReelMediaCountAggregateOutputType = {
+    id: number
+    mimeType: number
+    data: number
+    size: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ReelMediaAvgAggregateInputType = {
+    size?: true
+  }
+
+  export type ReelMediaSumAggregateInputType = {
+    size?: true
+  }
+
+  export type ReelMediaMinAggregateInputType = {
+    id?: true
+    mimeType?: true
+    data?: true
+    size?: true
+    createdAt?: true
+  }
+
+  export type ReelMediaMaxAggregateInputType = {
+    id?: true
+    mimeType?: true
+    data?: true
+    size?: true
+    createdAt?: true
+  }
+
+  export type ReelMediaCountAggregateInputType = {
+    id?: true
+    mimeType?: true
+    data?: true
+    size?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ReelMediaAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ReelMedia to aggregate.
+     */
+    where?: ReelMediaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReelMedias to fetch.
+     */
+    orderBy?: ReelMediaOrderByWithRelationInput | ReelMediaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ReelMediaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReelMedias from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReelMedias.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ReelMedias
+    **/
+    _count?: true | ReelMediaCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ReelMediaAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ReelMediaSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ReelMediaMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ReelMediaMaxAggregateInputType
+  }
+
+  export type GetReelMediaAggregateType<T extends ReelMediaAggregateArgs> = {
+        [P in keyof T & keyof AggregateReelMedia]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateReelMedia[P]>
+      : GetScalarType<T[P], AggregateReelMedia[P]>
+  }
+
+
+
+
+  export type ReelMediaGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReelMediaWhereInput
+    orderBy?: ReelMediaOrderByWithAggregationInput | ReelMediaOrderByWithAggregationInput[]
+    by: ReelMediaScalarFieldEnum[] | ReelMediaScalarFieldEnum
+    having?: ReelMediaScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ReelMediaCountAggregateInputType | true
+    _avg?: ReelMediaAvgAggregateInputType
+    _sum?: ReelMediaSumAggregateInputType
+    _min?: ReelMediaMinAggregateInputType
+    _max?: ReelMediaMaxAggregateInputType
+  }
+
+  export type ReelMediaGroupByOutputType = {
+    id: string
+    mimeType: string
+    data: Bytes
+    size: number
+    createdAt: Date
+    _count: ReelMediaCountAggregateOutputType | null
+    _avg: ReelMediaAvgAggregateOutputType | null
+    _sum: ReelMediaSumAggregateOutputType | null
+    _min: ReelMediaMinAggregateOutputType | null
+    _max: ReelMediaMaxAggregateOutputType | null
+  }
+
+  type GetReelMediaGroupByPayload<T extends ReelMediaGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ReelMediaGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ReelMediaGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ReelMediaGroupByOutputType[P]>
+            : GetScalarType<T[P], ReelMediaGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ReelMediaSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    mimeType?: boolean
+    data?: boolean
+    size?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["reelMedia"]>
+
+  export type ReelMediaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    mimeType?: boolean
+    data?: boolean
+    size?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["reelMedia"]>
+
+  export type ReelMediaSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    mimeType?: boolean
+    data?: boolean
+    size?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["reelMedia"]>
+
+  export type ReelMediaSelectScalar = {
+    id?: boolean
+    mimeType?: boolean
+    data?: boolean
+    size?: boolean
+    createdAt?: boolean
+  }
+
+  export type ReelMediaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "mimeType" | "data" | "size" | "createdAt", ExtArgs["result"]["reelMedia"]>
+
+  export type $ReelMediaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ReelMedia"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      mimeType: string
+      data: Prisma.Bytes
+      size: number
+      createdAt: Date
+    }, ExtArgs["result"]["reelMedia"]>
+    composites: {}
+  }
+
+  type ReelMediaGetPayload<S extends boolean | null | undefined | ReelMediaDefaultArgs> = $Result.GetResult<Prisma.$ReelMediaPayload, S>
+
+  type ReelMediaCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ReelMediaFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ReelMediaCountAggregateInputType | true
+    }
+
+  export interface ReelMediaDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ReelMedia'], meta: { name: 'ReelMedia' } }
+    /**
+     * Find zero or one ReelMedia that matches the filter.
+     * @param {ReelMediaFindUniqueArgs} args - Arguments to find a ReelMedia
+     * @example
+     * // Get one ReelMedia
+     * const reelMedia = await prisma.reelMedia.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ReelMediaFindUniqueArgs>(args: SelectSubset<T, ReelMediaFindUniqueArgs<ExtArgs>>): Prisma__ReelMediaClient<$Result.GetResult<Prisma.$ReelMediaPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ReelMedia that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ReelMediaFindUniqueOrThrowArgs} args - Arguments to find a ReelMedia
+     * @example
+     * // Get one ReelMedia
+     * const reelMedia = await prisma.reelMedia.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ReelMediaFindUniqueOrThrowArgs>(args: SelectSubset<T, ReelMediaFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ReelMediaClient<$Result.GetResult<Prisma.$ReelMediaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ReelMedia that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReelMediaFindFirstArgs} args - Arguments to find a ReelMedia
+     * @example
+     * // Get one ReelMedia
+     * const reelMedia = await prisma.reelMedia.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ReelMediaFindFirstArgs>(args?: SelectSubset<T, ReelMediaFindFirstArgs<ExtArgs>>): Prisma__ReelMediaClient<$Result.GetResult<Prisma.$ReelMediaPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ReelMedia that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReelMediaFindFirstOrThrowArgs} args - Arguments to find a ReelMedia
+     * @example
+     * // Get one ReelMedia
+     * const reelMedia = await prisma.reelMedia.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ReelMediaFindFirstOrThrowArgs>(args?: SelectSubset<T, ReelMediaFindFirstOrThrowArgs<ExtArgs>>): Prisma__ReelMediaClient<$Result.GetResult<Prisma.$ReelMediaPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ReelMedias that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReelMediaFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ReelMedias
+     * const reelMedias = await prisma.reelMedia.findMany()
+     * 
+     * // Get first 10 ReelMedias
+     * const reelMedias = await prisma.reelMedia.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const reelMediaWithIdOnly = await prisma.reelMedia.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ReelMediaFindManyArgs>(args?: SelectSubset<T, ReelMediaFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReelMediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ReelMedia.
+     * @param {ReelMediaCreateArgs} args - Arguments to create a ReelMedia.
+     * @example
+     * // Create one ReelMedia
+     * const ReelMedia = await prisma.reelMedia.create({
+     *   data: {
+     *     // ... data to create a ReelMedia
+     *   }
+     * })
+     * 
+     */
+    create<T extends ReelMediaCreateArgs>(args: SelectSubset<T, ReelMediaCreateArgs<ExtArgs>>): Prisma__ReelMediaClient<$Result.GetResult<Prisma.$ReelMediaPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ReelMedias.
+     * @param {ReelMediaCreateManyArgs} args - Arguments to create many ReelMedias.
+     * @example
+     * // Create many ReelMedias
+     * const reelMedia = await prisma.reelMedia.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ReelMediaCreateManyArgs>(args?: SelectSubset<T, ReelMediaCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ReelMedias and returns the data saved in the database.
+     * @param {ReelMediaCreateManyAndReturnArgs} args - Arguments to create many ReelMedias.
+     * @example
+     * // Create many ReelMedias
+     * const reelMedia = await prisma.reelMedia.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ReelMedias and only return the `id`
+     * const reelMediaWithIdOnly = await prisma.reelMedia.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ReelMediaCreateManyAndReturnArgs>(args?: SelectSubset<T, ReelMediaCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReelMediaPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ReelMedia.
+     * @param {ReelMediaDeleteArgs} args - Arguments to delete one ReelMedia.
+     * @example
+     * // Delete one ReelMedia
+     * const ReelMedia = await prisma.reelMedia.delete({
+     *   where: {
+     *     // ... filter to delete one ReelMedia
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ReelMediaDeleteArgs>(args: SelectSubset<T, ReelMediaDeleteArgs<ExtArgs>>): Prisma__ReelMediaClient<$Result.GetResult<Prisma.$ReelMediaPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ReelMedia.
+     * @param {ReelMediaUpdateArgs} args - Arguments to update one ReelMedia.
+     * @example
+     * // Update one ReelMedia
+     * const reelMedia = await prisma.reelMedia.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ReelMediaUpdateArgs>(args: SelectSubset<T, ReelMediaUpdateArgs<ExtArgs>>): Prisma__ReelMediaClient<$Result.GetResult<Prisma.$ReelMediaPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ReelMedias.
+     * @param {ReelMediaDeleteManyArgs} args - Arguments to filter ReelMedias to delete.
+     * @example
+     * // Delete a few ReelMedias
+     * const { count } = await prisma.reelMedia.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ReelMediaDeleteManyArgs>(args?: SelectSubset<T, ReelMediaDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ReelMedias.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReelMediaUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ReelMedias
+     * const reelMedia = await prisma.reelMedia.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ReelMediaUpdateManyArgs>(args: SelectSubset<T, ReelMediaUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ReelMedias and returns the data updated in the database.
+     * @param {ReelMediaUpdateManyAndReturnArgs} args - Arguments to update many ReelMedias.
+     * @example
+     * // Update many ReelMedias
+     * const reelMedia = await prisma.reelMedia.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ReelMedias and only return the `id`
+     * const reelMediaWithIdOnly = await prisma.reelMedia.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ReelMediaUpdateManyAndReturnArgs>(args: SelectSubset<T, ReelMediaUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReelMediaPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ReelMedia.
+     * @param {ReelMediaUpsertArgs} args - Arguments to update or create a ReelMedia.
+     * @example
+     * // Update or create a ReelMedia
+     * const reelMedia = await prisma.reelMedia.upsert({
+     *   create: {
+     *     // ... data to create a ReelMedia
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ReelMedia we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ReelMediaUpsertArgs>(args: SelectSubset<T, ReelMediaUpsertArgs<ExtArgs>>): Prisma__ReelMediaClient<$Result.GetResult<Prisma.$ReelMediaPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ReelMedias.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReelMediaCountArgs} args - Arguments to filter ReelMedias to count.
+     * @example
+     * // Count the number of ReelMedias
+     * const count = await prisma.reelMedia.count({
+     *   where: {
+     *     // ... the filter for the ReelMedias we want to count
+     *   }
+     * })
+    **/
+    count<T extends ReelMediaCountArgs>(
+      args?: Subset<T, ReelMediaCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ReelMediaCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ReelMedia.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReelMediaAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ReelMediaAggregateArgs>(args: Subset<T, ReelMediaAggregateArgs>): Prisma.PrismaPromise<GetReelMediaAggregateType<T>>
+
+    /**
+     * Group by ReelMedia.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReelMediaGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ReelMediaGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ReelMediaGroupByArgs['orderBy'] }
+        : { orderBy?: ReelMediaGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ReelMediaGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetReelMediaGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ReelMedia model
+   */
+  readonly fields: ReelMediaFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ReelMedia.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ReelMediaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ReelMedia model
+   */
+  interface ReelMediaFieldRefs {
+    readonly id: FieldRef<"ReelMedia", 'String'>
+    readonly mimeType: FieldRef<"ReelMedia", 'String'>
+    readonly data: FieldRef<"ReelMedia", 'Bytes'>
+    readonly size: FieldRef<"ReelMedia", 'Int'>
+    readonly createdAt: FieldRef<"ReelMedia", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ReelMedia findUnique
+   */
+  export type ReelMediaFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReelMedia
+     */
+    select?: ReelMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReelMedia
+     */
+    omit?: ReelMediaOmit<ExtArgs> | null
+    /**
+     * Filter, which ReelMedia to fetch.
+     */
+    where: ReelMediaWhereUniqueInput
+  }
+
+  /**
+   * ReelMedia findUniqueOrThrow
+   */
+  export type ReelMediaFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReelMedia
+     */
+    select?: ReelMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReelMedia
+     */
+    omit?: ReelMediaOmit<ExtArgs> | null
+    /**
+     * Filter, which ReelMedia to fetch.
+     */
+    where: ReelMediaWhereUniqueInput
+  }
+
+  /**
+   * ReelMedia findFirst
+   */
+  export type ReelMediaFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReelMedia
+     */
+    select?: ReelMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReelMedia
+     */
+    omit?: ReelMediaOmit<ExtArgs> | null
+    /**
+     * Filter, which ReelMedia to fetch.
+     */
+    where?: ReelMediaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReelMedias to fetch.
+     */
+    orderBy?: ReelMediaOrderByWithRelationInput | ReelMediaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ReelMedias.
+     */
+    cursor?: ReelMediaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReelMedias from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReelMedias.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReelMedias.
+     */
+    distinct?: ReelMediaScalarFieldEnum | ReelMediaScalarFieldEnum[]
+  }
+
+  /**
+   * ReelMedia findFirstOrThrow
+   */
+  export type ReelMediaFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReelMedia
+     */
+    select?: ReelMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReelMedia
+     */
+    omit?: ReelMediaOmit<ExtArgs> | null
+    /**
+     * Filter, which ReelMedia to fetch.
+     */
+    where?: ReelMediaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReelMedias to fetch.
+     */
+    orderBy?: ReelMediaOrderByWithRelationInput | ReelMediaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ReelMedias.
+     */
+    cursor?: ReelMediaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReelMedias from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReelMedias.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReelMedias.
+     */
+    distinct?: ReelMediaScalarFieldEnum | ReelMediaScalarFieldEnum[]
+  }
+
+  /**
+   * ReelMedia findMany
+   */
+  export type ReelMediaFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReelMedia
+     */
+    select?: ReelMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReelMedia
+     */
+    omit?: ReelMediaOmit<ExtArgs> | null
+    /**
+     * Filter, which ReelMedias to fetch.
+     */
+    where?: ReelMediaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReelMedias to fetch.
+     */
+    orderBy?: ReelMediaOrderByWithRelationInput | ReelMediaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ReelMedias.
+     */
+    cursor?: ReelMediaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReelMedias from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReelMedias.
+     */
+    skip?: number
+    distinct?: ReelMediaScalarFieldEnum | ReelMediaScalarFieldEnum[]
+  }
+
+  /**
+   * ReelMedia create
+   */
+  export type ReelMediaCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReelMedia
+     */
+    select?: ReelMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReelMedia
+     */
+    omit?: ReelMediaOmit<ExtArgs> | null
+    /**
+     * The data needed to create a ReelMedia.
+     */
+    data: XOR<ReelMediaCreateInput, ReelMediaUncheckedCreateInput>
+  }
+
+  /**
+   * ReelMedia createMany
+   */
+  export type ReelMediaCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ReelMedias.
+     */
+    data: ReelMediaCreateManyInput | ReelMediaCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ReelMedia createManyAndReturn
+   */
+  export type ReelMediaCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReelMedia
+     */
+    select?: ReelMediaSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReelMedia
+     */
+    omit?: ReelMediaOmit<ExtArgs> | null
+    /**
+     * The data used to create many ReelMedias.
+     */
+    data: ReelMediaCreateManyInput | ReelMediaCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ReelMedia update
+   */
+  export type ReelMediaUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReelMedia
+     */
+    select?: ReelMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReelMedia
+     */
+    omit?: ReelMediaOmit<ExtArgs> | null
+    /**
+     * The data needed to update a ReelMedia.
+     */
+    data: XOR<ReelMediaUpdateInput, ReelMediaUncheckedUpdateInput>
+    /**
+     * Choose, which ReelMedia to update.
+     */
+    where: ReelMediaWhereUniqueInput
+  }
+
+  /**
+   * ReelMedia updateMany
+   */
+  export type ReelMediaUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ReelMedias.
+     */
+    data: XOR<ReelMediaUpdateManyMutationInput, ReelMediaUncheckedUpdateManyInput>
+    /**
+     * Filter which ReelMedias to update
+     */
+    where?: ReelMediaWhereInput
+    /**
+     * Limit how many ReelMedias to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ReelMedia updateManyAndReturn
+   */
+  export type ReelMediaUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReelMedia
+     */
+    select?: ReelMediaSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReelMedia
+     */
+    omit?: ReelMediaOmit<ExtArgs> | null
+    /**
+     * The data used to update ReelMedias.
+     */
+    data: XOR<ReelMediaUpdateManyMutationInput, ReelMediaUncheckedUpdateManyInput>
+    /**
+     * Filter which ReelMedias to update
+     */
+    where?: ReelMediaWhereInput
+    /**
+     * Limit how many ReelMedias to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ReelMedia upsert
+   */
+  export type ReelMediaUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReelMedia
+     */
+    select?: ReelMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReelMedia
+     */
+    omit?: ReelMediaOmit<ExtArgs> | null
+    /**
+     * The filter to search for the ReelMedia to update in case it exists.
+     */
+    where: ReelMediaWhereUniqueInput
+    /**
+     * In case the ReelMedia found by the `where` argument doesn't exist, create a new ReelMedia with this data.
+     */
+    create: XOR<ReelMediaCreateInput, ReelMediaUncheckedCreateInput>
+    /**
+     * In case the ReelMedia was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ReelMediaUpdateInput, ReelMediaUncheckedUpdateInput>
+  }
+
+  /**
+   * ReelMedia delete
+   */
+  export type ReelMediaDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReelMedia
+     */
+    select?: ReelMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReelMedia
+     */
+    omit?: ReelMediaOmit<ExtArgs> | null
+    /**
+     * Filter which ReelMedia to delete.
+     */
+    where: ReelMediaWhereUniqueInput
+  }
+
+  /**
+   * ReelMedia deleteMany
+   */
+  export type ReelMediaDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ReelMedias to delete
+     */
+    where?: ReelMediaWhereInput
+    /**
+     * Limit how many ReelMedias to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ReelMedia without action
+   */
+  export type ReelMediaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReelMedia
+     */
+    select?: ReelMediaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReelMedia
+     */
+    omit?: ReelMediaOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Model Supplier
    */
 
@@ -42332,6 +43486,8 @@ export namespace Prisma {
     comparePrice: 'comparePrice',
     stock: 'stock',
     reorderLevel: 'reorderLevel',
+    minOrderQuantity: 'minOrderQuantity',
+    maxOrderQuantity: 'maxOrderQuantity',
     status: 'status',
     featured: 'featured',
     badgeEnabled: 'badgeEnabled',
@@ -42648,6 +43804,17 @@ export namespace Prisma {
   export type StoreSettingScalarFieldEnum = (typeof StoreSettingScalarFieldEnum)[keyof typeof StoreSettingScalarFieldEnum]
 
 
+  export const ReelMediaScalarFieldEnum: {
+    id: 'id',
+    mimeType: 'mimeType',
+    data: 'data',
+    size: 'size',
+    createdAt: 'createdAt'
+  };
+
+  export type ReelMediaScalarFieldEnum = (typeof ReelMediaScalarFieldEnum)[keyof typeof ReelMediaScalarFieldEnum]
+
+
   export const SupplierScalarFieldEnum: {
     id: 'id',
     name: 'name',
@@ -42948,6 +44115,20 @@ export namespace Prisma {
    * Reference to a field of type 'ServiceRequestStatus[]'
    */
   export type ListEnumServiceRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ServiceRequestStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Bytes'
+   */
+  export type BytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes'>
+    
+
+
+  /**
+   * Reference to a field of type 'Bytes[]'
+   */
+  export type ListBytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes[]'>
     
 
 
@@ -43403,6 +44584,8 @@ export namespace Prisma {
     comparePrice?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
     stock?: IntFilter<"Product"> | number
     reorderLevel?: IntFilter<"Product"> | number
+    minOrderQuantity?: IntNullableFilter<"Product"> | number | null
+    maxOrderQuantity?: IntNullableFilter<"Product"> | number | null
     status?: EnumProductStatusFilter<"Product"> | $Enums.ProductStatus
     featured?: BoolFilter<"Product"> | boolean
     badgeEnabled?: BoolFilter<"Product"> | boolean
@@ -43441,6 +44624,8 @@ export namespace Prisma {
     comparePrice?: SortOrderInput | SortOrder
     stock?: SortOrder
     reorderLevel?: SortOrder
+    minOrderQuantity?: SortOrderInput | SortOrder
+    maxOrderQuantity?: SortOrderInput | SortOrder
     status?: SortOrder
     featured?: SortOrder
     badgeEnabled?: SortOrder
@@ -43482,6 +44667,8 @@ export namespace Prisma {
     comparePrice?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
     stock?: IntFilter<"Product"> | number
     reorderLevel?: IntFilter<"Product"> | number
+    minOrderQuantity?: IntNullableFilter<"Product"> | number | null
+    maxOrderQuantity?: IntNullableFilter<"Product"> | number | null
     status?: EnumProductStatusFilter<"Product"> | $Enums.ProductStatus
     featured?: BoolFilter<"Product"> | boolean
     badgeEnabled?: BoolFilter<"Product"> | boolean
@@ -43520,6 +44707,8 @@ export namespace Prisma {
     comparePrice?: SortOrderInput | SortOrder
     stock?: SortOrder
     reorderLevel?: SortOrder
+    minOrderQuantity?: SortOrderInput | SortOrder
+    maxOrderQuantity?: SortOrderInput | SortOrder
     status?: SortOrder
     featured?: SortOrder
     badgeEnabled?: SortOrder
@@ -43554,6 +44743,8 @@ export namespace Prisma {
     comparePrice?: DecimalNullableWithAggregatesFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
     stock?: IntWithAggregatesFilter<"Product"> | number
     reorderLevel?: IntWithAggregatesFilter<"Product"> | number
+    minOrderQuantity?: IntNullableWithAggregatesFilter<"Product"> | number | null
+    maxOrderQuantity?: IntNullableWithAggregatesFilter<"Product"> | number | null
     status?: EnumProductStatusWithAggregatesFilter<"Product"> | $Enums.ProductStatus
     featured?: BoolWithAggregatesFilter<"Product"> | boolean
     badgeEnabled?: BoolWithAggregatesFilter<"Product"> | boolean
@@ -45159,6 +46350,60 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"StoreSetting"> | Date | string
   }
 
+  export type ReelMediaWhereInput = {
+    AND?: ReelMediaWhereInput | ReelMediaWhereInput[]
+    OR?: ReelMediaWhereInput[]
+    NOT?: ReelMediaWhereInput | ReelMediaWhereInput[]
+    id?: StringFilter<"ReelMedia"> | string
+    mimeType?: StringFilter<"ReelMedia"> | string
+    data?: BytesFilter<"ReelMedia"> | Bytes
+    size?: IntFilter<"ReelMedia"> | number
+    createdAt?: DateTimeFilter<"ReelMedia"> | Date | string
+  }
+
+  export type ReelMediaOrderByWithRelationInput = {
+    id?: SortOrder
+    mimeType?: SortOrder
+    data?: SortOrder
+    size?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ReelMediaWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ReelMediaWhereInput | ReelMediaWhereInput[]
+    OR?: ReelMediaWhereInput[]
+    NOT?: ReelMediaWhereInput | ReelMediaWhereInput[]
+    mimeType?: StringFilter<"ReelMedia"> | string
+    data?: BytesFilter<"ReelMedia"> | Bytes
+    size?: IntFilter<"ReelMedia"> | number
+    createdAt?: DateTimeFilter<"ReelMedia"> | Date | string
+  }, "id">
+
+  export type ReelMediaOrderByWithAggregationInput = {
+    id?: SortOrder
+    mimeType?: SortOrder
+    data?: SortOrder
+    size?: SortOrder
+    createdAt?: SortOrder
+    _count?: ReelMediaCountOrderByAggregateInput
+    _avg?: ReelMediaAvgOrderByAggregateInput
+    _max?: ReelMediaMaxOrderByAggregateInput
+    _min?: ReelMediaMinOrderByAggregateInput
+    _sum?: ReelMediaSumOrderByAggregateInput
+  }
+
+  export type ReelMediaScalarWhereWithAggregatesInput = {
+    AND?: ReelMediaScalarWhereWithAggregatesInput | ReelMediaScalarWhereWithAggregatesInput[]
+    OR?: ReelMediaScalarWhereWithAggregatesInput[]
+    NOT?: ReelMediaScalarWhereWithAggregatesInput | ReelMediaScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ReelMedia"> | string
+    mimeType?: StringWithAggregatesFilter<"ReelMedia"> | string
+    data?: BytesWithAggregatesFilter<"ReelMedia"> | Bytes
+    size?: IntWithAggregatesFilter<"ReelMedia"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"ReelMedia"> | Date | string
+  }
+
   export type SupplierWhereInput = {
     AND?: SupplierWhereInput | SupplierWhereInput[]
     OR?: SupplierWhereInput[]
@@ -45935,6 +47180,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -45972,6 +47219,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -46008,6 +47257,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -46045,6 +47296,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -46082,6 +47335,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -46107,6 +47362,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -46132,6 +47389,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -47753,6 +49012,62 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ReelMediaCreateInput = {
+    id?: string
+    mimeType: string
+    data: Bytes
+    size: number
+    createdAt?: Date | string
+  }
+
+  export type ReelMediaUncheckedCreateInput = {
+    id?: string
+    mimeType: string
+    data: Bytes
+    size: number
+    createdAt?: Date | string
+  }
+
+  export type ReelMediaUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    data?: BytesFieldUpdateOperationsInput | Bytes
+    size?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReelMediaUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    data?: BytesFieldUpdateOperationsInput | Bytes
+    size?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReelMediaCreateManyInput = {
+    id?: string
+    mimeType: string
+    data: Bytes
+    size: number
+    createdAt?: Date | string
+  }
+
+  export type ReelMediaUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    data?: BytesFieldUpdateOperationsInput | Bytes
+    size?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReelMediaUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    data?: BytesFieldUpdateOperationsInput | Bytes
+    size?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type SupplierCreateInput = {
     name: string
     contactName?: string | null
@@ -48790,6 +50105,8 @@ export namespace Prisma {
     comparePrice?: SortOrder
     stock?: SortOrder
     reorderLevel?: SortOrder
+    minOrderQuantity?: SortOrder
+    maxOrderQuantity?: SortOrder
     status?: SortOrder
     featured?: SortOrder
     badgeEnabled?: SortOrder
@@ -48811,6 +50128,8 @@ export namespace Prisma {
     comparePrice?: SortOrder
     stock?: SortOrder
     reorderLevel?: SortOrder
+    minOrderQuantity?: SortOrder
+    maxOrderQuantity?: SortOrder
     returnDays?: SortOrder
     replacementDays?: SortOrder
     categoryId?: SortOrder
@@ -48827,6 +50146,8 @@ export namespace Prisma {
     comparePrice?: SortOrder
     stock?: SortOrder
     reorderLevel?: SortOrder
+    minOrderQuantity?: SortOrder
+    maxOrderQuantity?: SortOrder
     status?: SortOrder
     featured?: SortOrder
     badgeEnabled?: SortOrder
@@ -48853,6 +50174,8 @@ export namespace Prisma {
     comparePrice?: SortOrder
     stock?: SortOrder
     reorderLevel?: SortOrder
+    minOrderQuantity?: SortOrder
+    maxOrderQuantity?: SortOrder
     status?: SortOrder
     featured?: SortOrder
     badgeEnabled?: SortOrder
@@ -48874,6 +50197,8 @@ export namespace Prisma {
     comparePrice?: SortOrder
     stock?: SortOrder
     reorderLevel?: SortOrder
+    minOrderQuantity?: SortOrder
+    maxOrderQuantity?: SortOrder
     returnDays?: SortOrder
     replacementDays?: SortOrder
     categoryId?: SortOrder
@@ -50234,6 +51559,55 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedJsonFilter<$PrismaModel>
     _max?: NestedJsonFilter<$PrismaModel>
+  }
+
+  export type BytesFilter<$PrismaModel = never> = {
+    equals?: Bytes | BytesFieldRefInput<$PrismaModel>
+    in?: Bytes[] | ListBytesFieldRefInput<$PrismaModel>
+    notIn?: Bytes[] | ListBytesFieldRefInput<$PrismaModel>
+    not?: NestedBytesFilter<$PrismaModel> | Bytes
+  }
+
+  export type ReelMediaCountOrderByAggregateInput = {
+    id?: SortOrder
+    mimeType?: SortOrder
+    data?: SortOrder
+    size?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ReelMediaAvgOrderByAggregateInput = {
+    size?: SortOrder
+  }
+
+  export type ReelMediaMaxOrderByAggregateInput = {
+    id?: SortOrder
+    mimeType?: SortOrder
+    data?: SortOrder
+    size?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ReelMediaMinOrderByAggregateInput = {
+    id?: SortOrder
+    mimeType?: SortOrder
+    data?: SortOrder
+    size?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ReelMediaSumOrderByAggregateInput = {
+    size?: SortOrder
+  }
+
+  export type BytesWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Bytes | BytesFieldRefInput<$PrismaModel>
+    in?: Bytes[] | ListBytesFieldRefInput<$PrismaModel>
+    notIn?: Bytes[] | ListBytesFieldRefInput<$PrismaModel>
+    not?: NestedBytesWithAggregatesFilter<$PrismaModel> | Bytes
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBytesFilter<$PrismaModel>
+    _max?: NestedBytesFilter<$PrismaModel>
   }
 
   export type SupplierCountOrderByAggregateInput = {
@@ -52463,6 +53837,10 @@ export namespace Prisma {
     update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutReviewsInput, ProductUpdateWithoutReviewsInput>, ProductUncheckedUpdateWithoutReviewsInput>
   }
 
+  export type BytesFieldUpdateOperationsInput = {
+    set?: Bytes
+  }
+
   export type PurchaseCreateNestedManyWithoutSupplierInput = {
     create?: XOR<PurchaseCreateWithoutSupplierInput, PurchaseUncheckedCreateWithoutSupplierInput> | PurchaseCreateWithoutSupplierInput[] | PurchaseUncheckedCreateWithoutSupplierInput[]
     connectOrCreate?: PurchaseCreateOrConnectWithoutSupplierInput | PurchaseCreateOrConnectWithoutSupplierInput[]
@@ -53268,6 +54646,23 @@ export namespace Prisma {
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedBytesFilter<$PrismaModel = never> = {
+    equals?: Bytes | BytesFieldRefInput<$PrismaModel>
+    in?: Bytes[] | ListBytesFieldRefInput<$PrismaModel>
+    notIn?: Bytes[] | ListBytesFieldRefInput<$PrismaModel>
+    not?: NestedBytesFilter<$PrismaModel> | Bytes
+  }
+
+  export type NestedBytesWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Bytes | BytesFieldRefInput<$PrismaModel>
+    in?: Bytes[] | ListBytesFieldRefInput<$PrismaModel>
+    notIn?: Bytes[] | ListBytesFieldRefInput<$PrismaModel>
+    not?: NestedBytesWithAggregatesFilter<$PrismaModel> | Bytes
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBytesFilter<$PrismaModel>
+    _max?: NestedBytesFilter<$PrismaModel>
   }
 
   export type UserRoleCreateWithoutUserInput = {
@@ -54234,6 +55629,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -54270,6 +55667,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -54408,6 +55807,8 @@ export namespace Prisma {
     comparePrice?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
     stock?: IntFilter<"Product"> | number
     reorderLevel?: IntFilter<"Product"> | number
+    minOrderQuantity?: IntNullableFilter<"Product"> | number | null
+    maxOrderQuantity?: IntNullableFilter<"Product"> | number | null
     status?: EnumProductStatusFilter<"Product"> | $Enums.ProductStatus
     featured?: BoolFilter<"Product"> | boolean
     badgeEnabled?: BoolFilter<"Product"> | boolean
@@ -55109,6 +56510,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -55145,6 +56548,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -55196,6 +56601,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -55232,6 +56639,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -55267,6 +56676,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -55303,6 +56714,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -55354,6 +56767,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -55390,6 +56805,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -55425,6 +56842,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -55461,6 +56880,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -55512,6 +56933,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -55548,6 +56971,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -55583,6 +57008,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -55619,6 +57046,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -55695,6 +57124,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -55731,6 +57162,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -55887,6 +57320,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -55923,6 +57358,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -56071,6 +57508,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -56107,6 +57546,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -56889,6 +58330,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -56925,6 +58368,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -57090,6 +58535,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -57126,6 +58573,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -57161,6 +58610,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -57197,6 +58648,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -57430,6 +58883,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -57466,6 +58921,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -57990,6 +59447,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -58026,6 +59485,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -58123,6 +59584,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -58159,6 +59622,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -58234,6 +59699,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -58270,6 +59737,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -58367,6 +59836,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -58403,6 +59874,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -58438,6 +59911,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -58474,6 +59949,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -58525,6 +60002,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -58561,6 +60040,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -59102,6 +60583,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -59138,6 +60621,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -59253,6 +60738,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -59289,6 +60776,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -60027,6 +61516,8 @@ export namespace Prisma {
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
     reorderLevel?: number
+    minOrderQuantity?: number | null
+    maxOrderQuantity?: number | null
     status?: $Enums.ProductStatus
     featured?: boolean
     badgeEnabled?: boolean
@@ -60093,6 +61584,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -60129,6 +61622,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean
@@ -60165,6 +61660,8 @@ export namespace Prisma {
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
     reorderLevel?: IntFieldUpdateOperationsInput | number
+    minOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
+    maxOrderQuantity?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumProductStatusFieldUpdateOperationsInput | $Enums.ProductStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     badgeEnabled?: BoolFieldUpdateOperationsInput | boolean

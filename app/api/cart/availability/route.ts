@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
+import { effectiveQuantityLimits, getGlobalQuantityLimits } from "@/lib/quantity-limits";
 
 type CartLine = { id: unknown; variantId?: unknown; quantity: unknown };
 
@@ -18,6 +19,7 @@ export async function POST(request: Request) {
       where: { id: { in: productIds }, status: "active", category: { status: "active" } },
       include: { variants: { select: { id: true, stock: true } } },
     });
+    const globalLimits = await getGlobalQuantityLimits();
 
     const requested = new Map<string, number>();
     for (const item of validItems) {
@@ -37,9 +39,11 @@ export async function POST(request: Request) {
         : 0;
       const key = `${productId}:${variantId ?? "product"}`;
       const quantity = requested.get(key) ?? Number(item.quantity);
-      const available = Boolean(product) && (!variantId || Boolean(variant)) && stock >= quantity;
+      const limits = effectiveQuantityLimits(product ?? {}, globalLimits);
+      const totalForProduct = validItems.filter(line => Number(line.id) === productId).reduce((sum, line) => sum + Number(line.quantity), 0);
+      const available = Boolean(product) && (!variantId || Boolean(variant)) && stock >= quantity && totalForProduct >= limits.min && totalForProduct <= limits.max;
 
-      return { id: productId, variantId, stock, available, requested: quantity };
+      return { id: productId, variantId, stock, available, requested: quantity, min: limits.min, max: limits.max };
     });
 
     return NextResponse.json({ availability });

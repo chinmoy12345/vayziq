@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { requireAdminPermission } from "@/lib/auth";
 import { parseProductVideoUrl } from "@/lib/product-video";
+import { effectiveQuantityLimits, getGlobalQuantityLimits, parseQuantityOverride, validQuantityLimits } from "@/lib/quantity-limits";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -292,6 +293,8 @@ export async function GET(
 
         stock:
           product.stock,
+        minOrderQuantity: product.minOrderQuantity,
+        maxOrderQuantity: product.maxOrderQuantity,
 
         status:
           product.status,
@@ -365,6 +368,10 @@ export async function PUT(
 
     const body =
       await request.json();
+    const minOrderQuantity = parseQuantityOverride(body.minOrderQuantity);
+    const maxOrderQuantity = parseQuantityOverride(body.maxOrderQuantity);
+    const limits = effectiveQuantityLimits({ minOrderQuantity, maxOrderQuantity }, await getGlobalQuantityLimits());
+    if (minOrderQuantity === undefined || maxOrderQuantity === undefined || !validQuantityLimits(limits.min, limits.max)) return NextResponse.json({ message: "Invalid minimum or maximum purchase quantity." }, { status: 400 });
 
     const {
       name,
@@ -978,6 +985,8 @@ export async function PUT(
 
               stock:
                 finalStock,
+              minOrderQuantity,
+              maxOrderQuantity,
 
               status:
                 status ===

@@ -15,7 +15,7 @@ const sectionSettings: { key: SettingKey; label: string; description: string }[]
   { key: "featuredCollection", label: "The Collection", description: "Show the collection image carousel." },
   { key: "youMayLike", label: "You May Like", description: "Show the recommended product carousel." },
   { key: "watchAndBuy", label: "Watch & Buy", description: "Show the video shopping section." },
-  { key: "offerZone", label: "Offer banner", description: "Show the home page offer banner." },
+  { key: "offerZone", label: "Offer banners", description: "Show two slim promotional banners between home page sections. Active Offer Zone banners take priority over generic fallbacks." },
   { key: "journal", label: "From the Journal", description: "Show the latest blog stories." },
 ];
 

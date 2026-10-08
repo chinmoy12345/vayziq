@@ -22,7 +22,7 @@ import {
   X,
 } from "lucide-react";
 import type { BlogPost } from "@/lib/blog";
-import type { VayziqHomeData, VayziqHomeProduct } from "@/lib/vayziq-home-data";
+import type { VayziqHomeData, VayziqHomeOfferBanner, VayziqHomeProduct } from "@/lib/vayziq-home-data";
 import type { HomepageVisibility } from "@/lib/homepage-settings";
 import type { StoreMenuSettings } from "@/lib/store-menu-settings";
 import ProductVideo from "@/components/product/ProductVideo";
@@ -48,6 +48,20 @@ function SectionHeading({
       </Link>
     </div>
   );
+}
+
+function HomeOfferStrip({ banner, alternate = false }: { banner: VayziqHomeOfferBanner; alternate?: boolean }) {
+  return <section className={`${styles.offerSection} ${sectionWidthStyles.wideMerchSection}`} aria-label={banner.title}>
+    <Link href={banner.href} className={`${styles.offerStrip} ${alternate ? styles.offerStripAlternate : ""}`}>
+      <span className={styles.offerStripCopy}>
+        <span className={styles.offerStripEyebrow}>VAYZIQ / THE OFFER EDIT</span>
+        <strong>{banner.title}</strong>
+        {banner.subtitle && <span className={styles.offerStripSubtitle}>{banner.subtitle}</span>}
+        <span className={styles.offerStripAction}>Explore offers <ArrowRight size={15} /></span>
+      </span>
+      <span className={styles.offerStripImage}><Image src={banner.image} alt="" fill sizes="(max-width: 767px) 42vw, 38vw" quality={85} /></span>
+    </Link>
+  </section>;
 }
 function ProductCard({
   product,
@@ -161,9 +175,11 @@ export default function VayziqHome({
     null,
   );
   const [cartQuantity, setCartQuantity] = useState(1);
+  const [cartLimits, setCartLimits] = useState({ min: 1, max: 10 });
+  const [cartLimitMessage, setCartLimitMessage] = useState("");
   const [cartOptions, setCartOptions] = useState<Record<string, string>>({});
   const [cartAdded, setCartAdded] = useState(false);
-  const { banners, categories, products, catalogProducts } = initialData;
+  const { banners, offerBanners, categories, products, catalogProducts } = initialData;
   const looks = products.slice(0, 4).map((product) => product.image);
   const watchProducts = products
     .filter((product) => product.videoUrl)
@@ -197,7 +213,6 @@ export default function VayziqHome({
           )
   ).slice(0, 6);
   const visibleCollection = products.slice(0, 3);
-  const offerBanner = banners[(bannerStart + 1) % banners.length] ?? banners[0];
   const visibleBanners = Array.from(
     { length: Math.min(3, banners.length) },
     (_, index) => banners[(bannerStart + index) % banners.length],
@@ -234,6 +249,11 @@ export default function VayziqHome({
   const openCartPopup = (product: VayziqHomeProduct) => {
     setCartProduct(product);
     setCartQuantity(1);
+    setCartLimitMessage("");
+    void fetch("/api/cart/availability", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ items: [{ id: product.id, quantity: 1 }] }) })
+      .then(response => response.json())
+      .then(body => { const limits = body.availability?.[0]; if (limits) { setCartLimits({ min: limits.min, max: limits.max }); setCartQuantity(limits.min); } })
+      .catch(() => setCartLimitMessage("Quantity limits could not be loaded. Try again."));
     setCartOptions(
       Object.fromEntries(
         product.options
@@ -244,6 +264,7 @@ export default function VayziqHome({
     setCartAdded(false);
   };
   const addToCart = (product: VayziqHomeProduct, quantity: number) => {
+    if (quantity < cartLimits.min || quantity > cartLimits.max) { setCartLimitMessage(`Choose ${cartLimits.min}–${cartLimits.max} items.`); return; }
     const savedCart = JSON.parse(
       localStorage.getItem("susmita-cart") ?? "[]",
     ) as Array<{ id: number; quantity: number; size?: string; color?: string }>;
@@ -253,6 +274,7 @@ export default function VayziqHome({
         item.size === cartOptions.size &&
         item.color === (cartOptions.color ?? cartOptions.colour),
     );
+    if (savedCart.filter(item => item.id === product.id).reduce((sum, item) => sum + item.quantity, 0) + quantity > cartLimits.max) { setCartLimitMessage(`Maximum ${cartLimits.max} items of this product per order.`); return; }
     const item = {
       id: product.id,
       slug: product.slug,
@@ -388,6 +410,7 @@ export default function VayziqHome({
           ))}
         </ProductCarousel>
         </>}
+        {visibility.offerZone && offerBanners[0] && <HomeOfferStrip banner={offerBanners[0]} />}
         {visibility.newArrivals && <>
         <SectionHeading title="New Arrivals" href="/shop?sort=newest" />
         <ProductCarousel label="New Arrivals">
@@ -484,23 +507,7 @@ export default function VayziqHome({
             </section>
           </>
         )}
-        {visibility.offerZone && offerBanner && (
-          <section className={`${styles.offerSection} ${sectionWidthStyles.wideMerchSection}`}>
-            <Link
-              href={offerBanner.href}
-              className={styles.offerBanner}
-              aria-label={`Shop ${offerBanner.alt}`}
-            >
-              <Image
-                src={offerBanner.image}
-                alt={offerBanner.alt}
-                fill
-                sizes="100vw"
-                quality={100}
-              />
-            </Link>
-          </section>
-        )}
+        {visibility.offerZone && offerBanners[1] && <HomeOfferStrip banner={offerBanners[1]} alternate />}
         {visibility.trendingCategories && (
           <>
             <SectionHeading title="Trending Categories" />
@@ -689,13 +696,15 @@ export default function VayziqHome({
             ) : (
               <>
                 {cartProduct.options.map((option) => <div className={styles.optionGroup} key={option.name}><span>{option.name}</span><div>{option.values.map((value) => <button type="button" key={value} className={cartOptions[option.name.toLowerCase()] === value ? styles.optionSelected : ""} onClick={() => setCartOptions((current) => ({ ...current, [option.name.toLowerCase()]: value }))}>{value}</button>)}</div></div>)}
+                <p className="text-xs text-[#666]">Quantity per order: {cartLimits.min}–{cartLimits.max}</p>
+                {cartLimitMessage && <p role="alert" className="text-xs text-red-700">{cartLimitMessage}</p>}
                 <div className={styles.quantityControl}>
                   <span>Quantity</span>
                   <div>
                     <button
                       type="button"
                       onClick={() =>
-                        setCartQuantity((quantity) => Math.max(1, quantity - 1))
+                        setCartQuantity((quantity) => Math.max(cartLimits.min, quantity - 1))
                       }
                       aria-label="Decrease quantity"
                     >
@@ -705,7 +714,7 @@ export default function VayziqHome({
                     <button
                       type="button"
                       onClick={() =>
-                        setCartQuantity((quantity) => quantity + 1)
+                        setCartQuantity((quantity) => Math.min(cartLimits.max, quantity + 1))
                       }
                       aria-label="Increase quantity"
                     >

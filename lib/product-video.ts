@@ -14,6 +14,9 @@ export function parseProductVideoUrl(value: unknown): ProductVideoSource | null 
   if (/^\/uploads\/products\/[a-zA-Z0-9._-]+\.(mp4|webm|ogg)$/i.test(sourceUrl)) {
     return { kind: "file", sourceUrl };
   }
+  if (/^\/api\/reel-media\/[0-9a-f-]+\.(mp4|webm)$/i.test(sourceUrl)) {
+    return { kind: "file", sourceUrl };
+  }
 
   let url: URL;
   try {

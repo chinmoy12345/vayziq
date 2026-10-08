@@ -35,6 +35,8 @@ interface ProductInfoData {
   sizes?: string[];
   colors?: string[];
   stock?: number;
+  min?: number;
+  max?: number;
   slug?: string;
   image?: string;
 }
@@ -62,9 +64,11 @@ export default function ProductInfo({
   const compareAtPrice = Number((product.oldPrice ?? "").replace(/[^\d.]/g, ""));
   const discountPercent = compareAtPrice > sellingPrice ? Math.floor((compareAtPrice - sellingPrice) / compareAtPrice * 100) : 0;
   const selectedVariantStock = product.variants?.length ? variant?.stock ?? 0 : product.stock ?? 0;
-  const canPurchase = product.variants?.length ? Boolean(variant && selectedVariantStock > 0) : (product.stock ?? 0) > 0;
+  const minimumQuantity = product.min ?? 1;
+  const maximumQuantity = Math.min(product.max ?? 10, selectedVariantStock);
+  const canPurchase = product.variants?.length ? Boolean(variant && selectedVariantStock >= minimumQuantity) : (product.stock ?? 0) >= minimumQuantity;
   const colorSwatches: Record<string, string> = { Black: "#151515", Olive: "#647056", White: "#f5f5f3", Grey: "#a6a8aa", Gray: "#a6a8aa", Navy: "#233550", Beige: "#d8c7aa" };
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(minimumQuantity);
 
   const [wishlist, setWishlist] = useState(false);
   const [wishAnimating, setWishAnimating] = useState(false);
@@ -99,13 +103,14 @@ export default function ProductInfo({
   };
 
   const addToBag = () => {
-    if (!canPurchase || quantity > selectedVariantStock) { setActionMessage("Choose an available quantity."); return; }
+    if (!canPurchase || quantity < minimumQuantity || quantity > maximumQuantity) { setActionMessage(`Choose ${minimumQuantity}–${maximumQuantity} items.`); return; }
     if (product.variants?.length && (!variant || variant.stock < quantity)) { setActionMessage("Choose an available variant with enough stock."); return; }
     const savedCart = JSON.parse(localStorage.getItem("susmita-cart") ?? "[]") as Array<{
       id: number | string; quantity: number; size?: string; color?: string;
     }>;
     const existing = savedCart.find((item) => item.id === product.id && item.size === selectedSize && item.color === selectedColor);
-    if ((existing?.quantity ?? 0) + quantity > selectedVariantStock) { setActionMessage("The quantity in your bag would exceed available stock."); return; }
+    const totalInBag = savedCart.filter(item => Number(item.id) === Number(product.id)).reduce((sum, item) => sum + item.quantity, 0);
+    if (totalInBag + quantity > (product.max ?? 10)) { setActionMessage(`Maximum ${product.max ?? 10} items of this product per order.`); return; }
     const item = {
       id: product.id, slug: product.slug, name: product.name, category: product.category,
       price: sellingPrice, variantId: variant?.id, image: product.image ?? "/logo.png",
@@ -159,7 +164,7 @@ export default function ProductInfo({
   };
 
   const buyNow = () => {
-    if (!canPurchase || quantity > selectedVariantStock) { setActionMessage("Choose an available quantity."); return; }
+    if (!canPurchase || quantity < minimumQuantity || quantity > maximumQuantity) { setActionMessage(`Choose ${minimumQuantity}–${maximumQuantity} items.`); return; }
     if (product.variants?.length && (!variant || variant.stock < quantity)) {
       setActionMessage("Choose an available variant with enough stock.");
       return;
@@ -439,7 +444,7 @@ export default function ProductInfo({
             type="button"
             onClick={() =>
               setQuantity((value) =>
-                Math.max(1, value - 1)
+                Math.max(minimumQuantity, value - 1)
               )
             }
             className="flex h-full w-11 items-center justify-center text-[#5E5151] transition hover:bg-[#F8EFEC]"
@@ -456,12 +461,12 @@ export default function ProductInfo({
             type="button"
             onClick={() =>
               setQuantity((value) =>
-                Math.min(Math.max(1, Math.min(10, selectedVariantStock)), value + 1)
+                Math.min(maximumQuantity, value + 1)
               )
             }
             className="flex h-full w-11 items-center justify-center text-[#5E5151] transition hover:bg-[#F8EFEC]"
             aria-label="Increase quantity"
-          disabled={!canPurchase || quantity >= Math.min(10, selectedVariantStock)}
+          disabled={!canPurchase || quantity >= maximumQuantity}
           >
             <Plus className="h-4 w-4" />
           </button>
@@ -479,7 +484,7 @@ export default function ProductInfo({
         <button
           type="button"
           onClick={addToBag}
-          disabled={!canPurchase || quantity > selectedVariantStock}
+          disabled={!canPurchase || quantity > maximumQuantity}
           className="
             flex
             h-13
@@ -511,7 +516,7 @@ export default function ProductInfo({
         <button
           type="button"
           onClick={buyNow}
-          disabled={!canPurchase || quantity > selectedVariantStock}
+          disabled={!canPurchase || quantity > maximumQuantity}
           className="
             flex
             h-13

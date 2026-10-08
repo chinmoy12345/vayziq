@@ -3,12 +3,13 @@ import type { Prisma } from "@/lib/generated/prisma-suppliers";
 import { requireAdminPermission } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { REELS_SETTING_KEY, type StoreReel } from "@/lib/reels";
+import { parseProductVideoUrl } from "@/lib/product-video";
 
 const badges = ["None", "Trending", "New", "Bestseller", "Must Have"] as const;
 function validReel(value: unknown): value is StoreReel {
   if (!value || typeof value !== "object" || Array.isArray(value)) return false;
   const r = value as Record<string, unknown>;
-  return typeof r.id === "string" && typeof r.title === "string" && r.title.length <= 120 && typeof r.videoUrl === "string" && r.videoUrl.length <= 3000 && typeof r.poster === "string" && r.poster.length <= 3000 && badges.includes(r.badge as StoreReel["badge"]) && (r.productId === null || typeof r.productId === "number") && typeof r.cta === "string" && typeof r.description === "string" && typeof r.enabled === "boolean" && typeof r.sortOrder === "number";
+  return typeof r.id === "string" && typeof r.title === "string" && r.title.length <= 120 && typeof r.videoUrl === "string" && r.videoUrl.length <= 3000 && (!r.videoUrl || Boolean(parseProductVideoUrl(r.videoUrl))) && typeof r.poster === "string" && r.poster.length <= 3000 && badges.includes(r.badge as StoreReel["badge"]) && (r.productId === null || typeof r.productId === "number") && typeof r.cta === "string" && typeof r.description === "string" && typeof r.enabled === "boolean" && typeof r.sortOrder === "number";
 }
 export async function GET() {
   if (!(await requireAdminPermission("storefront", "view"))) return NextResponse.json({ message: "Unauthorized." }, { status: 401 });

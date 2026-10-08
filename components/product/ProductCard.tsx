@@ -31,6 +31,8 @@ export interface Product {
   filterValues?: { sizes: string[]; colors: string[] };
   options?: { name: string; values: string[] }[];
   inStock?: boolean;
+  minOrderQuantity?: number | null;
+  maxOrderQuantity?: number | null;
 }
 
 /* =========================================================
@@ -94,6 +96,8 @@ export default function ProductCard({
   const [cartOpen, setCartOpen] = useState(false);
   const [cartAdded, setCartAdded] = useState(false);
   const [cartQuantity, setCartQuantity] = useState(1);
+  const [cartLimits, setCartLimits] = useState({ min: 1, max: 10 });
+  const [cartLimitMessage, setCartLimitMessage] = useState("");
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
   const galleryImages = product.images?.length ? product.images : [product.image];
   const currentImage = galleryImages[imageIndex] ?? product.image;
@@ -144,17 +148,24 @@ export default function ProductCard({
   const openCartPopup = () => {
     setSelectedOptions(Object.fromEntries((product.options ?? []).filter((option) => option.values.length).map((option) => [option.name, option.values[0]])));
     setCartQuantity(1);
+    setCartLimitMessage("");
     setCartAdded(false);
     setCartOpen(true);
+    void fetch("/api/cart/availability", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ items: [{ id: product.id, quantity: 1 }] }) })
+      .then(response => response.json())
+      .then(body => { const limits = body.availability?.[0]; if (limits) { setCartLimits({ min: limits.min, max: limits.max }); setCartQuantity(limits.min); } })
+      .catch(() => setCartLimitMessage("Quantity limits could not be loaded. Try again."));
   };
 
   const addToCart = () => {
+    if (cartQuantity < cartLimits.min || cartQuantity > cartLimits.max) { setCartLimitMessage(`Choose ${cartLimits.min}–${cartLimits.max} items.`); return; }
     const savedCart = JSON.parse(localStorage.getItem("susmita-cart") ?? "[]") as Array<{ id: number; quantity: number; size?: string; color?: string; options?: Record<string, string> }>;
     const size = selectedOptions.Size ?? selectedOptions.size ?? "";
     const color = selectedOptions.Color ?? selectedOptions.Colour ?? selectedOptions.color ?? selectedOptions.colour ?? "";
     const existing = savedCart.find((item) => item.id === Number(product.id) && item.size === size && item.color === color);
     const item = { id: Number(product.id), slug: productSlug, name: product.name, category: product.category, price: Number(product.price.replace(/[^\d.]/g, "")), image: product.image, quantity: cartQuantity, size, color, options: selectedOptions };
     const nextQuantity = (existing?.quantity ?? 0) + cartQuantity;
+    if (savedCart.filter(cartItem => cartItem.id === Number(product.id)).reduce((sum, cartItem) => sum + cartItem.quantity, 0) + cartQuantity > cartLimits.max) { setCartLimitMessage(`Maximum ${cartLimits.max} items of this product per order.`); return; }
     localStorage.setItem("susmita-cart", JSON.stringify(existing ? savedCart.map((cartItem) => cartItem === existing ? { ...cartItem, quantity: nextQuantity } : cartItem) : [...savedCart, item]));
     window.dispatchEvent(new Event("cart-updated"));
     setCartAdded(true);
@@ -370,6 +381,8 @@ export default function ProductCard({
             {galleryImages.slice(0, 3).map((image, index) => <div key={`${image}-${index}`} className="overflow-hidden rounded-lg bg-[#f4f4f4]"><img src={image} alt={`${product.name} view ${index + 1}`} className="h-[145px] w-full object-cover sm:h-[250px]" /></div>)}
           </div>
           <div className="mt-5 pr-8"><p className="text-[10px] font-extrabold tracking-[.12em] text-[#777]">{cartAdded ? "ADDED TO BAG" : product.category.toUpperCase()}</p><h2 id={`cart-title-${product.id}`} className="mt-1 text-lg font-semibold leading-tight text-[#111]">{product.name}</h2><strong className="mt-2 block text-[17px] text-[#111]">{product.price}</strong>{product.oldPrice && <del className="ml-2 text-[13px] text-[#888]">{product.oldPrice}</del>}</div>
+          {!cartAdded && <p className="mt-3 text-xs text-[#666]">Quantity per order: {cartLimits.min}–{cartLimits.max}</p>}
+          {cartLimitMessage && <p role="alert" className="mt-2 text-xs text-red-700">{cartLimitMessage}</p>}
           {cartAdded ? <div className="mt-5"><Link href="/cart" className="flex min-h-11 items-center justify-center rounded-lg bg-[#fbb606] text-[13px] font-extrabold text-[#111]">View Cart</Link><button type="button" onClick={() => setCartOpen(false)} className="mt-2 flex min-h-11 w-full items-center justify-center rounded-lg border border-[#d7d7d7] bg-white text-[13px] font-extrabold text-[#111]">Continue Shopping</button></div> : <><div className="mt-5 space-y-4 border-t border-[#ececec] pt-4">{(product.options ?? []).filter((option) => option.values.length).map((option) => <div key={option.name}><p className="mb-2 text-[10px] font-extrabold uppercase tracking-[.12em] text-[#666]">{option.name}</p><div className="flex flex-wrap gap-2">{option.values.map((value) => <button key={value} type="button" onClick={() => setSelectedOptions((current) => ({ ...current, [option.name]: value }))} className={`min-w-11 rounded-md border px-3 py-2 text-xs font-bold transition ${selectedOptions[option.name] === value ? "border-[#111] bg-[#111] text-white" : "border-[#d6d6d6] bg-white text-[#333] hover:border-[#111]"}`}>{value}</button>)}</div></div>)}</div><div className="mt-5 flex items-center justify-between border-y border-[#ececec] py-3"><span className="text-sm font-bold text-[#333]">Quantity</span><div className="flex items-center gap-4"><button type="button" onClick={() => setCartQuantity((quantity) => Math.max(1, quantity - 1))} className="grid h-8 w-8 place-items-center rounded-full border border-[#d8d8d8] text-lg" aria-label="Decrease quantity">−</button><b className="text-sm">{cartQuantity}</b><button type="button" onClick={() => setCartQuantity((quantity) => quantity + 1)} className="grid h-8 w-8 place-items-center rounded-full border border-[#d8d8d8] text-lg" aria-label="Increase quantity">+</button></div></div><button type="button" onClick={addToCart} className="mt-5 flex min-h-11 w-full items-center justify-center rounded-lg bg-[#fbb606] text-[13px] font-extrabold text-[#111]">Add to Bag</button></>}
         </section>
       </div>

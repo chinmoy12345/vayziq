@@ -1,9 +1,10 @@
 import prisma from "@/lib/db";
 
 export type VayziqHomeBanner = { image: string; alt: string; href: string };
+export type VayziqHomeOfferBanner = { image: string; title: string; subtitle: string | null; href: string };
 export type VayziqHomeCategory = { id: number; name: string; slug: string; image: string };
 export type VayziqHomeProduct = { id: number; name: string; slug: string; price: string; oldPrice: string | null; discountPercent: number | null; image: string; images: string[]; category: string; colors: string[]; options: { name: string; values: string[] }[]; rating: string; videoUrl: string | null; badge: string | null; badgeTone: string | null; inStock: boolean };
-export type VayziqHomeData = { banners: VayziqHomeBanner[]; categories: VayziqHomeCategory[]; products: VayziqHomeProduct[]; catalogProducts: VayziqHomeProduct[] };
+export type VayziqHomeData = { banners: VayziqHomeBanner[]; offerBanners: VayziqHomeOfferBanner[]; categories: VayziqHomeCategory[]; products: VayziqHomeProduct[]; catalogProducts: VayziqHomeProduct[] };
 
 const fallbackBanners: VayziqHomeBanner[] = [
   { image: "/vayziq/hero-paired-v2.png", alt: "VAYZIQ everyday collection", href: "/shop" },
@@ -13,10 +14,15 @@ const fallbackBanners: VayziqHomeBanner[] = [
 ];
 
 const fallbackImage = "/vayziq/fashion-grid.png";
+const fallbackOfferBanners: VayziqHomeOfferBanner[] = [
+  { image: "/vayziq/category-women.png", title: "More to wear. More to love.", subtitle: "Explore current offers on everyday streetwear.", href: "/offers" },
+  { image: "/vayziq/category-men.png", title: "Good fits, better finds.", subtitle: "Find the latest Vayziq deals in one place.", href: "/offers" },
+];
 
 export async function getVayziqHomeData(): Promise<VayziqHomeData> {
-  const [banners, roots, products, reviewStats] = await Promise.all([
+  const [banners, offerBanners, roots, products, reviewStats] = await Promise.all([
     prisma.banner.findMany({ where: { active: true, placement: "home" }, orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }], take: 8 }),
+    prisma.banner.findMany({ where: { active: true, placement: "offer-zone" }, orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }], take: 2, select: { id: true, image: true, title: true, subtitle: true } }),
     prisma.category.findMany({
       where: { status: "active", slug: { in: ["men", "women"] }, parentId: null },
       include: { children: { where: { status: "active" }, orderBy: [{ sortOrder: "asc" }, { name: "asc" }] } },
@@ -61,6 +67,10 @@ export async function getVayziqHomeData(): Promise<VayziqHomeData> {
 
   return {
     banners: banners.length ? banners.map((banner) => ({ image: banner.image, alt: banner.title, href: banner.link || "/shop" })) : fallbackBanners,
+    offerBanners: fallbackOfferBanners.map((fallback, index) => {
+      const banner = offerBanners[index];
+      return banner ? { image: banner.image, title: banner.title.trim() || fallback.title, subtitle: banner.subtitle?.trim() || null, href: `/offers/${banner.id}` } : fallback;
+    }),
     categories: categoryCards,
     // Keep hero merchandising intentionally compact, while the dedicated
     // catalog block below exposes every active product for an early launch.

@@ -7,6 +7,7 @@ import { Check, RefreshCw, RotateCcw, Truck } from "lucide-react";
 
 import ProductGallery from "@/components/product/ProductGallery";
 import ProductInfo from "@/components/product/ProductInfo";
+import { effectiveQuantityLimits, getGlobalQuantityLimits } from "@/lib/quantity-limits";
 import ProductReviews from "@/components/product/ProductReviews";
 import ProductVideo from "@/components/product/ProductVideo";
 import ProductGrid from "@/components/product/ProductGrid";
@@ -74,6 +75,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const colors = [...new Set([...optionValues("color"), ...optionValues("colour")])];
   const sizes = optionValues("size");
   const purchaseProduct = {
+    ...effectiveQuantityLimits(product, await getGlobalQuantityLimits()),
     variants: product.variants.map(variant => ({
       id: variant.id,
       price: Number(variant.price),

@@ -62,6 +62,8 @@ export default function EditProductPage() {
   const [price, setPrice] = useState("");
   const [comparePrice, setComparePrice] = useState("");
   const [stock, setStock] = useState("");
+  const [minOrderQuantity, setMinOrderQuantity] = useState("");
+  const [maxOrderQuantity, setMaxOrderQuantity] = useState("");
 
   const [status, setStatus] =
     useState<ProductStatus>("Active");
@@ -239,6 +241,8 @@ export default function EditProductPage() {
         setPrice(data.price != null ? String(data.price) : "");
         setComparePrice(data.comparePrice != null ? String(data.comparePrice) : "");
         setStock(data.stock != null ? String(data.stock) : "");
+        setMinOrderQuantity(data.minOrderQuantity == null ? "" : String(data.minOrderQuantity));
+        setMaxOrderQuantity(data.maxOrderQuantity == null ? "" : String(data.maxOrderQuantity));
         setStatus(data.status === "draft" ? "Draft" : "Active");
         setFeatured(Boolean(data.featured));
         setBadgeEnabled(Boolean(data.badgeEnabled));
@@ -871,6 +875,8 @@ export default function EditProductPage() {
       stock: hasVariations
         ? variationTotalStock
         : Number(stock),
+      minOrderQuantity: minOrderQuantity === "" ? null : Number(minOrderQuantity),
+      maxOrderQuantity: maxOrderQuantity === "" ? null : Number(maxOrderQuantity),
 
       status:
         status === "Active"
@@ -1367,6 +1373,11 @@ export default function EditProductPage() {
                     </div>
 
                     {/* SIMPLE STOCK */}
+                    <div className="mt-5 grid max-w-xl gap-4 sm:grid-cols-2">
+                      <label className="text-xs font-medium text-[#514945]">Minimum purchase quantity<input type="number" min="1" max="1000" value={minOrderQuantity} onChange={event => setMinOrderQuantity(event.target.value)} placeholder="Global default" className={`${inputClass} mt-2`} /></label>
+                      <label className="text-xs font-medium text-[#514945]">Maximum purchase quantity<input type="number" min="1" max="1000" value={maxOrderQuantity} onChange={event => setMaxOrderQuantity(event.target.value)} placeholder="Global default" className={`${inputClass} mt-2`} /></label>
+                      <p className="text-xs text-[#958b86] sm:col-span-2">Leave blank to inherit the store-wide setting.</p>
+                    </div>
 
                     {!hasVariations && (
                       <div className="mt-5 max-w-sm">

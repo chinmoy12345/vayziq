@@ -182,6 +182,8 @@ model Product {
 
   stock        Int @default(0)
   reorderLevel Int @default(5)
+  minOrderQuantity Int?
+  maxOrderQuantity Int?
 
   status ProductStatus @default(draft)
 
@@ -664,6 +666,14 @@ model StoreSetting {
   key       String   @unique
   value     Json
   updatedAt DateTime @updatedAt
+}
+
+model ReelMedia {
+  id        String   @id @default(uuid())
+  mimeType  String
+  data      Bytes
+  size      Int
+  createdAt DateTime @default(now())
 }
 model Supplier {
   id          Int               @id @default(autoincrement())

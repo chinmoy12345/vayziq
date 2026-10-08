@@ -32,7 +32,7 @@ interface CartItem {
   color?: string;
 }
 
-type StockStatus = { stock: number; available: boolean; requested: number };
+type StockStatus = { stock: number; available: boolean; requested: number; min: number; max: number };
 
 export default function CartPageClient({ visibility }: { visibility: HomepageVisibility }) {
   const { offers: productOffers, loading: offersLoading, error: offersError } = useOffers();
@@ -121,9 +121,9 @@ export default function CartPageClient({ visibility }: { visibility: HomepageVis
         const data = await response.json();
         if (!response.ok) throw new Error(data.message);
         const next: Record<string, StockStatus> = {};
-        data.availability.forEach((line: { id: number; variantId?: number; stock: number; available: boolean; requested: number }, index: number) => {
+        data.availability.forEach((line: { id: number; variantId?: number; stock: number; available: boolean; requested: number; min: number; max: number }, index: number) => {
           const item = itemsForStock[index];
-          if (item) next[cartLineKey(item)] = { stock: line.stock, available: line.available, requested: line.requested };
+          if (item) next[cartLineKey(item)] = { stock: line.stock, available: line.available, requested: line.requested, min: line.min, max: line.max };
         });
         setStockStatus(next);
       })
@@ -139,10 +139,13 @@ export default function CartPageClient({ visibility }: { visibility: HomepageVis
         }
 
         const maxStock = stockStatus[id]?.stock;
-        const nextQuantity = Math.max(1, item.quantity + change);
+        const otherQuantity = items.filter(line => line.id === item.id && cartLineKey(line) !== id).reduce((sum, line) => sum + line.quantity, 0);
+        const minimum = Math.max(1, (stockStatus[id]?.min ?? 1) - otherQuantity);
+        const maximum = (stockStatus[id]?.max ?? Infinity) - otherQuantity;
+        const nextQuantity = Math.max(minimum, item.quantity + change);
         return {
           ...item,
-          quantity: change > 0 && typeof maxStock === "number" ? Math.min(nextQuantity, maxStock) : nextQuantity,
+          quantity: change > 0 ? Math.min(nextQuantity, maxStock ?? Infinity, maximum) : nextQuantity,
         };
       })
     );
@@ -389,7 +392,7 @@ export default function CartPageClient({ visibility }: { visibility: HomepageVis
                             onClick={() =>
                               updateQuantity(cartLineKey(item), -1)
                             }
-                            disabled={item.quantity <= 1}
+                            disabled={item.quantity <= Math.max(1, (stockStatus[cartLineKey(item)]?.min ?? 1) - cartItems.filter(line => line.id === item.id && cartLineKey(line) !== cartLineKey(item)).reduce((sum, line) => sum + line.quantity, 0))}
                             className="flex h-full w-9 items-center justify-center text-[#6D5B5B] transition hover:bg-[#F8EFEC] disabled:cursor-not-allowed disabled:opacity-40"
                             aria-label="Decrease quantity"
                           >
@@ -408,7 +411,7 @@ export default function CartPageClient({ visibility }: { visibility: HomepageVis
                             onClick={() =>
                               updateQuantity(cartLineKey(item), 1)
                             }
-                            disabled={stockStatus[cartLineKey(item)]?.stock === 0 || (typeof stockStatus[cartLineKey(item)]?.stock === "number" && item.quantity >= stockStatus[cartLineKey(item)]!.stock)}
+                            disabled={stockStatus[cartLineKey(item)]?.stock === 0 || (typeof stockStatus[cartLineKey(item)]?.stock === "number" && item.quantity >= Math.min(stockStatus[cartLineKey(item)]!.stock, stockStatus[cartLineKey(item)]!.max - cartItems.filter(line => line.id === item.id && cartLineKey(line) !== cartLineKey(item)).reduce((sum, line) => sum + line.quantity, 0)))}
                             className="flex h-full w-9 items-center justify-center text-[#6D5B5B] transition hover:bg-[#F8EFEC] disabled:cursor-not-allowed disabled:opacity-40"
                             aria-label="Increase quantity"
                           >

@@ -157,6 +157,31 @@
 @media(max-width:767px){.heroSlider{height:clamp(360px,110vw,540px)}.heroSlide img{object-position:center}.heroShade{background:linear-gradient(0deg,rgba(0,0,0,.72),rgba(0,0,0,.08) 65%)}.heroContent{inset:auto 0 52px;max-width:none;justify-content:flex-end;padding:0 24px}.heroEyebrow{font-size:9px;letter-spacing:.15em}.heroContent strong{font-size:clamp(28px,8vw,42px);max-width:390px}.heroCta{min-height:42px;margin-top:18px;padding:0 16px;font-size:12px}.heroArrow{top:45%;width:36px;height:36px}.heroArrow svg{width:17px;height:17px}.heroPrevious{left:10px}.heroNext{right:10px}.heroPagination{bottom:16px}}
 @media(prefers-reduced-motion:reduce){.heroSlide{animation:none}.heroCta,.heroPagination button{transition:none}}
 
+/* Slim, editorial offer breaks between merchandise sections. */
+.offerStrip{position:relative;display:block;height:164px;overflow:hidden;border:1px solid #282828;border-radius:13px;background:#111;color:#fff!important;box-shadow:0 10px 26px rgba(0,0,0,.08);transition:transform .22s ease,box-shadow .22s ease}
+.offerStrip:hover{transform:translateY(-2px);box-shadow:0 15px 30px rgba(0,0,0,.13)}
+.offerStripCopy{position:relative;z-index:2;display:flex;width:65%;height:100%;flex-direction:column;align-items:flex-start;justify-content:center;padding:19px clamp(20px,3vw,46px)}
+.offerStripEyebrow{color:#fbb606;font-size:9px;font-weight:800;letter-spacing:.18em}
+.offerStripCopy strong{display:-webkit-box;max-width:690px;overflow:hidden;margin-top:7px;font-size:clamp(23px,2.8vw,38px);font-weight:850;line-height:1.03;letter-spacing:-.045em;-webkit-box-orient:vertical;-webkit-line-clamp:2}
+.offerStripSubtitle{display:block;max-width:580px;margin-top:5px;color:rgba(255,255,255,.76);font-size:12px;line-height:1.35}
+.offerStripAction{display:inline-flex;align-items:center;gap:6px;margin-top:11px;border-bottom:2px solid #fbb606;padding-bottom:3px;color:#fff;font-size:11px;font-weight:800}
+.offerStripImage{position:absolute;inset:0 0 0 auto;width:43%;overflow:hidden}
+.offerStripImage img{object-fit:cover;object-position:center 38%;transition:transform .45s ease}
+.offerStrip:hover .offerStripImage img{transform:scale(1.035)}
+.offerStripImage::after{position:absolute;inset:0;content:"";background:linear-gradient(90deg,#111 0%,rgba(17,17,17,.22) 28%,transparent 65%)}
+.offerStripAlternate{border-color:#e7e4db;background:#f4f2eb;color:#111!important}
+.offerStripAlternate .offerStripEyebrow{color:#8d6500}
+.offerStripAlternate .offerStripSubtitle{color:#555}
+.offerStripAlternate .offerStripAction{color:#111}
+.offerStripAlternate .offerStripImage::after{background:linear-gradient(90deg,#f4f2eb 0%,rgba(244,242,235,.2) 30%,transparent 65%)}
+@media(max-width:767px){.offerStrip{height:132px;border-radius:10px}.offerStripCopy{width:72%;padding:13px 15px}.offerStripEyebrow{font-size:7px;letter-spacing:.12em}.offerStripCopy strong{margin-top:6px;font-size:clamp(18px,5vw,24px);line-height:1.05}.offerStripSubtitle{display:none}.offerStripAction{margin-top:9px;font-size:9px}.offerStripAction svg{width:12px;height:12px}.offerStripImage{width:42%}}
+@media(prefers-reduced-motion:reduce){.offerStrip,.offerStripImage img{transition:none}}
+
+/* Keep the lead photography and campaign tiles editorial, not oversized. */
+.home .heroSlider{height:clamp(350px,38vw,560px)}
+.home .bannerCard,.home .mobileBanner{aspect-ratio:16/9}
+@media(max-width:767px){.home .heroSlider{height:clamp(330px,100vw,460px)}}
+
 /* Data-driven category directory between the newsletter and legal footer. */
 .footerCategories{background:#0c0c0c;border-top:1px solid #2d2d2d;color:#fff}
 .footerCategoriesInner{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:32px;max-width:1440px;margin:0 auto;padding:36px 32px 40px}

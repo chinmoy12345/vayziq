@@ -2,12 +2,14 @@
 
 import { ChangeEvent, useEffect, useState } from "react";
 import type { SocialLinks, SocialPlatform } from "@/lib/social-links";
+import { DEFAULT_HEADER_UTILITY, type HeaderUtilitySettings } from "@/lib/header-utility-types";
 
 type SettingsTab =
   | "store"
   | "contact"
   | "orders"
   | "social"
+  | "utility"
   | "system";
 
 function StoreIcon() {
@@ -158,6 +160,26 @@ export default function SettingsPage() {
   }, []);
 
   const [socialLinks, setSocialLinks] = useState<SocialLinks>({ facebook: { url: "", visible: false }, instagram: { url: "", visible: false }, youtube: { url: "", visible: false } });
+  const [headerUtility, setHeaderUtility] = useState<HeaderUtilitySettings>(DEFAULT_HEADER_UTILITY);
+  const [utilityLoaded, setUtilityLoaded] = useState(false);
+  useEffect(() => {
+    void fetch("/api/admin/header-utility", { cache: "no-store" })
+      .then(async response => { const body = await response.json(); if (!response.ok || !body.data) throw new Error(body.message); return body.data as HeaderUtilitySettings; })
+      .then(data => { setHeaderUtility(data); setUtilityLoaded(true); })
+      .catch(() => setStatusMessage("Header utility settings could not be loaded."));
+  }, []);
+  const updateHeaderLink = (key: "trackOrder" | "help", value: Partial<HeaderUtilitySettings["trackOrder"]>) => setHeaderUtility(current => ({ ...current, [key]: { ...current[key], ...value } }));
+  async function saveHeaderUtility() {
+    if (!utilityLoaded) return;
+    setIsSaving(true); setStatusMessage(null);
+    try {
+      const response = await fetch("/api/admin/header-utility", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(headerUtility) });
+      const body = await response.json() as { data?: HeaderUtilitySettings; message?: string };
+      if (!response.ok || !body.data) throw new Error(body.message || "Unable to save header utility links.");
+      setHeaderUtility(body.data); setStatusMessage("Header utility links saved.");
+    } catch (error) { setStatusMessage(error instanceof Error ? error.message : "Unable to save header utility links."); }
+    finally { setIsSaving(false); }
+  }
   const [socialLoaded, setSocialLoaded] = useState(false);
   useEffect(() => {
     void fetch("/api/admin/social-links", { cache: "no-store" })
@@ -192,6 +214,24 @@ export default function SettingsPage() {
     useState("999");
 
   const [minimumOrder, setMinimumOrder] = useState("499");
+  const [minimumQuantity, setMinimumQuantity] = useState("1");
+  const [maximumQuantity, setMaximumQuantity] = useState("10");
+  const [quantitySaving, setQuantitySaving] = useState(false);
+  useEffect(() => {
+    void fetch("/api/admin/quantity-limits", { cache: "no-store" })
+      .then(response => response.json())
+      .then(body => { if (body.data) { setMinimumQuantity(String(body.data.min)); setMaximumQuantity(String(body.data.max)); } });
+  }, []);
+  async function saveQuantityLimits() {
+    setQuantitySaving(true); setStatusMessage(null);
+    try {
+      const response = await fetch("/api/admin/quantity-limits", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ min: Number(minimumQuantity), max: Number(maximumQuantity) }) });
+      const body = await response.json();
+      if (!response.ok) throw new Error(body.message || "Unable to save quantity limits.");
+      setStatusMessage("Global product quantity limits saved.");
+    } catch (error) { setStatusMessage(error instanceof Error ? error.message : "Unable to save quantity limits."); }
+    finally { setQuantitySaving(false); }
+  }
 
   const [maintenanceMode, setMaintenanceMode] = useState(false);
 
@@ -260,6 +300,11 @@ export default function SettingsPage() {
       icon: <GlobeIcon />,
     },
     {
+      id: "utility" as SettingsTab,
+      label: "Header Utility Links",
+      icon: <GlobeIcon />,
+    },
+    {
       id: "system" as SettingsTab,
       label: "System Settings",
       icon: <SettingsIcon />,
@@ -283,12 +328,12 @@ export default function SettingsPage() {
 
           <button
             type="button"
-            disabled={isSaving || (activeTab === "social" ? !socialLoaded : !isLoaded)}
-            onClick={activeTab === "social" ? saveSocial : handleSave}
+            disabled={isSaving || (activeTab === "social" ? !socialLoaded : activeTab === "utility" ? !utilityLoaded : !isLoaded)}
+            onClick={activeTab === "social" ? saveSocial : activeTab === "utility" ? saveHeaderUtility : handleSave}
             className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-[#292321] px-5 text-sm font-medium text-white transition hover:bg-[#403936]"
           >
             <SaveIcon />
-            {isSaving ? "Saving…" : activeTab === "social" ? "Save Social Links" : "Save Branding"}
+            {isSaving ? "Saving…" : activeTab === "social" ? "Save Social Links" : activeTab === "utility" ? "Save Header Links" : "Save Branding"}
           </button>
         </div>
 
@@ -526,6 +571,15 @@ export default function SettingsPage() {
                 </div>
 
                 <div className="grid gap-5 p-5 sm:grid-cols-2 sm:p-6">
+                  <div className="sm:col-span-2 rounded-xl border border-[#eee6e1] p-4">
+                    <h3 className="text-sm font-semibold text-[#292321]">Global quantity per product</h3>
+                    <p className="mt-1 text-xs text-[#958b86]">Default limits for each product in a customer’s bag. Product-specific limits override these values.</p>
+                    <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                      <label className="text-sm">Minimum quantity<input aria-label="Global minimum quantity" type="number" min="1" max="1000" value={minimumQuantity} onChange={event => setMinimumQuantity(event.target.value)} className="mt-1 h-11 w-full rounded-lg border border-[#ddd4cf] px-3" /></label>
+                      <label className="text-sm">Maximum quantity<input aria-label="Global maximum quantity" type="number" min="1" max="1000" value={maximumQuantity} onChange={event => setMaximumQuantity(event.target.value)} className="mt-1 h-11 w-full rounded-lg border border-[#ddd4cf] px-3" /></label>
+                    </div>
+                    <button type="button" disabled={quantitySaving} onClick={saveQuantityLimits} className="mt-4 rounded-lg bg-[#292321] px-4 py-2 text-sm font-medium text-white disabled:opacity-50">{quantitySaving ? "Saving…" : "Save quantity limits"}</button>
+                  </div>
                   <div>
                     <label className="mb-2 block text-sm font-medium text-[#403936]">
                       Tax Rate (%)
@@ -617,6 +671,27 @@ export default function SettingsPage() {
                       onChange={setNotifyNewReview}
                     />
                   </div>
+                </div>
+              </section>
+            )}
+
+            {activeTab === "utility" && (
+              <section className="rounded-2xl border border-[#eee6e1] bg-white shadow-sm">
+                <div className="border-b border-[#eee6e1] px-5 py-4 sm:px-6">
+                  <h2 className="text-base font-semibold text-[#292321]">Header Utility Links</h2>
+                  <p className="mt-1 text-xs text-[#958b86]">Manage the links on the right side of the desktop announcement bar.</p>
+                </div>
+                <div className="space-y-5 p-5 sm:p-6">
+                  {(["trackOrder", "help"] as const).map(key => (
+                    <div key={key} className="rounded-xl border border-[#eee6e1] p-4">
+                      <label className="flex items-center gap-2 text-sm font-semibold text-[#292321]"><input type="checkbox" checked={headerUtility[key].visible} onChange={event => updateHeaderLink(key, { visible: event.target.checked })} />Show {key === "trackOrder" ? "Track Order" : "Help"}</label>
+                      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                        <label className="text-sm text-[#403936]">Display text<input type="text" maxLength={32} value={headerUtility[key].label} onChange={event => updateHeaderLink(key, { label: event.target.value })} className="mt-1 h-11 w-full rounded-lg border border-[#ddd4cf] px-3" /></label>
+                        <label className="text-sm text-[#403936]">Destination path<input type="text" maxLength={200} value={headerUtility[key].href} onChange={event => updateHeaderLink(key, { href: event.target.value })} placeholder="/contact" className="mt-1 h-11 w-full rounded-lg border border-[#ddd4cf] px-3" /></label>
+                      </div>
+                    </div>
+                  ))}
+                  <label className="flex items-start gap-3 rounded-xl border border-[#eee6e1] p-4 text-sm text-[#403936]"><input type="checkbox" className="mt-1" checked={headerUtility.currency.visible} onChange={event => setHeaderUtility(current => ({ ...current, currency: { visible: event.target.checked } }))} /><span><b className="block text-[#292321]">Show 🇮🇳 INR indicator</b><small className="mt-1 block text-[#958b86]">Store prices and checkout remain in INR. This is a display indicator, not a currency switcher.</small></span></label>
                 </div>
               </section>
             )}

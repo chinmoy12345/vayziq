@@ -10,6 +10,7 @@ import AuthModal from "@/components/auth/AuthModal";
 import styles from "./VayziqHome.module.css";
 import brandingStyles from "./HeaderBranding.module.css";
 import type { StoreMenuSettings } from "@/lib/store-menu-settings";
+import { DEFAULT_HEADER_UTILITY, type HeaderUtilitySettings } from "@/lib/header-utility-types";
 
 export type HeaderCategory = { id: number; name: string; slug: string; status?: string; parentId: number | null; parent?: { id: number; name: string; slug: string } | null; children?: HeaderCategory[] };
 type HeaderUser = { id: number; name: string | null; email: string | null; mobile: string | null };
@@ -27,6 +28,7 @@ export default function HomeHeader({ menuSettings }: { menuSettings: StoreMenuSe
   const [authOpen, setAuthOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<HeaderUser | null>(null);
+  const [utility, setUtility] = useState<HeaderUtilitySettings>(DEFAULT_HEADER_UTILITY);
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -35,6 +37,11 @@ export default function HomeHeader({ menuSettings }: { menuSettings: StoreMenuSe
     updatePinnedState();
     window.addEventListener("scroll", updatePinnedState, { passive: true });
     return () => window.removeEventListener("scroll", updatePinnedState);
+  }, []);
+  useEffect(() => {
+    let active = true;
+    fetch("/api/header-utility", { cache: "no-store" }).then(response => response.ok ? response.json() : null).then((body: { data?: HeaderUtilitySettings } | null) => { if (active && body?.data) setUtility(body.data); }).catch(() => {});
+    return () => { active = false; };
   }, []);
   useEffect(() => { const refresh = () => { try { setCartCount((JSON.parse(localStorage.getItem("susmita-cart") ?? "[]") as Array<{ quantity?: number }>).reduce((total, item) => total + (item.quantity ?? 0), 0)); } catch { setCartCount(0); } }; refresh(); window.addEventListener("storage", refresh); window.addEventListener("cart-updated", refresh); return () => { window.removeEventListener("storage", refresh); window.removeEventListener("cart-updated", refresh); }; }, []);
   useEffect(() => { let active = true; fetch("/api/auth/me", { cache: "no-store" }).then(response => response.ok ? response.json() : null).then((data: { user?: HeaderUser | null } | null) => { if (active) setCurrentUser(data?.user ?? null); }).catch(() => {}); return () => { active = false; }; }, []);
@@ -82,7 +89,7 @@ export default function HomeHeader({ menuSettings }: { menuSettings: StoreMenuSe
   const visibleDesktopMenu = desktopMenu.filter((item) => item === "Catalog" ? menuSettings.shop : item === "New Arrivals" ? menuSettings.newArrivals : item === "Deals" ? menuSettings.deals : menuSettings.watchBuy);
   const visibleMobileMenu = mobileQuickMenu.filter(([, , href]) => href === "/" ? menuSettings.home : href === "/shop" ? menuSettings.shop : href === "/categories" ? menuSettings.categories : href === "/offers" ? menuSettings.deals : menuSettings.watchBuy);
   return <div className={`${styles.home} ${styles.chrome}`}>
-    <div className={styles.utility}><span><Truck /> Free Shipping on Orders over ₹999</span><span><Undo2 /> Easy 7-Day Returns</span><span><ShieldCheck /> 100% Original Products</span><span className={styles.utilityEnd}>Track Order　|　Help　|　🇮🇳 INR</span></div>
+    <div className={styles.utility}><span><Truck /> Free Shipping on Orders over ₹999</span><span><Undo2 /> Easy 7-Day Returns</span><span><ShieldCheck /> 100% Original Products</span><span className={styles.utilityEnd} style={{ display: "flex", alignItems: "center", gap: 10 }}>{utility.trackOrder.visible && <Link href={utility.trackOrder.href}>{utility.trackOrder.label}</Link>}{utility.trackOrder.visible && (utility.help.visible || utility.currency.visible) && <span aria-hidden="true">|</span>}{utility.help.visible && <Link href={utility.help.href}>{utility.help.label}</Link>}{utility.help.visible && utility.currency.visible && <span aria-hidden="true">|</span>}{utility.currency.visible && <span aria-label="Currency: Indian rupee">🇮🇳 INR</span>}</span></div>
     <header className={`${styles.header} ${isPinned ? styles.fixedHeader : ""}`}><button className={styles.menuButton} onClick={() => setDrawerOpen(true)} aria-label="Open menu"><Menu /></button><Link href="/"><Image className={`${styles.logo} ${brandingStyles.logo}`} src="/vayziq/vayziq-logo-final.svg" alt="Vayziq" width={420} height={96} priority /></Link><nav className={styles.desktopNav} aria-label="Primary navigation">{menuCategories.map(category => {
       const isOpen = openCategory === category.slug;
       return <div key={category.id} className={styles.navDropdown} onMouseEnter={() => setOpenCategory(category.slug)} onMouseLeave={() => setOpenCategory(null)} onFocus={() => setOpenCategory(category.slug)} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setOpenCategory(null); }}>
