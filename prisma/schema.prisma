@@ -437,6 +437,8 @@ model Order {
   discount      Decimal       @default(0) @db.Decimal(12, 2)
   total         Decimal       @db.Decimal(12, 2)
   couponCode    String?
+  acquisitionChannel String? @db.VarChar(40)
+  acquisitionCampaign String? @db.VarChar(120)
   user          User          @relation(fields: [userId], references: [id], onDelete: Restrict)
   address       Address?      @relation(fields: [addressId], references: [id], onDelete: SetNull)
   items         OrderItem[]
@@ -447,6 +449,18 @@ model Order {
 
   @@index([userId])
   @@index([status])
+  @@index([acquisitionChannel, createdAt])
+}
+
+model ChannelVisit {
+  id        Int      @id @default(autoincrement())
+  visitorId String   @db.VarChar(64)
+  day       String   @db.VarChar(10)
+  channel   String   @db.VarChar(40)
+  createdAt DateTime @default(now())
+
+  @@unique([visitorId, day, channel])
+  @@index([day, channel])
 }
 
 model OrderItem {

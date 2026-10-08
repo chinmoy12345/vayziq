@@ -5,11 +5,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { isDeliveryZipAllowed } from "@/lib/delivery-zip-settings";
+import { CHANNEL_COOKIE, readAttribution } from "@/lib/channel-attribution";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 export async function POST(request: NextRequest) {
+  const attribution = readAttribution(request.cookies.get(CHANNEL_COOKIE)?.value);
   const session = await getCurrentUser();
   const userId = Number(session?.sub);
   const { addressId, items, paymentMethod, couponCode } = await request.json();
@@ -28,7 +30,7 @@ export async function POST(request: NextRequest) {
   try {
   const order = await prisma.$transaction(async (tx) => {
     const discount = await reserveCoupon(tx, code, subtotal, orderedItems.map(item => ({ id: item.product!.id, price: item.price, quantity: item.quantity })));
-    const created = await tx.order.create({ data: { orderNumber, userId, addressId: address.id, subtotal, shipping, discount, couponCode: code || null, total: subtotal + shipping - discount, paymentStatus: paymentMethod === "cod" ? "pending" : "pending", items: { create: orderedItems.map((item) => ({ ...policySnapshot(item.product!), productId: item.product!.id, productName: item.product!.name, sku: item.sku, options: item.options, price: item.price, quantity: item.quantity })) } } });
+    const created = await tx.order.create({ data: { orderNumber, userId, addressId: address.id, subtotal, shipping, discount, couponCode: code || null, acquisitionChannel: attribution.channel, acquisitionCampaign: attribution.campaign, total: subtotal + shipping - discount, paymentStatus: paymentMethod === "cod" ? "pending" : "pending", items: { create: orderedItems.map((item) => ({ ...policySnapshot(item.product!), productId: item.product!.id, productName: item.product!.name, sku: item.sku, options: item.options, price: item.price, quantity: item.quantity })) } } });
     for (const item of orderedItems) {
       const product = await tx.product.findUnique({ where: { id: item.product!.id }, select: { id: true, name: true, sku: true, stock: true } });
       if (!product) throw new Error("STOCK_CHANGED");

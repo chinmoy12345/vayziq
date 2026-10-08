@@ -94,6 +94,11 @@ export type Address = $Result.DefaultSelection<Prisma.$AddressPayload>
  */
 export type Order = $Result.DefaultSelection<Prisma.$OrderPayload>
 /**
+ * Model ChannelVisit
+ * 
+ */
+export type ChannelVisit = $Result.DefaultSelection<Prisma.$ChannelVisitPayload>
+/**
  * Model OrderItem
  * 
  */
@@ -557,6 +562,16 @@ export class PrismaClient<
     * ```
     */
   get order(): Prisma.OrderDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.channelVisit`: Exposes CRUD operations for the **ChannelVisit** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ChannelVisits
+    * const channelVisits = await prisma.channelVisit.findMany()
+    * ```
+    */
+  get channelVisit(): Prisma.ChannelVisitDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.orderItem`: Exposes CRUD operations for the **OrderItem** model.
@@ -1164,6 +1179,7 @@ export namespace Prisma {
     ProductVariantValue: 'ProductVariantValue',
     Address: 'Address',
     Order: 'Order',
+    ChannelVisit: 'ChannelVisit',
     OrderItem: 'OrderItem',
     InventoryMovement: 'InventoryMovement',
     Shipment: 'Shipment',
@@ -1197,7 +1213,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "role" | "userRole" | "permission" | "rolePermission" | "category" | "product" | "productEngagement" | "productLike" | "productImage" | "productOption" | "productOptionValue" | "productVariant" | "productVariantValue" | "address" | "order" | "orderItem" | "inventoryMovement" | "shipment" | "serviceRequest" | "cartItem" | "wishlistItem" | "coupon" | "banner" | "review" | "contactMessage" | "storeSetting" | "supplier" | "purchase" | "purchaseItem" | "supplierPayment"
+      modelProps: "user" | "role" | "userRole" | "permission" | "rolePermission" | "category" | "product" | "productEngagement" | "productLike" | "productImage" | "productOption" | "productOptionValue" | "productVariant" | "productVariantValue" | "address" | "order" | "channelVisit" | "orderItem" | "inventoryMovement" | "shipment" | "serviceRequest" | "cartItem" | "wishlistItem" | "coupon" | "banner" | "review" | "contactMessage" | "storeSetting" | "supplier" | "purchase" | "purchaseItem" | "supplierPayment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2382,6 +2398,80 @@ export namespace Prisma {
           count: {
             args: Prisma.OrderCountArgs<ExtArgs>
             result: $Utils.Optional<OrderCountAggregateOutputType> | number
+          }
+        }
+      }
+      ChannelVisit: {
+        payload: Prisma.$ChannelVisitPayload<ExtArgs>
+        fields: Prisma.ChannelVisitFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ChannelVisitFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelVisitPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ChannelVisitFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelVisitPayload>
+          }
+          findFirst: {
+            args: Prisma.ChannelVisitFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelVisitPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ChannelVisitFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelVisitPayload>
+          }
+          findMany: {
+            args: Prisma.ChannelVisitFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelVisitPayload>[]
+          }
+          create: {
+            args: Prisma.ChannelVisitCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelVisitPayload>
+          }
+          createMany: {
+            args: Prisma.ChannelVisitCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ChannelVisitCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelVisitPayload>[]
+          }
+          delete: {
+            args: Prisma.ChannelVisitDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelVisitPayload>
+          }
+          update: {
+            args: Prisma.ChannelVisitUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelVisitPayload>
+          }
+          deleteMany: {
+            args: Prisma.ChannelVisitDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ChannelVisitUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ChannelVisitUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelVisitPayload>[]
+          }
+          upsert: {
+            args: Prisma.ChannelVisitUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChannelVisitPayload>
+          }
+          aggregate: {
+            args: Prisma.ChannelVisitAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateChannelVisit>
+          }
+          groupBy: {
+            args: Prisma.ChannelVisitGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ChannelVisitGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ChannelVisitCountArgs<ExtArgs>
+            result: $Utils.Optional<ChannelVisitCountAggregateOutputType> | number
           }
         }
       }
@@ -3607,6 +3697,7 @@ export namespace Prisma {
     productVariantValue?: ProductVariantValueOmit
     address?: AddressOmit
     order?: OrderOmit
+    channelVisit?: ChannelVisitOmit
     orderItem?: OrderItemOmit
     inventoryMovement?: InventoryMovementOmit
     shipment?: ShipmentOmit
@@ -22134,6 +22225,8 @@ export namespace Prisma {
     discount: Decimal | null
     total: Decimal | null
     couponCode: string | null
+    acquisitionChannel: string | null
+    acquisitionCampaign: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -22152,6 +22245,8 @@ export namespace Prisma {
     discount: Decimal | null
     total: Decimal | null
     couponCode: string | null
+    acquisitionChannel: string | null
+    acquisitionCampaign: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -22170,6 +22265,8 @@ export namespace Prisma {
     discount: number
     total: number
     couponCode: number
+    acquisitionChannel: number
+    acquisitionCampaign: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -22210,6 +22307,8 @@ export namespace Prisma {
     discount?: true
     total?: true
     couponCode?: true
+    acquisitionChannel?: true
+    acquisitionCampaign?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -22228,6 +22327,8 @@ export namespace Prisma {
     discount?: true
     total?: true
     couponCode?: true
+    acquisitionChannel?: true
+    acquisitionCampaign?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -22246,6 +22347,8 @@ export namespace Prisma {
     discount?: true
     total?: true
     couponCode?: true
+    acquisitionChannel?: true
+    acquisitionCampaign?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -22351,6 +22454,8 @@ export namespace Prisma {
     discount: Decimal
     total: Decimal
     couponCode: string | null
+    acquisitionChannel: string | null
+    acquisitionCampaign: string | null
     createdAt: Date
     updatedAt: Date
     _count: OrderCountAggregateOutputType | null
@@ -22388,6 +22493,8 @@ export namespace Prisma {
     discount?: boolean
     total?: boolean
     couponCode?: boolean
+    acquisitionChannel?: boolean
+    acquisitionCampaign?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -22412,6 +22519,8 @@ export namespace Prisma {
     discount?: boolean
     total?: boolean
     couponCode?: boolean
+    acquisitionChannel?: boolean
+    acquisitionCampaign?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -22432,6 +22541,8 @@ export namespace Prisma {
     discount?: boolean
     total?: boolean
     couponCode?: boolean
+    acquisitionChannel?: boolean
+    acquisitionCampaign?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -22452,11 +22563,13 @@ export namespace Prisma {
     discount?: boolean
     total?: boolean
     couponCode?: boolean
+    acquisitionChannel?: boolean
+    acquisitionCampaign?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderNumber" | "razorpayOrderId" | "razorpayPaymentId" | "userId" | "addressId" | "status" | "paymentStatus" | "subtotal" | "shipping" | "discount" | "total" | "couponCode" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
+  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderNumber" | "razorpayOrderId" | "razorpayPaymentId" | "userId" | "addressId" | "status" | "paymentStatus" | "subtotal" | "shipping" | "discount" | "total" | "couponCode" | "acquisitionChannel" | "acquisitionCampaign" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
   export type OrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     address?: boolean | Order$addressArgs<ExtArgs>
@@ -22497,6 +22610,8 @@ export namespace Prisma {
       discount: Prisma.Decimal
       total: Prisma.Decimal
       couponCode: string | null
+      acquisitionChannel: string | null
+      acquisitionCampaign: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["order"]>
@@ -22940,6 +23055,8 @@ export namespace Prisma {
     readonly discount: FieldRef<"Order", 'Decimal'>
     readonly total: FieldRef<"Order", 'Decimal'>
     readonly couponCode: FieldRef<"Order", 'String'>
+    readonly acquisitionChannel: FieldRef<"Order", 'String'>
+    readonly acquisitionCampaign: FieldRef<"Order", 'String'>
     readonly createdAt: FieldRef<"Order", 'DateTime'>
     readonly updatedAt: FieldRef<"Order", 'DateTime'>
   }
@@ -23444,6 +23561,1035 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: OrderInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ChannelVisit
+   */
+
+  export type AggregateChannelVisit = {
+    _count: ChannelVisitCountAggregateOutputType | null
+    _avg: ChannelVisitAvgAggregateOutputType | null
+    _sum: ChannelVisitSumAggregateOutputType | null
+    _min: ChannelVisitMinAggregateOutputType | null
+    _max: ChannelVisitMaxAggregateOutputType | null
+  }
+
+  export type ChannelVisitAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type ChannelVisitSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type ChannelVisitMinAggregateOutputType = {
+    id: number | null
+    visitorId: string | null
+    day: string | null
+    channel: string | null
+    createdAt: Date | null
+  }
+
+  export type ChannelVisitMaxAggregateOutputType = {
+    id: number | null
+    visitorId: string | null
+    day: string | null
+    channel: string | null
+    createdAt: Date | null
+  }
+
+  export type ChannelVisitCountAggregateOutputType = {
+    id: number
+    visitorId: number
+    day: number
+    channel: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ChannelVisitAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type ChannelVisitSumAggregateInputType = {
+    id?: true
+  }
+
+  export type ChannelVisitMinAggregateInputType = {
+    id?: true
+    visitorId?: true
+    day?: true
+    channel?: true
+    createdAt?: true
+  }
+
+  export type ChannelVisitMaxAggregateInputType = {
+    id?: true
+    visitorId?: true
+    day?: true
+    channel?: true
+    createdAt?: true
+  }
+
+  export type ChannelVisitCountAggregateInputType = {
+    id?: true
+    visitorId?: true
+    day?: true
+    channel?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ChannelVisitAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ChannelVisit to aggregate.
+     */
+    where?: ChannelVisitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ChannelVisits to fetch.
+     */
+    orderBy?: ChannelVisitOrderByWithRelationInput | ChannelVisitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ChannelVisitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ChannelVisits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ChannelVisits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ChannelVisits
+    **/
+    _count?: true | ChannelVisitCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ChannelVisitAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ChannelVisitSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ChannelVisitMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ChannelVisitMaxAggregateInputType
+  }
+
+  export type GetChannelVisitAggregateType<T extends ChannelVisitAggregateArgs> = {
+        [P in keyof T & keyof AggregateChannelVisit]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateChannelVisit[P]>
+      : GetScalarType<T[P], AggregateChannelVisit[P]>
+  }
+
+
+
+
+  export type ChannelVisitGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ChannelVisitWhereInput
+    orderBy?: ChannelVisitOrderByWithAggregationInput | ChannelVisitOrderByWithAggregationInput[]
+    by: ChannelVisitScalarFieldEnum[] | ChannelVisitScalarFieldEnum
+    having?: ChannelVisitScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ChannelVisitCountAggregateInputType | true
+    _avg?: ChannelVisitAvgAggregateInputType
+    _sum?: ChannelVisitSumAggregateInputType
+    _min?: ChannelVisitMinAggregateInputType
+    _max?: ChannelVisitMaxAggregateInputType
+  }
+
+  export type ChannelVisitGroupByOutputType = {
+    id: number
+    visitorId: string
+    day: string
+    channel: string
+    createdAt: Date
+    _count: ChannelVisitCountAggregateOutputType | null
+    _avg: ChannelVisitAvgAggregateOutputType | null
+    _sum: ChannelVisitSumAggregateOutputType | null
+    _min: ChannelVisitMinAggregateOutputType | null
+    _max: ChannelVisitMaxAggregateOutputType | null
+  }
+
+  type GetChannelVisitGroupByPayload<T extends ChannelVisitGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ChannelVisitGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ChannelVisitGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ChannelVisitGroupByOutputType[P]>
+            : GetScalarType<T[P], ChannelVisitGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ChannelVisitSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    visitorId?: boolean
+    day?: boolean
+    channel?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["channelVisit"]>
+
+  export type ChannelVisitSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    visitorId?: boolean
+    day?: boolean
+    channel?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["channelVisit"]>
+
+  export type ChannelVisitSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    visitorId?: boolean
+    day?: boolean
+    channel?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["channelVisit"]>
+
+  export type ChannelVisitSelectScalar = {
+    id?: boolean
+    visitorId?: boolean
+    day?: boolean
+    channel?: boolean
+    createdAt?: boolean
+  }
+
+  export type ChannelVisitOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "visitorId" | "day" | "channel" | "createdAt", ExtArgs["result"]["channelVisit"]>
+
+  export type $ChannelVisitPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ChannelVisit"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      visitorId: string
+      day: string
+      channel: string
+      createdAt: Date
+    }, ExtArgs["result"]["channelVisit"]>
+    composites: {}
+  }
+
+  type ChannelVisitGetPayload<S extends boolean | null | undefined | ChannelVisitDefaultArgs> = $Result.GetResult<Prisma.$ChannelVisitPayload, S>
+
+  type ChannelVisitCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ChannelVisitFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ChannelVisitCountAggregateInputType | true
+    }
+
+  export interface ChannelVisitDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ChannelVisit'], meta: { name: 'ChannelVisit' } }
+    /**
+     * Find zero or one ChannelVisit that matches the filter.
+     * @param {ChannelVisitFindUniqueArgs} args - Arguments to find a ChannelVisit
+     * @example
+     * // Get one ChannelVisit
+     * const channelVisit = await prisma.channelVisit.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ChannelVisitFindUniqueArgs>(args: SelectSubset<T, ChannelVisitFindUniqueArgs<ExtArgs>>): Prisma__ChannelVisitClient<$Result.GetResult<Prisma.$ChannelVisitPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ChannelVisit that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ChannelVisitFindUniqueOrThrowArgs} args - Arguments to find a ChannelVisit
+     * @example
+     * // Get one ChannelVisit
+     * const channelVisit = await prisma.channelVisit.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ChannelVisitFindUniqueOrThrowArgs>(args: SelectSubset<T, ChannelVisitFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ChannelVisitClient<$Result.GetResult<Prisma.$ChannelVisitPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ChannelVisit that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChannelVisitFindFirstArgs} args - Arguments to find a ChannelVisit
+     * @example
+     * // Get one ChannelVisit
+     * const channelVisit = await prisma.channelVisit.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ChannelVisitFindFirstArgs>(args?: SelectSubset<T, ChannelVisitFindFirstArgs<ExtArgs>>): Prisma__ChannelVisitClient<$Result.GetResult<Prisma.$ChannelVisitPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ChannelVisit that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChannelVisitFindFirstOrThrowArgs} args - Arguments to find a ChannelVisit
+     * @example
+     * // Get one ChannelVisit
+     * const channelVisit = await prisma.channelVisit.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ChannelVisitFindFirstOrThrowArgs>(args?: SelectSubset<T, ChannelVisitFindFirstOrThrowArgs<ExtArgs>>): Prisma__ChannelVisitClient<$Result.GetResult<Prisma.$ChannelVisitPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ChannelVisits that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChannelVisitFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ChannelVisits
+     * const channelVisits = await prisma.channelVisit.findMany()
+     * 
+     * // Get first 10 ChannelVisits
+     * const channelVisits = await prisma.channelVisit.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const channelVisitWithIdOnly = await prisma.channelVisit.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ChannelVisitFindManyArgs>(args?: SelectSubset<T, ChannelVisitFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChannelVisitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ChannelVisit.
+     * @param {ChannelVisitCreateArgs} args - Arguments to create a ChannelVisit.
+     * @example
+     * // Create one ChannelVisit
+     * const ChannelVisit = await prisma.channelVisit.create({
+     *   data: {
+     *     // ... data to create a ChannelVisit
+     *   }
+     * })
+     * 
+     */
+    create<T extends ChannelVisitCreateArgs>(args: SelectSubset<T, ChannelVisitCreateArgs<ExtArgs>>): Prisma__ChannelVisitClient<$Result.GetResult<Prisma.$ChannelVisitPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ChannelVisits.
+     * @param {ChannelVisitCreateManyArgs} args - Arguments to create many ChannelVisits.
+     * @example
+     * // Create many ChannelVisits
+     * const channelVisit = await prisma.channelVisit.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ChannelVisitCreateManyArgs>(args?: SelectSubset<T, ChannelVisitCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ChannelVisits and returns the data saved in the database.
+     * @param {ChannelVisitCreateManyAndReturnArgs} args - Arguments to create many ChannelVisits.
+     * @example
+     * // Create many ChannelVisits
+     * const channelVisit = await prisma.channelVisit.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ChannelVisits and only return the `id`
+     * const channelVisitWithIdOnly = await prisma.channelVisit.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ChannelVisitCreateManyAndReturnArgs>(args?: SelectSubset<T, ChannelVisitCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChannelVisitPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ChannelVisit.
+     * @param {ChannelVisitDeleteArgs} args - Arguments to delete one ChannelVisit.
+     * @example
+     * // Delete one ChannelVisit
+     * const ChannelVisit = await prisma.channelVisit.delete({
+     *   where: {
+     *     // ... filter to delete one ChannelVisit
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ChannelVisitDeleteArgs>(args: SelectSubset<T, ChannelVisitDeleteArgs<ExtArgs>>): Prisma__ChannelVisitClient<$Result.GetResult<Prisma.$ChannelVisitPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ChannelVisit.
+     * @param {ChannelVisitUpdateArgs} args - Arguments to update one ChannelVisit.
+     * @example
+     * // Update one ChannelVisit
+     * const channelVisit = await prisma.channelVisit.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ChannelVisitUpdateArgs>(args: SelectSubset<T, ChannelVisitUpdateArgs<ExtArgs>>): Prisma__ChannelVisitClient<$Result.GetResult<Prisma.$ChannelVisitPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ChannelVisits.
+     * @param {ChannelVisitDeleteManyArgs} args - Arguments to filter ChannelVisits to delete.
+     * @example
+     * // Delete a few ChannelVisits
+     * const { count } = await prisma.channelVisit.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ChannelVisitDeleteManyArgs>(args?: SelectSubset<T, ChannelVisitDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ChannelVisits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChannelVisitUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ChannelVisits
+     * const channelVisit = await prisma.channelVisit.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ChannelVisitUpdateManyArgs>(args: SelectSubset<T, ChannelVisitUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ChannelVisits and returns the data updated in the database.
+     * @param {ChannelVisitUpdateManyAndReturnArgs} args - Arguments to update many ChannelVisits.
+     * @example
+     * // Update many ChannelVisits
+     * const channelVisit = await prisma.channelVisit.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ChannelVisits and only return the `id`
+     * const channelVisitWithIdOnly = await prisma.channelVisit.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ChannelVisitUpdateManyAndReturnArgs>(args: SelectSubset<T, ChannelVisitUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChannelVisitPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ChannelVisit.
+     * @param {ChannelVisitUpsertArgs} args - Arguments to update or create a ChannelVisit.
+     * @example
+     * // Update or create a ChannelVisit
+     * const channelVisit = await prisma.channelVisit.upsert({
+     *   create: {
+     *     // ... data to create a ChannelVisit
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ChannelVisit we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ChannelVisitUpsertArgs>(args: SelectSubset<T, ChannelVisitUpsertArgs<ExtArgs>>): Prisma__ChannelVisitClient<$Result.GetResult<Prisma.$ChannelVisitPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ChannelVisits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChannelVisitCountArgs} args - Arguments to filter ChannelVisits to count.
+     * @example
+     * // Count the number of ChannelVisits
+     * const count = await prisma.channelVisit.count({
+     *   where: {
+     *     // ... the filter for the ChannelVisits we want to count
+     *   }
+     * })
+    **/
+    count<T extends ChannelVisitCountArgs>(
+      args?: Subset<T, ChannelVisitCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ChannelVisitCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ChannelVisit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChannelVisitAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ChannelVisitAggregateArgs>(args: Subset<T, ChannelVisitAggregateArgs>): Prisma.PrismaPromise<GetChannelVisitAggregateType<T>>
+
+    /**
+     * Group by ChannelVisit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChannelVisitGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ChannelVisitGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ChannelVisitGroupByArgs['orderBy'] }
+        : { orderBy?: ChannelVisitGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ChannelVisitGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetChannelVisitGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ChannelVisit model
+   */
+  readonly fields: ChannelVisitFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ChannelVisit.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ChannelVisitClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ChannelVisit model
+   */
+  interface ChannelVisitFieldRefs {
+    readonly id: FieldRef<"ChannelVisit", 'Int'>
+    readonly visitorId: FieldRef<"ChannelVisit", 'String'>
+    readonly day: FieldRef<"ChannelVisit", 'String'>
+    readonly channel: FieldRef<"ChannelVisit", 'String'>
+    readonly createdAt: FieldRef<"ChannelVisit", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ChannelVisit findUnique
+   */
+  export type ChannelVisitFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChannelVisit
+     */
+    select?: ChannelVisitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChannelVisit
+     */
+    omit?: ChannelVisitOmit<ExtArgs> | null
+    /**
+     * Filter, which ChannelVisit to fetch.
+     */
+    where: ChannelVisitWhereUniqueInput
+  }
+
+  /**
+   * ChannelVisit findUniqueOrThrow
+   */
+  export type ChannelVisitFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChannelVisit
+     */
+    select?: ChannelVisitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChannelVisit
+     */
+    omit?: ChannelVisitOmit<ExtArgs> | null
+    /**
+     * Filter, which ChannelVisit to fetch.
+     */
+    where: ChannelVisitWhereUniqueInput
+  }
+
+  /**
+   * ChannelVisit findFirst
+   */
+  export type ChannelVisitFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChannelVisit
+     */
+    select?: ChannelVisitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChannelVisit
+     */
+    omit?: ChannelVisitOmit<ExtArgs> | null
+    /**
+     * Filter, which ChannelVisit to fetch.
+     */
+    where?: ChannelVisitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ChannelVisits to fetch.
+     */
+    orderBy?: ChannelVisitOrderByWithRelationInput | ChannelVisitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ChannelVisits.
+     */
+    cursor?: ChannelVisitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ChannelVisits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ChannelVisits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ChannelVisits.
+     */
+    distinct?: ChannelVisitScalarFieldEnum | ChannelVisitScalarFieldEnum[]
+  }
+
+  /**
+   * ChannelVisit findFirstOrThrow
+   */
+  export type ChannelVisitFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChannelVisit
+     */
+    select?: ChannelVisitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChannelVisit
+     */
+    omit?: ChannelVisitOmit<ExtArgs> | null
+    /**
+     * Filter, which ChannelVisit to fetch.
+     */
+    where?: ChannelVisitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ChannelVisits to fetch.
+     */
+    orderBy?: ChannelVisitOrderByWithRelationInput | ChannelVisitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ChannelVisits.
+     */
+    cursor?: ChannelVisitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ChannelVisits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ChannelVisits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ChannelVisits.
+     */
+    distinct?: ChannelVisitScalarFieldEnum | ChannelVisitScalarFieldEnum[]
+  }
+
+  /**
+   * ChannelVisit findMany
+   */
+  export type ChannelVisitFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChannelVisit
+     */
+    select?: ChannelVisitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChannelVisit
+     */
+    omit?: ChannelVisitOmit<ExtArgs> | null
+    /**
+     * Filter, which ChannelVisits to fetch.
+     */
+    where?: ChannelVisitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ChannelVisits to fetch.
+     */
+    orderBy?: ChannelVisitOrderByWithRelationInput | ChannelVisitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ChannelVisits.
+     */
+    cursor?: ChannelVisitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ChannelVisits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ChannelVisits.
+     */
+    skip?: number
+    distinct?: ChannelVisitScalarFieldEnum | ChannelVisitScalarFieldEnum[]
+  }
+
+  /**
+   * ChannelVisit create
+   */
+  export type ChannelVisitCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChannelVisit
+     */
+    select?: ChannelVisitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChannelVisit
+     */
+    omit?: ChannelVisitOmit<ExtArgs> | null
+    /**
+     * The data needed to create a ChannelVisit.
+     */
+    data: XOR<ChannelVisitCreateInput, ChannelVisitUncheckedCreateInput>
+  }
+
+  /**
+   * ChannelVisit createMany
+   */
+  export type ChannelVisitCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ChannelVisits.
+     */
+    data: ChannelVisitCreateManyInput | ChannelVisitCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ChannelVisit createManyAndReturn
+   */
+  export type ChannelVisitCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChannelVisit
+     */
+    select?: ChannelVisitSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChannelVisit
+     */
+    omit?: ChannelVisitOmit<ExtArgs> | null
+    /**
+     * The data used to create many ChannelVisits.
+     */
+    data: ChannelVisitCreateManyInput | ChannelVisitCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ChannelVisit update
+   */
+  export type ChannelVisitUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChannelVisit
+     */
+    select?: ChannelVisitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChannelVisit
+     */
+    omit?: ChannelVisitOmit<ExtArgs> | null
+    /**
+     * The data needed to update a ChannelVisit.
+     */
+    data: XOR<ChannelVisitUpdateInput, ChannelVisitUncheckedUpdateInput>
+    /**
+     * Choose, which ChannelVisit to update.
+     */
+    where: ChannelVisitWhereUniqueInput
+  }
+
+  /**
+   * ChannelVisit updateMany
+   */
+  export type ChannelVisitUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ChannelVisits.
+     */
+    data: XOR<ChannelVisitUpdateManyMutationInput, ChannelVisitUncheckedUpdateManyInput>
+    /**
+     * Filter which ChannelVisits to update
+     */
+    where?: ChannelVisitWhereInput
+    /**
+     * Limit how many ChannelVisits to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ChannelVisit updateManyAndReturn
+   */
+  export type ChannelVisitUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChannelVisit
+     */
+    select?: ChannelVisitSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChannelVisit
+     */
+    omit?: ChannelVisitOmit<ExtArgs> | null
+    /**
+     * The data used to update ChannelVisits.
+     */
+    data: XOR<ChannelVisitUpdateManyMutationInput, ChannelVisitUncheckedUpdateManyInput>
+    /**
+     * Filter which ChannelVisits to update
+     */
+    where?: ChannelVisitWhereInput
+    /**
+     * Limit how many ChannelVisits to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ChannelVisit upsert
+   */
+  export type ChannelVisitUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChannelVisit
+     */
+    select?: ChannelVisitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChannelVisit
+     */
+    omit?: ChannelVisitOmit<ExtArgs> | null
+    /**
+     * The filter to search for the ChannelVisit to update in case it exists.
+     */
+    where: ChannelVisitWhereUniqueInput
+    /**
+     * In case the ChannelVisit found by the `where` argument doesn't exist, create a new ChannelVisit with this data.
+     */
+    create: XOR<ChannelVisitCreateInput, ChannelVisitUncheckedCreateInput>
+    /**
+     * In case the ChannelVisit was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ChannelVisitUpdateInput, ChannelVisitUncheckedUpdateInput>
+  }
+
+  /**
+   * ChannelVisit delete
+   */
+  export type ChannelVisitDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChannelVisit
+     */
+    select?: ChannelVisitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChannelVisit
+     */
+    omit?: ChannelVisitOmit<ExtArgs> | null
+    /**
+     * Filter which ChannelVisit to delete.
+     */
+    where: ChannelVisitWhereUniqueInput
+  }
+
+  /**
+   * ChannelVisit deleteMany
+   */
+  export type ChannelVisitDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ChannelVisits to delete
+     */
+    where?: ChannelVisitWhereInput
+    /**
+     * Limit how many ChannelVisits to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ChannelVisit without action
+   */
+  export type ChannelVisitDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChannelVisit
+     */
+    select?: ChannelVisitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChannelVisit
+     */
+    omit?: ChannelVisitOmit<ExtArgs> | null
   }
 
 
@@ -41312,11 +42458,24 @@ export namespace Prisma {
     discount: 'discount',
     total: 'total',
     couponCode: 'couponCode',
+    acquisitionChannel: 'acquisitionChannel',
+    acquisitionCampaign: 'acquisitionCampaign',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
   export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
+
+
+  export const ChannelVisitScalarFieldEnum: {
+    id: 'id',
+    visitorId: 'visitorId',
+    day: 'day',
+    channel: 'channel',
+    createdAt: 'createdAt'
+  };
+
+  export type ChannelVisitScalarFieldEnum = (typeof ChannelVisitScalarFieldEnum)[keyof typeof ChannelVisitScalarFieldEnum]
 
 
   export const OrderItemScalarFieldEnum: {
@@ -42938,6 +44097,8 @@ export namespace Prisma {
     discount?: DecimalFilter<"Order"> | Decimal | DecimalJsLike | number | string
     total?: DecimalFilter<"Order"> | Decimal | DecimalJsLike | number | string
     couponCode?: StringNullableFilter<"Order"> | string | null
+    acquisitionChannel?: StringNullableFilter<"Order"> | string | null
+    acquisitionCampaign?: StringNullableFilter<"Order"> | string | null
     createdAt?: DateTimeFilter<"Order"> | Date | string
     updatedAt?: DateTimeFilter<"Order"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -42961,6 +44122,8 @@ export namespace Prisma {
     discount?: SortOrder
     total?: SortOrder
     couponCode?: SortOrderInput | SortOrder
+    acquisitionChannel?: SortOrderInput | SortOrder
+    acquisitionCampaign?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -42987,6 +44150,8 @@ export namespace Prisma {
     discount?: DecimalFilter<"Order"> | Decimal | DecimalJsLike | number | string
     total?: DecimalFilter<"Order"> | Decimal | DecimalJsLike | number | string
     couponCode?: StringNullableFilter<"Order"> | string | null
+    acquisitionChannel?: StringNullableFilter<"Order"> | string | null
+    acquisitionCampaign?: StringNullableFilter<"Order"> | string | null
     createdAt?: DateTimeFilter<"Order"> | Date | string
     updatedAt?: DateTimeFilter<"Order"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -43010,6 +44175,8 @@ export namespace Prisma {
     discount?: SortOrder
     total?: SortOrder
     couponCode?: SortOrderInput | SortOrder
+    acquisitionChannel?: SortOrderInput | SortOrder
+    acquisitionCampaign?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: OrderCountOrderByAggregateInput
@@ -43036,8 +44203,65 @@ export namespace Prisma {
     discount?: DecimalWithAggregatesFilter<"Order"> | Decimal | DecimalJsLike | number | string
     total?: DecimalWithAggregatesFilter<"Order"> | Decimal | DecimalJsLike | number | string
     couponCode?: StringNullableWithAggregatesFilter<"Order"> | string | null
+    acquisitionChannel?: StringNullableWithAggregatesFilter<"Order"> | string | null
+    acquisitionCampaign?: StringNullableWithAggregatesFilter<"Order"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Order"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Order"> | Date | string
+  }
+
+  export type ChannelVisitWhereInput = {
+    AND?: ChannelVisitWhereInput | ChannelVisitWhereInput[]
+    OR?: ChannelVisitWhereInput[]
+    NOT?: ChannelVisitWhereInput | ChannelVisitWhereInput[]
+    id?: IntFilter<"ChannelVisit"> | number
+    visitorId?: StringFilter<"ChannelVisit"> | string
+    day?: StringFilter<"ChannelVisit"> | string
+    channel?: StringFilter<"ChannelVisit"> | string
+    createdAt?: DateTimeFilter<"ChannelVisit"> | Date | string
+  }
+
+  export type ChannelVisitOrderByWithRelationInput = {
+    id?: SortOrder
+    visitorId?: SortOrder
+    day?: SortOrder
+    channel?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ChannelVisitWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    visitorId_day_channel?: ChannelVisitVisitorIdDayChannelCompoundUniqueInput
+    AND?: ChannelVisitWhereInput | ChannelVisitWhereInput[]
+    OR?: ChannelVisitWhereInput[]
+    NOT?: ChannelVisitWhereInput | ChannelVisitWhereInput[]
+    visitorId?: StringFilter<"ChannelVisit"> | string
+    day?: StringFilter<"ChannelVisit"> | string
+    channel?: StringFilter<"ChannelVisit"> | string
+    createdAt?: DateTimeFilter<"ChannelVisit"> | Date | string
+  }, "id" | "visitorId_day_channel">
+
+  export type ChannelVisitOrderByWithAggregationInput = {
+    id?: SortOrder
+    visitorId?: SortOrder
+    day?: SortOrder
+    channel?: SortOrder
+    createdAt?: SortOrder
+    _count?: ChannelVisitCountOrderByAggregateInput
+    _avg?: ChannelVisitAvgOrderByAggregateInput
+    _max?: ChannelVisitMaxOrderByAggregateInput
+    _min?: ChannelVisitMinOrderByAggregateInput
+    _sum?: ChannelVisitSumOrderByAggregateInput
+  }
+
+  export type ChannelVisitScalarWhereWithAggregatesInput = {
+    AND?: ChannelVisitScalarWhereWithAggregatesInput | ChannelVisitScalarWhereWithAggregatesInput[]
+    OR?: ChannelVisitScalarWhereWithAggregatesInput[]
+    NOT?: ChannelVisitScalarWhereWithAggregatesInput | ChannelVisitScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"ChannelVisit"> | number
+    visitorId?: StringWithAggregatesFilter<"ChannelVisit"> | string
+    day?: StringWithAggregatesFilter<"ChannelVisit"> | string
+    channel?: StringWithAggregatesFilter<"ChannelVisit"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"ChannelVisit"> | Date | string
   }
 
   export type OrderItemWhereInput = {
@@ -45422,6 +46646,8 @@ export namespace Prisma {
     discount?: Decimal | DecimalJsLike | number | string
     total: Decimal | DecimalJsLike | number | string
     couponCode?: string | null
+    acquisitionChannel?: string | null
+    acquisitionCampaign?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutOrdersInput
@@ -45445,6 +46671,8 @@ export namespace Prisma {
     discount?: Decimal | DecimalJsLike | number | string
     total: Decimal | DecimalJsLike | number | string
     couponCode?: string | null
+    acquisitionChannel?: string | null
+    acquisitionCampaign?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
@@ -45463,6 +46691,8 @@ export namespace Prisma {
     discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionChannel?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionCampaign?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutOrdersNestedInput
@@ -45486,6 +46716,8 @@ export namespace Prisma {
     discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionChannel?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionCampaign?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
@@ -45507,6 +46739,8 @@ export namespace Prisma {
     discount?: Decimal | DecimalJsLike | number | string
     total: Decimal | DecimalJsLike | number | string
     couponCode?: string | null
+    acquisitionChannel?: string | null
+    acquisitionCampaign?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -45522,6 +46756,8 @@ export namespace Prisma {
     discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionChannel?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionCampaign?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -45540,8 +46776,63 @@ export namespace Prisma {
     discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionChannel?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionCampaign?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChannelVisitCreateInput = {
+    visitorId: string
+    day: string
+    channel: string
+    createdAt?: Date | string
+  }
+
+  export type ChannelVisitUncheckedCreateInput = {
+    id?: number
+    visitorId: string
+    day: string
+    channel: string
+    createdAt?: Date | string
+  }
+
+  export type ChannelVisitUpdateInput = {
+    visitorId?: StringFieldUpdateOperationsInput | string
+    day?: StringFieldUpdateOperationsInput | string
+    channel?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChannelVisitUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    visitorId?: StringFieldUpdateOperationsInput | string
+    day?: StringFieldUpdateOperationsInput | string
+    channel?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChannelVisitCreateManyInput = {
+    id?: number
+    visitorId: string
+    day: string
+    channel: string
+    createdAt?: Date | string
+  }
+
+  export type ChannelVisitUpdateManyMutationInput = {
+    visitorId?: StringFieldUpdateOperationsInput | string
+    day?: StringFieldUpdateOperationsInput | string
+    channel?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChannelVisitUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    visitorId?: StringFieldUpdateOperationsInput | string
+    day?: StringFieldUpdateOperationsInput | string
+    channel?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type OrderItemCreateInput = {
@@ -48037,6 +49328,8 @@ export namespace Prisma {
     discount?: SortOrder
     total?: SortOrder
     couponCode?: SortOrder
+    acquisitionChannel?: SortOrder
+    acquisitionCampaign?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -48065,6 +49358,8 @@ export namespace Prisma {
     discount?: SortOrder
     total?: SortOrder
     couponCode?: SortOrder
+    acquisitionChannel?: SortOrder
+    acquisitionCampaign?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -48083,6 +49378,8 @@ export namespace Prisma {
     discount?: SortOrder
     total?: SortOrder
     couponCode?: SortOrder
+    acquisitionChannel?: SortOrder
+    acquisitionCampaign?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -48115,6 +49412,44 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPaymentStatusFilter<$PrismaModel>
     _max?: NestedEnumPaymentStatusFilter<$PrismaModel>
+  }
+
+  export type ChannelVisitVisitorIdDayChannelCompoundUniqueInput = {
+    visitorId: string
+    day: string
+    channel: string
+  }
+
+  export type ChannelVisitCountOrderByAggregateInput = {
+    id?: SortOrder
+    visitorId?: SortOrder
+    day?: SortOrder
+    channel?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ChannelVisitAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type ChannelVisitMaxOrderByAggregateInput = {
+    id?: SortOrder
+    visitorId?: SortOrder
+    day?: SortOrder
+    channel?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ChannelVisitMinOrderByAggregateInput = {
+    id?: SortOrder
+    visitorId?: SortOrder
+    day?: SortOrder
+    channel?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ChannelVisitSumOrderByAggregateInput = {
+    id?: SortOrder
   }
   export type JsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -52074,6 +53409,8 @@ export namespace Prisma {
     discount?: Decimal | DecimalJsLike | number | string
     total: Decimal | DecimalJsLike | number | string
     couponCode?: string | null
+    acquisitionChannel?: string | null
+    acquisitionCampaign?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     address?: AddressCreateNestedOneWithoutOrdersInput
@@ -52095,6 +53432,8 @@ export namespace Prisma {
     discount?: Decimal | DecimalJsLike | number | string
     total: Decimal | DecimalJsLike | number | string
     couponCode?: string | null
+    acquisitionChannel?: string | null
+    acquisitionCampaign?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
@@ -52355,6 +53694,8 @@ export namespace Prisma {
     discount?: DecimalFilter<"Order"> | Decimal | DecimalJsLike | number | string
     total?: DecimalFilter<"Order"> | Decimal | DecimalJsLike | number | string
     couponCode?: StringNullableFilter<"Order"> | string | null
+    acquisitionChannel?: StringNullableFilter<"Order"> | string | null
+    acquisitionCampaign?: StringNullableFilter<"Order"> | string | null
     createdAt?: DateTimeFilter<"Order"> | Date | string
     updatedAt?: DateTimeFilter<"Order"> | Date | string
   }
@@ -55002,6 +56343,8 @@ export namespace Prisma {
     discount?: Decimal | DecimalJsLike | number | string
     total: Decimal | DecimalJsLike | number | string
     couponCode?: string | null
+    acquisitionChannel?: string | null
+    acquisitionCampaign?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutOrdersInput
@@ -55023,6 +56366,8 @@ export namespace Prisma {
     discount?: Decimal | DecimalJsLike | number | string
     total: Decimal | DecimalJsLike | number | string
     couponCode?: string | null
+    acquisitionChannel?: string | null
+    acquisitionCampaign?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
@@ -55497,6 +56842,8 @@ export namespace Prisma {
     discount?: Decimal | DecimalJsLike | number | string
     total: Decimal | DecimalJsLike | number | string
     couponCode?: string | null
+    acquisitionChannel?: string | null
+    acquisitionCampaign?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutOrdersInput
@@ -55519,6 +56866,8 @@ export namespace Prisma {
     discount?: Decimal | DecimalJsLike | number | string
     total: Decimal | DecimalJsLike | number | string
     couponCode?: string | null
+    acquisitionChannel?: string | null
+    acquisitionCampaign?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutOrderInput
@@ -55688,6 +57037,8 @@ export namespace Prisma {
     discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionChannel?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionCampaign?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutOrdersNestedInput
@@ -55710,6 +57061,8 @@ export namespace Prisma {
     discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionChannel?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionCampaign?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutOrderNestedInput
@@ -55915,6 +57268,8 @@ export namespace Prisma {
     discount?: Decimal | DecimalJsLike | number | string
     total: Decimal | DecimalJsLike | number | string
     couponCode?: string | null
+    acquisitionChannel?: string | null
+    acquisitionCampaign?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutOrdersInput
@@ -55937,6 +57292,8 @@ export namespace Prisma {
     discount?: Decimal | DecimalJsLike | number | string
     total: Decimal | DecimalJsLike | number | string
     couponCode?: string | null
+    acquisitionChannel?: string | null
+    acquisitionCampaign?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
@@ -56192,6 +57549,8 @@ export namespace Prisma {
     discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionChannel?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionCampaign?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutOrdersNestedInput
@@ -56214,6 +57573,8 @@ export namespace Prisma {
     discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionChannel?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionCampaign?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
@@ -56353,6 +57714,8 @@ export namespace Prisma {
     discount?: Decimal | DecimalJsLike | number | string
     total: Decimal | DecimalJsLike | number | string
     couponCode?: string | null
+    acquisitionChannel?: string | null
+    acquisitionCampaign?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutOrdersInput
@@ -56375,6 +57738,8 @@ export namespace Prisma {
     discount?: Decimal | DecimalJsLike | number | string
     total: Decimal | DecimalJsLike | number | string
     couponCode?: string | null
+    acquisitionChannel?: string | null
+    acquisitionCampaign?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput
@@ -56449,6 +57814,8 @@ export namespace Prisma {
     discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionChannel?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionCampaign?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutOrdersNestedInput
@@ -56471,6 +57838,8 @@ export namespace Prisma {
     discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionChannel?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionCampaign?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
@@ -58263,6 +59632,8 @@ export namespace Prisma {
     discount?: Decimal | DecimalJsLike | number | string
     total: Decimal | DecimalJsLike | number | string
     couponCode?: string | null
+    acquisitionChannel?: string | null
+    acquisitionCampaign?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -58438,6 +59809,8 @@ export namespace Prisma {
     discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionChannel?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionCampaign?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     address?: AddressUpdateOneWithoutOrdersNestedInput
@@ -58459,6 +59832,8 @@ export namespace Prisma {
     discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionChannel?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionCampaign?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
@@ -58479,6 +59854,8 @@ export namespace Prisma {
     discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionChannel?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionCampaign?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -59409,6 +60786,8 @@ export namespace Prisma {
     discount?: Decimal | DecimalJsLike | number | string
     total: Decimal | DecimalJsLike | number | string
     couponCode?: string | null
+    acquisitionChannel?: string | null
+    acquisitionCampaign?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -59424,6 +60803,8 @@ export namespace Prisma {
     discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionChannel?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionCampaign?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutOrdersNestedInput
@@ -59445,6 +60826,8 @@ export namespace Prisma {
     discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionChannel?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionCampaign?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput
@@ -59465,6 +60848,8 @@ export namespace Prisma {
     discount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     couponCode?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionChannel?: NullableStringFieldUpdateOperationsInput | string | null
+    acquisitionCampaign?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

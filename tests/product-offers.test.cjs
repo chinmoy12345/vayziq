@@ -12,6 +12,7 @@ function load(file, imports = {}, globals = {}) {
 const pricing = load('lib/product-offers.ts');
 const { offerDiscount } = pricing;
 const { couponInput } = load('lib/coupon-input.ts');
+const channelAttribution = load('lib/channel-attribution.ts');
 const coupons = load('lib/coupons.ts', { '@/lib/product-offers': pricing });
 const offer = (type, rules = {}, rest = {}) => ({ code: 'TEST', type, value: 10, minimum: 0, maximum: null, rules: { productIds: [], ...rules }, ...rest });
 const line = (quantity, id = 1, price = 599) => ({ id, quantity, price });
@@ -92,12 +93,14 @@ test('COD recalculates quantity discounts using database prices, ignoring client
   const coupon = { id: 1, code: 'TEST', type: 'quantity_price', value: 0, minimumOrder: 0, maximumDiscount: null, rules: { productIds: [1], priceMode: 'unit', tiers: [{ quantity: 3, price: 399 }, { quantity: 4, price: 299 }] }, active: true, usageCount: 0, usageLimit: null, startsAt: null, expiresAt: null, updatedAt: new Date() };
   const tx = { coupon: { findUnique: async () => coupon, updateMany: async () => ({ count: 1 }) }, order: { create: async ({ data }) => { saved = data; return { id: 100, orderNumber: data.orderNumber }; } }, product: { findUnique: async () => product, updateMany: async () => ({ count: 1 }) }, inventoryMovement: { create: async () => ({}) } };
   const db = { address: { findFirst: async () => ({ id: 1 }) }, product: { findMany: async () => [product] }, $transaction: async callback => callback(tx) };
-  const api = load('app/api/checkout/route.ts', { 'next/server': { NextResponse }, '@/lib/db': { default: db }, '@/lib/auth': { getCurrentUser: async () => ({ sub: '1' }) }, '@/lib/coupons': coupons, '@/lib/cart-pricing': load('lib/cart-pricing.ts', { '@/lib/db': { default: db } }), '@/lib/delivery-zip-settings': { isDeliveryZipAllowed: async () => true }, '@/lib/fulfillment': { policySnapshot: () => ({}) } });
-  const request = quantity => new NextRequest('http://localhost/api/checkout', { method: 'POST', body: JSON.stringify({ addressId: 1, paymentMethod: 'cod', couponCode: 'TEST', items: [{ id: 1, quantity, price: 1 }] }) });
+  const api = load('app/api/checkout/route.ts', { 'next/server': { NextResponse }, '@/lib/db': { default: db }, '@/lib/auth': { getCurrentUser: async () => ({ sub: '1' }) }, '@/lib/coupons': coupons, '@/lib/cart-pricing': load('lib/cart-pricing.ts', { '@/lib/db': { default: db } }), '@/lib/delivery-zip-settings': { isDeliveryZipAllowed: async () => true }, '@/lib/fulfillment': { policySnapshot: () => ({}) }, '@/lib/channel-attribution': channelAttribution });
+  const request = quantity => new NextRequest('http://localhost/api/checkout', { method: 'POST', headers: { cookie: `vayziq_channel=${encodeURIComponent(JSON.stringify({ channel: 'facebook', campaign: 'launch' }))}` }, body: JSON.stringify({ addressId: 1, paymentMethod: 'cod', couponCode: 'TEST', items: [{ id: 1, quantity, price: 1 }] }) });
   assert.equal((await api.POST(request(4))).status, 200);
   assert.equal(saved.subtotal, 2396);
   assert.equal(saved.discount, 1200);
   assert.equal(saved.total, 1196);
+  assert.equal(saved.acquisitionChannel, 'facebook');
+  assert.equal(saved.acquisitionCampaign, 'launch');
   assert.equal((await api.POST(request(1.5))).status, 400);
   coupon.active = false;
   assert.equal((await api.POST(request(4))).status, 409);
@@ -165,7 +168,7 @@ test('online payment amount uses the same server-side quantity discount as COD',
   const coupon={id:1,code:'TEST',type:'quantity_discount',value:0,minimumOrder:0,maximumDiscount:null,rules:{productIds:[],tiers:[{quantity:2,price:200},{quantity:3,price:300}]},active:true,usageCount:0,usageLimit:null,startsAt:null,expiresAt:null,updatedAt:new Date()};
   const tx={coupon:{findUnique:async()=>coupon,updateMany:async()=>({count:1})},order:{create:async({data})=>{saved={...data,id:100};return saved;}}};
   const db={address:{findFirst:async()=>({id:1,fullName:'Test',mobile:'9999999999'})},product:{findMany:async()=>[product]},user:{findUnique:async()=>({name:'Test',email:'test@example.invalid'})},order:{update:async()=>({})},$transaction:async cb=>cb(tx)};
-  const api=load('app/api/payments/razorpay/create-order/route.ts',{'next/server':{NextResponse},'@/lib/auth':{getCurrentUser:async()=>({sub:'1'})},'@/lib/db':{default:db},'@/lib/coupons':coupons,'@/lib/cart-pricing':load('lib/cart-pricing.ts',{'@/lib/db':{default:db}}),'@/lib/delivery-zip-settings':{isDeliveryZipAllowed:async()=>true},'@/lib/fulfillment':{policySnapshot:()=>({})},'@/lib/payment-messaging-settings':{getRazorpayCredentials:async()=>({keyId:'test',keySecret:'test'})}},{process:{env:{}},Buffer,fetch:async(_,{body})=>{gatewayAmount=JSON.parse(body).amount;return {ok:true,json:async()=>({id:'order_test',amount:gatewayAmount,currency:'INR'})};}});
+  const api=load('app/api/payments/razorpay/create-order/route.ts',{'next/server':{NextResponse},'@/lib/auth':{getCurrentUser:async()=>({sub:'1'})},'@/lib/db':{default:db},'@/lib/coupons':coupons,'@/lib/cart-pricing':load('lib/cart-pricing.ts',{'@/lib/db':{default:db}}),'@/lib/delivery-zip-settings':{isDeliveryZipAllowed:async()=>true},'@/lib/fulfillment':{policySnapshot:()=>({})},'@/lib/payment-messaging-settings':{getRazorpayCredentials:async()=>({keyId:'test',keySecret:'test'})},'@/lib/channel-attribution':channelAttribution},{process:{env:{}},Buffer,fetch:async(_,{body})=>{gatewayAmount=JSON.parse(body).amount;return {ok:true,json:async()=>({id:'order_test',amount:gatewayAmount,currency:'INR'})};}});
   const response=await api.POST(new NextRequest('http://localhost/api/payments/razorpay/create-order',{method:'POST',body:JSON.stringify({addressId:1,couponCode:'TEST',items:[{id:1,quantity:3,price:1}]})}));
   assert.equal(response.status,200);assert.equal(saved.subtotal,1797);assert.equal(saved.discount,300);assert.equal(saved.total,1497);assert.equal(gatewayAmount,149700);
 });

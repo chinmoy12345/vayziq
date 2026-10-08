@@ -7,6 +7,8 @@ import { getSocialLinks } from "@/lib/social-links";
 import prisma from "@/lib/db";
 import { getStoreMenuSettings } from "@/lib/store-menu-settings";
 import MaintenancePage from "@/components/store/MaintenancePage";
+import ChannelVisitTracker from "@/components/store/ChannelVisitTracker";
+import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";
 
@@ -37,6 +39,7 @@ export default async function StoreLayout({ children }: Readonly<{ children: Rea
 
   return (
     <>
+      <Suspense fallback={null}><ChannelVisitTracker /></Suspense>
       <Header menuSettings={menuSettings} />
       <ProductCardSettingsProvider settings={{
         productCardRating: visibility.productCardRating,

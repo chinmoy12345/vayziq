@@ -14,6 +14,7 @@ interface MenuItem {
 type AdminAccess = { permissions: string[]; isSuperAdmin: boolean };
 const permissionByHref: Record<string, string> = {
   "/admin/seo": "settings.view",
+  "/admin/channel-reports": "dashboard.view",
   "/admin/dashboard": "dashboard.view", "/admin/products": "products.view", "/admin/inventory": "inventory.view", "/admin/suppliers": "suppliers.view", "/admin/categories": "categories.view",
   "/admin/orders": "orders.view", "/admin/audit": "audit.view", "/admin/returns": "returns.view",
   "/admin/delivery-zips": "delivery-zips.view", "/admin/customers": "customers.view",
@@ -140,6 +141,11 @@ const menuItems: MenuItem[] = [
 ];
 
 const marketingItems: MenuItem[] = [
+  {
+    label: "Channel Reports",
+    href: "/admin/channel-reports",
+    icon: <span aria-hidden="true">▥</span>,
+  },
   {
     label: "Payments & SMS",
     href: "/admin/integrations",

@@ -7,6 +7,7 @@ import { getCurrentUser } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { isDeliveryZipAllowed } from "@/lib/delivery-zip-settings";
 import { getRazorpayCredentials } from "@/lib/payment-messaging-settings";
+import { CHANNEL_COOKIE, readAttribution } from "@/lib/channel-attribution";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -14,6 +15,7 @@ export const runtime = "nodejs";
 
 
 export async function POST(request: NextRequest) {
+  const attribution = readAttribution(request.cookies.get(CHANNEL_COOKIE)?.value);
   const session = await getCurrentUser();
   const userId = Number(session?.sub);
   if (!Number.isInteger(userId)) {
@@ -58,6 +60,8 @@ export async function POST(request: NextRequest) {
       shipping,
       discount,
       couponCode: code || null,
+      acquisitionChannel: attribution.channel,
+      acquisitionCampaign: attribution.campaign,
       total: subtotal + shipping - discount,
       paymentStatus: "pending",
       items: {
