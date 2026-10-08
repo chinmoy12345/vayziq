@@ -24,6 +24,7 @@ import {
 import type { BlogPost } from "@/lib/blog";
 import type { VayziqHomeData, VayziqHomeProduct } from "@/lib/vayziq-home-data";
 import type { HomepageVisibility } from "@/lib/homepage-settings";
+import type { StoreMenuSettings } from "@/lib/store-menu-settings";
 import ProductVideo from "@/components/product/ProductVideo";
 import ProductOfferBadges from "@/components/product/ProductOfferBadges";
 import HomeHeader from "./HomeHeader";
@@ -125,10 +126,12 @@ export default function VayziqHome({
   initialData,
   visibility,
   journalPosts,
+  menuSettings,
 }: {
   initialData: VayziqHomeData;
   visibility: HomepageVisibility;
   journalPosts: BlogPost[];
+  menuSettings: StoreMenuSettings;
 }) {
   const [bannerStart, setBannerStart] = useState(0);
   const [heroIndex, setHeroIndex] = useState(0);
@@ -297,9 +300,9 @@ export default function VayziqHome({
   }, [banners.length, heroPaused]);
   return (
     <div className={`${styles.home} vayziq-home`}>
-      <HomeHeader />
+      <HomeHeader menuSettings={menuSettings} />
       <main>
-        {activeHeroBanner && (
+        {visibility.heroSlider && activeHeroBanner && (
           <section
             className={styles.heroSlider}
             aria-label="Featured collections"
@@ -325,7 +328,7 @@ export default function VayziqHome({
             </>}
           </section>
         )}
-        <section className={styles.bannerSection} aria-label="Campaign banners">
+        {visibility.campaignBanners && <section className={styles.bannerSection} aria-label="Campaign banners">
           <div className={styles.desktopBanners}>
             {visibleBanners.map((banner, index) => (
               <Link
@@ -369,7 +372,8 @@ export default function VayziqHome({
               />
             ))}
           </div>
-        </section>
+        </section>}
+        {visibility.bestSellers && <>
         <SectionHeading title="Best Sellers" />
         <ProductCarousel label="Best Sellers">
           {bestSellers.map((product) => (
@@ -383,6 +387,8 @@ export default function VayziqHome({
             />
           ))}
         </ProductCarousel>
+        </>}
+        {visibility.newArrivals && <>
         <SectionHeading title="New Arrivals" href="/shop?sort=newest" />
         <ProductCarousel label="New Arrivals">
           {newArrivals.map((product) => (
@@ -396,7 +402,8 @@ export default function VayziqHome({
             />
           ))}
         </ProductCarousel>
-        {catalogProducts.length > 0 && (
+        </>}
+        {visibility.ourCatalog && catalogProducts.length > 0 && (
           <section className={styles.catalogSection} aria-labelledby="our-catalog-heading">
             <div className={styles.catalogHeading}>
               <div>
@@ -419,7 +426,7 @@ export default function VayziqHome({
             </div>
           </section>
         )}
-        <section
+        {visibility.featuredCollection && <section
           className={`${styles.collectionShowcase} ${sectionWidthStyles.wideMerchSection}`}
           aria-labelledby="collection-heading"
         >
@@ -444,7 +451,7 @@ export default function VayziqHome({
               </Link>
             ))}
           </div>
-        </section>
+        </section>}
         {visibility.trendingNow && (
           <>
             <SectionHeading title="Trending Now" />
@@ -477,7 +484,7 @@ export default function VayziqHome({
             </section>
           </>
         )}
-        {offerBanner && (
+        {visibility.offerZone && offerBanner && (
           <section className={`${styles.offerSection} ${sectionWidthStyles.wideMerchSection}`}>
             <Link
               href={offerBanner.href}
@@ -525,6 +532,7 @@ export default function VayziqHome({
             </section>
           </>
         )}
+        {visibility.youMayLike && <>
         <SectionHeading title="You May Like" />
         <ProductCarousel label="You May Like">
           {recommendations.map((product) => (
@@ -538,6 +546,7 @@ export default function VayziqHome({
             />
           ))}
         </ProductCarousel>
+        </>}
         {visibility.shopByMood && (
           <>
             <SectionHeading title="Shop by Mood" />
@@ -563,6 +572,7 @@ export default function VayziqHome({
             </section>
           </>
         )}
+        {visibility.watchAndBuy && <>
         <SectionHeading title="Watch & Buy" href="/watch-buy" />
         <section id="watch-buy" className={styles.watch}>
           {watchProducts.map((product) => (
@@ -588,6 +598,7 @@ export default function VayziqHome({
             </article>
           ))}
         </section>
+        </>}
         {visibility.trustBenefits && (
           <section className={styles.trust}>
             {[
@@ -609,7 +620,7 @@ export default function VayziqHome({
             })}
           </section>
         )}
-        {journalPosts.length > 0 && (
+        {visibility.journal && journalPosts.length > 0 && (
           <section className={`${styles.journalSection} ${sectionWidthStyles.wideMerchSection}`} aria-labelledby="journal-heading">
             <div className={styles.journalHeading}>
               <div>

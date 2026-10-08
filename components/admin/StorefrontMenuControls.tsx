@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { StoreMenuSettings } from "@/lib/store-menu-settings";
 
 type MenuCategory = { id: number; name: string; slug: string };
-type MenuSettings = { enabled: boolean; home: boolean; watchBuy: boolean; shop: boolean; categoryIds: number[] };
+type MenuSettings = StoreMenuSettings;
 
 export default function StorefrontMenuControls() {
   const [categories, setCategories] = useState<MenuCategory[]>([]);
-  const [settings, setSettings] = useState<MenuSettings>({ enabled: true, home: true, watchBuy: true, shop: true, categoryIds: [] });
+  const [settings, setSettings] = useState<MenuSettings>({ enabled: true, home: true, watchBuy: true, shop: true, newArrivals: true, categories: true, deals: true, categoryIds: [] });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
@@ -56,7 +57,7 @@ export default function StorefrontMenuControls() {
       <span><span className="block text-sm font-medium text-[#292321]">Show category menu</span><span className="mt-1 block text-xs leading-5 text-[#857974]">Turn parent category links in the header menu on or off.</span></span>
       <input type="checkbox" role="switch" checked={settings.enabled} disabled={loading || saving} onChange={event => setSettings(current => ({ ...current, enabled: event.target.checked }))} className="h-5 w-9 shrink-0 cursor-pointer accent-[#9b5c5c] disabled:cursor-wait" aria-label="Show category menu" />
     </label>
-    <div className="border-b border-[#f0e9e5] px-5 py-4 sm:px-6"><p className="text-sm font-medium text-[#292321]">Header links</p><p className="mt-1 text-xs leading-5 text-[#857974]">Show or hide the fixed links in both desktop and mobile headers.</p><div className="mt-3 grid gap-1 sm:grid-cols-3">{([{ key: "home", label: "Home" }, { key: "watchBuy", label: "Watch & Buy" }, { key: "shop", label: "Shop" }] as const).map(item => <label key={item.key} className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-3 text-sm text-[#514945] transition hover:bg-[#faf8f6]"><input type="checkbox" checked={settings[item.key]} disabled={saving} onChange={event => setSettings(current => ({ ...current, [item.key]: event.target.checked }))} className="h-4 w-4 accent-[#9b5c5c]" /><span>{item.label}</span></label>)}</div></div>
+    <div className="border-b border-[#f0e9e5] px-5 py-4 sm:px-6"><p className="text-sm font-medium text-[#292321]">Header links</p><p className="mt-1 text-xs leading-5 text-[#857974]">Show or hide the fixed links in desktop and mobile navigation.</p><div className="mt-3 grid gap-1 sm:grid-cols-3">{([{ key: "home", label: "Home" }, { key: "shop", label: "Catalog" }, { key: "newArrivals", label: "New Arrivals" }, { key: "categories", label: "Categories" }, { key: "deals", label: "Deals" }, { key: "watchBuy", label: "Watch & Buy" }] as const).map(item => <label key={item.key} className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-3 text-sm text-[#514945] transition hover:bg-[#faf8f6]"><input type="checkbox" checked={settings[item.key]} disabled={saving} onChange={event => setSettings(current => ({ ...current, [item.key]: event.target.checked }))} className="h-4 w-4 accent-[#9b5c5c]" /><span>{item.label}</span></label>)}</div></div>
     <div className="px-5 py-4 sm:px-6"><p className="text-sm font-medium text-[#292321]">Parent categories</p><p className="mt-1 text-xs leading-5 text-[#857974]">Only selected active parent categories will appear. Subcategories remain nested under their parent.</p>
       {loading ? <p className="py-4 text-sm text-[#857974]">Loading categories…</p> : categories.length ? <div className="mt-3 grid gap-1 sm:grid-cols-2">{categories.map(category => <label key={category.id} className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-3 text-sm text-[#514945] transition hover:bg-[#faf8f6]"><input type="checkbox" checked={settings.categoryIds.includes(category.id)} disabled={saving} onChange={event => toggleCategory(category.id, event.target.checked)} className="h-4 w-4 accent-[#9b5c5c]" /><span>{category.name}</span></label>)}</div> : <p className="py-4 text-sm text-[#857974]">No active parent categories available.</p>}
     </div>

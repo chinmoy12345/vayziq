@@ -1,18 +1,22 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { HomepageVisibility } from "@/lib/homepage-settings";
+import { HOMEPAGE_VISIBILITY_DEFAULTS, type HomepageVisibility } from "@/lib/homepage-settings";
 import StorefrontMenuControls from "@/components/admin/StorefrontMenuControls";
 
 type SettingKey = keyof HomepageVisibility;
 
 const sectionSettings: { key: SettingKey; label: string; description: string }[] = [
-  { key: "customerReviews", label: "Loved by our customers", description: "Show approved customer reviews on the homepage." },
+  { key: "heroSlider", label: "Top full-width slider", description: "Show the large rotating banner above the campaign cards." },
+  { key: "campaignBanners", label: "Campaign banners", description: "Show the existing banner cards below the main slider." },
+  { key: "bestSellers", label: "Best Sellers", description: "Show the Best Sellers product carousel." },
   { key: "newArrivals", label: "New arrivals", description: "Show the latest products section." },
+  { key: "ourCatalog", label: "Our Catalog", description: "Show all active products in the launch catalog section." },
+  { key: "featuredCollection", label: "The Collection", description: "Show the collection image carousel." },
+  { key: "youMayLike", label: "You May Like", description: "Show the recommended product carousel." },
   { key: "watchAndBuy", label: "Watch & Buy", description: "Show the video shopping section." },
-  { key: "featuredCollection", label: "Featured collection", description: "Show featured products on the homepage." },
-  { key: "offerZone", label: "Offer Zone", description: "Show offer cards and uploaded offer banners." },
-  { key: "newsletter", label: "Join our world of elegance", description: "Show the homepage newsletter signup section." },
+  { key: "offerZone", label: "Offer banner", description: "Show the home page offer banner." },
+  { key: "journal", label: "From the Journal", description: "Show the latest blog stories." },
 ];
 
 const optionalHomeSettings: { key: SettingKey; label: string; description: string }[] = [
@@ -24,11 +28,10 @@ const optionalHomeSettings: { key: SettingKey; label: string; description: strin
 
 const footerSettings: { key: SettingKey; label: string; description: string }[] = [
   { key: "footerNewsletter", label: "Footer newsletter", description: "Show the email signup area at the top of the footer." },
-  { key: "footerBrand", label: "Footer brand and social links", description: "Show the brand description and social media icons." },
-  { key: "footerShopLinks", label: "Footer Shop links", description: "Show category and new arrival links." },
-  { key: "footerInformationLinks", label: "Footer information links", description: "Show contact, about, shipping, returns, policy and blog links." },
-  { key: "footerContact", label: "Footer contact details", description: "Show phone, email and business hours." },
-  { key: "footerBottomBar", label: "Footer bottom bar", description: "Show the copyright and design line." },
+  { key: "footerBrand", label: "Footer social links", description: "Show configured Facebook, Instagram and YouTube links." },
+  { key: "footerShopLinks", label: "Footer categories", description: "Show Men, Women and their active subcategories." },
+  { key: "footerInformationLinks", label: "Footer information links", description: "Show the Shop, About, Contact and policy links." },
+  { key: "footerBottomBar", label: "Footer bottom bar", description: "Show copyright and its optional links." },
 ];
 
 const cardSettings: { key: SettingKey; label: string; description: string }[] = [
@@ -56,7 +59,7 @@ const productDetailSettings: { key: SettingKey; label: string; description: stri
   { key: "productDetailRelated", label: "You may also like", description: "Show related products below product details." },
 ];
 
-const defaults: HomepageVisibility = { customerReviews: true, newArrivals: true, watchAndBuy: true, featuredCollection: true, offerZone: true, newsletter: true, trendingNow: false, trendingCategories: false, shopByMood: false, trustBenefits: false, footerNewsletter: true, footerBrand: true, footerShopLinks: true, footerInformationLinks: true, footerContact: true, footerBottomBar: true, productCardRating: true, productCardCarousel: true, productDetailRating: true, productDetailOffers: true, productDetailVideo: true, productDetailDelivery: true, productDetailDescription: true, productDetailReviews: true, productDetailRelated: true, cartPageHeader: true, cartItemCount: true, cartClearButton: true, cartSaveForLater: true, cartOffers: true, cartShippingMessage: true, cartTrustBenefits: true };
+const defaults: HomepageVisibility = { ...HOMEPAGE_VISIBILITY_DEFAULTS };
 
 export default function HomepageControls() {
   const [settings, setSettings] = useState<HomepageVisibility>(defaults);
@@ -82,7 +85,7 @@ export default function HomepageControls() {
       const body = await response.json() as { data?: HomepageVisibility; message?: string };
       if (!response.ok) throw new Error(body.message || "Homepage settings could not be saved.");
       if (body.data) setSettings({ ...defaults, ...body.data });
-      setMessage("Homepage display settings saved.");
+      setMessage(settings.maintenanceMode ? "Settings saved. The public storefront is in maintenance mode." : "Settings saved. The public storefront is live.");
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Homepage settings could not be saved.");
     } finally {
@@ -99,6 +102,7 @@ export default function HomepageControls() {
 
   return <main className="min-h-[calc(100vh-72px)] bg-[#faf8f6] p-4 sm:p-6 lg:p-8"><div className="mx-auto max-w-4xl"><div className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#a87567]">Storefront</p><h1 className="mt-1 text-2xl font-semibold tracking-tight text-[#292321]">Storefront controls</h1><p className="mt-2 text-sm text-[#857974]">Manage visible storefront sections, cart options, product features and footer content.</p></div><button type="button" onClick={() => void save()} disabled={loading || saving} className="inline-flex min-h-11 items-center rounded-lg bg-[#292321] px-5 text-sm font-medium text-white hover:bg-[#403936] disabled:opacity-50">{saving ? "Saving…" : "Save changes"}</button></div>
     {message && <p role="status" className="mt-5 rounded-lg border border-[#e7d3cb] bg-[#fff8f5] px-4 py-3 text-sm text-[#7d5e57]">{message}</p>}
+    <section className="mt-7 overflow-hidden rounded-xl border border-[#eee6e1] bg-white shadow-sm"><div className="border-b border-[#eee6e1] px-5 py-4 sm:px-6"><h2 className="font-semibold text-[#292321]">Storefront availability</h2><p className="mt-1 text-xs text-[#958b86]">Maintenance mode is on by default. The admin panel stays available.</p></div><label className="flex cursor-pointer items-center justify-between gap-4 px-5 py-5 sm:px-6"><span><span className="block text-sm font-medium text-[#292321]">Maintenance mode</span><span className="mt-1 block text-xs leading-5 text-[#857974]">When on, visitors see the maintenance page instead of the store. Turn it off and save to launch the storefront.</span></span><input type="checkbox" role="switch" checked={settings.maintenanceMode} disabled={loading || saving} onChange={event => setSettings(current => ({ ...current, maintenanceMode: event.target.checked }))} className="h-5 w-9 shrink-0 cursor-pointer accent-[#9b5c5c] disabled:cursor-wait" aria-label="Maintenance mode" /></label></section>
     <section className="mt-7 overflow-hidden rounded-xl border border-[#eee6e1] bg-white shadow-sm"><div className="border-b border-[#eee6e1] px-5 py-4 sm:px-6"><h2 className="font-semibold text-[#292321]">Homepage sections</h2><p className="mt-1 text-xs text-[#958b86]">Hidden sections are removed from the homepage.</p></div>{loading ? <p className="p-6 text-sm text-[#857974]">Loading settings…</p> : rows(sectionSettings)}</section>
     <section className="mt-5 overflow-hidden rounded-xl border border-[#eee6e1] bg-white shadow-sm"><div className="border-b border-[#eee6e1] px-5 py-4 sm:px-6"><h2 className="font-semibold text-[#292321]">Optional home page sections</h2><p className="mt-1 text-xs text-[#958b86]">These sections are hidden by default and affect only the home page.</p></div>{loading ? <p className="p-6 text-sm text-[#857974]">Loading settings…</p> : rows(optionalHomeSettings)}</section>
     <section className="mt-5 overflow-hidden rounded-xl border border-[#eee6e1] bg-white shadow-sm"><div className="border-b border-[#eee6e1] px-5 py-4 sm:px-6"><h2 className="font-semibold text-[#292321]">Product card features</h2><p className="mt-1 text-xs text-[#958b86]">These settings apply to product cards across the storefront.</p></div>{loading ? <p className="p-6 text-sm text-[#857974]">Loading settings…</p> : rows(cardSettings)}</section>

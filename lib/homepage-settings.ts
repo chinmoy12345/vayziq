@@ -2,6 +2,13 @@ import { cache } from "react";
 import prisma from "@/lib/db";
 
 export const HOMEPAGE_VISIBILITY_DEFAULTS = {
+  maintenanceMode: true,
+  heroSlider: true,
+  campaignBanners: true,
+  bestSellers: true,
+  ourCatalog: true,
+  youMayLike: true,
+  journal: true,
   customerReviews: true,
   newArrivals: true,
   watchAndBuy: true,

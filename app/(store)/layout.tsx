@@ -5,13 +5,20 @@ import { getHomepageVisibility } from "@/lib/homepage-settings";
 import { getStoreBranding } from "@/lib/store-branding";
 import { getSocialLinks } from "@/lib/social-links";
 import prisma from "@/lib/db";
+import { getStoreMenuSettings } from "@/lib/store-menu-settings";
+import MaintenancePage from "@/components/store/MaintenancePage";
 
 export const dynamic = "force-dynamic";
 
 export default async function StoreLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const [branding, visibility, socialLinks, footerCategories] = await Promise.all([
+  const visibility = await getHomepageVisibility();
+  if (visibility.maintenanceMode) {
+    const branding = await getStoreBranding();
+    return <MaintenancePage branding={branding} />;
+  }
+
+  const [branding, socialLinks, footerCategories, menuSettings] = await Promise.all([
     getStoreBranding(),
-    getHomepageVisibility(),
     getSocialLinks(),
     prisma.category.findMany({
       where: { parentId: null, status: "active", slug: { in: ["men", "women"] } },
@@ -25,11 +32,12 @@ export default async function StoreLayout({ children }: Readonly<{ children: Rea
         },
       },
     }),
+    getStoreMenuSettings(),
   ]);
 
   return (
     <>
-      <Header />
+      <Header menuSettings={menuSettings} />
       <ProductCardSettingsProvider settings={{
         productCardRating: visibility.productCardRating,
         productCardCarousel: visibility.productCardCarousel,
