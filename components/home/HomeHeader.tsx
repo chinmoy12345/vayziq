@@ -11,6 +11,8 @@ import styles from "./VayziqHome.module.css";
 import brandingStyles from "./HeaderBranding.module.css";
 import type { StoreMenuSettings } from "@/lib/store-menu-settings";
 import { DEFAULT_HEADER_UTILITY, type HeaderUtilitySettings } from "@/lib/header-utility-types";
+import { useOffers } from "@/lib/use-offers";
+import { offerTitle } from "@/lib/product-offers";
 
 export type HeaderCategory = { id: number; name: string; slug: string; status?: string; parentId: number | null; parent?: { id: number; name: string; slug: string } | null; children?: HeaderCategory[] };
 type HeaderUser = { id: number; name: string | null; email: string | null; mobile: string | null };
@@ -29,6 +31,7 @@ export default function HomeHeader({ menuSettings }: { menuSettings: StoreMenuSe
   const [accountOpen, setAccountOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<HeaderUser | null>(null);
   const [utility, setUtility] = useState<HeaderUtilitySettings>(DEFAULT_HEADER_UTILITY);
+  const { offers } = useOffers();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -101,6 +104,7 @@ export default function HomeHeader({ menuSettings }: { menuSettings: StoreMenuSe
       </div>;
     })}{visibleDesktopMenu.map(item => <Link key={item} href={item === "Watch & Buy" ? "/watch-buy" : item === "Deals" ? "/offers" : item === "New Arrivals" ? "/shop?sort=newest" : "/shop"} className={isMenuActive(item) ? styles.navActive : ""} aria-current={isMenuActive(item) ? "page" : undefined}>{item}</Link>)}</nav><div className={styles.tools}><form className={styles.search} onSubmit={event => { event.preventDefault(); setSearchOpen(true); }}><Search /><input readOnly onClick={() => setSearchOpen(true)} placeholder="Search for joggers, hoodies, t-shirts..." /><button type="submit" aria-label="Open search"><Search /></button></form><button type="button" onClick={() => setSearchOpen(true)} className={styles.mobileSearch} aria-label="Search"><Search /></button><div className={styles.accountMenu}><button type="button" className={styles.account} onClick={() => currentUser ? setAccountOpen(open => !open) : setAuthOpen(true)} aria-label={currentUser ? "Open account menu" : "Sign in or create account"} aria-expanded={currentUser ? accountOpen : undefined}><CircleUserRound /></button>{currentUser && accountOpen && <div className={styles.accountDropdown} role="menu"><div className={styles.accountGreeting}><b>{currentUser.name || "My Account"}</b><span>{currentUser.email || currentUser.mobile}</span></div><Link href="/account" role="menuitem" onClick={() => setAccountOpen(false)}><UserRound />My Account</Link><Link href="/account/orders" role="menuitem" onClick={() => setAccountOpen(false)}><Package />My Orders</Link><Link href="/account/wishlist" role="menuitem" onClick={() => setAccountOpen(false)}><Heart />Wishlist</Link><Link href="/account/profile" role="menuitem" onClick={() => setAccountOpen(false)}><CircleUserRound />My Profile</Link><Link href="/account/addresses" role="menuitem" onClick={() => setAccountOpen(false)}><MapPin />Addresses</Link><button type="button" onClick={() => void logout()} role="menuitem"><LogOut />Logout</button></div>}</div><Link href="/account/wishlist" aria-label="Wishlist"><Heart /></Link><Link className={styles.cart} href="/cart" aria-label="Cart"><ShoppingBag /><i>{cartCount}</i></Link></div></header>
     {isPinned && <div className={styles.headerSpacer} aria-hidden="true" />}
+    {offers.length > 0 && <div className={styles.offerTicker} aria-label="Current offers"><div className={styles.offerTickerTrack}>{[...offers, ...offers].map((offer, index) => <Link key={`${offer.code}-${index}`} href={`/offer/${offer.code}`} aria-hidden={index >= offers.length} tabIndex={index >= offers.length ? -1 : undefined}><strong>{offerTitle(offer)}</strong><span>USE CODE {offer.code}</span></Link>)}</div></div>}
     {visibleMobileMenu.length > 0 && <nav className={styles.mobileTopNav} aria-label="Mobile quick navigation">{visibleMobileMenu.map(([item, Icon, href]) => { const active = href === "/" ? pathname === "/" : pathname === href; return <Link key={item} className={active ? styles.mobileActive : ""} href={href} aria-current={active ? "page" : undefined}><Icon /><span>{item}</span></Link>; })}</nav>}
     <MobileMenu isOpen={drawerOpen} onClose={() => setDrawerOpen(false)} userName={null} onSignIn={() => { setDrawerOpen(false); setAuthOpen(true); }} showQuickNav={false} categories={menuCategories} menuSettings={menuSettings} />
     <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} onSuccess={() => void completeAuthentication()} />

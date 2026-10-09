@@ -175,6 +175,7 @@ export default function VayziqHome({
     null,
   );
   const [cartQuantity, setCartQuantity] = useState(1);
+  const [cartImageIndex, setCartImageIndex] = useState(0);
   const [cartLimits, setCartLimits] = useState({ min: 1, max: 10 });
   const [cartLimitMessage, setCartLimitMessage] = useState("");
   const [cartOptions, setCartOptions] = useState<Record<string, string>>({});
@@ -246,6 +247,14 @@ export default function VayziqHome({
     const nextIndex = (currentIndex + direction + watchProducts.length) % watchProducts.length;
     setActiveVideoId(watchProducts[nextIndex].id);
   };
+useEffect(() => {
+    if (!cartProduct) return;
+    const previousOverflow = document.body.style.overflow;
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setCartProduct(null); };
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", closeOnEscape);
+    return () => { document.body.style.overflow = previousOverflow; window.removeEventListener("keydown", closeOnEscape); };
+  }, [cartProduct]);
   const openCartPopup = (product: VayziqHomeProduct) => {
     setCartProduct(product);
     setCartQuantity(1);
@@ -655,86 +664,26 @@ export default function VayziqHome({
         )}
       </main>
       {cartProduct && (
-        <div
-          className={styles.cartPopupBackdrop}
-          onMouseDown={() => setCartProduct(null)}
-        >
-          <section
-            className={`${styles.cartPopup}${cartProduct.images.length === 1 ? ` ${styles.cartPopupSingle}` : ""}`}
-            role="dialog"
-            aria-modal="true"
-            aria-label="Add product to cart"
-            onMouseDown={(event) => event.stopPropagation()}
-          >
-            <button
-              type="button"
-              className={styles.cartPopupClose}
-              onClick={() => setCartProduct(null)}
-              aria-label="Close"
-            >
-              <X />
-            </button>
-            <div className={`${styles.cartPopupGallery}${cartProduct.images.length === 1 ? ` ${styles.cartPopupGallerySingle}` : ""}`}>
-              {cartProduct.images.slice(0, 3).map((image, index) => <div className={styles.cartPopupImage} key={`${image}-${index}`}><Image src={image} alt={`${cartProduct.name} view ${index + 1}`} fill sizes="(max-width: 767px) 30vw, 190px" /></div>)}
-            </div>
-            <div className={styles.cartPopupProduct}>
-              <div><p>{cartAdded ? "ADDED TO BAG" : cartProduct.category.toUpperCase()}</p><h2>{cartProduct.name}</h2><strong>{cartProduct.price}</strong>{cartProduct.oldPrice && <del>{cartProduct.oldPrice}</del>}</div>
-            </div>
-            {cartAdded ? (
-              <div className={styles.cartPopupActions}>
-                <Link href="/cart" className={styles.cartPopupPrimary}>
-                  View Cart
-                </Link>
-                <button
-                  type="button"
-                  className={styles.cartPopupSecondary}
-                  onClick={() => setCartProduct(null)}
-                >
-                  Continue Shopping
-                </button>
+        <div className="fixed inset-0 z-[250] flex items-center justify-center bg-black/55 p-2 backdrop-blur-[2px] sm:p-5" onMouseDown={() => setCartProduct(null)}>
+          <section className="relative flex max-h-[calc(100dvh-16px)] w-full max-w-[980px] flex-col overflow-hidden rounded-xl bg-white shadow-[0_22px_70px_rgba(0,0,0,.32)] sm:max-h-[calc(100dvh-40px)]" role="dialog" aria-modal="true" aria-labelledby={`home-cart-title-${cartProduct.id}`} onMouseDown={(event) => event.stopPropagation()}>
+            <header className="flex h-14 shrink-0 items-center justify-between border-b border-[#e7e7e7] px-5 sm:h-16 sm:px-7"><h2 className="text-base font-extrabold tracking-tight text-[#222] sm:text-lg">ADD TO CART</h2><button type="button" onClick={() => setCartProduct(null)} aria-label="Close add to cart" className="grid h-9 w-9 place-items-center rounded-full text-[#222] transition hover:bg-[#f3f3f3]"><X className="h-5 w-5" /></button></header>
+            <div className="grid min-h-0 flex-1 overflow-y-auto lg:grid-cols-[1.12fr_.88fr]">
+              <div className="grid min-h-[360px] grid-cols-[68px_minmax(0,1fr)] gap-3 border-b border-[#ececec] p-4 sm:min-h-[510px] sm:grid-cols-[88px_minmax(0,1fr)] sm:gap-5 sm:p-6 lg:border-b-0 lg:border-r">
+                <div className="flex flex-col gap-3 overflow-y-auto">{cartProduct.images.map((image, index) => <button key={`${image}-${index}`} type="button" onClick={() => setCartImageIndex(index)} aria-label={`Show ${cartProduct.name} image ${index + 1}`} aria-pressed={cartImageIndex === index} className={`relative aspect-[3/4] shrink-0 overflow-hidden rounded-lg border-2 bg-[#f4f4f4] transition ${cartImageIndex === index ? "border-[#111]" : "border-transparent hover:border-[#aaa]"}`}><Image src={image} alt="" fill sizes="88px" className="object-cover" /></button>)}</div>
+                <div className="relative min-h-0 overflow-hidden rounded-lg bg-[#f5f5f5]"><Image src={cartProduct.images[cartImageIndex] ?? cartProduct.image} alt={cartProduct.name} fill sizes="(max-width:1023px) 75vw, 520px" className="object-cover" priority />{cartProduct.badge && <span className="absolute left-3 top-3 rounded-md bg-white/95 px-2.5 py-1.5 text-[10px] font-bold text-[#1d3f63] shadow-sm">{cartProduct.badge}</span>}</div>
               </div>
-            ) : (
-              <>
-                {cartProduct.options.map((option) => <div className={styles.optionGroup} key={option.name}><span>{option.name}</span><div>{option.values.map((value) => <button type="button" key={value} className={cartOptions[option.name.toLowerCase()] === value ? styles.optionSelected : ""} onClick={() => setCartOptions((current) => ({ ...current, [option.name.toLowerCase()]: value }))}>{value}</button>)}</div></div>)}
-                <p className="text-xs text-[#666]">Quantity per order: {cartLimits.min}–{cartLimits.max}</p>
-                {cartLimitMessage && <p role="alert" className="text-xs text-red-700">{cartLimitMessage}</p>}
-                <div className={styles.quantityControl}>
-                  <span>Quantity</span>
-                  <div>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setCartQuantity((quantity) => Math.max(cartLimits.min, quantity - 1))
-                      }
-                      aria-label="Decrease quantity"
-                    >
-                      <Minus />
-                    </button>
-                    <b>{cartQuantity}</b>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setCartQuantity((quantity) => Math.min(cartLimits.max, quantity + 1))
-                      }
-                      aria-label="Increase quantity"
-                    >
-                      <Plus />
-                    </button>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  className={styles.cartPopupPrimary}
-                  onClick={() => addToCart(cartProduct, cartQuantity)}
-                >
-                  Add to Bag
-                </button>
-              </>
-            )}
+              <div className="flex min-h-0 flex-col p-5 sm:p-7">
+                <div><div className="flex flex-wrap items-baseline gap-2"><strong className="text-2xl text-[#111]">{cartProduct.price}</strong>{cartProduct.oldPrice && <del className="text-sm font-semibold text-[#aaa]">{cartProduct.oldPrice}</del>}{cartProduct.discountPercent && <span className="text-sm font-bold text-[#00a83b]">{cartProduct.discountPercent}% OFF</span>}</div><div className="mt-2"><ProductOfferBadges id={cartProduct.id} price={cartProduct.price} inStock={cartProduct.inStock} /></div><h3 id={`home-cart-title-${cartProduct.id}`} className="mt-4 text-lg font-semibold leading-snug text-[#151515] sm:text-xl">{cartProduct.name}</h3><p className="mt-2 text-xs font-semibold uppercase tracking-[.1em] text-[#777]">{cartProduct.category}</p></div>
+                {cartAdded ? <div className="mt-auto pt-8"><p className="mb-4 rounded-lg bg-[#effaf2] px-4 py-3 text-sm font-bold text-[#08752f]">Added to your cart</p><Link href="/cart" className="flex min-h-12 items-center justify-center rounded-lg bg-[#fbb606] text-sm font-extrabold text-[#111]">View Cart</Link><button type="button" onClick={() => setCartProduct(null)} className="mt-2 flex min-h-11 w-full items-center justify-center rounded-lg border border-[#d7d7d7] bg-white text-sm font-bold text-[#111]">Continue Shopping</button></div> : <>
+                  <div className="mt-5 space-y-4">{cartProduct.options.filter((option) => option.values.length).map((option) => <div key={option.name}><p className="mb-2 text-[10px] font-extrabold uppercase tracking-[.12em] text-[#666]">{option.name}</p><div className="flex flex-wrap gap-2">{option.values.map((value) => <button type="button" key={value} onClick={() => setCartOptions((current) => ({ ...current, [option.name.toLowerCase()]: value }))} className={`min-w-11 rounded-md border px-3 py-2 text-xs font-bold transition ${cartOptions[option.name.toLowerCase()] === value ? "border-[#111] bg-[#111] text-white" : "border-[#d6d6d6] bg-white text-[#333] hover:border-[#111]"}`}>{value}</button>)}</div></div>)}</div>
+                  <div className="mt-5 flex items-center justify-between border-y border-[#ececec] py-3"><div><span className="block text-sm font-bold text-[#333]">Quantity</span><small className="text-[10px] text-[#777]">Allowed {cartLimits.min}–{cartLimits.max}</small></div><div className="flex items-center gap-4"><button type="button" onClick={() => setCartQuantity((quantity) => Math.max(cartLimits.min, quantity - 1))} className="grid h-8 w-8 place-items-center rounded-full border border-[#d8d8d8]" aria-label="Decrease quantity"><Minus className="h-4 w-4" /></button><b className="text-sm">{cartQuantity}</b><button type="button" onClick={() => setCartQuantity((quantity) => Math.min(cartLimits.max, quantity + 1))} className="grid h-8 w-8 place-items-center rounded-full border border-[#d8d8d8]" aria-label="Increase quantity"><Plus className="h-4 w-4" /></button></div></div>
+                  {cartLimitMessage && <p role="alert" className="mt-3 text-xs text-red-700">{cartLimitMessage}</p>}<button type="button" onClick={() => addToCart(cartProduct, cartQuantity)} className="mt-auto flex min-h-12 w-full items-center justify-center rounded-lg bg-[#fbb606] text-sm font-extrabold text-[#111] transition hover:bg-[#eaae00]">Add to Cart</button>
+                </>}
+              </div>
+            </div>
           </section>
         </div>
-      )}
-      {activeVideo && activeVideo.videoUrl && (
+      )}      {activeVideo && activeVideo.videoUrl && (
         <div
           className="fixed inset-0 z-[240] flex items-center justify-center bg-black/75 p-3 backdrop-blur-[3px] sm:p-8"
           onMouseDown={() => setActiveVideoId(null)}

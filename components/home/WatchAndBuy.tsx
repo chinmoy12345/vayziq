@@ -153,6 +153,13 @@ function reelDestination(reel: Reel) {
   return "/shop";
 }
 
+function formatEngagementCount(count: number) {
+  return new Intl.NumberFormat("en", {
+    notation: count >= 1_000 ? "compact" : "standard",
+    maximumFractionDigits: 1,
+  }).format(count);
+}
+
 export default function WatchAndBuy({ products, editorialProducts = [], viewAll = false }: { products: WatchProduct[]; editorialProducts?: WatchProductSummary[]; viewAll?: boolean }) {
   const reels = useMemo<Reel[]>(
     () => [
@@ -471,13 +478,6 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
                         {product?.reelBadge && product.reelBadge !== "None" ? product.reelBadge : ["Trending", "New", "Bestseller", "Must Have"][index % 4]}
                       </span>
                     )}
-                    {viewAll && product && (
-                      <span className="absolute right-2 top-14 flex flex-col items-center gap-2 text-white">
-                        <span className="flex flex-col items-center gap-0.5"><Heart className="h-4 w-4 fill-white" /><small className="text-[8px] font-semibold">{product.likeCount || "1.2K"}</small></span>
-                        <span className="flex flex-col items-center gap-0.5"><MessageCircle className="h-4 w-4" /><small className="text-[8px] font-semibold">230</small></span>
-                        <span className="flex flex-col items-center gap-0.5"><Share2 className="h-4 w-4" /><small className="text-[8px] font-semibold">{product.shareCount || "1.1K"}</small></span>
-                      </span>
-                    )}
 
                     {!isPlaying && (
                       <span className="watch-play-overlay absolute inset-0 flex items-center justify-center">
@@ -487,6 +487,29 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
                       </span>
                     )}
                   </button>
+                  {viewAll && product && (
+                    <div className="absolute right-2 top-14 z-10 flex flex-col items-center gap-2 text-white">
+                      <button
+                        type="button"
+                        aria-label={likedProducts.includes(String(product.id)) ? `Unlike ${product.name}` : `Love ${product.name}`}
+                        aria-pressed={likedProducts.includes(String(product.id))}
+                        onClick={() => toggleLike(product)}
+                        className="flex flex-col items-center gap-0.5 rounded-md bg-black/20 px-1.5 py-1 text-white backdrop-blur-[1px] transition hover:bg-black/40"
+                      >
+                        <Heart className={`h-4 w-4 ${likedProducts.includes(String(product.id)) ? "fill-[#D78383] text-[#D78383]" : "fill-white"}`} />
+                        <small className="text-[8px] font-semibold">{formatEngagementCount(engagementCounts[String(product.id)]?.likeCount ?? product.likeCount)}</small>
+                      </button>
+                      <button
+                        type="button"
+                        aria-label={`Share ${product.name}`}
+                        onClick={() => shareProduct(product)}
+                        className="flex flex-col items-center gap-0.5 rounded-md bg-black/20 px-1.5 py-1 text-white backdrop-blur-[1px] transition hover:bg-black/40"
+                      >
+                        <Share2 className="h-4 w-4" />
+                        <small className="text-[8px] font-semibold">{formatEngagementCount(engagementCounts[String(product.id)]?.shareCount ?? product.shareCount)}</small>
+                      </button>
+                    </div>
+                  )}
                   {isPlaying && (
                     <button
                       type="button"
@@ -629,15 +652,12 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
                   <div className="absolute right-3 top-16 z-10 flex flex-col items-center gap-3 text-white">
                     <button type="button" aria-label={likedProducts.includes(String(activeProduct.id)) ? `Unlike ${activeProduct.name}` : `Love ${activeProduct.name}`} aria-pressed={likedProducts.includes(String(activeProduct.id))} onClick={() => toggleLike(activeProduct)} className="flex flex-col items-center gap-0.5 rounded-md px-1 py-0.5 text-white transition hover:bg-black/25">
                       <Heart className={`h-5 w-5 ${likedProducts.includes(String(activeProduct.id)) ? "fill-[#D78383] text-[#D78383]" : ""}`} />
-                      <span className="text-[10px] font-semibold leading-none">{engagementCounts[String(activeProduct.id)]?.likeCount || activeProduct.likeCount || "1.2K"}</span>
+                      <span className="text-[10px] font-semibold leading-none">{formatEngagementCount(engagementCounts[String(activeProduct.id)]?.likeCount ?? activeProduct.likeCount)}</span>
                     </button>
-                    <Link href={`/product/${activeProduct.slug}#reviews`} onClick={() => setActiveIndex(null)} aria-label={`Read comments for ${activeProduct.name}`} className="flex flex-col items-center gap-0.5 rounded-md px-1 py-0.5 text-white transition hover:bg-black/25">
-                      <MessageCircle className="h-5 w-5" />
-                      <span className="text-[10px] font-semibold leading-none">230</span>
-                    </Link>
+
                     <button type="button" aria-label={`Share ${activeProduct.name}`} onClick={() => void shareProduct(activeProduct)} className="flex flex-col items-center gap-0.5 rounded-md px-1 py-0.5 text-white transition hover:bg-black/25">
                       <Share2 className="h-5 w-5" />
-                      <span className="text-[10px] font-semibold leading-none">{engagementCounts[String(activeProduct.id)]?.shareCount || activeProduct.shareCount || "1.1K"}</span>
+                      <span className="text-[10px] font-semibold leading-none">{formatEngagementCount(engagementCounts[String(activeProduct.id)]?.shareCount ?? activeProduct.shareCount)}</span>
                     </button>
                   </div>
                 )}

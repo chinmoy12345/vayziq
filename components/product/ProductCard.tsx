@@ -121,6 +121,15 @@ export default function ProductCard({
     void loadSavedState();
   }, [product.id]);
 
+useEffect(() => {
+    if (!cartOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setCartOpen(false); };
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", closeOnEscape);
+    return () => { document.body.style.overflow = previousOverflow; window.removeEventListener("keydown", closeOnEscape); };
+  }, [cartOpen]);
+
   const toggleWishlist = async () => {
     const productId = Number(product.id);
     if (!Number.isInteger(productId)) return;
@@ -146,6 +155,7 @@ export default function ProductCard({
   };
 
   const openCartPopup = () => {
+    setImageIndex(0);
     setSelectedOptions(Object.fromEntries((product.options ?? []).filter((option) => option.values.length).map((option) => [option.name, option.values[0]])));
     setCartQuantity(1);
     setCartLimitMessage("");
@@ -374,16 +384,23 @@ export default function ProductCard({
       </div>
     </article>
     {cartOpen && (
-      <div className="fixed inset-0 z-[250] grid place-items-center bg-black/50 p-4 backdrop-blur-[3px]" role="dialog" aria-modal="true" aria-labelledby={`cart-title-${product.id}`} onMouseDown={() => setCartOpen(false)}>
-        <section className="relative max-h-[calc(100dvh-32px)] w-full max-w-[760px] overflow-auto rounded-2xl bg-white p-5 shadow-[0_18px_55px_rgba(0,0,0,.28)] sm:p-6" onMouseDown={(event) => event.stopPropagation()}>
-          <button type="button" onClick={() => setCartOpen(false)} aria-label="Close" className="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full bg-[#f3f3f3] text-lg text-[#111]">×</button>
-          <div className={`grid gap-2 ${galleryImages.length === 1 ? "grid-cols-1" : "grid-cols-3"}`}>
-            {galleryImages.slice(0, 3).map((image, index) => <div key={`${image}-${index}`} className="overflow-hidden rounded-lg bg-[#f4f4f4]"><img src={image} alt={`${product.name} view ${index + 1}`} className="h-[145px] w-full object-cover sm:h-[250px]" /></div>)}
+      <div className="fixed inset-0 z-[250] flex items-center justify-center bg-black/55 p-2 backdrop-blur-[2px] sm:p-5" role="dialog" aria-modal="true" aria-labelledby={`cart-title-${product.id}`} onMouseDown={() => setCartOpen(false)}>
+        <section className="relative flex max-h-[calc(100dvh-16px)] w-full max-w-[980px] flex-col overflow-hidden rounded-xl bg-white shadow-[0_22px_70px_rgba(0,0,0,.32)] sm:max-h-[calc(100dvh-40px)]" onMouseDown={(event) => event.stopPropagation()}>
+          <header className="flex h-14 shrink-0 items-center justify-between border-b border-[#e7e7e7] px-5 sm:h-16 sm:px-7"><h2 className="text-base font-extrabold tracking-tight text-[#222] sm:text-lg">ADD TO CART</h2><button type="button" onClick={() => setCartOpen(false)} aria-label="Close add to cart" className="grid h-9 w-9 place-items-center rounded-full text-2xl leading-none text-[#222] transition hover:bg-[#f3f3f3]">×</button></header>
+          <div className="grid min-h-0 flex-1 overflow-y-auto lg:grid-cols-[1.12fr_.88fr]">
+            <div className="grid min-h-[360px] grid-cols-[68px_minmax(0,1fr)] gap-3 border-b border-[#ececec] p-4 sm:min-h-[510px] sm:grid-cols-[88px_minmax(0,1fr)] sm:gap-5 sm:p-6 lg:border-b-0 lg:border-r">
+              <div className="flex flex-col gap-3 overflow-y-auto">{galleryImages.map((image, index) => <button key={`${image}-${index}`} type="button" onClick={() => setImageIndex(index)} aria-label={`Show ${product.name} image ${index + 1}`} aria-pressed={imageIndex === index} className={`relative aspect-[3/4] shrink-0 overflow-hidden rounded-lg border-2 bg-[#f4f4f4] transition ${imageIndex === index ? "border-[#111]" : "border-transparent hover:border-[#aaa]"}`}><ProgressiveImage src={image} alt="" className="h-full w-full object-cover" /></button>)}</div>
+              <div className="relative min-h-0 overflow-hidden rounded-lg bg-[#f5f5f5]"><ProgressiveImage src={currentImage} alt={product.name} className="h-full w-full object-cover" loading="eager" />{badge && <span className="absolute left-3 top-3 rounded-md bg-white/95 px-2.5 py-1.5 text-[10px] font-bold text-[#1d3f63] shadow-sm">{badge}</span>}</div>
+            </div>
+            <div className="flex min-h-0 flex-col p-5 sm:p-7">
+              <div><div className="flex flex-wrap items-baseline gap-2"><strong className="text-2xl text-[#111]">{product.price}</strong>{oldPrice > price && <del className="text-sm font-semibold text-[#aaa]">{product.oldPrice}</del>}{discountPercent && <span className="text-sm font-bold text-[#00a83b]">{discountPercent}% OFF</span>}</div><div className="mt-2"><ProductOfferBadges id={product.id} price={product.price} inStock={inStock} /></div><h3 id={`cart-title-${product.id}`} className="mt-4 text-lg font-semibold leading-snug text-[#151515] sm:text-xl">{product.name}</h3><p className="mt-2 text-xs font-semibold uppercase tracking-[.1em] text-[#777]">{product.category}</p></div>
+              {cartAdded ? <div className="mt-auto pt-8"><p className="mb-4 rounded-lg bg-[#effaf2] px-4 py-3 text-sm font-bold text-[#08752f]">Added to your cart</p><Link href="/cart" className="flex min-h-12 items-center justify-center rounded-lg bg-[#fbb606] text-sm font-extrabold text-[#111]">View Cart</Link><button type="button" onClick={() => setCartOpen(false)} className="mt-2 flex min-h-11 w-full items-center justify-center rounded-lg border border-[#d7d7d7] bg-white text-sm font-bold text-[#111]">Continue Shopping</button></div> : <>
+                <div className="mt-5 space-y-4">{(product.options ?? []).filter((option) => option.values.length).map((option) => <div key={option.name}><p className="mb-2 text-[10px] font-extrabold uppercase tracking-[.12em] text-[#666]">{option.name}</p><div className="flex flex-wrap gap-2">{option.values.map((value) => <button key={value} type="button" onClick={() => setSelectedOptions((current) => ({ ...current, [option.name]: value }))} className={`min-w-11 rounded-md border px-3 py-2 text-xs font-bold transition ${selectedOptions[option.name] === value ? "border-[#111] bg-[#111] text-white" : "border-[#d6d6d6] bg-white text-[#333] hover:border-[#111]"}`}>{value}</button>)}</div></div>)}</div>
+                <div className="mt-5 flex items-center justify-between border-y border-[#ececec] py-3"><div><span className="block text-sm font-bold text-[#333]">Quantity</span><small className="text-[10px] text-[#777]">Allowed {cartLimits.min}–{cartLimits.max}</small></div><div className="flex items-center gap-4"><button type="button" onClick={() => setCartQuantity((quantity) => Math.max(cartLimits.min, quantity - 1))} className="grid h-8 w-8 place-items-center rounded-full border border-[#d8d8d8] text-lg" aria-label="Decrease quantity">−</button><b className="text-sm">{cartQuantity}</b><button type="button" onClick={() => setCartQuantity((quantity) => Math.min(cartLimits.max, quantity + 1))} className="grid h-8 w-8 place-items-center rounded-full border border-[#d8d8d8] text-lg" aria-label="Increase quantity">+</button></div></div>
+                {cartLimitMessage && <p role="alert" className="mt-3 text-xs text-red-700">{cartLimitMessage}</p>}<button type="button" onClick={addToCart} className="mt-auto flex min-h-12 w-full items-center justify-center rounded-lg bg-[#fbb606] text-sm font-extrabold text-[#111] transition hover:bg-[#eaae00]">Add to Cart</button>
+              </>}
+            </div>
           </div>
-          <div className="mt-5 pr-8"><p className="text-[10px] font-extrabold tracking-[.12em] text-[#777]">{cartAdded ? "ADDED TO BAG" : product.category.toUpperCase()}</p><h2 id={`cart-title-${product.id}`} className="mt-1 text-lg font-semibold leading-tight text-[#111]">{product.name}</h2><strong className="mt-2 block text-[17px] text-[#111]">{product.price}</strong>{product.oldPrice && <del className="ml-2 text-[13px] text-[#888]">{product.oldPrice}</del>}</div>
-          {!cartAdded && <p className="mt-3 text-xs text-[#666]">Quantity per order: {cartLimits.min}–{cartLimits.max}</p>}
-          {cartLimitMessage && <p role="alert" className="mt-2 text-xs text-red-700">{cartLimitMessage}</p>}
-          {cartAdded ? <div className="mt-5"><Link href="/cart" className="flex min-h-11 items-center justify-center rounded-lg bg-[#fbb606] text-[13px] font-extrabold text-[#111]">View Cart</Link><button type="button" onClick={() => setCartOpen(false)} className="mt-2 flex min-h-11 w-full items-center justify-center rounded-lg border border-[#d7d7d7] bg-white text-[13px] font-extrabold text-[#111]">Continue Shopping</button></div> : <><div className="mt-5 space-y-4 border-t border-[#ececec] pt-4">{(product.options ?? []).filter((option) => option.values.length).map((option) => <div key={option.name}><p className="mb-2 text-[10px] font-extrabold uppercase tracking-[.12em] text-[#666]">{option.name}</p><div className="flex flex-wrap gap-2">{option.values.map((value) => <button key={value} type="button" onClick={() => setSelectedOptions((current) => ({ ...current, [option.name]: value }))} className={`min-w-11 rounded-md border px-3 py-2 text-xs font-bold transition ${selectedOptions[option.name] === value ? "border-[#111] bg-[#111] text-white" : "border-[#d6d6d6] bg-white text-[#333] hover:border-[#111]"}`}>{value}</button>)}</div></div>)}</div><div className="mt-5 flex items-center justify-between border-y border-[#ececec] py-3"><span className="text-sm font-bold text-[#333]">Quantity</span><div className="flex items-center gap-4"><button type="button" onClick={() => setCartQuantity((quantity) => Math.max(1, quantity - 1))} className="grid h-8 w-8 place-items-center rounded-full border border-[#d8d8d8] text-lg" aria-label="Decrease quantity">−</button><b className="text-sm">{cartQuantity}</b><button type="button" onClick={() => setCartQuantity((quantity) => quantity + 1)} className="grid h-8 w-8 place-items-center rounded-full border border-[#d8d8d8] text-lg" aria-label="Increase quantity">+</button></div></div><button type="button" onClick={addToCart} className="mt-5 flex min-h-11 w-full items-center justify-center rounded-lg bg-[#fbb606] text-[13px] font-extrabold text-[#111]">Add to Bag</button></>}
         </section>
       </div>
     )}
