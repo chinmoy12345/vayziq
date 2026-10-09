@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "npm run db:sync && prisma generate && next build",
-    "db:sync": "prisma db execute --schema prisma/schema.prisma --file prisma/patches/razorpay-order-fields.sql && prisma db push --skip-generate && prisma db execute --schema prisma/schema.prisma --file prisma/patches/managed-offers.sql && prisma db execute --schema prisma/schema.prisma --file prisma/patches/category-banner-placements.sql && prisma db execute --schema prisma/schema.prisma --file prisma/patches/quantity-offers.sql && prisma db execute --schema prisma/schema.prisma --file prisma/patches/inventory-opening-stock.sql",
+    "db:sync": "prisma db execute --schema prisma/schema.prisma --file prisma/patches/razorpay-order-fields.sql && prisma db execute --schema prisma/schema.prisma --file prisma/patches/cashfree_payments.sql && prisma db push --skip-generate && prisma db execute --schema prisma/schema.prisma --file prisma/patches/managed-offers.sql && prisma db execute --schema prisma/schema.prisma --file prisma/patches/category-banner-placements.sql && prisma db execute --schema prisma/schema.prisma --file prisma/patches/quantity-offers.sql && prisma db execute --schema prisma/schema.prisma --file prisma/patches/inventory-opening-stock.sql",
     "start": "next start",
     "lint": "eslint",
     "offers:demo": "node scripts/seed-demo-offers.cjs",

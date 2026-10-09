@@ -48,7 +48,7 @@ type CartItem = {
   quantity: number;
 };
 
-type PaymentMethod = "cod" | "razorpay";
+type PaymentMethod = "cod" | "razorpay" | "cashfree";
 
 type RazorpayPaymentResponse = {
   razorpay_order_id: string;
@@ -74,7 +74,27 @@ type RazorpayOptions = {
 declare global {
   interface Window {
     Razorpay?: new (options: RazorpayOptions) => RazorpayCheckout;
+    Cashfree?: (options: { mode: "sandbox" | "production" }) => { checkout: (options: { paymentSessionId: string; redirectTarget: "_self" }) => Promise<unknown> };
   }
+}
+
+function loadCashfreeCheckout() {
+  return new Promise<boolean>(resolve => {
+    if (window.Cashfree) return resolve(true);
+    const existing = document.querySelector<HTMLScriptElement>('script[data-cashfree-checkout="true"]');
+    if (existing) {
+      existing.addEventListener("load", () => resolve(Boolean(window.Cashfree)), { once: true });
+      existing.addEventListener("error", () => resolve(false), { once: true });
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "https://sdk.cashfree.com/js/v3/cashfree.js";
+    script.async = true;
+    script.dataset.cashfreeCheckout = "true";
+    script.onload = () => resolve(Boolean(window.Cashfree));
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
 }
 
 function loadRazorpayCheckout() {
@@ -123,6 +143,7 @@ export default function CheckoutPage() {
   const [checkoutMessage, setCheckoutMessage] = useState("");
   const [checkoutReady, setCheckoutReady] = useState(false);
   const [onlinePaymentAvailable, setOnlinePaymentAvailable] = useState(false);
+  const [cashfreeAvailable, setCashfreeAvailable] = useState(false);
 
   const [showAddressList, setShowAddressList] =
     useState(false);
@@ -151,6 +172,15 @@ export default function CheckoutPage() {
       }
     }, 0);
     return () => window.clearTimeout(loadCart);
+  }, []);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    void fetch("/api/payments/cashfree/availability", { cache: "no-store", signal: controller.signal })
+      .then(response => response.ok ? response.json() : null)
+      .then((data: { available?: boolean } | null) => { if (!controller.signal.aborted) setCashfreeAvailable(data?.available === true); })
+      .catch(() => {});
+    return () => controller.abort();
   }, []);
 
   useEffect(() => {
@@ -237,6 +267,17 @@ export default function CheckoutPage() {
     let paymentGatewayOpen = false;
 
     try {
+      if (paymentMethod === "cashfree") {
+        const response = await fetch("/api/payments/cashfree/create-order", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ addressId: selectedAddress, items: cart, couponCode: couponApplied ? coupon : undefined }) });
+        const data = await response.json() as { message?: string; paymentSessionId?: string; mode?: "sandbox" | "production" };
+        if (!response.ok || !data.paymentSessionId || !data.mode) throw new Error(data.message || "Unable to start Cashfree payment.");
+        if (!(await loadCashfreeCheckout()) || !window.Cashfree) throw new Error("Cashfree checkout could not load. Please check your connection.");
+        paymentGatewayOpen = true;
+        await window.Cashfree({ mode: data.mode }).checkout({ paymentSessionId: data.paymentSessionId, redirectTarget: "_self" });
+        setCheckoutMessage("If you completed payment but were not redirected, check your orders. We will confirm it after verification.");
+        setPlacingOrder(false);
+        return;
+      }
       if (paymentMethod === "razorpay") {
         const response = await fetch("/api/payments/razorpay/create-order", {
           method: "POST",
@@ -314,6 +355,7 @@ export default function CheckoutPage() {
       router.refresh();
     } catch (error) {
       setCheckoutMessage(error instanceof Error ? error.message : "Unable to place order. Please try again.");
+      setPlacingOrder(false);
     } finally {
       if (!paymentGatewayOpen) setPlacingOrder(false);
     }
@@ -610,6 +652,13 @@ export default function CheckoutPage() {
                   title="Pay Online with Razorpay"
                   description="UPI, cards, net banking & wallets"
                 />}
+                {cashfreeAvailable && <PaymentOption
+                  selected={paymentMethod === "cashfree"}
+                  onSelect={() => setPaymentMethod("cashfree")}
+                  icon={<CreditCard className="h-5 w-5" />}
+                  title="Pay Online with Cashfree"
+                  description="Secure UPI, cards, net banking & wallets"
+                />}
               </div>
             </section>
           </div>
@@ -822,7 +871,7 @@ export default function CheckoutPage() {
                     </>
                   ) : (
                     <>
-                      {paymentMethod === "razorpay" ? "PAY WITH RAZORPAY" : "PLACE COD ORDER"}
+                      {paymentMethod === "razorpay" ? "PAY WITH RAZORPAY" : paymentMethod === "cashfree" ? "PAY WITH CASHFREE" : "PLACE COD ORDER"}
                       <ChevronDown className="h-4 w-4 rotate-[-90deg]" />
                     </>
                   )}

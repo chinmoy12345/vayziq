@@ -159,6 +159,11 @@ export type StoreSetting = $Result.DefaultSelection<Prisma.$StoreSettingPayload>
  */
 export type ReelMedia = $Result.DefaultSelection<Prisma.$ReelMediaPayload>
 /**
+ * Model AdminNotificationRead
+ * 
+ */
+export type AdminNotificationRead = $Result.DefaultSelection<Prisma.$AdminNotificationReadPayload>
+/**
  * Model Supplier
  * 
  */
@@ -699,6 +704,16 @@ export class PrismaClient<
   get reelMedia(): Prisma.ReelMediaDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.adminNotificationRead`: Exposes CRUD operations for the **AdminNotificationRead** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AdminNotificationReads
+    * const adminNotificationReads = await prisma.adminNotificationRead.findMany()
+    * ```
+    */
+  get adminNotificationRead(): Prisma.AdminNotificationReadDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.supplier`: Exposes CRUD operations for the **Supplier** model.
     * Example usage:
     * ```ts
@@ -1207,6 +1222,7 @@ export namespace Prisma {
     ContactMessage: 'ContactMessage',
     StoreSetting: 'StoreSetting',
     ReelMedia: 'ReelMedia',
+    AdminNotificationRead: 'AdminNotificationRead',
     Supplier: 'Supplier',
     Purchase: 'Purchase',
     PurchaseItem: 'PurchaseItem',
@@ -1229,7 +1245,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "role" | "userRole" | "permission" | "rolePermission" | "category" | "product" | "productEngagement" | "productLike" | "productImage" | "productOption" | "productOptionValue" | "productVariant" | "productVariantValue" | "address" | "order" | "channelVisit" | "orderItem" | "inventoryMovement" | "shipment" | "serviceRequest" | "cartItem" | "wishlistItem" | "coupon" | "banner" | "review" | "contactMessage" | "storeSetting" | "reelMedia" | "supplier" | "purchase" | "purchaseItem" | "supplierPayment"
+      modelProps: "user" | "role" | "userRole" | "permission" | "rolePermission" | "category" | "product" | "productEngagement" | "productLike" | "productImage" | "productOption" | "productOptionValue" | "productVariant" | "productVariantValue" | "address" | "order" | "channelVisit" | "orderItem" | "inventoryMovement" | "shipment" | "serviceRequest" | "cartItem" | "wishlistItem" | "coupon" | "banner" | "review" | "contactMessage" | "storeSetting" | "reelMedia" | "adminNotificationRead" | "supplier" | "purchase" | "purchaseItem" | "supplierPayment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3379,6 +3395,80 @@ export namespace Prisma {
           }
         }
       }
+      AdminNotificationRead: {
+        payload: Prisma.$AdminNotificationReadPayload<ExtArgs>
+        fields: Prisma.AdminNotificationReadFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AdminNotificationReadFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminNotificationReadPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AdminNotificationReadFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminNotificationReadPayload>
+          }
+          findFirst: {
+            args: Prisma.AdminNotificationReadFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminNotificationReadPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AdminNotificationReadFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminNotificationReadPayload>
+          }
+          findMany: {
+            args: Prisma.AdminNotificationReadFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminNotificationReadPayload>[]
+          }
+          create: {
+            args: Prisma.AdminNotificationReadCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminNotificationReadPayload>
+          }
+          createMany: {
+            args: Prisma.AdminNotificationReadCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AdminNotificationReadCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminNotificationReadPayload>[]
+          }
+          delete: {
+            args: Prisma.AdminNotificationReadDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminNotificationReadPayload>
+          }
+          update: {
+            args: Prisma.AdminNotificationReadUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminNotificationReadPayload>
+          }
+          deleteMany: {
+            args: Prisma.AdminNotificationReadDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AdminNotificationReadUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AdminNotificationReadUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminNotificationReadPayload>[]
+          }
+          upsert: {
+            args: Prisma.AdminNotificationReadUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminNotificationReadPayload>
+          }
+          aggregate: {
+            args: Prisma.AdminNotificationReadAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAdminNotificationRead>
+          }
+          groupBy: {
+            args: Prisma.AdminNotificationReadGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AdminNotificationReadGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AdminNotificationReadCountArgs<ExtArgs>
+            result: $Utils.Optional<AdminNotificationReadCountAggregateOutputType> | number
+          }
+        }
+      }
       Supplier: {
         payload: Prisma.$SupplierPayload<ExtArgs>
         fields: Prisma.SupplierFieldRefs
@@ -3800,6 +3890,7 @@ export namespace Prisma {
     contactMessage?: ContactMessageOmit
     storeSetting?: StoreSettingOmit
     reelMedia?: ReelMediaOmit
+    adminNotificationRead?: AdminNotificationReadOmit
     supplier?: SupplierOmit
     purchase?: PurchaseOmit
     purchaseItem?: PurchaseItemOmit
@@ -3892,6 +3983,7 @@ export namespace Prisma {
     addresses: number
     cartItems: number
     wishlistItems: number
+    notificationReads: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3903,6 +3995,7 @@ export namespace Prisma {
     addresses?: boolean | UserCountOutputTypeCountAddressesArgs
     cartItems?: boolean | UserCountOutputTypeCountCartItemsArgs
     wishlistItems?: boolean | UserCountOutputTypeCountWishlistItemsArgs
+    notificationReads?: boolean | UserCountOutputTypeCountNotificationReadsArgs
   }
 
   // Custom InputTypes
@@ -3970,6 +4063,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountWishlistItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: WishlistItemWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountNotificationReadsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdminNotificationReadWhereInput
   }
 
 
@@ -4750,6 +4850,7 @@ export namespace Prisma {
     addresses?: boolean | User$addressesArgs<ExtArgs>
     cartItems?: boolean | User$cartItemsArgs<ExtArgs>
     wishlistItems?: boolean | User$wishlistItemsArgs<ExtArgs>
+    notificationReads?: boolean | User$notificationReadsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -4796,6 +4897,7 @@ export namespace Prisma {
     addresses?: boolean | User$addressesArgs<ExtArgs>
     cartItems?: boolean | User$cartItemsArgs<ExtArgs>
     wishlistItems?: boolean | User$wishlistItemsArgs<ExtArgs>
+    notificationReads?: boolean | User$notificationReadsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -4812,6 +4914,7 @@ export namespace Prisma {
       addresses: Prisma.$AddressPayload<ExtArgs>[]
       cartItems: Prisma.$CartItemPayload<ExtArgs>[]
       wishlistItems: Prisma.$WishlistItemPayload<ExtArgs>[]
+      notificationReads: Prisma.$AdminNotificationReadPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -5224,6 +5327,7 @@ export namespace Prisma {
     addresses<T extends User$addressesArgs<ExtArgs> = {}>(args?: Subset<T, User$addressesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AddressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     cartItems<T extends User$cartItemsArgs<ExtArgs> = {}>(args?: Subset<T, User$cartItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CartItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     wishlistItems<T extends User$wishlistItemsArgs<ExtArgs> = {}>(args?: Subset<T, User$wishlistItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WishlistItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    notificationReads<T extends User$notificationReadsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationReadsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminNotificationReadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5838,6 +5942,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: WishlistItemScalarFieldEnum | WishlistItemScalarFieldEnum[]
+  }
+
+  /**
+   * User.notificationReads
+   */
+  export type User$notificationReadsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminNotificationRead
+     */
+    select?: AdminNotificationReadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminNotificationRead
+     */
+    omit?: AdminNotificationReadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminNotificationReadInclude<ExtArgs> | null
+    where?: AdminNotificationReadWhereInput
+    orderBy?: AdminNotificationReadOrderByWithRelationInput | AdminNotificationReadOrderByWithRelationInput[]
+    cursor?: AdminNotificationReadWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AdminNotificationReadScalarFieldEnum | AdminNotificationReadScalarFieldEnum[]
   }
 
   /**
@@ -22341,6 +22469,8 @@ export namespace Prisma {
     orderNumber: string | null
     razorpayOrderId: string | null
     razorpayPaymentId: string | null
+    cashfreeOrderId: string | null
+    cashfreePaymentId: string | null
     userId: number | null
     addressId: number | null
     status: $Enums.OrderStatus | null
@@ -22361,6 +22491,8 @@ export namespace Prisma {
     orderNumber: string | null
     razorpayOrderId: string | null
     razorpayPaymentId: string | null
+    cashfreeOrderId: string | null
+    cashfreePaymentId: string | null
     userId: number | null
     addressId: number | null
     status: $Enums.OrderStatus | null
@@ -22381,6 +22513,8 @@ export namespace Prisma {
     orderNumber: number
     razorpayOrderId: number
     razorpayPaymentId: number
+    cashfreeOrderId: number
+    cashfreePaymentId: number
     userId: number
     addressId: number
     status: number
@@ -22423,6 +22557,8 @@ export namespace Prisma {
     orderNumber?: true
     razorpayOrderId?: true
     razorpayPaymentId?: true
+    cashfreeOrderId?: true
+    cashfreePaymentId?: true
     userId?: true
     addressId?: true
     status?: true
@@ -22443,6 +22579,8 @@ export namespace Prisma {
     orderNumber?: true
     razorpayOrderId?: true
     razorpayPaymentId?: true
+    cashfreeOrderId?: true
+    cashfreePaymentId?: true
     userId?: true
     addressId?: true
     status?: true
@@ -22463,6 +22601,8 @@ export namespace Prisma {
     orderNumber?: true
     razorpayOrderId?: true
     razorpayPaymentId?: true
+    cashfreeOrderId?: true
+    cashfreePaymentId?: true
     userId?: true
     addressId?: true
     status?: true
@@ -22570,6 +22710,8 @@ export namespace Prisma {
     orderNumber: string
     razorpayOrderId: string | null
     razorpayPaymentId: string | null
+    cashfreeOrderId: string | null
+    cashfreePaymentId: string | null
     userId: number
     addressId: number | null
     status: $Enums.OrderStatus
@@ -22609,6 +22751,8 @@ export namespace Prisma {
     orderNumber?: boolean
     razorpayOrderId?: boolean
     razorpayPaymentId?: boolean
+    cashfreeOrderId?: boolean
+    cashfreePaymentId?: boolean
     userId?: boolean
     addressId?: boolean
     status?: boolean
@@ -22635,6 +22779,8 @@ export namespace Prisma {
     orderNumber?: boolean
     razorpayOrderId?: boolean
     razorpayPaymentId?: boolean
+    cashfreeOrderId?: boolean
+    cashfreePaymentId?: boolean
     userId?: boolean
     addressId?: boolean
     status?: boolean
@@ -22657,6 +22803,8 @@ export namespace Prisma {
     orderNumber?: boolean
     razorpayOrderId?: boolean
     razorpayPaymentId?: boolean
+    cashfreeOrderId?: boolean
+    cashfreePaymentId?: boolean
     userId?: boolean
     addressId?: boolean
     status?: boolean
@@ -22679,6 +22827,8 @@ export namespace Prisma {
     orderNumber?: boolean
     razorpayOrderId?: boolean
     razorpayPaymentId?: boolean
+    cashfreeOrderId?: boolean
+    cashfreePaymentId?: boolean
     userId?: boolean
     addressId?: boolean
     status?: boolean
@@ -22694,7 +22844,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderNumber" | "razorpayOrderId" | "razorpayPaymentId" | "userId" | "addressId" | "status" | "paymentStatus" | "subtotal" | "shipping" | "discount" | "total" | "couponCode" | "acquisitionChannel" | "acquisitionCampaign" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
+  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderNumber" | "razorpayOrderId" | "razorpayPaymentId" | "cashfreeOrderId" | "cashfreePaymentId" | "userId" | "addressId" | "status" | "paymentStatus" | "subtotal" | "shipping" | "discount" | "total" | "couponCode" | "acquisitionChannel" | "acquisitionCampaign" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
   export type OrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     address?: boolean | Order$addressArgs<ExtArgs>
@@ -22726,6 +22876,8 @@ export namespace Prisma {
       orderNumber: string
       razorpayOrderId: string | null
       razorpayPaymentId: string | null
+      cashfreeOrderId: string | null
+      cashfreePaymentId: string | null
       userId: number
       addressId: number | null
       status: $Enums.OrderStatus
@@ -23171,6 +23323,8 @@ export namespace Prisma {
     readonly orderNumber: FieldRef<"Order", 'String'>
     readonly razorpayOrderId: FieldRef<"Order", 'String'>
     readonly razorpayPaymentId: FieldRef<"Order", 'String'>
+    readonly cashfreeOrderId: FieldRef<"Order", 'String'>
+    readonly cashfreePaymentId: FieldRef<"Order", 'String'>
     readonly userId: FieldRef<"Order", 'Int'>
     readonly addressId: FieldRef<"Order", 'Int'>
     readonly status: FieldRef<"Order", 'OrderStatus'>
@@ -38496,6 +38650,1072 @@ export namespace Prisma {
 
 
   /**
+   * Model AdminNotificationRead
+   */
+
+  export type AggregateAdminNotificationRead = {
+    _count: AdminNotificationReadCountAggregateOutputType | null
+    _avg: AdminNotificationReadAvgAggregateOutputType | null
+    _sum: AdminNotificationReadSumAggregateOutputType | null
+    _min: AdminNotificationReadMinAggregateOutputType | null
+    _max: AdminNotificationReadMaxAggregateOutputType | null
+  }
+
+  export type AdminNotificationReadAvgAggregateOutputType = {
+    userId: number | null
+  }
+
+  export type AdminNotificationReadSumAggregateOutputType = {
+    userId: number | null
+  }
+
+  export type AdminNotificationReadMinAggregateOutputType = {
+    userId: number | null
+    key: string | null
+    readAt: Date | null
+  }
+
+  export type AdminNotificationReadMaxAggregateOutputType = {
+    userId: number | null
+    key: string | null
+    readAt: Date | null
+  }
+
+  export type AdminNotificationReadCountAggregateOutputType = {
+    userId: number
+    key: number
+    readAt: number
+    _all: number
+  }
+
+
+  export type AdminNotificationReadAvgAggregateInputType = {
+    userId?: true
+  }
+
+  export type AdminNotificationReadSumAggregateInputType = {
+    userId?: true
+  }
+
+  export type AdminNotificationReadMinAggregateInputType = {
+    userId?: true
+    key?: true
+    readAt?: true
+  }
+
+  export type AdminNotificationReadMaxAggregateInputType = {
+    userId?: true
+    key?: true
+    readAt?: true
+  }
+
+  export type AdminNotificationReadCountAggregateInputType = {
+    userId?: true
+    key?: true
+    readAt?: true
+    _all?: true
+  }
+
+  export type AdminNotificationReadAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdminNotificationRead to aggregate.
+     */
+    where?: AdminNotificationReadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminNotificationReads to fetch.
+     */
+    orderBy?: AdminNotificationReadOrderByWithRelationInput | AdminNotificationReadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AdminNotificationReadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminNotificationReads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminNotificationReads.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AdminNotificationReads
+    **/
+    _count?: true | AdminNotificationReadCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AdminNotificationReadAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AdminNotificationReadSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AdminNotificationReadMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AdminNotificationReadMaxAggregateInputType
+  }
+
+  export type GetAdminNotificationReadAggregateType<T extends AdminNotificationReadAggregateArgs> = {
+        [P in keyof T & keyof AggregateAdminNotificationRead]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAdminNotificationRead[P]>
+      : GetScalarType<T[P], AggregateAdminNotificationRead[P]>
+  }
+
+
+
+
+  export type AdminNotificationReadGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdminNotificationReadWhereInput
+    orderBy?: AdminNotificationReadOrderByWithAggregationInput | AdminNotificationReadOrderByWithAggregationInput[]
+    by: AdminNotificationReadScalarFieldEnum[] | AdminNotificationReadScalarFieldEnum
+    having?: AdminNotificationReadScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AdminNotificationReadCountAggregateInputType | true
+    _avg?: AdminNotificationReadAvgAggregateInputType
+    _sum?: AdminNotificationReadSumAggregateInputType
+    _min?: AdminNotificationReadMinAggregateInputType
+    _max?: AdminNotificationReadMaxAggregateInputType
+  }
+
+  export type AdminNotificationReadGroupByOutputType = {
+    userId: number
+    key: string
+    readAt: Date
+    _count: AdminNotificationReadCountAggregateOutputType | null
+    _avg: AdminNotificationReadAvgAggregateOutputType | null
+    _sum: AdminNotificationReadSumAggregateOutputType | null
+    _min: AdminNotificationReadMinAggregateOutputType | null
+    _max: AdminNotificationReadMaxAggregateOutputType | null
+  }
+
+  type GetAdminNotificationReadGroupByPayload<T extends AdminNotificationReadGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AdminNotificationReadGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AdminNotificationReadGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AdminNotificationReadGroupByOutputType[P]>
+            : GetScalarType<T[P], AdminNotificationReadGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AdminNotificationReadSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    userId?: boolean
+    key?: boolean
+    readAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminNotificationRead"]>
+
+  export type AdminNotificationReadSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    userId?: boolean
+    key?: boolean
+    readAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminNotificationRead"]>
+
+  export type AdminNotificationReadSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    userId?: boolean
+    key?: boolean
+    readAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminNotificationRead"]>
+
+  export type AdminNotificationReadSelectScalar = {
+    userId?: boolean
+    key?: boolean
+    readAt?: boolean
+  }
+
+  export type AdminNotificationReadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"userId" | "key" | "readAt", ExtArgs["result"]["adminNotificationRead"]>
+  export type AdminNotificationReadInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type AdminNotificationReadIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type AdminNotificationReadIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $AdminNotificationReadPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AdminNotificationRead"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      userId: number
+      key: string
+      readAt: Date
+    }, ExtArgs["result"]["adminNotificationRead"]>
+    composites: {}
+  }
+
+  type AdminNotificationReadGetPayload<S extends boolean | null | undefined | AdminNotificationReadDefaultArgs> = $Result.GetResult<Prisma.$AdminNotificationReadPayload, S>
+
+  type AdminNotificationReadCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AdminNotificationReadFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AdminNotificationReadCountAggregateInputType | true
+    }
+
+  export interface AdminNotificationReadDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AdminNotificationRead'], meta: { name: 'AdminNotificationRead' } }
+    /**
+     * Find zero or one AdminNotificationRead that matches the filter.
+     * @param {AdminNotificationReadFindUniqueArgs} args - Arguments to find a AdminNotificationRead
+     * @example
+     * // Get one AdminNotificationRead
+     * const adminNotificationRead = await prisma.adminNotificationRead.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AdminNotificationReadFindUniqueArgs>(args: SelectSubset<T, AdminNotificationReadFindUniqueArgs<ExtArgs>>): Prisma__AdminNotificationReadClient<$Result.GetResult<Prisma.$AdminNotificationReadPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AdminNotificationRead that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AdminNotificationReadFindUniqueOrThrowArgs} args - Arguments to find a AdminNotificationRead
+     * @example
+     * // Get one AdminNotificationRead
+     * const adminNotificationRead = await prisma.adminNotificationRead.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AdminNotificationReadFindUniqueOrThrowArgs>(args: SelectSubset<T, AdminNotificationReadFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AdminNotificationReadClient<$Result.GetResult<Prisma.$AdminNotificationReadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdminNotificationRead that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminNotificationReadFindFirstArgs} args - Arguments to find a AdminNotificationRead
+     * @example
+     * // Get one AdminNotificationRead
+     * const adminNotificationRead = await prisma.adminNotificationRead.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AdminNotificationReadFindFirstArgs>(args?: SelectSubset<T, AdminNotificationReadFindFirstArgs<ExtArgs>>): Prisma__AdminNotificationReadClient<$Result.GetResult<Prisma.$AdminNotificationReadPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdminNotificationRead that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminNotificationReadFindFirstOrThrowArgs} args - Arguments to find a AdminNotificationRead
+     * @example
+     * // Get one AdminNotificationRead
+     * const adminNotificationRead = await prisma.adminNotificationRead.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AdminNotificationReadFindFirstOrThrowArgs>(args?: SelectSubset<T, AdminNotificationReadFindFirstOrThrowArgs<ExtArgs>>): Prisma__AdminNotificationReadClient<$Result.GetResult<Prisma.$AdminNotificationReadPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AdminNotificationReads that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminNotificationReadFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AdminNotificationReads
+     * const adminNotificationReads = await prisma.adminNotificationRead.findMany()
+     * 
+     * // Get first 10 AdminNotificationReads
+     * const adminNotificationReads = await prisma.adminNotificationRead.findMany({ take: 10 })
+     * 
+     * // Only select the `userId`
+     * const adminNotificationReadWithUserIdOnly = await prisma.adminNotificationRead.findMany({ select: { userId: true } })
+     * 
+     */
+    findMany<T extends AdminNotificationReadFindManyArgs>(args?: SelectSubset<T, AdminNotificationReadFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminNotificationReadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AdminNotificationRead.
+     * @param {AdminNotificationReadCreateArgs} args - Arguments to create a AdminNotificationRead.
+     * @example
+     * // Create one AdminNotificationRead
+     * const AdminNotificationRead = await prisma.adminNotificationRead.create({
+     *   data: {
+     *     // ... data to create a AdminNotificationRead
+     *   }
+     * })
+     * 
+     */
+    create<T extends AdminNotificationReadCreateArgs>(args: SelectSubset<T, AdminNotificationReadCreateArgs<ExtArgs>>): Prisma__AdminNotificationReadClient<$Result.GetResult<Prisma.$AdminNotificationReadPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AdminNotificationReads.
+     * @param {AdminNotificationReadCreateManyArgs} args - Arguments to create many AdminNotificationReads.
+     * @example
+     * // Create many AdminNotificationReads
+     * const adminNotificationRead = await prisma.adminNotificationRead.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AdminNotificationReadCreateManyArgs>(args?: SelectSubset<T, AdminNotificationReadCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AdminNotificationReads and returns the data saved in the database.
+     * @param {AdminNotificationReadCreateManyAndReturnArgs} args - Arguments to create many AdminNotificationReads.
+     * @example
+     * // Create many AdminNotificationReads
+     * const adminNotificationRead = await prisma.adminNotificationRead.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AdminNotificationReads and only return the `userId`
+     * const adminNotificationReadWithUserIdOnly = await prisma.adminNotificationRead.createManyAndReturn({
+     *   select: { userId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AdminNotificationReadCreateManyAndReturnArgs>(args?: SelectSubset<T, AdminNotificationReadCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminNotificationReadPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AdminNotificationRead.
+     * @param {AdminNotificationReadDeleteArgs} args - Arguments to delete one AdminNotificationRead.
+     * @example
+     * // Delete one AdminNotificationRead
+     * const AdminNotificationRead = await prisma.adminNotificationRead.delete({
+     *   where: {
+     *     // ... filter to delete one AdminNotificationRead
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AdminNotificationReadDeleteArgs>(args: SelectSubset<T, AdminNotificationReadDeleteArgs<ExtArgs>>): Prisma__AdminNotificationReadClient<$Result.GetResult<Prisma.$AdminNotificationReadPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AdminNotificationRead.
+     * @param {AdminNotificationReadUpdateArgs} args - Arguments to update one AdminNotificationRead.
+     * @example
+     * // Update one AdminNotificationRead
+     * const adminNotificationRead = await prisma.adminNotificationRead.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AdminNotificationReadUpdateArgs>(args: SelectSubset<T, AdminNotificationReadUpdateArgs<ExtArgs>>): Prisma__AdminNotificationReadClient<$Result.GetResult<Prisma.$AdminNotificationReadPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AdminNotificationReads.
+     * @param {AdminNotificationReadDeleteManyArgs} args - Arguments to filter AdminNotificationReads to delete.
+     * @example
+     * // Delete a few AdminNotificationReads
+     * const { count } = await prisma.adminNotificationRead.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AdminNotificationReadDeleteManyArgs>(args?: SelectSubset<T, AdminNotificationReadDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdminNotificationReads.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminNotificationReadUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AdminNotificationReads
+     * const adminNotificationRead = await prisma.adminNotificationRead.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AdminNotificationReadUpdateManyArgs>(args: SelectSubset<T, AdminNotificationReadUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdminNotificationReads and returns the data updated in the database.
+     * @param {AdminNotificationReadUpdateManyAndReturnArgs} args - Arguments to update many AdminNotificationReads.
+     * @example
+     * // Update many AdminNotificationReads
+     * const adminNotificationRead = await prisma.adminNotificationRead.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AdminNotificationReads and only return the `userId`
+     * const adminNotificationReadWithUserIdOnly = await prisma.adminNotificationRead.updateManyAndReturn({
+     *   select: { userId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AdminNotificationReadUpdateManyAndReturnArgs>(args: SelectSubset<T, AdminNotificationReadUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminNotificationReadPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AdminNotificationRead.
+     * @param {AdminNotificationReadUpsertArgs} args - Arguments to update or create a AdminNotificationRead.
+     * @example
+     * // Update or create a AdminNotificationRead
+     * const adminNotificationRead = await prisma.adminNotificationRead.upsert({
+     *   create: {
+     *     // ... data to create a AdminNotificationRead
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AdminNotificationRead we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AdminNotificationReadUpsertArgs>(args: SelectSubset<T, AdminNotificationReadUpsertArgs<ExtArgs>>): Prisma__AdminNotificationReadClient<$Result.GetResult<Prisma.$AdminNotificationReadPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AdminNotificationReads.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminNotificationReadCountArgs} args - Arguments to filter AdminNotificationReads to count.
+     * @example
+     * // Count the number of AdminNotificationReads
+     * const count = await prisma.adminNotificationRead.count({
+     *   where: {
+     *     // ... the filter for the AdminNotificationReads we want to count
+     *   }
+     * })
+    **/
+    count<T extends AdminNotificationReadCountArgs>(
+      args?: Subset<T, AdminNotificationReadCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AdminNotificationReadCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AdminNotificationRead.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminNotificationReadAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AdminNotificationReadAggregateArgs>(args: Subset<T, AdminNotificationReadAggregateArgs>): Prisma.PrismaPromise<GetAdminNotificationReadAggregateType<T>>
+
+    /**
+     * Group by AdminNotificationRead.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminNotificationReadGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AdminNotificationReadGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AdminNotificationReadGroupByArgs['orderBy'] }
+        : { orderBy?: AdminNotificationReadGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AdminNotificationReadGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAdminNotificationReadGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AdminNotificationRead model
+   */
+  readonly fields: AdminNotificationReadFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AdminNotificationRead.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AdminNotificationReadClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AdminNotificationRead model
+   */
+  interface AdminNotificationReadFieldRefs {
+    readonly userId: FieldRef<"AdminNotificationRead", 'Int'>
+    readonly key: FieldRef<"AdminNotificationRead", 'String'>
+    readonly readAt: FieldRef<"AdminNotificationRead", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AdminNotificationRead findUnique
+   */
+  export type AdminNotificationReadFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminNotificationRead
+     */
+    select?: AdminNotificationReadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminNotificationRead
+     */
+    omit?: AdminNotificationReadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminNotificationReadInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminNotificationRead to fetch.
+     */
+    where: AdminNotificationReadWhereUniqueInput
+  }
+
+  /**
+   * AdminNotificationRead findUniqueOrThrow
+   */
+  export type AdminNotificationReadFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminNotificationRead
+     */
+    select?: AdminNotificationReadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminNotificationRead
+     */
+    omit?: AdminNotificationReadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminNotificationReadInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminNotificationRead to fetch.
+     */
+    where: AdminNotificationReadWhereUniqueInput
+  }
+
+  /**
+   * AdminNotificationRead findFirst
+   */
+  export type AdminNotificationReadFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminNotificationRead
+     */
+    select?: AdminNotificationReadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminNotificationRead
+     */
+    omit?: AdminNotificationReadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminNotificationReadInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminNotificationRead to fetch.
+     */
+    where?: AdminNotificationReadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminNotificationReads to fetch.
+     */
+    orderBy?: AdminNotificationReadOrderByWithRelationInput | AdminNotificationReadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdminNotificationReads.
+     */
+    cursor?: AdminNotificationReadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminNotificationReads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminNotificationReads.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdminNotificationReads.
+     */
+    distinct?: AdminNotificationReadScalarFieldEnum | AdminNotificationReadScalarFieldEnum[]
+  }
+
+  /**
+   * AdminNotificationRead findFirstOrThrow
+   */
+  export type AdminNotificationReadFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminNotificationRead
+     */
+    select?: AdminNotificationReadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminNotificationRead
+     */
+    omit?: AdminNotificationReadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminNotificationReadInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminNotificationRead to fetch.
+     */
+    where?: AdminNotificationReadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminNotificationReads to fetch.
+     */
+    orderBy?: AdminNotificationReadOrderByWithRelationInput | AdminNotificationReadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdminNotificationReads.
+     */
+    cursor?: AdminNotificationReadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminNotificationReads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminNotificationReads.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdminNotificationReads.
+     */
+    distinct?: AdminNotificationReadScalarFieldEnum | AdminNotificationReadScalarFieldEnum[]
+  }
+
+  /**
+   * AdminNotificationRead findMany
+   */
+  export type AdminNotificationReadFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminNotificationRead
+     */
+    select?: AdminNotificationReadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminNotificationRead
+     */
+    omit?: AdminNotificationReadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminNotificationReadInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminNotificationReads to fetch.
+     */
+    where?: AdminNotificationReadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminNotificationReads to fetch.
+     */
+    orderBy?: AdminNotificationReadOrderByWithRelationInput | AdminNotificationReadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AdminNotificationReads.
+     */
+    cursor?: AdminNotificationReadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminNotificationReads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminNotificationReads.
+     */
+    skip?: number
+    distinct?: AdminNotificationReadScalarFieldEnum | AdminNotificationReadScalarFieldEnum[]
+  }
+
+  /**
+   * AdminNotificationRead create
+   */
+  export type AdminNotificationReadCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminNotificationRead
+     */
+    select?: AdminNotificationReadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminNotificationRead
+     */
+    omit?: AdminNotificationReadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminNotificationReadInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AdminNotificationRead.
+     */
+    data: XOR<AdminNotificationReadCreateInput, AdminNotificationReadUncheckedCreateInput>
+  }
+
+  /**
+   * AdminNotificationRead createMany
+   */
+  export type AdminNotificationReadCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AdminNotificationReads.
+     */
+    data: AdminNotificationReadCreateManyInput | AdminNotificationReadCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AdminNotificationRead createManyAndReturn
+   */
+  export type AdminNotificationReadCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminNotificationRead
+     */
+    select?: AdminNotificationReadSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminNotificationRead
+     */
+    omit?: AdminNotificationReadOmit<ExtArgs> | null
+    /**
+     * The data used to create many AdminNotificationReads.
+     */
+    data: AdminNotificationReadCreateManyInput | AdminNotificationReadCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminNotificationReadIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AdminNotificationRead update
+   */
+  export type AdminNotificationReadUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminNotificationRead
+     */
+    select?: AdminNotificationReadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminNotificationRead
+     */
+    omit?: AdminNotificationReadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminNotificationReadInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AdminNotificationRead.
+     */
+    data: XOR<AdminNotificationReadUpdateInput, AdminNotificationReadUncheckedUpdateInput>
+    /**
+     * Choose, which AdminNotificationRead to update.
+     */
+    where: AdminNotificationReadWhereUniqueInput
+  }
+
+  /**
+   * AdminNotificationRead updateMany
+   */
+  export type AdminNotificationReadUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AdminNotificationReads.
+     */
+    data: XOR<AdminNotificationReadUpdateManyMutationInput, AdminNotificationReadUncheckedUpdateManyInput>
+    /**
+     * Filter which AdminNotificationReads to update
+     */
+    where?: AdminNotificationReadWhereInput
+    /**
+     * Limit how many AdminNotificationReads to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdminNotificationRead updateManyAndReturn
+   */
+  export type AdminNotificationReadUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminNotificationRead
+     */
+    select?: AdminNotificationReadSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminNotificationRead
+     */
+    omit?: AdminNotificationReadOmit<ExtArgs> | null
+    /**
+     * The data used to update AdminNotificationReads.
+     */
+    data: XOR<AdminNotificationReadUpdateManyMutationInput, AdminNotificationReadUncheckedUpdateManyInput>
+    /**
+     * Filter which AdminNotificationReads to update
+     */
+    where?: AdminNotificationReadWhereInput
+    /**
+     * Limit how many AdminNotificationReads to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminNotificationReadIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AdminNotificationRead upsert
+   */
+  export type AdminNotificationReadUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminNotificationRead
+     */
+    select?: AdminNotificationReadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminNotificationRead
+     */
+    omit?: AdminNotificationReadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminNotificationReadInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AdminNotificationRead to update in case it exists.
+     */
+    where: AdminNotificationReadWhereUniqueInput
+    /**
+     * In case the AdminNotificationRead found by the `where` argument doesn't exist, create a new AdminNotificationRead with this data.
+     */
+    create: XOR<AdminNotificationReadCreateInput, AdminNotificationReadUncheckedCreateInput>
+    /**
+     * In case the AdminNotificationRead was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AdminNotificationReadUpdateInput, AdminNotificationReadUncheckedUpdateInput>
+  }
+
+  /**
+   * AdminNotificationRead delete
+   */
+  export type AdminNotificationReadDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminNotificationRead
+     */
+    select?: AdminNotificationReadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminNotificationRead
+     */
+    omit?: AdminNotificationReadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminNotificationReadInclude<ExtArgs> | null
+    /**
+     * Filter which AdminNotificationRead to delete.
+     */
+    where: AdminNotificationReadWhereUniqueInput
+  }
+
+  /**
+   * AdminNotificationRead deleteMany
+   */
+  export type AdminNotificationReadDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdminNotificationReads to delete
+     */
+    where?: AdminNotificationReadWhereInput
+    /**
+     * Limit how many AdminNotificationReads to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdminNotificationRead without action
+   */
+  export type AdminNotificationReadDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminNotificationRead
+     */
+    select?: AdminNotificationReadSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminNotificationRead
+     */
+    omit?: AdminNotificationReadOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminNotificationReadInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Supplier
    */
 
@@ -43605,6 +44825,8 @@ export namespace Prisma {
     orderNumber: 'orderNumber',
     razorpayOrderId: 'razorpayOrderId',
     razorpayPaymentId: 'razorpayPaymentId',
+    cashfreeOrderId: 'cashfreeOrderId',
+    cashfreePaymentId: 'cashfreePaymentId',
     userId: 'userId',
     addressId: 'addressId',
     status: 'status',
@@ -43813,6 +45035,15 @@ export namespace Prisma {
   };
 
   export type ReelMediaScalarFieldEnum = (typeof ReelMediaScalarFieldEnum)[keyof typeof ReelMediaScalarFieldEnum]
+
+
+  export const AdminNotificationReadScalarFieldEnum: {
+    userId: 'userId',
+    key: 'key',
+    readAt: 'readAt'
+  };
+
+  export type AdminNotificationReadScalarFieldEnum = (typeof AdminNotificationReadScalarFieldEnum)[keyof typeof AdminNotificationReadScalarFieldEnum]
 
 
   export const SupplierScalarFieldEnum: {
@@ -44169,6 +45400,7 @@ export namespace Prisma {
     addresses?: AddressListRelationFilter
     cartItems?: CartItemListRelationFilter
     wishlistItems?: WishlistItemListRelationFilter
+    notificationReads?: AdminNotificationReadListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -44188,6 +45420,7 @@ export namespace Prisma {
     addresses?: AddressOrderByRelationAggregateInput
     cartItems?: CartItemOrderByRelationAggregateInput
     wishlistItems?: WishlistItemOrderByRelationAggregateInput
+    notificationReads?: AdminNotificationReadOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -44210,6 +45443,7 @@ export namespace Prisma {
     addresses?: AddressListRelationFilter
     cartItems?: CartItemListRelationFilter
     wishlistItems?: WishlistItemListRelationFilter
+    notificationReads?: AdminNotificationReadListRelationFilter
   }, "id" | "email" | "mobile">
 
   export type UserOrderByWithAggregationInput = {
@@ -45279,6 +46513,8 @@ export namespace Prisma {
     orderNumber?: StringFilter<"Order"> | string
     razorpayOrderId?: StringNullableFilter<"Order"> | string | null
     razorpayPaymentId?: StringNullableFilter<"Order"> | string | null
+    cashfreeOrderId?: StringNullableFilter<"Order"> | string | null
+    cashfreePaymentId?: StringNullableFilter<"Order"> | string | null
     userId?: IntFilter<"Order"> | number
     addressId?: IntNullableFilter<"Order"> | number | null
     status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
@@ -45304,6 +46540,8 @@ export namespace Prisma {
     orderNumber?: SortOrder
     razorpayOrderId?: SortOrderInput | SortOrder
     razorpayPaymentId?: SortOrderInput | SortOrder
+    cashfreeOrderId?: SortOrderInput | SortOrder
+    cashfreePaymentId?: SortOrderInput | SortOrder
     userId?: SortOrder
     addressId?: SortOrderInput | SortOrder
     status?: SortOrder
@@ -45329,6 +46567,8 @@ export namespace Prisma {
     orderNumber?: string
     razorpayOrderId?: string
     razorpayPaymentId?: string
+    cashfreeOrderId?: string
+    cashfreePaymentId?: string
     AND?: OrderWhereInput | OrderWhereInput[]
     OR?: OrderWhereInput[]
     NOT?: OrderWhereInput | OrderWhereInput[]
@@ -45350,13 +46590,15 @@ export namespace Prisma {
     items?: OrderItemListRelationFilter
     inventoryMovements?: InventoryMovementListRelationFilter
     shipments?: ShipmentListRelationFilter
-  }, "id" | "orderNumber" | "razorpayOrderId" | "razorpayPaymentId">
+  }, "id" | "orderNumber" | "razorpayOrderId" | "razorpayPaymentId" | "cashfreeOrderId" | "cashfreePaymentId">
 
   export type OrderOrderByWithAggregationInput = {
     id?: SortOrder
     orderNumber?: SortOrder
     razorpayOrderId?: SortOrderInput | SortOrder
     razorpayPaymentId?: SortOrderInput | SortOrder
+    cashfreeOrderId?: SortOrderInput | SortOrder
+    cashfreePaymentId?: SortOrderInput | SortOrder
     userId?: SortOrder
     addressId?: SortOrderInput | SortOrder
     status?: SortOrder
@@ -45385,6 +46627,8 @@ export namespace Prisma {
     orderNumber?: StringWithAggregatesFilter<"Order"> | string
     razorpayOrderId?: StringNullableWithAggregatesFilter<"Order"> | string | null
     razorpayPaymentId?: StringNullableWithAggregatesFilter<"Order"> | string | null
+    cashfreeOrderId?: StringNullableWithAggregatesFilter<"Order"> | string | null
+    cashfreePaymentId?: StringNullableWithAggregatesFilter<"Order"> | string | null
     userId?: IntWithAggregatesFilter<"Order"> | number
     addressId?: IntNullableWithAggregatesFilter<"Order"> | number | null
     status?: EnumOrderStatusWithAggregatesFilter<"Order"> | $Enums.OrderStatus
@@ -46404,6 +47648,54 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"ReelMedia"> | Date | string
   }
 
+  export type AdminNotificationReadWhereInput = {
+    AND?: AdminNotificationReadWhereInput | AdminNotificationReadWhereInput[]
+    OR?: AdminNotificationReadWhereInput[]
+    NOT?: AdminNotificationReadWhereInput | AdminNotificationReadWhereInput[]
+    userId?: IntFilter<"AdminNotificationRead"> | number
+    key?: StringFilter<"AdminNotificationRead"> | string
+    readAt?: DateTimeFilter<"AdminNotificationRead"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type AdminNotificationReadOrderByWithRelationInput = {
+    userId?: SortOrder
+    key?: SortOrder
+    readAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type AdminNotificationReadWhereUniqueInput = Prisma.AtLeast<{
+    userId_key?: AdminNotificationReadUserIdKeyCompoundUniqueInput
+    AND?: AdminNotificationReadWhereInput | AdminNotificationReadWhereInput[]
+    OR?: AdminNotificationReadWhereInput[]
+    NOT?: AdminNotificationReadWhereInput | AdminNotificationReadWhereInput[]
+    userId?: IntFilter<"AdminNotificationRead"> | number
+    key?: StringFilter<"AdminNotificationRead"> | string
+    readAt?: DateTimeFilter<"AdminNotificationRead"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "userId_key">
+
+  export type AdminNotificationReadOrderByWithAggregationInput = {
+    userId?: SortOrder
+    key?: SortOrder
+    readAt?: SortOrder
+    _count?: AdminNotificationReadCountOrderByAggregateInput
+    _avg?: AdminNotificationReadAvgOrderByAggregateInput
+    _max?: AdminNotificationReadMaxOrderByAggregateInput
+    _min?: AdminNotificationReadMinOrderByAggregateInput
+    _sum?: AdminNotificationReadSumOrderByAggregateInput
+  }
+
+  export type AdminNotificationReadScalarWhereWithAggregatesInput = {
+    AND?: AdminNotificationReadScalarWhereWithAggregatesInput | AdminNotificationReadScalarWhereWithAggregatesInput[]
+    OR?: AdminNotificationReadScalarWhereWithAggregatesInput[]
+    NOT?: AdminNotificationReadScalarWhereWithAggregatesInput | AdminNotificationReadScalarWhereWithAggregatesInput[]
+    userId?: IntWithAggregatesFilter<"AdminNotificationRead"> | number
+    key?: StringWithAggregatesFilter<"AdminNotificationRead"> | string
+    readAt?: DateTimeWithAggregatesFilter<"AdminNotificationRead"> | Date | string
+  }
+
   export type SupplierWhereInput = {
     AND?: SupplierWhereInput | SupplierWhereInput[]
     OR?: SupplierWhereInput[]
@@ -46763,6 +48055,7 @@ export namespace Prisma {
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    notificationReads?: AdminNotificationReadCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -46782,6 +48075,7 @@ export namespace Prisma {
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    notificationReads?: AdminNotificationReadUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -46800,6 +48094,7 @@ export namespace Prisma {
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    notificationReads?: AdminNotificationReadUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -46819,6 +48114,7 @@ export namespace Prisma {
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    notificationReads?: AdminNotificationReadUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -47898,6 +49194,8 @@ export namespace Prisma {
     orderNumber: string
     razorpayOrderId?: string | null
     razorpayPaymentId?: string | null
+    cashfreeOrderId?: string | null
+    cashfreePaymentId?: string | null
     status?: $Enums.OrderStatus
     paymentStatus?: $Enums.PaymentStatus
     subtotal: Decimal | DecimalJsLike | number | string
@@ -47921,6 +49219,8 @@ export namespace Prisma {
     orderNumber: string
     razorpayOrderId?: string | null
     razorpayPaymentId?: string | null
+    cashfreeOrderId?: string | null
+    cashfreePaymentId?: string | null
     userId: number
     addressId?: number | null
     status?: $Enums.OrderStatus
@@ -47943,6 +49243,8 @@ export namespace Prisma {
     orderNumber?: StringFieldUpdateOperationsInput | string
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreeOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreePaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -47966,6 +49268,8 @@ export namespace Prisma {
     orderNumber?: StringFieldUpdateOperationsInput | string
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreeOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreePaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: IntFieldUpdateOperationsInput | number
     addressId?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
@@ -47989,6 +49293,8 @@ export namespace Prisma {
     orderNumber: string
     razorpayOrderId?: string | null
     razorpayPaymentId?: string | null
+    cashfreeOrderId?: string | null
+    cashfreePaymentId?: string | null
     userId: number
     addressId?: number | null
     status?: $Enums.OrderStatus
@@ -48008,6 +49314,8 @@ export namespace Prisma {
     orderNumber?: StringFieldUpdateOperationsInput | string
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreeOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreePaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -48026,6 +49334,8 @@ export namespace Prisma {
     orderNumber?: StringFieldUpdateOperationsInput | string
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreeOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreePaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: IntFieldUpdateOperationsInput | number
     addressId?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
@@ -49068,6 +50378,47 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type AdminNotificationReadCreateInput = {
+    key: string
+    readAt?: Date | string
+    user: UserCreateNestedOneWithoutNotificationReadsInput
+  }
+
+  export type AdminNotificationReadUncheckedCreateInput = {
+    userId: number
+    key: string
+    readAt?: Date | string
+  }
+
+  export type AdminNotificationReadUpdateInput = {
+    key?: StringFieldUpdateOperationsInput | string
+    readAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutNotificationReadsNestedInput
+  }
+
+  export type AdminNotificationReadUncheckedUpdateInput = {
+    userId?: IntFieldUpdateOperationsInput | number
+    key?: StringFieldUpdateOperationsInput | string
+    readAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminNotificationReadCreateManyInput = {
+    userId: number
+    key: string
+    readAt?: Date | string
+  }
+
+  export type AdminNotificationReadUpdateManyMutationInput = {
+    key?: StringFieldUpdateOperationsInput | string
+    readAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminNotificationReadUncheckedUpdateManyInput = {
+    userId?: IntFieldUpdateOperationsInput | number
+    key?: StringFieldUpdateOperationsInput | string
+    readAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type SupplierCreateInput = {
     name: string
     contactName?: string | null
@@ -49522,6 +50873,12 @@ export namespace Prisma {
     none?: WishlistItemWhereInput
   }
 
+  export type AdminNotificationReadListRelationFilter = {
+    every?: AdminNotificationReadWhereInput
+    some?: AdminNotificationReadWhereInput
+    none?: AdminNotificationReadWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -49556,6 +50913,10 @@ export namespace Prisma {
   }
 
   export type WishlistItemOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AdminNotificationReadOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -50644,6 +52005,8 @@ export namespace Prisma {
     orderNumber?: SortOrder
     razorpayOrderId?: SortOrder
     razorpayPaymentId?: SortOrder
+    cashfreeOrderId?: SortOrder
+    cashfreePaymentId?: SortOrder
     userId?: SortOrder
     addressId?: SortOrder
     status?: SortOrder
@@ -50674,6 +52037,8 @@ export namespace Prisma {
     orderNumber?: SortOrder
     razorpayOrderId?: SortOrder
     razorpayPaymentId?: SortOrder
+    cashfreeOrderId?: SortOrder
+    cashfreePaymentId?: SortOrder
     userId?: SortOrder
     addressId?: SortOrder
     status?: SortOrder
@@ -50694,6 +52059,8 @@ export namespace Prisma {
     orderNumber?: SortOrder
     razorpayOrderId?: SortOrder
     razorpayPaymentId?: SortOrder
+    cashfreeOrderId?: SortOrder
+    cashfreePaymentId?: SortOrder
     userId?: SortOrder
     addressId?: SortOrder
     status?: SortOrder
@@ -51610,6 +52977,37 @@ export namespace Prisma {
     _max?: NestedBytesFilter<$PrismaModel>
   }
 
+  export type AdminNotificationReadUserIdKeyCompoundUniqueInput = {
+    userId: number
+    key: string
+  }
+
+  export type AdminNotificationReadCountOrderByAggregateInput = {
+    userId?: SortOrder
+    key?: SortOrder
+    readAt?: SortOrder
+  }
+
+  export type AdminNotificationReadAvgOrderByAggregateInput = {
+    userId?: SortOrder
+  }
+
+  export type AdminNotificationReadMaxOrderByAggregateInput = {
+    userId?: SortOrder
+    key?: SortOrder
+    readAt?: SortOrder
+  }
+
+  export type AdminNotificationReadMinOrderByAggregateInput = {
+    userId?: SortOrder
+    key?: SortOrder
+    readAt?: SortOrder
+  }
+
+  export type AdminNotificationReadSumOrderByAggregateInput = {
+    userId?: SortOrder
+  }
+
   export type SupplierCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -51881,6 +53279,13 @@ export namespace Prisma {
     connect?: WishlistItemWhereUniqueInput | WishlistItemWhereUniqueInput[]
   }
 
+  export type AdminNotificationReadCreateNestedManyWithoutUserInput = {
+    create?: XOR<AdminNotificationReadCreateWithoutUserInput, AdminNotificationReadUncheckedCreateWithoutUserInput> | AdminNotificationReadCreateWithoutUserInput[] | AdminNotificationReadUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AdminNotificationReadCreateOrConnectWithoutUserInput | AdminNotificationReadCreateOrConnectWithoutUserInput[]
+    createMany?: AdminNotificationReadCreateManyUserInputEnvelope
+    connect?: AdminNotificationReadWhereUniqueInput | AdminNotificationReadWhereUniqueInput[]
+  }
+
   export type UserRoleUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<UserRoleCreateWithoutUserInput, UserRoleUncheckedCreateWithoutUserInput> | UserRoleCreateWithoutUserInput[] | UserRoleUncheckedCreateWithoutUserInput[]
     connectOrCreate?: UserRoleCreateOrConnectWithoutUserInput | UserRoleCreateOrConnectWithoutUserInput[]
@@ -51935,6 +53340,13 @@ export namespace Prisma {
     connectOrCreate?: WishlistItemCreateOrConnectWithoutUserInput | WishlistItemCreateOrConnectWithoutUserInput[]
     createMany?: WishlistItemCreateManyUserInputEnvelope
     connect?: WishlistItemWhereUniqueInput | WishlistItemWhereUniqueInput[]
+  }
+
+  export type AdminNotificationReadUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<AdminNotificationReadCreateWithoutUserInput, AdminNotificationReadUncheckedCreateWithoutUserInput> | AdminNotificationReadCreateWithoutUserInput[] | AdminNotificationReadUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AdminNotificationReadCreateOrConnectWithoutUserInput | AdminNotificationReadCreateOrConnectWithoutUserInput[]
+    createMany?: AdminNotificationReadCreateManyUserInputEnvelope
+    connect?: AdminNotificationReadWhereUniqueInput | AdminNotificationReadWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -52065,6 +53477,20 @@ export namespace Prisma {
     deleteMany?: WishlistItemScalarWhereInput | WishlistItemScalarWhereInput[]
   }
 
+  export type AdminNotificationReadUpdateManyWithoutUserNestedInput = {
+    create?: XOR<AdminNotificationReadCreateWithoutUserInput, AdminNotificationReadUncheckedCreateWithoutUserInput> | AdminNotificationReadCreateWithoutUserInput[] | AdminNotificationReadUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AdminNotificationReadCreateOrConnectWithoutUserInput | AdminNotificationReadCreateOrConnectWithoutUserInput[]
+    upsert?: AdminNotificationReadUpsertWithWhereUniqueWithoutUserInput | AdminNotificationReadUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: AdminNotificationReadCreateManyUserInputEnvelope
+    set?: AdminNotificationReadWhereUniqueInput | AdminNotificationReadWhereUniqueInput[]
+    disconnect?: AdminNotificationReadWhereUniqueInput | AdminNotificationReadWhereUniqueInput[]
+    delete?: AdminNotificationReadWhereUniqueInput | AdminNotificationReadWhereUniqueInput[]
+    connect?: AdminNotificationReadWhereUniqueInput | AdminNotificationReadWhereUniqueInput[]
+    update?: AdminNotificationReadUpdateWithWhereUniqueWithoutUserInput | AdminNotificationReadUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: AdminNotificationReadUpdateManyWithWhereWithoutUserInput | AdminNotificationReadUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: AdminNotificationReadScalarWhereInput | AdminNotificationReadScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -52183,6 +53609,20 @@ export namespace Prisma {
     update?: WishlistItemUpdateWithWhereUniqueWithoutUserInput | WishlistItemUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: WishlistItemUpdateManyWithWhereWithoutUserInput | WishlistItemUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: WishlistItemScalarWhereInput | WishlistItemScalarWhereInput[]
+  }
+
+  export type AdminNotificationReadUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<AdminNotificationReadCreateWithoutUserInput, AdminNotificationReadUncheckedCreateWithoutUserInput> | AdminNotificationReadCreateWithoutUserInput[] | AdminNotificationReadUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AdminNotificationReadCreateOrConnectWithoutUserInput | AdminNotificationReadCreateOrConnectWithoutUserInput[]
+    upsert?: AdminNotificationReadUpsertWithWhereUniqueWithoutUserInput | AdminNotificationReadUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: AdminNotificationReadCreateManyUserInputEnvelope
+    set?: AdminNotificationReadWhereUniqueInput | AdminNotificationReadWhereUniqueInput[]
+    disconnect?: AdminNotificationReadWhereUniqueInput | AdminNotificationReadWhereUniqueInput[]
+    delete?: AdminNotificationReadWhereUniqueInput | AdminNotificationReadWhereUniqueInput[]
+    connect?: AdminNotificationReadWhereUniqueInput | AdminNotificationReadWhereUniqueInput[]
+    update?: AdminNotificationReadUpdateWithWhereUniqueWithoutUserInput | AdminNotificationReadUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: AdminNotificationReadUpdateManyWithWhereWithoutUserInput | AdminNotificationReadUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: AdminNotificationReadScalarWhereInput | AdminNotificationReadScalarWhereInput[]
   }
 
   export type UserRoleCreateNestedManyWithoutRoleInput = {
@@ -53841,6 +55281,20 @@ export namespace Prisma {
     set?: Bytes
   }
 
+  export type UserCreateNestedOneWithoutNotificationReadsInput = {
+    create?: XOR<UserCreateWithoutNotificationReadsInput, UserUncheckedCreateWithoutNotificationReadsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutNotificationReadsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutNotificationReadsNestedInput = {
+    create?: XOR<UserCreateWithoutNotificationReadsInput, UserUncheckedCreateWithoutNotificationReadsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutNotificationReadsInput
+    upsert?: UserUpsertWithoutNotificationReadsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutNotificationReadsInput, UserUpdateWithoutNotificationReadsInput>, UserUncheckedUpdateWithoutNotificationReadsInput>
+  }
+
   export type PurchaseCreateNestedManyWithoutSupplierInput = {
     create?: XOR<PurchaseCreateWithoutSupplierInput, PurchaseUncheckedCreateWithoutSupplierInput> | PurchaseCreateWithoutSupplierInput[] | PurchaseUncheckedCreateWithoutSupplierInput[]
     connectOrCreate?: PurchaseCreateOrConnectWithoutSupplierInput | PurchaseCreateOrConnectWithoutSupplierInput[]
@@ -54797,6 +56251,8 @@ export namespace Prisma {
     orderNumber: string
     razorpayOrderId?: string | null
     razorpayPaymentId?: string | null
+    cashfreeOrderId?: string | null
+    cashfreePaymentId?: string | null
     status?: $Enums.OrderStatus
     paymentStatus?: $Enums.PaymentStatus
     subtotal: Decimal | DecimalJsLike | number | string
@@ -54819,6 +56275,8 @@ export namespace Prisma {
     orderNumber: string
     razorpayOrderId?: string | null
     razorpayPaymentId?: string | null
+    cashfreeOrderId?: string | null
+    cashfreePaymentId?: string | null
     addressId?: number | null
     status?: $Enums.OrderStatus
     paymentStatus?: $Enums.PaymentStatus
@@ -54930,6 +56388,26 @@ export namespace Prisma {
 
   export type WishlistItemCreateManyUserInputEnvelope = {
     data: WishlistItemCreateManyUserInput | WishlistItemCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AdminNotificationReadCreateWithoutUserInput = {
+    key: string
+    readAt?: Date | string
+  }
+
+  export type AdminNotificationReadUncheckedCreateWithoutUserInput = {
+    key: string
+    readAt?: Date | string
+  }
+
+  export type AdminNotificationReadCreateOrConnectWithoutUserInput = {
+    where: AdminNotificationReadWhereUniqueInput
+    create: XOR<AdminNotificationReadCreateWithoutUserInput, AdminNotificationReadUncheckedCreateWithoutUserInput>
+  }
+
+  export type AdminNotificationReadCreateManyUserInputEnvelope = {
+    data: AdminNotificationReadCreateManyUserInput | AdminNotificationReadCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -55080,6 +56558,8 @@ export namespace Prisma {
     orderNumber?: StringFilter<"Order"> | string
     razorpayOrderId?: StringNullableFilter<"Order"> | string | null
     razorpayPaymentId?: StringNullableFilter<"Order"> | string | null
+    cashfreeOrderId?: StringNullableFilter<"Order"> | string | null
+    cashfreePaymentId?: StringNullableFilter<"Order"> | string | null
     userId?: IntFilter<"Order"> | number
     addressId?: IntNullableFilter<"Order"> | number | null
     status?: EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
@@ -55184,6 +56664,31 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"WishlistItem"> | Date | string
   }
 
+  export type AdminNotificationReadUpsertWithWhereUniqueWithoutUserInput = {
+    where: AdminNotificationReadWhereUniqueInput
+    update: XOR<AdminNotificationReadUpdateWithoutUserInput, AdminNotificationReadUncheckedUpdateWithoutUserInput>
+    create: XOR<AdminNotificationReadCreateWithoutUserInput, AdminNotificationReadUncheckedCreateWithoutUserInput>
+  }
+
+  export type AdminNotificationReadUpdateWithWhereUniqueWithoutUserInput = {
+    where: AdminNotificationReadWhereUniqueInput
+    data: XOR<AdminNotificationReadUpdateWithoutUserInput, AdminNotificationReadUncheckedUpdateWithoutUserInput>
+  }
+
+  export type AdminNotificationReadUpdateManyWithWhereWithoutUserInput = {
+    where: AdminNotificationReadScalarWhereInput
+    data: XOR<AdminNotificationReadUpdateManyMutationInput, AdminNotificationReadUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type AdminNotificationReadScalarWhereInput = {
+    AND?: AdminNotificationReadScalarWhereInput | AdminNotificationReadScalarWhereInput[]
+    OR?: AdminNotificationReadScalarWhereInput[]
+    NOT?: AdminNotificationReadScalarWhereInput | AdminNotificationReadScalarWhereInput[]
+    userId?: IntFilter<"AdminNotificationRead"> | number
+    key?: StringFilter<"AdminNotificationRead"> | string
+    readAt?: DateTimeFilter<"AdminNotificationRead"> | Date | string
+  }
+
   export type UserRoleCreateWithoutRoleInput = {
     user: UserCreateNestedOneWithoutRolesInput
   }
@@ -55278,6 +56783,7 @@ export namespace Prisma {
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    notificationReads?: AdminNotificationReadCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutRolesInput = {
@@ -55296,6 +56802,7 @@ export namespace Prisma {
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    notificationReads?: AdminNotificationReadUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutRolesInput = {
@@ -55353,6 +56860,7 @@ export namespace Prisma {
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    notificationReads?: AdminNotificationReadUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRolesInput = {
@@ -55371,6 +56879,7 @@ export namespace Prisma {
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    notificationReads?: AdminNotificationReadUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type RoleUpsertWithoutUsersInput = {
@@ -57748,6 +59257,7 @@ export namespace Prisma {
     orders?: OrderCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    notificationReads?: AdminNotificationReadCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAddressesInput = {
@@ -57766,6 +59276,7 @@ export namespace Prisma {
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    notificationReads?: AdminNotificationReadUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAddressesInput = {
@@ -57777,6 +59288,8 @@ export namespace Prisma {
     orderNumber: string
     razorpayOrderId?: string | null
     razorpayPaymentId?: string | null
+    cashfreeOrderId?: string | null
+    cashfreePaymentId?: string | null
     status?: $Enums.OrderStatus
     paymentStatus?: $Enums.PaymentStatus
     subtotal: Decimal | DecimalJsLike | number | string
@@ -57799,6 +59312,8 @@ export namespace Prisma {
     orderNumber: string
     razorpayOrderId?: string | null
     razorpayPaymentId?: string | null
+    cashfreeOrderId?: string | null
+    cashfreePaymentId?: string | null
     userId: number
     status?: $Enums.OrderStatus
     paymentStatus?: $Enums.PaymentStatus
@@ -57852,6 +59367,7 @@ export namespace Prisma {
     orders?: OrderUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    notificationReads?: AdminNotificationReadUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAddressesInput = {
@@ -57870,6 +59386,7 @@ export namespace Prisma {
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    notificationReads?: AdminNotificationReadUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OrderUpsertWithWhereUniqueWithoutAddressInput = {
@@ -57903,6 +59420,7 @@ export namespace Prisma {
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    notificationReads?: AdminNotificationReadCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOrdersInput = {
@@ -57921,6 +59439,7 @@ export namespace Prisma {
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    notificationReads?: AdminNotificationReadUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOrdersInput = {
@@ -58103,6 +59622,7 @@ export namespace Prisma {
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    notificationReads?: AdminNotificationReadUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOrdersInput = {
@@ -58121,6 +59641,7 @@ export namespace Prisma {
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    notificationReads?: AdminNotificationReadUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AddressUpsertWithoutOrdersInput = {
@@ -58276,6 +59797,8 @@ export namespace Prisma {
     orderNumber: string
     razorpayOrderId?: string | null
     razorpayPaymentId?: string | null
+    cashfreeOrderId?: string | null
+    cashfreePaymentId?: string | null
     status?: $Enums.OrderStatus
     paymentStatus?: $Enums.PaymentStatus
     subtotal: Decimal | DecimalJsLike | number | string
@@ -58298,6 +59821,8 @@ export namespace Prisma {
     orderNumber: string
     razorpayOrderId?: string | null
     razorpayPaymentId?: string | null
+    cashfreeOrderId?: string | null
+    cashfreePaymentId?: string | null
     userId: number
     addressId?: number | null
     status?: $Enums.OrderStatus
@@ -58475,6 +60000,8 @@ export namespace Prisma {
     orderNumber?: StringFieldUpdateOperationsInput | string
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreeOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreePaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -58497,6 +60024,8 @@ export namespace Prisma {
     orderNumber?: StringFieldUpdateOperationsInput | string
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreeOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreePaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: IntFieldUpdateOperationsInput | number
     addressId?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
@@ -58714,6 +60243,8 @@ export namespace Prisma {
     orderNumber: string
     razorpayOrderId?: string | null
     razorpayPaymentId?: string | null
+    cashfreeOrderId?: string | null
+    cashfreePaymentId?: string | null
     status?: $Enums.OrderStatus
     paymentStatus?: $Enums.PaymentStatus
     subtotal: Decimal | DecimalJsLike | number | string
@@ -58736,6 +60267,8 @@ export namespace Prisma {
     orderNumber: string
     razorpayOrderId?: string | null
     razorpayPaymentId?: string | null
+    cashfreeOrderId?: string | null
+    cashfreePaymentId?: string | null
     userId: number
     addressId?: number | null
     status?: $Enums.OrderStatus
@@ -58773,6 +60306,7 @@ export namespace Prisma {
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    notificationReads?: AdminNotificationReadCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInventoryMovementsInput = {
@@ -58791,6 +60325,7 @@ export namespace Prisma {
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    notificationReads?: AdminNotificationReadUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInventoryMovementsInput = {
@@ -58999,6 +60534,8 @@ export namespace Prisma {
     orderNumber?: StringFieldUpdateOperationsInput | string
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreeOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreePaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -59021,6 +60558,8 @@ export namespace Prisma {
     orderNumber?: StringFieldUpdateOperationsInput | string
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreeOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreePaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: IntFieldUpdateOperationsInput | number
     addressId?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
@@ -59064,6 +60603,7 @@ export namespace Prisma {
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    notificationReads?: AdminNotificationReadUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInventoryMovementsInput = {
@@ -59082,6 +60622,7 @@ export namespace Prisma {
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    notificationReads?: AdminNotificationReadUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SupplierUpsertWithoutMovementsInput = {
@@ -59164,6 +60705,8 @@ export namespace Prisma {
     orderNumber: string
     razorpayOrderId?: string | null
     razorpayPaymentId?: string | null
+    cashfreeOrderId?: string | null
+    cashfreePaymentId?: string | null
     status?: $Enums.OrderStatus
     paymentStatus?: $Enums.PaymentStatus
     subtotal: Decimal | DecimalJsLike | number | string
@@ -59186,6 +60729,8 @@ export namespace Prisma {
     orderNumber: string
     razorpayOrderId?: string | null
     razorpayPaymentId?: string | null
+    cashfreeOrderId?: string | null
+    cashfreePaymentId?: string | null
     userId: number
     addressId?: number | null
     status?: $Enums.OrderStatus
@@ -59264,6 +60809,8 @@ export namespace Prisma {
     orderNumber?: StringFieldUpdateOperationsInput | string
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreeOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreePaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -59286,6 +60833,8 @@ export namespace Prisma {
     orderNumber?: StringFieldUpdateOperationsInput | string
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreeOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreePaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: IntFieldUpdateOperationsInput | number
     addressId?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
@@ -59412,6 +60961,7 @@ export namespace Prisma {
     orders?: OrderCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    notificationReads?: AdminNotificationReadCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCartItemsInput = {
@@ -59430,6 +60980,7 @@ export namespace Prisma {
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    notificationReads?: AdminNotificationReadUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCartItemsInput = {
@@ -59543,6 +61094,7 @@ export namespace Prisma {
     orders?: OrderUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    notificationReads?: AdminNotificationReadUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCartItemsInput = {
@@ -59561,6 +61113,7 @@ export namespace Prisma {
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    notificationReads?: AdminNotificationReadUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProductUpsertWithoutCartItemsInput = {
@@ -59664,6 +61217,7 @@ export namespace Prisma {
     orders?: OrderCreateNestedManyWithoutUserInput
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
+    notificationReads?: AdminNotificationReadCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutWishlistItemsInput = {
@@ -59682,6 +61236,7 @@ export namespace Prisma {
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
+    notificationReads?: AdminNotificationReadUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutWishlistItemsInput = {
@@ -59795,6 +61350,7 @@ export namespace Prisma {
     orders?: OrderUpdateManyWithoutUserNestedInput
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
+    notificationReads?: AdminNotificationReadUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWishlistItemsInput = {
@@ -59813,6 +61369,7 @@ export namespace Prisma {
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
+    notificationReads?: AdminNotificationReadUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProductUpsertWithoutWishlistItemsInput = {
@@ -60067,6 +61624,96 @@ export namespace Prisma {
     likes?: ProductLikeUncheckedUpdateManyWithoutProductNestedInput
   }
 
+  export type UserCreateWithoutNotificationReadsInput = {
+    name: string
+    email: string
+    mobile?: string | null
+    passwordHash: string
+    status?: $Enums.UserStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    roles?: UserRoleCreateNestedManyWithoutUserInput
+    inventoryMovements?: InventoryMovementCreateNestedManyWithoutActorInput
+    purchasesCreated?: PurchaseCreateNestedManyWithoutCreatedByInput
+    supplierPaymentsRecorded?: SupplierPaymentCreateNestedManyWithoutRecordedByInput
+    orders?: OrderCreateNestedManyWithoutUserInput
+    addresses?: AddressCreateNestedManyWithoutUserInput
+    cartItems?: CartItemCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutNotificationReadsInput = {
+    id?: number
+    name: string
+    email: string
+    mobile?: string | null
+    passwordHash: string
+    status?: $Enums.UserStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    roles?: UserRoleUncheckedCreateNestedManyWithoutUserInput
+    inventoryMovements?: InventoryMovementUncheckedCreateNestedManyWithoutActorInput
+    purchasesCreated?: PurchaseUncheckedCreateNestedManyWithoutCreatedByInput
+    supplierPaymentsRecorded?: SupplierPaymentUncheckedCreateNestedManyWithoutRecordedByInput
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput
+    addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
+    cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
+    wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutNotificationReadsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutNotificationReadsInput, UserUncheckedCreateWithoutNotificationReadsInput>
+  }
+
+  export type UserUpsertWithoutNotificationReadsInput = {
+    update: XOR<UserUpdateWithoutNotificationReadsInput, UserUncheckedUpdateWithoutNotificationReadsInput>
+    create: XOR<UserCreateWithoutNotificationReadsInput, UserUncheckedCreateWithoutNotificationReadsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutNotificationReadsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutNotificationReadsInput, UserUncheckedUpdateWithoutNotificationReadsInput>
+  }
+
+  export type UserUpdateWithoutNotificationReadsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    roles?: UserRoleUpdateManyWithoutUserNestedInput
+    inventoryMovements?: InventoryMovementUpdateManyWithoutActorNestedInput
+    purchasesCreated?: PurchaseUpdateManyWithoutCreatedByNestedInput
+    supplierPaymentsRecorded?: SupplierPaymentUpdateManyWithoutRecordedByNestedInput
+    orders?: OrderUpdateManyWithoutUserNestedInput
+    addresses?: AddressUpdateManyWithoutUserNestedInput
+    cartItems?: CartItemUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutNotificationReadsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    roles?: UserRoleUncheckedUpdateManyWithoutUserNestedInput
+    inventoryMovements?: InventoryMovementUncheckedUpdateManyWithoutActorNestedInput
+    purchasesCreated?: PurchaseUncheckedUpdateManyWithoutCreatedByNestedInput
+    supplierPaymentsRecorded?: SupplierPaymentUncheckedUpdateManyWithoutRecordedByNestedInput
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
+    cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
+    wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+  }
+
   export type PurchaseCreateWithoutSupplierInput = {
     purchaseNumber: string
     total: Decimal | DecimalJsLike | number | string
@@ -60275,6 +61922,7 @@ export namespace Prisma {
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    notificationReads?: AdminNotificationReadCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPurchasesCreatedInput = {
@@ -60293,6 +61941,7 @@ export namespace Prisma {
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    notificationReads?: AdminNotificationReadUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPurchasesCreatedInput = {
@@ -60477,6 +62126,7 @@ export namespace Prisma {
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    notificationReads?: AdminNotificationReadUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPurchasesCreatedInput = {
@@ -60495,6 +62145,7 @@ export namespace Prisma {
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    notificationReads?: AdminNotificationReadUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PurchaseItemUpsertWithWhereUniqueWithoutPurchaseInput = {
@@ -60918,6 +62569,7 @@ export namespace Prisma {
     addresses?: AddressCreateNestedManyWithoutUserInput
     cartItems?: CartItemCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemCreateNestedManyWithoutUserInput
+    notificationReads?: AdminNotificationReadCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSupplierPaymentsRecordedInput = {
@@ -60936,6 +62588,7 @@ export namespace Prisma {
     addresses?: AddressUncheckedCreateNestedManyWithoutUserInput
     cartItems?: CartItemUncheckedCreateNestedManyWithoutUserInput
     wishlistItems?: WishlistItemUncheckedCreateNestedManyWithoutUserInput
+    notificationReads?: AdminNotificationReadUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSupplierPaymentsRecordedInput = {
@@ -61045,6 +62698,7 @@ export namespace Prisma {
     addresses?: AddressUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUpdateManyWithoutUserNestedInput
+    notificationReads?: AdminNotificationReadUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSupplierPaymentsRecordedInput = {
@@ -61063,6 +62717,7 @@ export namespace Prisma {
     addresses?: AddressUncheckedUpdateManyWithoutUserNestedInput
     cartItems?: CartItemUncheckedUpdateManyWithoutUserNestedInput
     wishlistItems?: WishlistItemUncheckedUpdateManyWithoutUserNestedInput
+    notificationReads?: AdminNotificationReadUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserRoleCreateManyUserInput = {
@@ -61113,6 +62768,8 @@ export namespace Prisma {
     orderNumber: string
     razorpayOrderId?: string | null
     razorpayPaymentId?: string | null
+    cashfreeOrderId?: string | null
+    cashfreePaymentId?: string | null
     addressId?: number | null
     status?: $Enums.OrderStatus
     paymentStatus?: $Enums.PaymentStatus
@@ -61154,6 +62811,11 @@ export namespace Prisma {
     id?: number
     productId: number
     createdAt?: Date | string
+  }
+
+  export type AdminNotificationReadCreateManyUserInput = {
+    key: string
+    readAt?: Date | string
   }
 
   export type UserRoleUpdateWithoutUserInput = {
@@ -61291,6 +62953,8 @@ export namespace Prisma {
     orderNumber?: StringFieldUpdateOperationsInput | string
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreeOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreePaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -61313,6 +62977,8 @@ export namespace Prisma {
     orderNumber?: StringFieldUpdateOperationsInput | string
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreeOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreePaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     addressId?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
@@ -61335,6 +63001,8 @@ export namespace Prisma {
     orderNumber?: StringFieldUpdateOperationsInput | string
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreeOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreePaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     addressId?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
@@ -61433,6 +63101,21 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     productId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminNotificationReadUpdateWithoutUserInput = {
+    key?: StringFieldUpdateOperationsInput | string
+    readAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminNotificationReadUncheckedUpdateWithoutUserInput = {
+    key?: StringFieldUpdateOperationsInput | string
+    readAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AdminNotificationReadUncheckedUpdateManyWithoutUserInput = {
+    key?: StringFieldUpdateOperationsInput | string
+    readAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserRoleCreateManyRoleInput = {
@@ -62275,6 +63958,8 @@ export namespace Prisma {
     orderNumber: string
     razorpayOrderId?: string | null
     razorpayPaymentId?: string | null
+    cashfreeOrderId?: string | null
+    cashfreePaymentId?: string | null
     userId: number
     status?: $Enums.OrderStatus
     paymentStatus?: $Enums.PaymentStatus
@@ -62293,6 +63978,8 @@ export namespace Prisma {
     orderNumber?: StringFieldUpdateOperationsInput | string
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreeOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreePaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
     subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -62315,6 +64002,8 @@ export namespace Prisma {
     orderNumber?: StringFieldUpdateOperationsInput | string
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreeOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreePaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: IntFieldUpdateOperationsInput | number
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
@@ -62337,6 +64026,8 @@ export namespace Prisma {
     orderNumber?: StringFieldUpdateOperationsInput | string
     razorpayOrderId?: NullableStringFieldUpdateOperationsInput | string | null
     razorpayPaymentId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreeOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    cashfreePaymentId?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: IntFieldUpdateOperationsInput | number
     status?: EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
     paymentStatus?: EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus

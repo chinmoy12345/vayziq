@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import AdminNotificationBell from "./AdminNotificationBell";
 
 interface AdminHeaderProps {
   onMenuClick: () => void;
@@ -88,26 +89,7 @@ export default function AdminHeader({
 
           <div className="hidden h-8 w-px bg-[#eee6e1] md:block" />
 
-          {/* Notification */}
-          <button
-            type="button"
-            className="relative flex h-10 w-10 items-center justify-center rounded-full border border-[#eee6e1] text-[#665b56] transition hover:bg-[#faf8f6]"
-            aria-label="Notifications"
-          >
-            <svg
-              width="19"
-              height="19"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.7"
-            >
-              <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" />
-              <path d="M10 21h4" />
-            </svg>
-
-            <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-[#a87567]" />
-          </button>
+          <AdminNotificationBell />
 
           <div className="hidden h-8 w-px bg-[#eee6e1] sm:block" />
 

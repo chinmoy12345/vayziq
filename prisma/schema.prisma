@@ -44,6 +44,7 @@ model User {
   addresses     Address[]
   cartItems     CartItem[]
   wishlistItems WishlistItem[]
+  notificationReads AdminNotificationRead[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -430,6 +431,8 @@ model Order {
   orderNumber   String        @unique
   razorpayOrderId   String?       @unique
   razorpayPaymentId String?       @unique
+  cashfreeOrderId String? @unique
+  cashfreePaymentId String? @unique
   userId        Int
   addressId     Int?
   status        OrderStatus   @default(pending)
@@ -674,6 +677,16 @@ model ReelMedia {
   data      Bytes
   size      Int
   createdAt DateTime @default(now())
+}
+
+model AdminNotificationRead {
+  userId Int
+  key String @db.VarChar(160)
+  readAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, key])
+  @@index([userId, readAt])
 }
 model Supplier {
   id          Int               @id @default(autoincrement())

@@ -4,26 +4,29 @@ import { notFound, redirect } from "next/navigation";
 import Breadcrumbs from "@/components/store/Breadcrumbs";
 import { getCurrentUser } from "@/lib/auth";
 import prisma from "@/lib/db";
+import CashfreeCartCleanup from "@/components/store/CashfreeCartCleanup";
 
 const money = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 });
 
-export default async function OrderSuccessPage({ params }: { params: Promise<{ orderNumber: string }> }) {
+export default async function OrderSuccessPage({ params, searchParams }: { params: Promise<{ orderNumber: string }>; searchParams: Promise<{ cashfree?: string }> }) {
   const { orderNumber } = await params;
+  const { cashfree } = await searchParams;
   const user = await getCurrentUser();
   const userId = Number(user?.sub);
   if (!Number.isInteger(userId) || userId < 1) redirect("/login");
 
   const order = await prisma.order.findFirst({
     where: { userId, orderNumber },
-    select: { orderNumber: true, razorpayOrderId: true, paymentStatus: true, total: true, _count: { select: { inventoryMovements: true } }, items: { select: { id: true, productName: true, quantity: true } } },
+    select: { orderNumber: true, razorpayOrderId: true, cashfreeOrderId: true, paymentStatus: true, total: true, _count: { select: { inventoryMovements: true } }, items: { select: { id: true, productName: true, quantity: true } } },
   });
   if (!order) notFound();
-  // COD has inventory movements on creation; Razorpay receives them only after verification.
+  // COD has inventory movements on creation; online gateways receive them only after verification.
   // An abandoned online order must never appear as a confirmed purchase.
-  if (order.paymentStatus !== "paid" && (order.razorpayOrderId || order._count.inventoryMovements === 0)) redirect(`/account/orders/${encodeURIComponent(orderNumber)}`);
+  if (order.paymentStatus !== "paid" && (order.razorpayOrderId || order.cashfreeOrderId || order._count.inventoryMovements === 0)) redirect(`/account/orders/${encodeURIComponent(orderNumber)}`);
 
   return (
     <main className="min-h-screen bg-white text-[#111]">
+      {cashfree === "1" && order.cashfreeOrderId && order.paymentStatus === "paid" && <CashfreeCartCleanup />}
       <Breadcrumbs title="Order confirmed" isShop={false} parent={{ label: "Checkout", href: "/checkout" }} />
       <div className="mx-auto max-w-3xl px-5 py-12 sm:px-8 sm:py-20">
         <div className="overflow-hidden rounded-2xl border border-[#e8e8e8] bg-white shadow-[0_12px_40px_rgba(0,0,0,.06)]">

@@ -242,6 +242,24 @@ export default function SettingsPage() {
   const [notifyNewOrder, setNotifyNewOrder] = useState(true);
 
   const [notifyNewReview, setNotifyNewReview] = useState(true);
+  const [notificationLoaded, setNotificationLoaded] = useState(false);
+  useEffect(() => {
+    void fetch("/api/admin/notification-preferences", { cache: "no-store" })
+      .then(async response => { const body = await response.json(); if (!response.ok || !body.data) throw new Error(body.message); return body.data as { orders: boolean; reviews: boolean }; })
+      .then(data => { setNotifyNewOrder(data.orders); setNotifyNewReview(data.reviews); setNotificationLoaded(true); })
+      .catch(() => setStatusMessage("Notification preferences could not be loaded."));
+  }, []);
+  async function saveNotificationPreferences() {
+    if (!notificationLoaded) return;
+    setIsSaving(true); setStatusMessage(null);
+    try {
+      const response = await fetch("/api/admin/notification-preferences", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ orders: notifyNewOrder, reviews: notifyNewReview }) });
+      const body = await response.json() as { message?: string };
+      if (!response.ok) throw new Error(body.message || "Unable to save notifications.");
+      setStatusMessage("Admin notification preferences saved.");
+    } catch (reason) { setStatusMessage(reason instanceof Error ? reason.message : "Unable to save notifications."); }
+    finally { setIsSaving(false); }
+  }
 
   async function handleLogoUpload(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -328,12 +346,12 @@ export default function SettingsPage() {
 
           <button
             type="button"
-            disabled={isSaving || (activeTab === "social" ? !socialLoaded : activeTab === "utility" ? !utilityLoaded : !isLoaded)}
-            onClick={activeTab === "social" ? saveSocial : activeTab === "utility" ? saveHeaderUtility : handleSave}
+            disabled={isSaving || (activeTab === "social" ? !socialLoaded : activeTab === "utility" ? !utilityLoaded : activeTab === "orders" ? !notificationLoaded : !isLoaded)}
+            onClick={activeTab === "social" ? saveSocial : activeTab === "utility" ? saveHeaderUtility : activeTab === "orders" ? saveNotificationPreferences : handleSave}
             className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-[#292321] px-5 text-sm font-medium text-white transition hover:bg-[#403936]"
           >
             <SaveIcon />
-            {isSaving ? "Saving…" : activeTab === "social" ? "Save Social Links" : activeTab === "utility" ? "Save Header Links" : "Save Branding"}
+            {isSaving ? "Saving…" : activeTab === "social" ? "Save Social Links" : activeTab === "utility" ? "Save Header Links" : activeTab === "orders" ? "Save Notifications" : "Save Branding"}
           </button>
         </div>
 
@@ -806,12 +824,12 @@ export default function SettingsPage() {
             <div className="mt-6 lg:hidden">
               <button
                 type="button"
-                onClick={activeTab === "social" ? saveSocial : handleSave}
-                disabled={isSaving || (activeTab === "social" ? !socialLoaded : !isLoaded)}
+                onClick={activeTab === "social" ? saveSocial : activeTab === "utility" ? saveHeaderUtility : activeTab === "orders" ? saveNotificationPreferences : handleSave}
+                disabled={isSaving || (activeTab === "social" ? !socialLoaded : activeTab === "utility" ? !utilityLoaded : activeTab === "orders" ? !notificationLoaded : !isLoaded)}
                 className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-[#292321] px-5 text-sm font-medium text-white hover:bg-[#403936]"
               >
                 <SaveIcon />
-                {activeTab === "social" ? "Save Social Links" : "Save Changes"}
+                {activeTab === "social" ? "Save Social Links" : activeTab === "utility" ? "Save Header Links" : activeTab === "orders" ? "Save Notifications" : "Save Changes"}
               </button>
             </div>
           </main>
