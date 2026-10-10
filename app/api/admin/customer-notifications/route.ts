@@ -1,0 +1,8 @@
+import { NextResponse } from "next/server";
+import { requireAdminPermission } from "@/lib/auth";
+import { getNotificationSettings, saveNotificationSettings } from "@/lib/notification-settings";
+import { sendCustomerNotification } from "@/lib/customer-notifications";
+export const runtime="nodejs"; export const dynamic="force-dynamic";
+export async function GET(){if(!(await requireAdminPermission("settings","view")))return NextResponse.json({message:"Unauthorized"},{status:401});const data=await getNotificationSettings();return NextResponse.json({success:true,data:{...data,smtpPasswordConfigured:Boolean((await getNotificationSettings(true)).smtpPassword)}});}
+export async function PUT(request:Request){if(!(await requireAdminPermission("settings","update")))return NextResponse.json({message:"Unauthorized"},{status:401});try{return NextResponse.json({success:true,data:await saveNotificationSettings(await request.json())});}catch(error){return NextResponse.json({message:error instanceof Error?error.message:"Unable to save."},{status:400});}}
+export async function POST(request:Request){if(!(await requireAdminPermission("settings","update")))return NextResponse.json({message:"Unauthorized"},{status:401});const {email,mobile}=await request.json();await sendCustomerNotification({kind:"welcome",email:typeof email==="string"?email:null,mobile:typeof mobile==="string"?mobile:null,subject:"Vayziq notification test",text:"Your Vayziq email and SMS notification settings are working.",html:"<h2>Vayziq notification test</h2><p>Your email and SMS notification settings are working.</p>"});return NextResponse.json({success:true});}
