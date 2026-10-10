@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import bcrypt from "bcryptjs";
 import prisma from "@/lib/db";
+import { sendCustomerNotification } from "@/lib/customer-notifications";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -18,6 +19,7 @@ export async function POST(request: NextRequest) {
     const user = await prisma.user.create({ data: { name: cleanName, email: cleanEmail, mobile: cleanMobile || null, passwordHash: await bcrypt.hash(password, 12) } });
     const cookieStore = await cookies();
     cookieStore.set("access_token", signToken({ sub: String(user.id), email: user.email }), { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", path: "/", maxAge: 60 * 60 * 24 * 7 });
+    await sendCustomerNotification({ kind: "welcome", email: user.email, mobile: user.mobile, subject: "Welcome to Vayziq", text: `Hi ${user.name}, welcome to Vayziq. Your account is ready.`, html: `<h2>Welcome to Vayziq</h2><p>Hi ${user.name}, your account is ready.</p>` }).catch(error => console.error("WELCOME NOTIFICATION ERROR", error));
     return NextResponse.json({ success: true, user: { id: user.id, name: user.name, email: user.email, mobile: user.mobile } }, { status: 201 });
   } catch (error: unknown) {
     const code = typeof error === "object" && error !== null && "code" in error ? error.code : undefined;

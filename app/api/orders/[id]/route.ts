@@ -3,6 +3,7 @@ import prisma from "@/lib/db";
 import { Prisma } from "@/lib/generated/prisma-suppliers";
 import type { OrderStatus, PaymentStatus } from "@/lib/generated/prisma-suppliers";
 import { requireAdminPermission } from "@/lib/auth";
+import { notifyOrder } from "@/lib/customer-notifications";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -29,7 +30,9 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
   if (status !== "cancelled") {
     const result = await prisma.order.updateMany({ where: { id: orderId }, data: { ...(status ? { status } : {}), ...(paymentStatus ? { paymentStatus } : {}) } });
     if (!result.count) return NextResponse.json({ success: false, message: "Order not found." }, { status: 404 });
-    return NextResponse.json({ success: true, data: await prisma.order.findUnique({ where: { id: orderId } }) });
+    const updated = await prisma.order.findUnique({ where: { id: orderId } });
+    if (status) await notifyOrder(orderId, "orderStatus").catch(error => console.error("ORDER STATUS NOTIFICATION ERROR", error));
+    return NextResponse.json({ success: true, data: updated });
   }
 
   try {
@@ -81,6 +84,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       }
       return tx.order.update({ where: { id: orderId }, data: { status: "cancelled", ...(paymentStatus ? { paymentStatus } : {}) }, include: { items: true } });
     }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+    await notifyOrder(orderId, "orderStatus").catch(error => console.error("ORDER STATUS NOTIFICATION ERROR", error));
     return NextResponse.json({ success: true, data: order });
   } catch (error) {
     const message = error instanceof Error ? error.message : "";

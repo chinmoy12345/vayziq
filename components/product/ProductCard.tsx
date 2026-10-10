@@ -21,7 +21,7 @@ export interface Product {
   colorCount?: number;
   price: string;
   image: string;
-  images?: string[];
+  images?: Array<string | { src: string; color?: string }>;
   oldPrice?: string;
   badge?: string;
   badgeTone?: string;
@@ -99,8 +99,11 @@ export default function ProductCard({
   const [cartLimits, setCartLimits] = useState({ min: 1, max: 10 });
   const [cartLimitMessage, setCartLimitMessage] = useState("");
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
-  const galleryImages = product.images?.length ? product.images : [product.image];
-  const currentImage = galleryImages[imageIndex] ?? product.image;
+  const rawGalleryImages = (product.images?.length ? product.images : [product.image]).map((image) => typeof image === "string" ? { src: image, color: undefined } : image);
+  const selectedColor = Object.entries(selectedOptions).find(([name]) => /colou?r/i.test(name))?.[1] ?? "";
+  const selectedColorImages = selectedColor ? rawGalleryImages.filter((image) => image.color?.toLowerCase() === selectedColor.toLowerCase()) : [];
+  const galleryImages = selectedColorImages.length ? selectedColorImages : rawGalleryImages;
+  const currentImage = galleryImages[imageIndex]?.src ?? product.image;
   const badge = productBadge(product);
   const price = Number(product.price.replace(/[^0-9.]/g, ""));
   const oldPrice = Number(product.oldPrice?.replace(/[^0-9.]/g, "") ?? 0);
@@ -389,13 +392,13 @@ useEffect(() => {
           <header className="flex h-14 shrink-0 items-center justify-between border-b border-[#e7e7e7] px-5 sm:h-16 sm:px-7"><h2 className="text-base font-extrabold tracking-tight text-[#222] sm:text-lg">ADD TO CART</h2><button type="button" onClick={() => setCartOpen(false)} aria-label="Close add to cart" className="grid h-9 w-9 place-items-center rounded-full text-2xl leading-none text-[#222] transition hover:bg-[#f3f3f3]">×</button></header>
           <div className="grid min-h-0 flex-1 overflow-y-auto lg:grid-cols-[1.12fr_.88fr]">
             <div className="grid min-h-[360px] grid-cols-[68px_minmax(0,1fr)] gap-3 border-b border-[#ececec] p-4 sm:min-h-[510px] sm:grid-cols-[88px_minmax(0,1fr)] sm:gap-5 sm:p-6 lg:border-b-0 lg:border-r">
-              <div className="flex flex-col gap-3 overflow-y-auto">{galleryImages.map((image, index) => <button key={`${image}-${index}`} type="button" onClick={() => setImageIndex(index)} aria-label={`Show ${product.name} image ${index + 1}`} aria-pressed={imageIndex === index} className={`relative aspect-[3/4] shrink-0 overflow-hidden rounded-lg border-2 bg-[#f4f4f4] transition ${imageIndex === index ? "border-[#111]" : "border-transparent hover:border-[#aaa]"}`}><ProgressiveImage src={image} alt="" className="h-full w-full object-cover" /></button>)}</div>
+              <div className="flex flex-col gap-3 overflow-y-auto">{galleryImages.map((image, index) => <button key={`${image.src}-${index}`} type="button" onClick={() => setImageIndex(index)} aria-label={`Show ${product.name} image ${index + 1}`} aria-pressed={imageIndex === index} className={`relative aspect-[3/4] shrink-0 overflow-hidden rounded-lg border-2 bg-[#f4f4f4] transition ${imageIndex === index ? "border-[#111]" : "border-transparent hover:border-[#aaa]"}`}><ProgressiveImage src={image.src} alt="" className="h-full w-full object-cover" /></button>)}</div>
               <div className="relative min-h-0 overflow-hidden rounded-lg bg-[#f5f5f5]"><ProgressiveImage src={currentImage} alt={product.name} className="h-full w-full object-cover" loading="eager" />{badge && <span className="absolute left-3 top-3 rounded-md bg-white/95 px-2.5 py-1.5 text-[10px] font-bold text-[#1d3f63] shadow-sm">{badge}</span>}</div>
             </div>
             <div className="flex min-h-0 flex-col p-5 sm:p-7">
               <div><div className="flex flex-wrap items-baseline gap-2"><strong className="text-2xl text-[#111]">{product.price}</strong>{oldPrice > price && <del className="text-sm font-semibold text-[#aaa]">{product.oldPrice}</del>}{discountPercent && <span className="text-sm font-bold text-[#00a83b]">{discountPercent}% OFF</span>}</div><div className="mt-2"><ProductOfferBadges id={product.id} price={product.price} inStock={inStock} /></div><h3 id={`cart-title-${product.id}`} className="mt-4 text-lg font-semibold leading-snug text-[#151515] sm:text-xl">{product.name}</h3><p className="mt-2 text-xs font-semibold uppercase tracking-[.1em] text-[#777]">{product.category}</p></div>
               {cartAdded ? <div className="mt-auto pt-8"><p className="mb-4 rounded-lg bg-[#effaf2] px-4 py-3 text-sm font-bold text-[#08752f]">Added to your cart</p><Link href="/cart" className="flex min-h-12 items-center justify-center rounded-lg bg-[#fbb606] text-sm font-extrabold text-[#111]">View Cart</Link><button type="button" onClick={() => setCartOpen(false)} className="mt-2 flex min-h-11 w-full items-center justify-center rounded-lg border border-[#d7d7d7] bg-white text-sm font-bold text-[#111]">Continue Shopping</button></div> : <>
-                <div className="mt-5 space-y-4">{(product.options ?? []).filter((option) => option.values.length).map((option) => <div key={option.name}><p className="mb-2 text-[10px] font-extrabold uppercase tracking-[.12em] text-[#666]">{option.name}</p><div className="flex flex-wrap gap-2">{option.values.map((value) => <button key={value} type="button" onClick={() => setSelectedOptions((current) => ({ ...current, [option.name]: value }))} className={`min-w-11 rounded-md border px-3 py-2 text-xs font-bold transition ${selectedOptions[option.name] === value ? "border-[#111] bg-[#111] text-white" : "border-[#d6d6d6] bg-white text-[#333] hover:border-[#111]"}`}>{value}</button>)}</div></div>)}</div>
+                <div className="mt-5 space-y-4">{(product.options ?? []).filter((option) => option.values.length).map((option) => <div key={option.name}><p className="mb-2 text-[10px] font-extrabold uppercase tracking-[.12em] text-[#666]">{option.name}</p><div className="flex flex-wrap gap-2">{option.values.map((value) => <button key={value} type="button" onClick={() => { setSelectedOptions((current) => ({ ...current, [option.name]: value })); if (/colou?r/i.test(option.name)) setImageIndex(0); }} className={`min-w-11 rounded-md border px-3 py-2 text-xs font-bold transition ${selectedOptions[option.name] === value ? "border-[#111] bg-[#111] text-white" : "border-[#d6d6d6] bg-white text-[#333] hover:border-[#111]"}`}>{value}</button>)}</div></div>)}</div>
                 <div className="mt-5 flex items-center justify-between border-y border-[#ececec] py-3"><div><span className="block text-sm font-bold text-[#333]">Quantity</span><small className="text-[10px] text-[#777]">Allowed {cartLimits.min}–{cartLimits.max}</small></div><div className="flex items-center gap-4"><button type="button" onClick={() => setCartQuantity((quantity) => Math.max(cartLimits.min, quantity - 1))} className="grid h-8 w-8 place-items-center rounded-full border border-[#d8d8d8] text-lg" aria-label="Decrease quantity">−</button><b className="text-sm">{cartQuantity}</b><button type="button" onClick={() => setCartQuantity((quantity) => Math.min(cartLimits.max, quantity + 1))} className="grid h-8 w-8 place-items-center rounded-full border border-[#d8d8d8] text-lg" aria-label="Increase quantity">+</button></div></div>
                 {cartLimitMessage && <p role="alert" className="mt-3 text-xs text-red-700">{cartLimitMessage}</p>}<button type="button" onClick={addToCart} className="mt-auto flex min-h-12 w-full items-center justify-center rounded-lg bg-[#fbb606] text-sm font-extrabold text-[#111] transition hover:bg-[#eaae00]">Add to Cart</button>
               </>}

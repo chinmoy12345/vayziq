@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdminPermission } from "@/lib/auth";
 import prisma from "@/lib/db";
+import { notifyOrder } from "@/lib/customer-notifications";
 import { fulfillmentStatus } from "@/lib/fulfillment";
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -22,6 +23,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       const items = await tx.orderItem.findMany({ where: { orderId }, include: { shipment: true } });
       await tx.order.update({ where: { id: orderId }, data: { status: fulfillmentStatus(items) } });
     }, { isolationLevel: "Serializable" });
+    await notifyOrder(orderId, "orderStatus").catch(error => console.error("ORDER STATUS NOTIFICATION ERROR", error));
     return NextResponse.json({ success: true });
   } catch { return NextResponse.json({ message: "Cannot create shipment. Check order status and unassigned items, then retry." }, { status: 409 }); }
 }
@@ -42,6 +44,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       const items = await tx.orderItem.findMany({ where: { orderId }, include: { shipment: true } });
       await tx.order.update({ where: { id: orderId }, data: { status: fulfillmentStatus(items) } });
     }, { isolationLevel: "Serializable" });
+    await notifyOrder(orderId, "orderStatus").catch(error => console.error("ORDER STATUS NOTIFICATION ERROR", error));
     return NextResponse.json({ success: true });
   } catch { return NextResponse.json({ message: "Cannot mark this shipment delivered. Refresh and check the delivery date." }, { status: 409 }); }
 }

@@ -6,6 +6,7 @@ import { getCurrentUser } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { isDeliveryZipAllowed } from "@/lib/delivery-zip-settings";
 import { CHANNEL_COOKIE, readAttribution } from "@/lib/channel-attribution";
+import { notifyOrder } from "@/lib/customer-notifications";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -53,6 +54,7 @@ export async function POST(request: NextRequest) {
     }
     return created;
   }, { isolationLevel: "Serializable" });
+  await notifyOrder(order.id, "orderPlaced").catch(error => console.error("ORDER NOTIFICATION ERROR", error));
   return NextResponse.json({ success: true, orderNumber: order.orderNumber });
   } catch { return NextResponse.json({ success: false, message: "Unable to place order. Your offer or stock may have changed. Refresh and try again." }, { status: 409 }); }
 }

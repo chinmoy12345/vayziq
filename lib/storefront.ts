@@ -129,7 +129,7 @@ export const toCardProduct = (product: StoreCardProduct): Product => ({
   price: formatPrice(product.price),
   oldPrice: product.comparePrice ? formatPrice(product.comparePrice) : undefined,
   image: product.images[0]?.image ?? FALLBACK_IMAGE,
-  images: product.images.map(image => image.image),
+  images: product.images.map(image => ({ src: image.image, color: image.color ?? undefined })),
   rating: product.cardRating,
   reviews: product.cardReviewCount,
   badge: product.badgeEnabled && product.badgeText ? product.badgeText : undefined,

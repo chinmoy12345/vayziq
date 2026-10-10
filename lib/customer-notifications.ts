@@ -1,0 +1,12 @@
+import nodemailer from "nodemailer";
+import { getNotificationSettings } from "@/lib/notification-settings";
+import { getTwilioCredentials } from "@/lib/payment-messaging-settings";
+import prisma from "@/lib/db";
+export type Notice={kind:"welcome"|"orderPlaced"|"orderStatus";email?:string|null;mobile?:string|null;subject:string;text:string;html:string};
+export async function sendCustomerNotification(n:Notice){const s=await getNotificationSettings(true);if(!s[n.kind])return;const jobs:Promise<unknown>[]=[];if(s.emailEnabled&&n.email&&!n.email.endsWith("@account.susmitas.local")&&s.smtpHost&&s.smtpUser&&s.smtpPassword&&s.fromEmail){const tx=nodemailer.createTransport({host:s.smtpHost,port:s.smtpPort,secure:s.smtpSecure,auth:{user:s.smtpUser,pass:s.smtpPassword}});jobs.push(tx.sendMail({from:`${s.fromName} <${s.fromEmail}>`,to:n.email,subject:n.subject,text:n.text,html:n.html}));}if(s.smsEnabled&&n.mobile){const twilio=await getTwilioCredentials();if(twilio){const auth=Buffer.from(`${twilio.accountSid}:${twilio.authToken}`).toString("base64"),body=new URLSearchParams({To:n.mobile.startsWith("+")?n.mobile:`+91${n.mobile}`,From:twilio.fromNumber,Body:n.text.slice(0,1500)});jobs.push(fetch(`https://api.twilio.com/2010-04-01/Accounts/${twilio.accountSid}/Messages.json`,{method:"POST",headers:{Authorization:`Basic ${auth}`,"Content-Type":"application/x-www-form-urlencoded"},body}).then(r=>{if(!r.ok)throw new Error(`SMS failed (${r.status})`);}));}}await Promise.allSettled(jobs);}
+export async function notifyOrder(orderId:number,kind:"orderPlaced"|"orderStatus"){
+ const order=await prisma.order.findUnique({where:{id:orderId},include:{user:{select:{name:true,email:true,mobile:true}},items:{select:{productName:true,quantity:true}}}});if(!order)return;
+ const status=order.status.replaceAll("_"," "),title=kind==="orderPlaced"?`Order ${order.orderNumber} received`:`Order ${order.orderNumber}: ${status}`;
+ const items=order.items.map(i=>`${i.productName} × ${i.quantity}`).join(", ");
+ await sendCustomerNotification({kind,email:order.user.email,mobile:order.user.mobile,subject:title,text:`Hi ${order.user.name}, ${title}. Total ₹${Number(order.total).toLocaleString("en-IN")}. ${items}`,html:`<h2>${title}</h2><p>Hi ${order.user.name},</p><p>Status: <strong>${status}</strong></p><p>Items: ${items}</p><p>Total: ₹${Number(order.total).toLocaleString("en-IN")}</p>`});
+}

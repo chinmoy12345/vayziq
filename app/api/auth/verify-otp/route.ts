@@ -4,6 +4,7 @@ import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
 import prisma from "@/lib/db";
+import { sendCustomerNotification } from "@/lib/customer-notifications";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -25,6 +26,7 @@ export async function POST(request: NextRequest) {
   }
 
   let user = await prisma.user.findUnique({ where: { mobile: cleanMobile } });
+  const isNewUser = !user;
   if (!user) {
     try {
       user = await prisma.user.create({
@@ -52,5 +54,6 @@ export async function POST(request: NextRequest) {
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
   });
+  if (isNewUser) await sendCustomerNotification({ kind: "welcome", email: user.email, mobile: user.mobile, subject: "Welcome to Vayziq", text: `Hi ${user.name}, welcome to Vayziq. Your account is ready.`, html: `<h2>Welcome to Vayziq</h2><p>Hi ${user.name}, your account is ready.</p>` }).catch(error => console.error("WELCOME NOTIFICATION ERROR", error));
   return NextResponse.json({ success: true, user: { id: user.id, name: user.name, email: user.email, mobile: user.mobile } });
 }

@@ -1,0 +1,11 @@
+import { createCipheriv, createDecipheriv, createHash, randomBytes } from "crypto";
+import prisma from "@/lib/db";
+import type { Prisma } from "@/lib/generated/prisma-suppliers";
+const KEY="customer_notification_settings_v1";
+export type NotificationSettings={emailEnabled:boolean;smsEnabled:boolean;welcome:boolean;orderPlaced:boolean;orderStatus:boolean;smtpHost:string;smtpPort:number;smtpSecure:boolean;smtpUser:string;smtpPassword?:string;fromName:string;fromEmail:string};
+const defaults:NotificationSettings={emailEnabled:false,smsEnabled:false,welcome:true,orderPlaced:true,orderStatus:true,smtpHost:"",smtpPort:587,smtpSecure:false,smtpUser:"",fromName:"Vayziq",fromEmail:""};
+const cryptoKey=()=>createHash("sha256").update(process.env.CREDENTIALS_ENCRYPTION_KEY||process.env.JWT_SECRET||"development-only-key").digest();
+function encrypt(v:string){const iv=randomBytes(12),c=createCipheriv("aes-256-gcm",cryptoKey(),iv),data=Buffer.concat([c.update(v,"utf8"),c.final()]);return [iv.toString("base64"),c.getAuthTag().toString("base64"),data.toString("base64")].join(".");}
+function decrypt(v:string){const [i,t,d]=v.split("."),x=createDecipheriv("aes-256-gcm",cryptoKey(),Buffer.from(i,"base64"));x.setAuthTag(Buffer.from(t,"base64"));return Buffer.concat([x.update(Buffer.from(d,"base64")),x.final()]).toString("utf8");}
+export async function getNotificationSettings(includeSecret=false){const row=await prisma.storeSetting.findUnique({where:{key:KEY},select:{value:true}});const raw=(row?.value&&typeof row.value==="object"&&!Array.isArray(row.value)?row.value:{}) as Record<string,unknown>;const s={...defaults,...raw} as NotificationSettings;if(s.smtpPassword){try{s.smtpPassword=includeSecret?decrypt(s.smtpPassword):""}catch{s.smtpPassword=""}}return s;}
+export async function saveNotificationSettings(input:Partial<NotificationSettings>){const current=await getNotificationSettings(true);const plainPassword=input.smtpPassword||current.smtpPassword||"";const next={...current,...input,smtpPort:Math.max(1,Math.min(65535,Number(input.smtpPort??current.smtpPort))),smtpPassword:plainPassword?encrypt(plainPassword):undefined};await prisma.storeSetting.upsert({where:{key:KEY},update:{value:next as unknown as Prisma.InputJsonValue},create:{key:KEY,value:next as unknown as Prisma.InputJsonValue}});return getNotificationSettings();}

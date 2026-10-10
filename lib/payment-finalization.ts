@@ -1,4 +1,5 @@
 import prisma from "@/lib/db";
+import { notifyOrder } from "@/lib/customer-notifications";
 
 /** Claim a paid order and move stock exactly once, in the same transaction. */
 export async function finalizePaidOrder(orderId: number, provider: "razorpay" | "cashfree", paymentId: string) {
@@ -27,5 +28,6 @@ export async function finalizePaidOrder(orderId: number, provider: "razorpay" | 
       await tx.inventoryMovement.create({ data: { productId: product.id, variantId: variant?.id ?? null, orderId, productName: item.productName, sku: variant?.sku ?? product.sku, variantLabel: variant?.variantValues.map(({ optionValue }) => `${optionValue.option.name}: ${optionValue.value}`).join(" · ") ?? null, delta: -item.quantity, previousStock, newStock: previousStock - item.quantity, reason: "sale" } });
     }
   }, { isolationLevel: "Serializable" });
+  await notifyOrder(orderId, "orderPlaced").catch(error => console.error("ORDER NOTIFICATION ERROR", error));
   return order.orderNumber;
 }
