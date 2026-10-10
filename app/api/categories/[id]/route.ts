@@ -233,6 +233,13 @@ export async function PUT(
         ? null
         : existing.image;
 
+    const sizeGuideImage =
+      typeof body.sizeGuideImage === "string"
+        ? body.sizeGuideImage.trim() || null
+        : body.sizeGuideImage === null
+        ? null
+        : existing.sizeGuideImage;
+
     // --------------------------------------
     // Status
     // --------------------------------------
@@ -372,6 +379,7 @@ export async function PUT(
           slug,
           description,
           image,
+          sizeGuideImage,
           status,
           featured,
           sortOrder,

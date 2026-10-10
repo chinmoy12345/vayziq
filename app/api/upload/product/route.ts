@@ -5,7 +5,7 @@ import path from "path";
 import crypto from "crypto";
 
 export async function POST(request: Request) {
-  if (!(await requireAdminPermission("products","create"))) return NextResponse.json({ success: false, message: "Unauthorized." }, { status: 403 });
+  if (!(await requireAdminPermission("products","create")) && !(await requireAdminPermission("products","update"))) return NextResponse.json({ success: false, message: "Unauthorized." }, { status: 403 });
 
   try {
     const formData = await request.formData();

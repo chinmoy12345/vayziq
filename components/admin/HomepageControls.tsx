@@ -67,6 +67,7 @@ export default function HomepageControls() {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
+  const [countdown, setCountdown] = useState({ enabled: false, endsAt: "" });
 
   useEffect(() => {
     let active = true;
@@ -75,6 +76,7 @@ export default function HomepageControls() {
       if (!response.ok) throw new Error(body.message || "Homepage settings could not be loaded.");
       if (active && body.data) setSettings({ ...defaults, ...body.data });
     }).catch(error => { if (active) setMessage(error instanceof Error ? error.message : "Homepage settings could not be loaded."); }).finally(() => { if (active) setLoading(false); });
+    void fetch("/api/admin/sale-countdown", { cache: "no-store" }).then((response) => response.json()).then((body) => { if (active && body.data) setCountdown({ enabled: Boolean(body.data.enabled), endsAt: body.data.endsAt ? new Date(body.data.endsAt).toISOString().slice(0,16) : "" }); }).catch(() => {});
     return () => { active = false; };
   }, []);
 
@@ -85,6 +87,9 @@ export default function HomepageControls() {
       const body = await response.json() as { data?: HomepageVisibility; message?: string };
       if (!response.ok) throw new Error(body.message || "Homepage settings could not be saved.");
       if (body.data) setSettings({ ...defaults, ...body.data });
+      const countdownResponse = await fetch("/api/admin/sale-countdown", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ enabled: countdown.enabled, endsAt: countdown.endsAt ? new Date(countdown.endsAt).toISOString() : "" }) });
+      const countdownBody = await countdownResponse.json();
+      if (!countdownResponse.ok) throw new Error(countdownBody.message || "Countdown settings could not be saved.");
       setMessage(settings.maintenanceMode ? "Settings saved. The public storefront is in maintenance mode." : "Settings saved. The public storefront is live.");
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Homepage settings could not be saved.");
@@ -108,6 +113,7 @@ export default function HomepageControls() {
     <section className="mt-5 overflow-hidden rounded-xl border border-[#eee6e1] bg-white shadow-sm"><div className="border-b border-[#eee6e1] px-5 py-4 sm:px-6"><h2 className="font-semibold text-[#292321]">Product card features</h2><p className="mt-1 text-xs text-[#958b86]">These settings apply to product cards across the storefront.</p></div>{loading ? <p className="p-6 text-sm text-[#857974]">Loading settings…</p> : rows(cardSettings)}</section>
     <section className="mt-5 overflow-hidden rounded-xl border border-[#eee6e1] bg-white shadow-sm"><div className="border-b border-[#eee6e1] px-5 py-4 sm:px-6"><h2 className="font-semibold text-[#292321]">Cart page</h2><p className="mt-1 text-xs text-[#958b86]">Choose which optional elements shoppers see on the cart page.</p></div>{loading ? <p className="p-6 text-sm text-[#857974]">Loading settings…</p> : rows(cartPageSettings)}</section>
     <section className="mt-5 overflow-hidden rounded-xl border border-[#eee6e1] bg-white shadow-sm"><div className="border-b border-[#eee6e1] px-5 py-4 sm:px-6"><h2 className="font-semibold text-[#292321]">Product details page</h2><p className="mt-1 text-xs text-[#958b86]">Choose which sections appear on every product details page.</p></div>{loading ? <p className="p-6 text-sm text-[#857974]">Loading settings…</p> : rows(productDetailSettings)}</section>
+    <section className="mt-5 overflow-hidden rounded-xl border border-[#eee6e1] bg-white shadow-sm"><div className="border-b border-[#eee6e1] px-5 py-4 sm:px-6"><h2 className="font-semibold text-[#292321]">Global sale countdown</h2><p className="mt-1 text-xs text-[#958b86]">Default countdown for every product that follows the global setting.</p></div><div className="grid gap-4 p-5 sm:grid-cols-2 sm:p-6"><label className="flex items-center gap-3 text-sm"><input type="checkbox" checked={countdown.enabled} onChange={(event) => setCountdown((current) => ({ ...current, enabled: event.target.checked }))} />Show countdown globally</label><label className="text-sm">Sale ends at<input type="datetime-local" value={countdown.endsAt} onChange={(event) => setCountdown((current) => ({ ...current, endsAt: event.target.value }))} className="mt-2 h-11 w-full rounded-lg border border-[#ddd4cf] px-3" /></label></div></section>
     <section className="mt-5 overflow-hidden rounded-xl border border-[#eee6e1] bg-white shadow-sm"><div className="border-b border-[#eee6e1] px-5 py-4 sm:px-6"><h2 className="font-semibold text-[#292321]">Footer</h2><p className="mt-1 text-xs text-[#958b86]">Show or hide footer areas across the storefront.</p></div>{loading ? <p className="p-6 text-sm text-[#857974]">Loading settings…</p> : rows(footerSettings)}</section>
     <StorefrontMenuControls />
   </div></main>;

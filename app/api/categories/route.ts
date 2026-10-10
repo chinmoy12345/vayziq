@@ -190,6 +190,11 @@ export async function POST(
         ? body.image.trim()
         : null;
 
+    const sizeGuideImage =
+      typeof body.sizeGuideImage === "string" && body.sizeGuideImage.trim()
+        ? body.sizeGuideImage.trim()
+        : null;
+
     // --------------------------------------------------
     // Status
     // --------------------------------------------------
@@ -316,6 +321,7 @@ export async function POST(
           slug,
           description,
           image,
+          sizeGuideImage,
           status,
           featured,
           sortOrder,

@@ -21,6 +21,7 @@ type RouteContext = {
 type VariationOptionInput = {
   name: string;
   values: string[];
+  valueImages: Record<string, string>;
 };
 
 type VariantInput = {
@@ -210,11 +211,8 @@ export async function GET(
 
           name: option.name,
 
-          values:
-            option.values.map(
-              (value) =>
-                value.value
-            ),
+          values: option.values.map((value) => value.value),
+          valueImages: Object.fromEntries(option.values.filter((value) => value.image).map((value) => [value.value, value.image])),
         })
       );
 
@@ -379,6 +377,9 @@ export async function PUT(
       sku,
       description,
       videoUrl,
+      sizeGuideImage,
+      saleCountdownMode,
+      saleEndsAt,
       price,
       comparePrice,
       stock,
@@ -388,6 +389,7 @@ export async function PUT(
       badgeText,
       badgeTone,
       images = [],
+      imageColors = {},
       hasVariations = false,
       variationOptions = [],
       variants = [],
@@ -667,11 +669,8 @@ export async function PUT(
                         )
                     : [];
 
-                return {
-                    name:
-                      optionName,
-                    values,
-                  };
+                const rawImages = asInputRecord(option.valueImages);
+                return { name: optionName, values, valueImages: Object.fromEntries(values.map((value) => [value, typeof rawImages[value] === "string" ? String(rawImages[value]).trim() : ""])) };
               }
             )
             .filter(
@@ -967,6 +966,9 @@ export async function PUT(
                 null,
 
               videoUrl: productVideo?.sourceUrl ?? null,
+              sizeGuideImage: String(sizeGuideImage ?? "").trim() || null,
+              saleCountdownMode: ["global", "custom", "hidden"].includes(String(saleCountdownMode)) ? String(saleCountdownMode) : "global",
+              saleEndsAt: String(saleCountdownMode) === "custom" && saleEndsAt ? new Date(saleEndsAt) : null,
 
               price:
                 priceNumber,
@@ -1092,11 +1094,8 @@ export async function PUT(
                     optionId:
                       createdOption.id,
 
-                    value:
-                      optionData
-                        .values[
-                        valueIndex
-                      ],
+                    value: optionData.values[valueIndex],
+                    image: optionData.valueImages[optionData.values[valueIndex]] || null,
 
                     sortOrder:
                       valueIndex,
@@ -1265,16 +1264,11 @@ export async function PUT(
               {
                 data:
                   validImages.map(
-                    (
-                      image,
-                      index
-                    ) => ({
+                    (image, index) => ({
                       productId,
-
                       image,
-
-                      sortOrder:
-                        index,
+                      color: typeof imageColors?.[image] === "string" ? imageColors[image].trim() || null : null,
+                      sortOrder: index,
                     })
                   ),
               }
@@ -1361,11 +1355,8 @@ export async function PUT(
 
           name: option.name,
 
-          values:
-            option.values.map(
-              (value) =>
-                value.value
-            ),
+          values: option.values.map((value) => value.value),
+          valueImages: Object.fromEntries(option.values.filter((value) => value.image).map((value) => [value.value, value.image])),
         })
       );
 

@@ -37,13 +37,14 @@ model User {
 
   // Dynamic RBAC
   roles                    UserRole[]
-  inventoryMovements       InventoryMovement[] @relation("InventoryMovementActor")
-  purchasesCreated         Purchase[]          @relation("PurchaseCreator")
-  supplierPaymentsRecorded SupplierPayment[]   @relation("SupplierPaymentRecorder")
+  inventoryMovements       InventoryMovement[]     @relation("InventoryMovementActor")
+  purchasesCreated         Purchase[]              @relation("PurchaseCreator")
+  supplierPaymentsRecorded SupplierPayment[]       @relation("SupplierPaymentRecorder")
   orders                   Order[]
   addresses                Address[]
   cartItems                CartItem[]
   wishlistItems            WishlistItem[]
+  notificationReads        AdminNotificationRead[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -131,15 +132,16 @@ model RolePermission {
 // =====================================================
 
 model Category {
-  id          Int            @id @default(autoincrement())
-  name        String
-  slug        String         @unique
-  description String?
-  image       String?
-  status      CategoryStatus @default(active)
-  featured    Boolean        @default(false)
-  sortOrder   Int            @default(0)
-  parentId    Int?
+  id             Int            @id @default(autoincrement())
+  name           String
+  slug           String         @unique
+  description    String?
+  image          String?
+  sizeGuideImage String?
+  status         CategoryStatus @default(active)
+  featured       Boolean        @default(false)
+  sortOrder      Int            @default(0)
+  parentId       Int?
 
   parent   Category?  @relation("CategoryTree", fields: [parentId], references: [id], onDelete: SetNull)
   children Category[] @relation("CategoryTree")
@@ -174,14 +176,19 @@ model Product {
 
   sku String @unique
 
-  description String?
-  videoUrl    String?
+  description       String?
+  videoUrl          String?
+  sizeGuideImage    String?
+  saleCountdownMode String    @default("global")
+  saleEndsAt        DateTime?
 
   price        Decimal  @db.Decimal(12, 2)
   comparePrice Decimal? @db.Decimal(12, 2)
 
-  stock        Int @default(0)
-  reorderLevel Int @default(5)
+  stock            Int  @default(0)
+  reorderLevel     Int  @default(5)
+  minOrderQuantity Int?
+  maxOrderQuantity Int?
 
   status ProductStatus @default(draft)
 
@@ -257,7 +264,8 @@ model ProductImage {
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   image     String
-  sortOrder Int    @default(0)
+  color     String?
+  sortOrder Int     @default(0)
 
   createdAt DateTime @default(now())
 
@@ -316,6 +324,7 @@ model ProductOptionValue {
   option   ProductOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
 
   value String
+  image String?
 
   sortOrder Int @default(0)
 
@@ -429,6 +438,8 @@ model Order {
   orderNumber         String              @unique
   razorpayOrderId     String?             @unique
   razorpayPaymentId   String?             @unique
+  cashfreeOrderId     String?             @unique
+  cashfreePaymentId   String?             @unique
   userId              Int
   addressId           Int?
   status              OrderStatus         @default(pending)
@@ -665,6 +676,24 @@ model StoreSetting {
   key       String   @unique
   value     Json
   updatedAt DateTime @updatedAt
+}
+
+model ReelMedia {
+  id        String   @id @default(uuid())
+  mimeType  String
+  data      Bytes
+  size      Int
+  createdAt DateTime @default(now())
+}
+
+model AdminNotificationRead {
+  userId Int
+  key    String   @db.VarChar(160)
+  readAt DateTime @default(now())
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, key])
+  @@index([userId, readAt])
 }
 
 model Supplier {

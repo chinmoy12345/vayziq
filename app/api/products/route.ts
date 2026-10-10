@@ -86,6 +86,9 @@ export async function POST(request: NextRequest) {
       sku,
       description,
       videoUrl,
+      sizeGuideImage,
+      saleCountdownMode,
+      saleEndsAt,
       price,
       comparePrice,
       stock,
@@ -95,6 +98,7 @@ export async function POST(request: NextRequest) {
       badgeText,
       badgeTone,
       images = [],
+      imageColors = {},
       hasVariations = false,
       variationOptions = [],
       variants = [],
@@ -244,6 +248,9 @@ export async function POST(request: NextRequest) {
             description?.trim() || null,
 
           videoUrl: productVideo?.sourceUrl ?? null,
+          sizeGuideImage: String(sizeGuideImage ?? "").trim() || null,
+          saleCountdownMode: ["global", "custom", "hidden"].includes(String(saleCountdownMode)) ? String(saleCountdownMode) : "global",
+          saleEndsAt: String(saleCountdownMode) === "custom" && saleEndsAt ? new Date(saleEndsAt) : null,
 
           price: Number(price),
 
@@ -302,6 +309,7 @@ export async function POST(request: NextRequest) {
               (image, index) => ({
                 productId: newProduct.id,
                 image: image.trim(),
+                color: typeof imageColors?.[image] === "string" ? imageColors[image].trim() || null : null,
                 sortOrder: index,
               })
             ),
@@ -375,6 +383,7 @@ export async function POST(request: NextRequest) {
                   ) => ({
                     optionId: option.id,
                     value: value.trim(),
+                    image: typeof optionData.valueImages?.[value] === "string" ? optionData.valueImages[value].trim() || null : null,
                     sortOrder: valueIndex,
                   })
                 ),

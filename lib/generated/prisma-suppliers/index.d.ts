@@ -10456,6 +10456,7 @@ export namespace Prisma {
     slug: string | null
     description: string | null
     image: string | null
+    sizeGuideImage: string | null
     status: $Enums.CategoryStatus | null
     featured: boolean | null
     sortOrder: number | null
@@ -10470,6 +10471,7 @@ export namespace Prisma {
     slug: string | null
     description: string | null
     image: string | null
+    sizeGuideImage: string | null
     status: $Enums.CategoryStatus | null
     featured: boolean | null
     sortOrder: number | null
@@ -10484,6 +10486,7 @@ export namespace Prisma {
     slug: number
     description: number
     image: number
+    sizeGuideImage: number
     status: number
     featured: number
     sortOrder: number
@@ -10512,6 +10515,7 @@ export namespace Prisma {
     slug?: true
     description?: true
     image?: true
+    sizeGuideImage?: true
     status?: true
     featured?: true
     sortOrder?: true
@@ -10526,6 +10530,7 @@ export namespace Prisma {
     slug?: true
     description?: true
     image?: true
+    sizeGuideImage?: true
     status?: true
     featured?: true
     sortOrder?: true
@@ -10540,6 +10545,7 @@ export namespace Prisma {
     slug?: true
     description?: true
     image?: true
+    sizeGuideImage?: true
     status?: true
     featured?: true
     sortOrder?: true
@@ -10641,6 +10647,7 @@ export namespace Prisma {
     slug: string
     description: string | null
     image: string | null
+    sizeGuideImage: string | null
     status: $Enums.CategoryStatus
     featured: boolean
     sortOrder: number
@@ -10674,6 +10681,7 @@ export namespace Prisma {
     slug?: boolean
     description?: boolean
     image?: boolean
+    sizeGuideImage?: boolean
     status?: boolean
     featured?: boolean
     sortOrder?: boolean
@@ -10692,6 +10700,7 @@ export namespace Prisma {
     slug?: boolean
     description?: boolean
     image?: boolean
+    sizeGuideImage?: boolean
     status?: boolean
     featured?: boolean
     sortOrder?: boolean
@@ -10707,6 +10716,7 @@ export namespace Prisma {
     slug?: boolean
     description?: boolean
     image?: boolean
+    sizeGuideImage?: boolean
     status?: boolean
     featured?: boolean
     sortOrder?: boolean
@@ -10722,6 +10732,7 @@ export namespace Prisma {
     slug?: boolean
     description?: boolean
     image?: boolean
+    sizeGuideImage?: boolean
     status?: boolean
     featured?: boolean
     sortOrder?: boolean
@@ -10730,7 +10741,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type CategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "description" | "image" | "status" | "featured" | "sortOrder" | "parentId" | "createdAt" | "updatedAt", ExtArgs["result"]["category"]>
+  export type CategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "description" | "image" | "sizeGuideImage" | "status" | "featured" | "sortOrder" | "parentId" | "createdAt" | "updatedAt", ExtArgs["result"]["category"]>
   export type CategoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     parent?: boolean | Category$parentArgs<ExtArgs>
     children?: boolean | Category$childrenArgs<ExtArgs>
@@ -10757,6 +10768,7 @@ export namespace Prisma {
       slug: string
       description: string | null
       image: string | null
+      sizeGuideImage: string | null
       status: $Enums.CategoryStatus
       featured: boolean
       sortOrder: number
@@ -11194,6 +11206,7 @@ export namespace Prisma {
     readonly slug: FieldRef<"Category", 'String'>
     readonly description: FieldRef<"Category", 'String'>
     readonly image: FieldRef<"Category", 'String'>
+    readonly sizeGuideImage: FieldRef<"Category", 'String'>
     readonly status: FieldRef<"Category", 'CategoryStatus'>
     readonly featured: FieldRef<"Category", 'Boolean'>
     readonly sortOrder: FieldRef<"Category", 'Int'>
@@ -11726,6 +11739,9 @@ export namespace Prisma {
     sku: string | null
     description: string | null
     videoUrl: string | null
+    sizeGuideImage: string | null
+    saleCountdownMode: string | null
+    saleEndsAt: Date | null
     price: Decimal | null
     comparePrice: Decimal | null
     stock: number | null
@@ -11754,6 +11770,9 @@ export namespace Prisma {
     sku: string | null
     description: string | null
     videoUrl: string | null
+    sizeGuideImage: string | null
+    saleCountdownMode: string | null
+    saleEndsAt: Date | null
     price: Decimal | null
     comparePrice: Decimal | null
     stock: number | null
@@ -11782,6 +11801,9 @@ export namespace Prisma {
     sku: number
     description: number
     videoUrl: number
+    sizeGuideImage: number
+    saleCountdownMode: number
+    saleEndsAt: number
     price: number
     comparePrice: number
     stock: number
@@ -11838,6 +11860,9 @@ export namespace Prisma {
     sku?: true
     description?: true
     videoUrl?: true
+    sizeGuideImage?: true
+    saleCountdownMode?: true
+    saleEndsAt?: true
     price?: true
     comparePrice?: true
     stock?: true
@@ -11866,6 +11891,9 @@ export namespace Prisma {
     sku?: true
     description?: true
     videoUrl?: true
+    sizeGuideImage?: true
+    saleCountdownMode?: true
+    saleEndsAt?: true
     price?: true
     comparePrice?: true
     stock?: true
@@ -11894,6 +11922,9 @@ export namespace Prisma {
     sku?: true
     description?: true
     videoUrl?: true
+    sizeGuideImage?: true
+    saleCountdownMode?: true
+    saleEndsAt?: true
     price?: true
     comparePrice?: true
     stock?: true
@@ -12009,6 +12040,9 @@ export namespace Prisma {
     sku: string
     description: string | null
     videoUrl: string | null
+    sizeGuideImage: string | null
+    saleCountdownMode: string
+    saleEndsAt: Date | null
     price: Decimal
     comparePrice: Decimal | null
     stock: number
@@ -12056,6 +12090,9 @@ export namespace Prisma {
     sku?: boolean
     description?: boolean
     videoUrl?: boolean
+    sizeGuideImage?: boolean
+    saleCountdownMode?: boolean
+    saleEndsAt?: boolean
     price?: boolean
     comparePrice?: boolean
     stock?: boolean
@@ -12097,6 +12134,9 @@ export namespace Prisma {
     sku?: boolean
     description?: boolean
     videoUrl?: boolean
+    sizeGuideImage?: boolean
+    saleCountdownMode?: boolean
+    saleEndsAt?: boolean
     price?: boolean
     comparePrice?: boolean
     stock?: boolean
@@ -12126,6 +12166,9 @@ export namespace Prisma {
     sku?: boolean
     description?: boolean
     videoUrl?: boolean
+    sizeGuideImage?: boolean
+    saleCountdownMode?: boolean
+    saleEndsAt?: boolean
     price?: boolean
     comparePrice?: boolean
     stock?: boolean
@@ -12155,6 +12198,9 @@ export namespace Prisma {
     sku?: boolean
     description?: boolean
     videoUrl?: boolean
+    sizeGuideImage?: boolean
+    saleCountdownMode?: boolean
+    saleEndsAt?: boolean
     price?: boolean
     comparePrice?: boolean
     stock?: boolean
@@ -12176,7 +12222,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "sku" | "description" | "videoUrl" | "price" | "comparePrice" | "stock" | "reorderLevel" | "minOrderQuantity" | "maxOrderQuantity" | "status" | "featured" | "badgeEnabled" | "badgeText" | "badgeTone" | "hasVariations" | "returnEnabled" | "replacementEnabled" | "returnDays" | "replacementDays" | "categoryId" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "sku" | "description" | "videoUrl" | "sizeGuideImage" | "saleCountdownMode" | "saleEndsAt" | "price" | "comparePrice" | "stock" | "reorderLevel" | "minOrderQuantity" | "maxOrderQuantity" | "status" | "featured" | "badgeEnabled" | "badgeText" | "badgeTone" | "hasVariations" | "returnEnabled" | "replacementEnabled" | "returnDays" | "replacementDays" | "categoryId" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     images?: boolean | Product$imagesArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
@@ -12222,6 +12268,9 @@ export namespace Prisma {
       sku: string
       description: string | null
       videoUrl: string | null
+      sizeGuideImage: string | null
+      saleCountdownMode: string
+      saleEndsAt: Date | null
       price: Prisma.Decimal
       comparePrice: Prisma.Decimal | null
       stock: number
@@ -12682,6 +12731,9 @@ export namespace Prisma {
     readonly sku: FieldRef<"Product", 'String'>
     readonly description: FieldRef<"Product", 'String'>
     readonly videoUrl: FieldRef<"Product", 'String'>
+    readonly sizeGuideImage: FieldRef<"Product", 'String'>
+    readonly saleCountdownMode: FieldRef<"Product", 'String'>
+    readonly saleEndsAt: FieldRef<"Product", 'DateTime'>
     readonly price: FieldRef<"Product", 'Decimal'>
     readonly comparePrice: FieldRef<"Product", 'Decimal'>
     readonly stock: FieldRef<"Product", 'Int'>
@@ -15555,6 +15607,7 @@ export namespace Prisma {
     id: number | null
     productId: number | null
     image: string | null
+    color: string | null
     sortOrder: number | null
     createdAt: Date | null
   }
@@ -15563,6 +15616,7 @@ export namespace Prisma {
     id: number | null
     productId: number | null
     image: string | null
+    color: string | null
     sortOrder: number | null
     createdAt: Date | null
   }
@@ -15571,6 +15625,7 @@ export namespace Prisma {
     id: number
     productId: number
     image: number
+    color: number
     sortOrder: number
     createdAt: number
     _all: number
@@ -15593,6 +15648,7 @@ export namespace Prisma {
     id?: true
     productId?: true
     image?: true
+    color?: true
     sortOrder?: true
     createdAt?: true
   }
@@ -15601,6 +15657,7 @@ export namespace Prisma {
     id?: true
     productId?: true
     image?: true
+    color?: true
     sortOrder?: true
     createdAt?: true
   }
@@ -15609,6 +15666,7 @@ export namespace Prisma {
     id?: true
     productId?: true
     image?: true
+    color?: true
     sortOrder?: true
     createdAt?: true
     _all?: true
@@ -15704,6 +15762,7 @@ export namespace Prisma {
     id: number
     productId: number
     image: string
+    color: string | null
     sortOrder: number
     createdAt: Date
     _count: ProductImageCountAggregateOutputType | null
@@ -15731,6 +15790,7 @@ export namespace Prisma {
     id?: boolean
     productId?: boolean
     image?: boolean
+    color?: boolean
     sortOrder?: boolean
     createdAt?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
@@ -15740,6 +15800,7 @@ export namespace Prisma {
     id?: boolean
     productId?: boolean
     image?: boolean
+    color?: boolean
     sortOrder?: boolean
     createdAt?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
@@ -15749,6 +15810,7 @@ export namespace Prisma {
     id?: boolean
     productId?: boolean
     image?: boolean
+    color?: boolean
     sortOrder?: boolean
     createdAt?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
@@ -15758,11 +15820,12 @@ export namespace Prisma {
     id?: boolean
     productId?: boolean
     image?: boolean
+    color?: boolean
     sortOrder?: boolean
     createdAt?: boolean
   }
 
-  export type ProductImageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productId" | "image" | "sortOrder" | "createdAt", ExtArgs["result"]["productImage"]>
+  export type ProductImageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productId" | "image" | "color" | "sortOrder" | "createdAt", ExtArgs["result"]["productImage"]>
   export type ProductImageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     product?: boolean | ProductDefaultArgs<ExtArgs>
   }
@@ -15782,6 +15845,7 @@ export namespace Prisma {
       id: number
       productId: number
       image: string
+      color: string | null
       sortOrder: number
       createdAt: Date
     }, ExtArgs["result"]["productImage"]>
@@ -16211,6 +16275,7 @@ export namespace Prisma {
     readonly id: FieldRef<"ProductImage", 'Int'>
     readonly productId: FieldRef<"ProductImage", 'Int'>
     readonly image: FieldRef<"ProductImage", 'String'>
+    readonly color: FieldRef<"ProductImage", 'String'>
     readonly sortOrder: FieldRef<"ProductImage", 'Int'>
     readonly createdAt: FieldRef<"ProductImage", 'DateTime'>
   }
@@ -17798,6 +17863,7 @@ export namespace Prisma {
     id: number | null
     optionId: number | null
     value: string | null
+    image: string | null
     sortOrder: number | null
     createdAt: Date | null
   }
@@ -17806,6 +17872,7 @@ export namespace Prisma {
     id: number | null
     optionId: number | null
     value: string | null
+    image: string | null
     sortOrder: number | null
     createdAt: Date | null
   }
@@ -17814,6 +17881,7 @@ export namespace Prisma {
     id: number
     optionId: number
     value: number
+    image: number
     sortOrder: number
     createdAt: number
     _all: number
@@ -17836,6 +17904,7 @@ export namespace Prisma {
     id?: true
     optionId?: true
     value?: true
+    image?: true
     sortOrder?: true
     createdAt?: true
   }
@@ -17844,6 +17913,7 @@ export namespace Prisma {
     id?: true
     optionId?: true
     value?: true
+    image?: true
     sortOrder?: true
     createdAt?: true
   }
@@ -17852,6 +17922,7 @@ export namespace Prisma {
     id?: true
     optionId?: true
     value?: true
+    image?: true
     sortOrder?: true
     createdAt?: true
     _all?: true
@@ -17947,6 +18018,7 @@ export namespace Prisma {
     id: number
     optionId: number
     value: string
+    image: string | null
     sortOrder: number
     createdAt: Date
     _count: ProductOptionValueCountAggregateOutputType | null
@@ -17974,6 +18046,7 @@ export namespace Prisma {
     id?: boolean
     optionId?: boolean
     value?: boolean
+    image?: boolean
     sortOrder?: boolean
     createdAt?: boolean
     option?: boolean | ProductOptionDefaultArgs<ExtArgs>
@@ -17985,6 +18058,7 @@ export namespace Prisma {
     id?: boolean
     optionId?: boolean
     value?: boolean
+    image?: boolean
     sortOrder?: boolean
     createdAt?: boolean
     option?: boolean | ProductOptionDefaultArgs<ExtArgs>
@@ -17994,6 +18068,7 @@ export namespace Prisma {
     id?: boolean
     optionId?: boolean
     value?: boolean
+    image?: boolean
     sortOrder?: boolean
     createdAt?: boolean
     option?: boolean | ProductOptionDefaultArgs<ExtArgs>
@@ -18003,11 +18078,12 @@ export namespace Prisma {
     id?: boolean
     optionId?: boolean
     value?: boolean
+    image?: boolean
     sortOrder?: boolean
     createdAt?: boolean
   }
 
-  export type ProductOptionValueOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "optionId" | "value" | "sortOrder" | "createdAt", ExtArgs["result"]["productOptionValue"]>
+  export type ProductOptionValueOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "optionId" | "value" | "image" | "sortOrder" | "createdAt", ExtArgs["result"]["productOptionValue"]>
   export type ProductOptionValueInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     option?: boolean | ProductOptionDefaultArgs<ExtArgs>
     variantValues?: boolean | ProductOptionValue$variantValuesArgs<ExtArgs>
@@ -18030,6 +18106,7 @@ export namespace Prisma {
       id: number
       optionId: number
       value: string
+      image: string | null
       sortOrder: number
       createdAt: Date
     }, ExtArgs["result"]["productOptionValue"]>
@@ -18460,6 +18537,7 @@ export namespace Prisma {
     readonly id: FieldRef<"ProductOptionValue", 'Int'>
     readonly optionId: FieldRef<"ProductOptionValue", 'Int'>
     readonly value: FieldRef<"ProductOptionValue", 'String'>
+    readonly image: FieldRef<"ProductOptionValue", 'String'>
     readonly sortOrder: FieldRef<"ProductOptionValue", 'Int'>
     readonly createdAt: FieldRef<"ProductOptionValue", 'DateTime'>
   }
@@ -44684,6 +44762,7 @@ export namespace Prisma {
     slug: 'slug',
     description: 'description',
     image: 'image',
+    sizeGuideImage: 'sizeGuideImage',
     status: 'status',
     featured: 'featured',
     sortOrder: 'sortOrder',
@@ -44702,6 +44781,9 @@ export namespace Prisma {
     sku: 'sku',
     description: 'description',
     videoUrl: 'videoUrl',
+    sizeGuideImage: 'sizeGuideImage',
+    saleCountdownMode: 'saleCountdownMode',
+    saleEndsAt: 'saleEndsAt',
     price: 'price',
     comparePrice: 'comparePrice',
     stock: 'stock',
@@ -44749,6 +44831,7 @@ export namespace Prisma {
     id: 'id',
     productId: 'productId',
     image: 'image',
+    color: 'color',
     sortOrder: 'sortOrder',
     createdAt: 'createdAt'
   };
@@ -44772,6 +44855,7 @@ export namespace Prisma {
     id: 'id',
     optionId: 'optionId',
     value: 'value',
+    image: 'image',
     sortOrder: 'sortOrder',
     createdAt: 'createdAt'
   };
@@ -45720,6 +45804,7 @@ export namespace Prisma {
     slug?: StringFilter<"Category"> | string
     description?: StringNullableFilter<"Category"> | string | null
     image?: StringNullableFilter<"Category"> | string | null
+    sizeGuideImage?: StringNullableFilter<"Category"> | string | null
     status?: EnumCategoryStatusFilter<"Category"> | $Enums.CategoryStatus
     featured?: BoolFilter<"Category"> | boolean
     sortOrder?: IntFilter<"Category"> | number
@@ -45737,6 +45822,7 @@ export namespace Prisma {
     slug?: SortOrder
     description?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
+    sizeGuideImage?: SortOrderInput | SortOrder
     status?: SortOrder
     featured?: SortOrder
     sortOrder?: SortOrder
@@ -45757,6 +45843,7 @@ export namespace Prisma {
     name?: StringFilter<"Category"> | string
     description?: StringNullableFilter<"Category"> | string | null
     image?: StringNullableFilter<"Category"> | string | null
+    sizeGuideImage?: StringNullableFilter<"Category"> | string | null
     status?: EnumCategoryStatusFilter<"Category"> | $Enums.CategoryStatus
     featured?: BoolFilter<"Category"> | boolean
     sortOrder?: IntFilter<"Category"> | number
@@ -45774,6 +45861,7 @@ export namespace Prisma {
     slug?: SortOrder
     description?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
+    sizeGuideImage?: SortOrderInput | SortOrder
     status?: SortOrder
     featured?: SortOrder
     sortOrder?: SortOrder
@@ -45796,6 +45884,7 @@ export namespace Prisma {
     slug?: StringWithAggregatesFilter<"Category"> | string
     description?: StringNullableWithAggregatesFilter<"Category"> | string | null
     image?: StringNullableWithAggregatesFilter<"Category"> | string | null
+    sizeGuideImage?: StringNullableWithAggregatesFilter<"Category"> | string | null
     status?: EnumCategoryStatusWithAggregatesFilter<"Category"> | $Enums.CategoryStatus
     featured?: BoolWithAggregatesFilter<"Category"> | boolean
     sortOrder?: IntWithAggregatesFilter<"Category"> | number
@@ -45814,6 +45903,9 @@ export namespace Prisma {
     sku?: StringFilter<"Product"> | string
     description?: StringNullableFilter<"Product"> | string | null
     videoUrl?: StringNullableFilter<"Product"> | string | null
+    sizeGuideImage?: StringNullableFilter<"Product"> | string | null
+    saleCountdownMode?: StringFilter<"Product"> | string
+    saleEndsAt?: DateTimeNullableFilter<"Product"> | Date | string | null
     price?: DecimalFilter<"Product"> | Decimal | DecimalJsLike | number | string
     comparePrice?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
     stock?: IntFilter<"Product"> | number
@@ -45854,6 +45946,9 @@ export namespace Prisma {
     sku?: SortOrder
     description?: SortOrderInput | SortOrder
     videoUrl?: SortOrderInput | SortOrder
+    sizeGuideImage?: SortOrderInput | SortOrder
+    saleCountdownMode?: SortOrder
+    saleEndsAt?: SortOrderInput | SortOrder
     price?: SortOrder
     comparePrice?: SortOrderInput | SortOrder
     stock?: SortOrder
@@ -45897,6 +45992,9 @@ export namespace Prisma {
     name?: StringFilter<"Product"> | string
     description?: StringNullableFilter<"Product"> | string | null
     videoUrl?: StringNullableFilter<"Product"> | string | null
+    sizeGuideImage?: StringNullableFilter<"Product"> | string | null
+    saleCountdownMode?: StringFilter<"Product"> | string
+    saleEndsAt?: DateTimeNullableFilter<"Product"> | Date | string | null
     price?: DecimalFilter<"Product"> | Decimal | DecimalJsLike | number | string
     comparePrice?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
     stock?: IntFilter<"Product"> | number
@@ -45937,6 +46035,9 @@ export namespace Prisma {
     sku?: SortOrder
     description?: SortOrderInput | SortOrder
     videoUrl?: SortOrderInput | SortOrder
+    sizeGuideImage?: SortOrderInput | SortOrder
+    saleCountdownMode?: SortOrder
+    saleEndsAt?: SortOrderInput | SortOrder
     price?: SortOrder
     comparePrice?: SortOrderInput | SortOrder
     stock?: SortOrder
@@ -45973,6 +46074,9 @@ export namespace Prisma {
     sku?: StringWithAggregatesFilter<"Product"> | string
     description?: StringNullableWithAggregatesFilter<"Product"> | string | null
     videoUrl?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    sizeGuideImage?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    saleCountdownMode?: StringWithAggregatesFilter<"Product"> | string
+    saleEndsAt?: DateTimeNullableWithAggregatesFilter<"Product"> | Date | string | null
     price?: DecimalWithAggregatesFilter<"Product"> | Decimal | DecimalJsLike | number | string
     comparePrice?: DecimalNullableWithAggregatesFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
     stock?: IntWithAggregatesFilter<"Product"> | number
@@ -46101,6 +46205,7 @@ export namespace Prisma {
     id?: IntFilter<"ProductImage"> | number
     productId?: IntFilter<"ProductImage"> | number
     image?: StringFilter<"ProductImage"> | string
+    color?: StringNullableFilter<"ProductImage"> | string | null
     sortOrder?: IntFilter<"ProductImage"> | number
     createdAt?: DateTimeFilter<"ProductImage"> | Date | string
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
@@ -46110,6 +46215,7 @@ export namespace Prisma {
     id?: SortOrder
     productId?: SortOrder
     image?: SortOrder
+    color?: SortOrderInput | SortOrder
     sortOrder?: SortOrder
     createdAt?: SortOrder
     product?: ProductOrderByWithRelationInput
@@ -46122,6 +46228,7 @@ export namespace Prisma {
     NOT?: ProductImageWhereInput | ProductImageWhereInput[]
     productId?: IntFilter<"ProductImage"> | number
     image?: StringFilter<"ProductImage"> | string
+    color?: StringNullableFilter<"ProductImage"> | string | null
     sortOrder?: IntFilter<"ProductImage"> | number
     createdAt?: DateTimeFilter<"ProductImage"> | Date | string
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
@@ -46131,6 +46238,7 @@ export namespace Prisma {
     id?: SortOrder
     productId?: SortOrder
     image?: SortOrder
+    color?: SortOrderInput | SortOrder
     sortOrder?: SortOrder
     createdAt?: SortOrder
     _count?: ProductImageCountOrderByAggregateInput
@@ -46147,6 +46255,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"ProductImage"> | number
     productId?: IntWithAggregatesFilter<"ProductImage"> | number
     image?: StringWithAggregatesFilter<"ProductImage"> | string
+    color?: StringNullableWithAggregatesFilter<"ProductImage"> | string | null
     sortOrder?: IntWithAggregatesFilter<"ProductImage"> | number
     createdAt?: DateTimeWithAggregatesFilter<"ProductImage"> | Date | string
   }
@@ -46224,6 +46333,7 @@ export namespace Prisma {
     id?: IntFilter<"ProductOptionValue"> | number
     optionId?: IntFilter<"ProductOptionValue"> | number
     value?: StringFilter<"ProductOptionValue"> | string
+    image?: StringNullableFilter<"ProductOptionValue"> | string | null
     sortOrder?: IntFilter<"ProductOptionValue"> | number
     createdAt?: DateTimeFilter<"ProductOptionValue"> | Date | string
     option?: XOR<ProductOptionScalarRelationFilter, ProductOptionWhereInput>
@@ -46234,6 +46344,7 @@ export namespace Prisma {
     id?: SortOrder
     optionId?: SortOrder
     value?: SortOrder
+    image?: SortOrderInput | SortOrder
     sortOrder?: SortOrder
     createdAt?: SortOrder
     option?: ProductOptionOrderByWithRelationInput
@@ -46248,6 +46359,7 @@ export namespace Prisma {
     NOT?: ProductOptionValueWhereInput | ProductOptionValueWhereInput[]
     optionId?: IntFilter<"ProductOptionValue"> | number
     value?: StringFilter<"ProductOptionValue"> | string
+    image?: StringNullableFilter<"ProductOptionValue"> | string | null
     sortOrder?: IntFilter<"ProductOptionValue"> | number
     createdAt?: DateTimeFilter<"ProductOptionValue"> | Date | string
     option?: XOR<ProductOptionScalarRelationFilter, ProductOptionWhereInput>
@@ -46258,6 +46370,7 @@ export namespace Prisma {
     id?: SortOrder
     optionId?: SortOrder
     value?: SortOrder
+    image?: SortOrderInput | SortOrder
     sortOrder?: SortOrder
     createdAt?: SortOrder
     _count?: ProductOptionValueCountOrderByAggregateInput
@@ -46274,6 +46387,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"ProductOptionValue"> | number
     optionId?: IntWithAggregatesFilter<"ProductOptionValue"> | number
     value?: StringWithAggregatesFilter<"ProductOptionValue"> | string
+    image?: StringNullableWithAggregatesFilter<"ProductOptionValue"> | string | null
     sortOrder?: IntWithAggregatesFilter<"ProductOptionValue"> | number
     createdAt?: DateTimeWithAggregatesFilter<"ProductOptionValue"> | Date | string
   }
@@ -48369,6 +48483,7 @@ export namespace Prisma {
     slug: string
     description?: string | null
     image?: string | null
+    sizeGuideImage?: string | null
     status?: $Enums.CategoryStatus
     featured?: boolean
     sortOrder?: number
@@ -48385,6 +48500,7 @@ export namespace Prisma {
     slug: string
     description?: string | null
     image?: string | null
+    sizeGuideImage?: string | null
     status?: $Enums.CategoryStatus
     featured?: boolean
     sortOrder?: number
@@ -48400,6 +48516,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
@@ -48416,6 +48533,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
@@ -48432,6 +48550,7 @@ export namespace Prisma {
     slug: string
     description?: string | null
     image?: string | null
+    sizeGuideImage?: string | null
     status?: $Enums.CategoryStatus
     featured?: boolean
     sortOrder?: number
@@ -48445,6 +48564,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
@@ -48458,6 +48578,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
@@ -48472,6 +48593,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -48511,6 +48635,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -48549,6 +48676,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -48588,6 +48718,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -48627,6 +48760,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -48654,6 +48790,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -48681,6 +48820,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -48793,6 +48935,7 @@ export namespace Prisma {
 
   export type ProductImageCreateInput = {
     image: string
+    color?: string | null
     sortOrder?: number
     createdAt?: Date | string
     product: ProductCreateNestedOneWithoutImagesInput
@@ -48802,12 +48945,14 @@ export namespace Prisma {
     id?: number
     productId: number
     image: string
+    color?: string | null
     sortOrder?: number
     createdAt?: Date | string
   }
 
   export type ProductImageUpdateInput = {
     image?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
     sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     product?: ProductUpdateOneRequiredWithoutImagesNestedInput
@@ -48817,6 +48962,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     productId?: IntFieldUpdateOperationsInput | number
     image?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
     sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -48825,12 +48971,14 @@ export namespace Prisma {
     id?: number
     productId: number
     image: string
+    color?: string | null
     sortOrder?: number
     createdAt?: Date | string
   }
 
   export type ProductImageUpdateManyMutationInput = {
     image?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
     sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -48839,6 +48987,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     productId?: IntFieldUpdateOperationsInput | number
     image?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
     sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -48908,6 +49057,7 @@ export namespace Prisma {
 
   export type ProductOptionValueCreateInput = {
     value: string
+    image?: string | null
     sortOrder?: number
     createdAt?: Date | string
     option: ProductOptionCreateNestedOneWithoutValuesInput
@@ -48918,6 +49068,7 @@ export namespace Prisma {
     id?: number
     optionId: number
     value: string
+    image?: string | null
     sortOrder?: number
     createdAt?: Date | string
     variantValues?: ProductVariantValueUncheckedCreateNestedManyWithoutOptionValueInput
@@ -48925,6 +49076,7 @@ export namespace Prisma {
 
   export type ProductOptionValueUpdateInput = {
     value?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     option?: ProductOptionUpdateOneRequiredWithoutValuesNestedInput
@@ -48935,6 +49087,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     optionId?: IntFieldUpdateOperationsInput | number
     value?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     variantValues?: ProductVariantValueUncheckedUpdateManyWithoutOptionValueNestedInput
@@ -48944,12 +49097,14 @@ export namespace Prisma {
     id?: number
     optionId: number
     value: string
+    image?: string | null
     sortOrder?: number
     createdAt?: Date | string
   }
 
   export type ProductOptionValueUpdateManyMutationInput = {
     value?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -48958,6 +49113,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     optionId?: IntFieldUpdateOperationsInput | number
     value?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -51264,6 +51420,7 @@ export namespace Prisma {
     slug?: SortOrder
     description?: SortOrder
     image?: SortOrder
+    sizeGuideImage?: SortOrder
     status?: SortOrder
     featured?: SortOrder
     sortOrder?: SortOrder
@@ -51284,6 +51441,7 @@ export namespace Prisma {
     slug?: SortOrder
     description?: SortOrder
     image?: SortOrder
+    sizeGuideImage?: SortOrder
     status?: SortOrder
     featured?: SortOrder
     sortOrder?: SortOrder
@@ -51298,6 +51456,7 @@ export namespace Prisma {
     slug?: SortOrder
     description?: SortOrder
     image?: SortOrder
+    sizeGuideImage?: SortOrder
     status?: SortOrder
     featured?: SortOrder
     sortOrder?: SortOrder
@@ -51344,6 +51503,17 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type DecimalFilter<$PrismaModel = never> = {
@@ -51462,6 +51632,9 @@ export namespace Prisma {
     sku?: SortOrder
     description?: SortOrder
     videoUrl?: SortOrder
+    sizeGuideImage?: SortOrder
+    saleCountdownMode?: SortOrder
+    saleEndsAt?: SortOrder
     price?: SortOrder
     comparePrice?: SortOrder
     stock?: SortOrder
@@ -51503,6 +51676,9 @@ export namespace Prisma {
     sku?: SortOrder
     description?: SortOrder
     videoUrl?: SortOrder
+    sizeGuideImage?: SortOrder
+    saleCountdownMode?: SortOrder
+    saleEndsAt?: SortOrder
     price?: SortOrder
     comparePrice?: SortOrder
     stock?: SortOrder
@@ -51531,6 +51707,9 @@ export namespace Prisma {
     sku?: SortOrder
     description?: SortOrder
     videoUrl?: SortOrder
+    sizeGuideImage?: SortOrder
+    saleCountdownMode?: SortOrder
+    saleEndsAt?: SortOrder
     price?: SortOrder
     comparePrice?: SortOrder
     stock?: SortOrder
@@ -51563,6 +51742,20 @@ export namespace Prisma {
     returnDays?: SortOrder
     replacementDays?: SortOrder
     categoryId?: SortOrder
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
@@ -51680,6 +51873,7 @@ export namespace Prisma {
     id?: SortOrder
     productId?: SortOrder
     image?: SortOrder
+    color?: SortOrder
     sortOrder?: SortOrder
     createdAt?: SortOrder
   }
@@ -51694,6 +51888,7 @@ export namespace Prisma {
     id?: SortOrder
     productId?: SortOrder
     image?: SortOrder
+    color?: SortOrder
     sortOrder?: SortOrder
     createdAt?: SortOrder
   }
@@ -51702,6 +51897,7 @@ export namespace Prisma {
     id?: SortOrder
     productId?: SortOrder
     image?: SortOrder
+    color?: SortOrder
     sortOrder?: SortOrder
     createdAt?: SortOrder
   }
@@ -51790,6 +51986,7 @@ export namespace Prisma {
     id?: SortOrder
     optionId?: SortOrder
     value?: SortOrder
+    image?: SortOrder
     sortOrder?: SortOrder
     createdAt?: SortOrder
   }
@@ -51804,6 +52001,7 @@ export namespace Prisma {
     id?: SortOrder
     optionId?: SortOrder
     value?: SortOrder
+    image?: SortOrder
     sortOrder?: SortOrder
     createdAt?: SortOrder
   }
@@ -51812,6 +52010,7 @@ export namespace Prisma {
     id?: SortOrder
     optionId?: SortOrder
     value?: SortOrder
+    image?: SortOrder
     sortOrder?: SortOrder
     createdAt?: SortOrder
   }
@@ -52391,17 +52590,6 @@ export namespace Prisma {
     not?: NestedEnumShipmentStatusFilter<$PrismaModel> | $Enums.ShipmentStatus
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type ShipmentCountOrderByAggregateInput = {
     id?: SortOrder
     orderId?: SortOrder
@@ -52450,20 +52638,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumShipmentStatusFilter<$PrismaModel>
     _max?: NestedEnumShipmentStatusFilter<$PrismaModel>
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type EnumServiceRequestKindFilter<$PrismaModel = never> = {
@@ -54081,6 +54255,10 @@ export namespace Prisma {
     connect?: ProductLikeWhereUniqueInput | ProductLikeWhereUniqueInput[]
   }
 
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
   export type DecimalFieldUpdateOperationsInput = {
     set?: Decimal | DecimalJsLike | number | string
     increment?: Decimal | DecimalJsLike | number | string
@@ -55145,10 +55323,6 @@ export namespace Prisma {
     set?: $Enums.ShipmentStatus
   }
 
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
-  }
-
   export type OrderUpdateOneRequiredWithoutShipmentsNestedInput = {
     create?: XOR<OrderCreateWithoutShipmentsInput, OrderUncheckedCreateWithoutShipmentsInput>
     connectOrCreate?: OrderCreateOrConnectWithoutShipmentsInput
@@ -55875,6 +56049,17 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type NestedDecimalFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
@@ -55902,6 +56087,20 @@ export namespace Prisma {
     in?: $Enums.ProductStatus[] | ListEnumProductStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.ProductStatus[] | ListEnumProductStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumProductStatusFilter<$PrismaModel> | $Enums.ProductStatus
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
@@ -56010,17 +56209,6 @@ export namespace Prisma {
     not?: NestedEnumShipmentStatusFilter<$PrismaModel> | $Enums.ShipmentStatus
   }
 
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type NestedEnumShipmentStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.ShipmentStatus | EnumShipmentStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ShipmentStatus[] | ListEnumShipmentStatusFieldRefInput<$PrismaModel>
@@ -56029,20 +56217,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumShipmentStatusFilter<$PrismaModel>
     _max?: NestedEnumShipmentStatusFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumServiceRequestKindFilter<$PrismaModel = never> = {
@@ -57060,6 +57234,7 @@ export namespace Prisma {
     slug: string
     description?: string | null
     image?: string | null
+    sizeGuideImage?: string | null
     status?: $Enums.CategoryStatus
     featured?: boolean
     sortOrder?: number
@@ -57075,6 +57250,7 @@ export namespace Prisma {
     slug: string
     description?: string | null
     image?: string | null
+    sizeGuideImage?: string | null
     status?: $Enums.CategoryStatus
     featured?: boolean
     sortOrder?: number
@@ -57094,6 +57270,7 @@ export namespace Prisma {
     slug: string
     description?: string | null
     image?: string | null
+    sizeGuideImage?: string | null
     status?: $Enums.CategoryStatus
     featured?: boolean
     sortOrder?: number
@@ -57109,6 +57286,7 @@ export namespace Prisma {
     slug: string
     description?: string | null
     image?: string | null
+    sizeGuideImage?: string | null
     status?: $Enums.CategoryStatus
     featured?: boolean
     sortOrder?: number
@@ -57134,6 +57312,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -57172,6 +57353,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -57229,6 +57413,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
@@ -57244,6 +57429,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
@@ -57278,6 +57464,7 @@ export namespace Prisma {
     slug?: StringFilter<"Category"> | string
     description?: StringNullableFilter<"Category"> | string | null
     image?: StringNullableFilter<"Category"> | string | null
+    sizeGuideImage?: StringNullableFilter<"Category"> | string | null
     status?: EnumCategoryStatusFilter<"Category"> | $Enums.CategoryStatus
     featured?: BoolFilter<"Category"> | boolean
     sortOrder?: IntFilter<"Category"> | number
@@ -57312,6 +57499,9 @@ export namespace Prisma {
     sku?: StringFilter<"Product"> | string
     description?: StringNullableFilter<"Product"> | string | null
     videoUrl?: StringNullableFilter<"Product"> | string | null
+    sizeGuideImage?: StringNullableFilter<"Product"> | string | null
+    saleCountdownMode?: StringFilter<"Product"> | string
+    saleEndsAt?: DateTimeNullableFilter<"Product"> | Date | string | null
     price?: DecimalFilter<"Product"> | Decimal | DecimalJsLike | number | string
     comparePrice?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
     stock?: IntFilter<"Product"> | number
@@ -57335,6 +57525,7 @@ export namespace Prisma {
 
   export type ProductImageCreateWithoutProductInput = {
     image: string
+    color?: string | null
     sortOrder?: number
     createdAt?: Date | string
   }
@@ -57342,6 +57533,7 @@ export namespace Prisma {
   export type ProductImageUncheckedCreateWithoutProductInput = {
     id?: number
     image: string
+    color?: string | null
     sortOrder?: number
     createdAt?: Date | string
   }
@@ -57361,6 +57553,7 @@ export namespace Prisma {
     slug: string
     description?: string | null
     image?: string | null
+    sizeGuideImage?: string | null
     status?: $Enums.CategoryStatus
     featured?: boolean
     sortOrder?: number
@@ -57376,6 +57569,7 @@ export namespace Prisma {
     slug: string
     description?: string | null
     image?: string | null
+    sizeGuideImage?: string | null
     status?: $Enums.CategoryStatus
     featured?: boolean
     sortOrder?: number
@@ -57712,6 +57906,7 @@ export namespace Prisma {
     id?: IntFilter<"ProductImage"> | number
     productId?: IntFilter<"ProductImage"> | number
     image?: StringFilter<"ProductImage"> | string
+    color?: StringNullableFilter<"ProductImage"> | string | null
     sortOrder?: IntFilter<"ProductImage"> | number
     createdAt?: DateTimeFilter<"ProductImage"> | Date | string
   }
@@ -57732,6 +57927,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
@@ -57747,6 +57943,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
@@ -58015,6 +58212,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -58053,6 +58253,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -58106,6 +58309,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -58144,6 +58350,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -58181,6 +58390,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -58219,6 +58431,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -58272,6 +58487,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -58310,6 +58528,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -58347,6 +58568,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -58385,6 +58609,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -58438,6 +58665,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -58476,6 +58706,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -58513,6 +58746,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -58551,6 +58787,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -58589,6 +58828,7 @@ export namespace Prisma {
 
   export type ProductOptionValueCreateWithoutOptionInput = {
     value: string
+    image?: string | null
     sortOrder?: number
     createdAt?: Date | string
     variantValues?: ProductVariantValueCreateNestedManyWithoutOptionValueInput
@@ -58597,6 +58837,7 @@ export namespace Prisma {
   export type ProductOptionValueUncheckedCreateWithoutOptionInput = {
     id?: number
     value: string
+    image?: string | null
     sortOrder?: number
     createdAt?: Date | string
     variantValues?: ProductVariantValueUncheckedCreateNestedManyWithoutOptionValueInput
@@ -58629,6 +58870,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -58667,6 +58911,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -58721,6 +58968,7 @@ export namespace Prisma {
     id?: IntFilter<"ProductOptionValue"> | number
     optionId?: IntFilter<"ProductOptionValue"> | number
     value?: StringFilter<"ProductOptionValue"> | string
+    image?: StringNullableFilter<"ProductOptionValue"> | string | null
     sortOrder?: IntFilter<"ProductOptionValue"> | number
     createdAt?: DateTimeFilter<"ProductOptionValue"> | Date | string
   }
@@ -58825,6 +59073,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -58863,6 +59114,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -59013,6 +59267,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -59051,6 +59308,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -59162,6 +59422,7 @@ export namespace Prisma {
 
   export type ProductOptionValueCreateWithoutVariantValuesInput = {
     value: string
+    image?: string | null
     sortOrder?: number
     createdAt?: Date | string
     option: ProductOptionCreateNestedOneWithoutValuesInput
@@ -59171,6 +59432,7 @@ export namespace Prisma {
     id?: number
     optionId: number
     value: string
+    image?: string | null
     sortOrder?: number
     createdAt?: Date | string
   }
@@ -59229,6 +59491,7 @@ export namespace Prisma {
 
   export type ProductOptionValueUpdateWithoutVariantValuesInput = {
     value?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     option?: ProductOptionUpdateOneRequiredWithoutValuesNestedInput
@@ -59238,6 +59501,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     optionId?: IntFieldUpdateOperationsInput | number
     value?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -59851,6 +60115,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -59889,6 +60156,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -60060,6 +60330,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -60098,6 +60371,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -60135,6 +60411,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -60173,6 +60452,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -60414,6 +60696,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -60452,6 +60737,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -60994,6 +61282,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -61032,6 +61323,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -61133,6 +61427,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -61171,6 +61468,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -61250,6 +61550,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -61288,6 +61591,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -61389,6 +61695,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -61427,6 +61736,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -61464,6 +61776,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -61502,6 +61817,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -61555,6 +61873,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -61593,6 +61914,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -62230,6 +62554,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -62268,6 +62595,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -62385,6 +62715,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -62423,6 +62756,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -63181,6 +63517,7 @@ export namespace Prisma {
     slug: string
     description?: string | null
     image?: string | null
+    sizeGuideImage?: string | null
     status?: $Enums.CategoryStatus
     featured?: boolean
     sortOrder?: number
@@ -63195,6 +63532,9 @@ export namespace Prisma {
     sku: string
     description?: string | null
     videoUrl?: string | null
+    sizeGuideImage?: string | null
+    saleCountdownMode?: string
+    saleEndsAt?: Date | string | null
     price: Decimal | DecimalJsLike | number | string
     comparePrice?: Decimal | DecimalJsLike | number | string | null
     stock?: number
@@ -63220,6 +63560,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
@@ -63235,6 +63576,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
@@ -63250,6 +63592,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumCategoryStatusFieldUpdateOperationsInput | $Enums.CategoryStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
     sortOrder?: IntFieldUpdateOperationsInput | number
@@ -63263,6 +63606,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -63301,6 +63647,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -63339,6 +63688,9 @@ export namespace Prisma {
     sku?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    sizeGuideImage?: NullableStringFieldUpdateOperationsInput | string | null
+    saleCountdownMode?: StringFieldUpdateOperationsInput | string
+    saleEndsAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     comparePrice?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     stock?: IntFieldUpdateOperationsInput | number
@@ -63362,6 +63714,7 @@ export namespace Prisma {
   export type ProductImageCreateManyProductInput = {
     id?: number
     image: string
+    color?: string | null
     sortOrder?: number
     createdAt?: Date | string
   }
@@ -63463,6 +63816,7 @@ export namespace Prisma {
 
   export type ProductImageUpdateWithoutProductInput = {
     image?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
     sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -63470,6 +63824,7 @@ export namespace Prisma {
   export type ProductImageUncheckedUpdateWithoutProductInput = {
     id?: IntFieldUpdateOperationsInput | number
     image?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
     sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -63477,6 +63832,7 @@ export namespace Prisma {
   export type ProductImageUncheckedUpdateManyWithoutProductInput = {
     id?: IntFieldUpdateOperationsInput | number
     image?: StringFieldUpdateOperationsInput | string
+    color?: NullableStringFieldUpdateOperationsInput | string | null
     sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -63771,12 +64127,14 @@ export namespace Prisma {
   export type ProductOptionValueCreateManyOptionInput = {
     id?: number
     value: string
+    image?: string | null
     sortOrder?: number
     createdAt?: Date | string
   }
 
   export type ProductOptionValueUpdateWithoutOptionInput = {
     value?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     variantValues?: ProductVariantValueUpdateManyWithoutOptionValueNestedInput
@@ -63785,6 +64143,7 @@ export namespace Prisma {
   export type ProductOptionValueUncheckedUpdateWithoutOptionInput = {
     id?: IntFieldUpdateOperationsInput | number
     value?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     variantValues?: ProductVariantValueUncheckedUpdateManyWithoutOptionValueNestedInput
@@ -63793,6 +64152,7 @@ export namespace Prisma {
   export type ProductOptionValueUncheckedUpdateManyWithoutOptionInput = {
     id?: IntFieldUpdateOperationsInput | number
     value?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

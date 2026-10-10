@@ -7,6 +7,8 @@ import { Check, RefreshCw, RotateCcw, Truck } from "lucide-react";
 
 import ProductGallery from "@/components/product/ProductGallery";
 import ProductInfo from "@/components/product/ProductInfo";
+import SaleCountdown from "@/components/product/SaleCountdown";
+import { getSaleCountdownSettings } from "@/lib/sale-countdown-settings";
 import { effectiveQuantityLimits, getGlobalQuantityLimits } from "@/lib/quantity-limits";
 import ProductReviews from "@/components/product/ProductReviews";
 import ProductVideo from "@/components/product/ProductVideo";
@@ -52,7 +54,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
   });
   if (!product) notFound();
 
-  const visibility = await getHomepageVisibility();
+  const [visibility, globalCountdown] = await Promise.all([getHomepageVisibility(), getSaleCountdownSettings()]);
+  const countdownEndsAt = product.saleCountdownMode === "hidden" ? "" : product.saleCountdownMode === "custom" ? product.saleEndsAt?.toISOString() ?? "" : globalCountdown.enabled ? globalCountdown.endsAt : "";
   const relatedProducts = await prisma.product.findMany({
     where: { id: { not: product.id }, status: "active", categoryId: product.categoryId, category: { status: "active" } },
     include: {
@@ -66,6 +69,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const averageRating = product.reviews.length ? product.reviews.reduce((sum, review) => sum + review.rating, 0) / product.reviews.length : 0;
   const optionValues = (name: string) => product.options.find(option => option.name.toLowerCase() === name)?.values.map(value => value.value) ?? [];
   const images = product.images.map(image => image.image);
+  const galleryImages = product.images.map(image => ({ src: image.image, color: image.color ?? undefined }));
   const oldPrice = product.comparePrice ? formatPrice(product.comparePrice) : undefined;
   const discount = product.comparePrice && Number(product.comparePrice) > Number(product.price)
     ? `${Math.round((1 - Number(product.price) / Number(product.comparePrice)) * 100)}% OFF`
@@ -73,6 +77,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const details = product.description?.split(/\n|\r/).map(line => line.trim()).filter(Boolean) ?? [];
   const material = optionValues("material")[0] ?? optionValues("fabric")[0] ?? "Details in description";
   const colors = [...new Set([...optionValues("color"), ...optionValues("colour")])];
+  const colorImages = Object.fromEntries(product.options.filter((option) => /colou?r/i.test(option.name)).flatMap((option) => option.values.filter((value) => value.image).map((value) => [value.value, value.image!] as const)));
   const sizes = optionValues("size");
   const purchaseProduct = {
     ...effectiveQuantityLimits(product, await getGlobalQuantityLimits()),
@@ -98,6 +103,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
     material,
     sizes,
     colors,
+    colorImages,
+    sizeGuideImage: product.sizeGuideImage ?? product.category.sizeGuideImage ?? undefined,
     stock: product.stock,
   };
 
@@ -124,18 +131,21 @@ export default async function ProductPage({ params }: ProductPageProps) {
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productStructuredData).replace(/</g, "\\u003c") }} />
     <Breadcrumbs title={product.name} isShop={false} parent={{ label: product.category.name, href: `/${product.category.slug}` }} />
 
-    <div className="mx-auto max-w-[1440px] px-4 pb-10 pt-0 sm:px-8 sm:pt-6 lg:px-10">
-      <section aria-label={`${product.name} purchase details`} className="grid items-start gap-5 sm:gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-10 xl:gap-12">
+    <div className="mx-auto max-w-[1440px] px-4 pb-10 pt-3 sm:px-8 sm:pt-6 lg:px-10">
+      <section aria-label={`${product.name} purchase details`} className="grid items-start gap-5 sm:gap-8 lg:grid-cols-[minmax(0,1.16fr)_minmax(390px,0.84fr)] lg:gap-8 xl:gap-12">
         <div className="-mx-4 min-w-0 space-y-5 sm:mx-0">
-          <ProductGallery productId={product.id} images={images} name={product.name} badge={product.badgeEnabled && product.badgeText ? product.badgeText : undefined} badgeTone={product.badgeTone} />
+          <ProductGallery productId={product.id} images={galleryImages} initialColor={colors[0]} name={product.name} badge={product.badgeEnabled && product.badgeText ? product.badgeText : undefined} badgeTone={product.badgeTone} />
           {visibility.productDetailVideo && product.videoUrl && <section aria-labelledby="product-video-title" className="overflow-hidden rounded-xl border border-[#E8DADA] bg-white">
             <div className="px-4 py-3 sm:px-5"><h2 id="product-video-title" className="font-serif text-xl text-[#2B2525]">See this piece in motion</h2><p className="mt-1 text-xs text-[#756565]">A closer look at the fabric, finish and fit.</p></div>
             <div className="aspect-video bg-[#2B2525]"><ProductVideo url={product.videoUrl} title={`${product.name} product video`} poster={images[0]} /></div>
           </section>}
         </div>
-        <div className="min-w-0 bg-white pb-4 lg:pl-2">
-          <ProductInfo product={purchaseProduct} showRating={visibility.productDetailRating} showOffers={visibility.productDetailOffers} />
-        </div>
+        <aside className="min-w-0 overflow-hidden rounded-2xl border border-[#ece8e4] bg-white shadow-[0_18px_55px_rgba(25,20,18,0.07)] lg:sticky lg:top-24">
+          {countdownEndsAt && <SaleCountdown endsAt={countdownEndsAt} />}
+          <div className="px-4 pb-5 pt-4 sm:px-6 sm:pb-7 sm:pt-5 xl:px-8">
+            <ProductInfo product={purchaseProduct} showRating={visibility.productDetailRating} showOffers={visibility.productDetailOffers} />
+          </div>
+        </aside>
       </section>
 
       {visibility.productDetailDelivery && <section aria-labelledby="delivery-benefits-title" className="mt-9 border-y border-[#E8DADA] py-6 sm:mt-12 sm:py-8">

@@ -23,6 +23,7 @@ interface CategoryData {
   slug: string;
   description: string;
   image: string;
+  sizeGuideImage: string;
   status: CategoryStatus;
   featured: boolean;
   productCount: number;
@@ -55,6 +56,8 @@ export default function EditCategoryPage() {
 
   const [image, setImage] =
     useState("");
+
+  const [sizeGuideImage, setSizeGuideImage] = useState("");
 
   const [parentId, setParentId] = useState("");
   const [parentCategories, setParentCategories] = useState<Array<{ id: number; name: string; slug: string; parentId: number | null; status: string }>>([]);
@@ -147,6 +150,8 @@ export default function EditCategoryPage() {
           image:
             data.image || "",
 
+          sizeGuideImage: data.sizeGuideImage || "",
+
           status:
             data.status === "inactive"
               ? "Inactive"
@@ -192,6 +197,7 @@ export default function EditCategoryPage() {
         setImage(
           categoryData.image
         );
+        setSizeGuideImage(categoryData.sizeGuideImage);
         setParentId(categoryData.parentId ? String(categoryData.parentId) : "");
 
         setSortOrder(
@@ -402,6 +408,8 @@ export default function EditCategoryPage() {
         image:
           image || null,
 
+        sizeGuideImage: sizeGuideImage.trim() || null,
+
         parentId: parentId ? Number(parentId) : null,
 
         sortOrder:
@@ -481,6 +489,8 @@ export default function EditCategoryPage() {
           image:
             updated.image || "",
 
+          sizeGuideImage: updated.sizeGuideImage || "",
+
           status:
             updated.status ===
             "inactive"
@@ -520,6 +530,7 @@ export default function EditCategoryPage() {
         setImage(
           updated.image || ""
         );
+        setSizeGuideImage(updated.sizeGuideImage || "");
 
         setStatus(
           updated.status ===
@@ -952,6 +963,19 @@ export default function EditCategoryPage() {
 
                 </section>
 
+
+                <section className="rounded-xl border border-[#eee6e1] bg-white">
+                  <div className="border-b border-[#eee6e1] px-5 py-4">
+                    <h2 className="text-sm font-semibold text-[#292321]">Category Size Guide</h2>
+                    <p className="mt-1 text-xs text-[#958b86]">Used automatically by products in this category unless a product has its own guide.</p>
+                  </div>
+                  <div className="p-5">
+                    <label htmlFor="categorySizeGuideImage" className="mb-2 block text-xs font-medium text-[#514945]">Size chart image URL</label>
+                    <input id="categorySizeGuideImage" type="url" value={sizeGuideImage} onChange={(event) => setSizeGuideImage(event.target.value)} disabled={saving} placeholder="https://.../category-size-chart.jpg" className="w-full rounded-lg border border-[#e5ddd8] bg-white px-4 py-3 text-sm text-[#292321] outline-none placeholder:text-[#aaa09a] focus:border-[#b56f6f] disabled:bg-[#faf8f6]" />
+                    <p className="mt-2 text-[11px] leading-5 text-[#958b86]">Recommended: upload a chart containing the measurement illustration and table, similar to Max/Flipkart/Bewakoof.</p>
+                    {sizeGuideImage && <div className="mt-4 overflow-hidden rounded-xl border border-[#e5ddd8] bg-[#faf8f6] p-2"><img src={sizeGuideImage} alt={`${name || "Category"} size guide preview`} className="max-h-80 w-full object-contain" /></div>}
+                  </div>
+                </section>
               </div>
 
               {/* =================================================

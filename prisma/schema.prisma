@@ -137,6 +137,7 @@ model Category {
   slug        String         @unique
   description String?
   image       String?
+  sizeGuideImage String?
   status      CategoryStatus @default(active)
   featured    Boolean        @default(false)
   sortOrder   Int            @default(0)
@@ -176,7 +177,10 @@ model Product {
   sku String @unique
 
   description String?
-  videoUrl    String?
+  videoUrl       String?
+  sizeGuideImage    String?
+  saleCountdownMode String   @default("global")
+  saleEndsAt         DateTime?
 
   price        Decimal  @db.Decimal(12, 2)
   comparePrice Decimal? @db.Decimal(12, 2)
@@ -259,6 +263,7 @@ model ProductImage {
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   image     String
+  color     String?
   sortOrder Int    @default(0)
 
   createdAt DateTime @default(now())
@@ -318,6 +323,7 @@ model ProductOptionValue {
   option   ProductOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
 
   value String
+  image String?
 
   sortOrder Int @default(0)
 

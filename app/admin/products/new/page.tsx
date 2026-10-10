@@ -29,6 +29,7 @@ type VariationOption = {
   id: string;
   name: string;
   values: string[];
+  valueImages: Record<string, string>;
 };
 
 type ProductVariant = {
@@ -60,6 +61,9 @@ export default function NewProductPage() {
   const [policy, setPolicy] = useState({ returnEnabled: true, replacementEnabled: true, returnDays: 7, replacementDays: 7 });
   const [description, setDescription] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
+  const [sizeGuideImage, setSizeGuideImage] = useState("");
+  const [saleCountdownMode, setSaleCountdownMode] = useState<"global" | "custom" | "hidden">("global");
+  const [saleEndsAt, setSaleEndsAt] = useState("");
 
   const [price, setPrice] = useState("");
   const [comparePrice, setComparePrice] = useState("");
@@ -83,6 +87,8 @@ export default function NewProductPage() {
 
   const [images, setImages] =
     useState<string[]>([]);
+
+  const [imageColors, setImageColors] = useState<Record<string, string>>({});
 
   // ===================================================
   // CATEGORIES
@@ -358,6 +364,7 @@ export default function NewProductPage() {
       id: createId(),
       name,
       values: [],
+      valueImages: {},
     };
 
     setVariationOptions((prev) => [
@@ -734,6 +741,9 @@ export default function NewProductPage() {
         description.trim() || null,
 
       videoUrl: videoUrl.trim() || null,
+      sizeGuideImage: sizeGuideImage.trim() || null,
+      saleCountdownMode,
+      saleEndsAt: saleCountdownMode === "custom" && saleEndsAt ? new Date(saleEndsAt).toISOString() : null,
 
       price: Number(price),
 
@@ -761,6 +771,7 @@ export default function NewProductPage() {
       // Uploaded images contain permanent URLs after
       // the upload API replaces their blob previews.
       images,
+      imageColors,
 
       hasVariations,
 
@@ -771,8 +782,8 @@ export default function NewProductPage() {
                 name:
                   option.name.trim(),
 
-                values:
-                  option.values,
+                values: option.values,
+                valueImages: option.valueImages,
               })
             )
           : [],
@@ -1100,6 +1111,11 @@ export default function NewProductPage() {
                       <div className="mt-5">
                         <label htmlFor="videoUrl" className="mb-2 block text-xs font-medium text-[#514945]">Product video (optional)</label>
                         <input id="videoUrl" type="url" value={videoUrl} onChange={(event) => setVideoUrl(event.target.value)} placeholder="https://youtu.be/... or https://.../video.mp4" className={inputClass} />
+                        <label htmlFor="sizeGuideImage" className="mb-2 mt-4 block text-xs font-medium text-[#514945]">Size guide image URL (optional)</label>
+                        <input id="sizeGuideImage" type="url" value={sizeGuideImage} onChange={(event) => setSizeGuideImage(event.target.value)} placeholder="https://.../size-guide.jpg" className={inputClass} />
+                        <label htmlFor="saleCountdownMode" className="mb-2 mt-4 block text-xs font-medium text-[#514945]">Sale countdown</label>
+                        <select id="saleCountdownMode" value={saleCountdownMode} onChange={(event) => setSaleCountdownMode(event.target.value as "global" | "custom" | "hidden")} className={inputClass}><option value="global">Follow global setting</option><option value="custom">Show custom countdown</option><option value="hidden">Hide for this product</option></select>
+                        {saleCountdownMode === "custom" && <><label htmlFor="saleEndsAt" className="mb-2 mt-4 block text-xs font-medium text-[#514945]">Sale ends at</label><input id="saleEndsAt" type="datetime-local" value={saleEndsAt} onChange={(event) => setSaleEndsAt(event.target.value)} className={inputClass} /></>}
                         <p className="mt-2 text-[11px] text-[#aaa09a]">Paste a YouTube, Vimeo, or direct MP4/WebM/OGG link. It will appear on this product and in Watch &amp; Buy.</p>
                       </div>
                     </div>
@@ -1360,6 +1376,7 @@ export default function NewProductPage() {
                                 onRemoveValue={
                                   removeOptionValue
                                 }
+                                onValueImageChange={(optionId, value, image) => setVariationOptions((current) => current.map((item) => item.id === optionId ? { ...item, valueImages: { ...item.valueImages, [value]: image } } : item))}
                                 onRemove={
                                   removeVariationOption
                                 }
@@ -1624,6 +1641,16 @@ export default function NewProductPage() {
                               }`}
                               className="h-full w-full object-cover"
                             />
+
+                            <select
+                              aria-label={`Color for product image ${index + 1}`}
+                              value={imageColors[image] ?? ""}
+                              onChange={(event) => setImageColors((current) => ({ ...current, [image]: event.target.value }))}
+                              className="absolute left-2 top-2 h-8 max-w-[calc(100%-3.5rem)] rounded-md border border-white/70 bg-white/95 px-2 text-[10px] font-semibold text-[#292321] shadow-sm outline-none"
+                            >
+                              <option value="">All colors</option>
+                              {(variationOptions.find((option) => /colou?r/i.test(option.name))?.values ?? []).map((color) => <option key={color} value={color}>{color}</option>)}
+                            </select>
 
                             <button
                               type="button"
@@ -1914,6 +1941,7 @@ function VariationOptionCard({
   onNameChange,
   onAddValue,
   onRemoveValue,
+  onValueImageChange,
   onRemove,
 }: {
   option: VariationOption;
@@ -1930,12 +1958,32 @@ function VariationOptionCard({
     id: string,
     value: string
   ) => void;
+  onValueImageChange: (id: string, value: string, image: string) => void;
   onRemove: (
     id: string
   ) => void;
 }) {
   const [value, setValue] =
     useState("");
+
+  const [uploadingValue, setUploadingValue] = useState("");
+
+  const uploadValueImage = async (colorValue: string, file?: File) => {
+    if (!file) return;
+    setUploadingValue(colorValue);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const response = await fetch("/api/upload/product", { method: "POST", body: formData });
+      const result = await response.json();
+      if (!response.ok || !result?.image) throw new Error(result?.message || "Color image upload failed.");
+      onValueImageChange(option.id, colorValue, result.image);
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "Color image upload failed.");
+    } finally {
+      setUploadingValue("");
+    }
+  };
 
   const handleAdd = () => {
     const cleanValue =
@@ -2025,7 +2073,8 @@ function VariationOptionCard({
                   key={item}
                   className="inline-flex items-center gap-2 rounded-full border border-[#e5ddd8] bg-[#faf8f6] px-3 py-1.5 text-xs text-[#514945]"
                 >
-                  {item}
+                  <span>{item}</span>
+                  {/colou?r/i.test(option.name) && <div className="flex items-center gap-1.5">{option.valueImages[item] && <span role="img" aria-label={`${item} preview`} className="h-10 w-10 rounded-md border border-[#ddd] bg-cover bg-center" style={{ backgroundImage: `url(${option.valueImages[item]})` }} />}<label className="cursor-pointer rounded-md border border-[#d9d1cc] bg-white px-2 py-1 text-[10px] font-medium hover:border-[#b56f6f]">{uploadingValue === item ? "Uploading..." : option.valueImages[item] ? "Change" : "Upload image"}<input type="file" accept="image/jpeg,image/png,image/webp" disabled={Boolean(uploadingValue)} onChange={(event) => { void uploadValueImage(item, event.target.files?.[0]); event.currentTarget.value = ""; }} className="hidden" /></label>{option.valueImages[item] && <button type="button" onClick={() => onValueImageChange(option.id, item, "")} className="px-1 text-[10px] text-red-500" aria-label={`Remove ${item} image`}>Remove</button>}</div>}
 
                   <button
                     type="button"

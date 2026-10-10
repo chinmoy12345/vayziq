@@ -1,0 +1,7 @@
+import { NextRequest, NextResponse } from "next/server";
+import { Prisma } from "@/lib/generated/prisma-suppliers";
+import prisma from "@/lib/db";
+import { requireAdminPermission } from "@/lib/auth";
+import { getSaleCountdownSettings, SALE_COUNTDOWN_KEY } from "@/lib/sale-countdown-settings";
+export async function GET() { if (!(await requireAdminPermission("settings", "view"))) return NextResponse.json({ message: "Unauthorized" }, { status: 403 }); return NextResponse.json({ data: await getSaleCountdownSettings() }); }
+export async function PUT(request: NextRequest) { if (!(await requireAdminPermission("settings", "update"))) return NextResponse.json({ message: "Unauthorized" }, { status: 403 }); const body = await request.json(); const enabled = body?.enabled === true; const endsAt = typeof body?.endsAt === "string" ? body.endsAt.trim() : ""; if (enabled && (!endsAt || Number.isNaN(Date.parse(endsAt)))) return NextResponse.json({ message: "Choose a valid sale end date and time." }, { status: 400 }); const data = { enabled, endsAt }; await prisma.storeSetting.upsert({ where: { key: SALE_COUNTDOWN_KEY }, create: { key: SALE_COUNTDOWN_KEY, value: data as Prisma.InputJsonValue }, update: { value: data as Prisma.InputJsonValue } }); return NextResponse.json({ data }); }

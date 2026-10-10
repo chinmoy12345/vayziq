@@ -7,13 +7,14 @@ export type CategoryResponse = {
   parent?: { name: string } | null;
 };
 
-export type ProductImageResponse = string | { url?: string; image?: string } | null;
-export type OptionValueResponse = string | { value?: string } | null;
+export type ProductImageResponse = string | { url?: string; image?: string; color?: string | null } | null;
+export type OptionValueResponse = string | { value?: string; image?: string | null } | null;
 export type ProductOptionResponse = {
   id?: number | string;
   name?: string;
   optionName?: string;
   values?: OptionValueResponse[];
+  valueImages?: Record<string, string>;
 };
 export type ProductVariantResponse = {
   id?: number | string;

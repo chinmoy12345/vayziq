@@ -7,7 +7,8 @@ import ProgressiveImage from "@/components/ui/ProgressiveImage";
 
 interface ProductGalleryProps {
   productId: number;
-  images: string[];
+  images: Array<string | { src: string; color?: string }>;
+  initialColor?: string;
   name: string;
   badge?: string;
   badgeTone?: string;
@@ -16,6 +17,7 @@ interface ProductGalleryProps {
 export default function ProductGallery({
   productId,
   images,
+  initialColor,
   name,
   badge,
   badgeTone,
@@ -30,8 +32,23 @@ export default function ProductGallery({
   const [slide, setSlide] = useState(0);
   const track = useRef<HTMLDivElement>(null);
 
-  const galleryImages =
-    images && images.length > 0 ? images : [];
+  const [activeColor, setActiveColor] = useState(initialColor ?? "");
+  const normalizedImages = (images ?? []).map((image) => typeof image === "string" ? { src: image, color: undefined } : image);
+  const colorImages = activeColor ? normalizedImages.filter((image) => image.color?.toLowerCase() === activeColor.toLowerCase()) : [];
+  const galleryImages = colorImages.length ? colorImages : normalizedImages;
+
+  useEffect(() => {
+    const changeColor = (event: Event) => {
+      const detail = (event as CustomEvent<{ productId: number; color: string }>).detail;
+      if (detail?.productId !== productId) return;
+      setActiveColor(detail.color);
+      setActiveImage(0);
+      setSlide(0);
+      track.current?.scrollTo({ left: 0, behavior: "smooth" });
+    };
+    window.addEventListener("vayziq:product-color", changeColor);
+    return () => window.removeEventListener("vayziq:product-color", changeColor);
+  }, [productId]);
 
   useEffect(() => {
     const loadWishlist = async () => {
@@ -102,7 +119,7 @@ export default function ProductGallery({
           PRODUCT IMAGE GRID
       ===================================================== */}
 
-      <div className="relative">
+      <div className="relative overflow-hidden bg-white sm:rounded-2xl sm:border sm:border-[#ece8e4] sm:p-2 sm:shadow-[0_16px_45px_rgba(25,20,18,0.05)]">
 
         <div ref={track} onScroll={(event) => {
           const element = event.currentTarget;
@@ -111,7 +128,7 @@ export default function ProductGallery({
 
           {galleryImages.map((image, index) => (
             <button
-              key={`${image}-${index}`}
+              key={`${image.src}-${index}`}
               type="button"
               onClick={() => openGallery(index)}
               className="
@@ -128,7 +145,7 @@ export default function ProductGallery({
             >
 
               <ProgressiveImage
-                src={image}
+                src={image.src}
                 alt={`${name} - Image ${index + 1}`}
                 className="
                   h-full
@@ -227,7 +244,7 @@ export default function ProductGallery({
           FULL SCREEN IMAGE MODAL
       ===================================================== */}
 
-      {isModalOpen && <ProductImageDialog images={galleryImages} name={name} active={activeImage} onChange={setActiveImage} onClose={closeGallery} />}
+      {isModalOpen && <ProductImageDialog images={galleryImages.map((image) => image.src)} name={name} active={activeImage} onChange={setActiveImage} onClose={closeGallery} />}
     </>
   );
 }
