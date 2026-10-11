@@ -7,6 +7,7 @@ import { ArrowLeft, ArrowRight, Heart, Play, Share2, ShoppingBag, X, Clipboard, 
 import ProductVideo from "@/components/product/ProductVideo";
 
 type WatchProductSummary = {
+  reelId?: string;
   id: number;
   slug: string;
   name: string;
@@ -37,6 +38,9 @@ type EditorialReel = {
 type ProductReel = { kind: "product"; id: string; product: WatchProduct };
 type Reel = EditorialReel | ProductReel;
 
+// Kept only as historical content data; the storefront no longer renders this
+// list and is driven exclusively by enabled admin reels.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const EDITORIAL_REELS: EditorialReel[] = [
   {
     kind: "editorial",
@@ -160,25 +164,22 @@ function formatEngagementCount(count: number) {
   }).format(count);
 }
 
-export default function WatchAndBuy({ products, editorialProducts = [], viewAll = false }: { products: WatchProduct[]; editorialProducts?: WatchProductSummary[]; viewAll?: boolean }) {
+export default function WatchAndBuy({ products, viewAll = false }: { products: WatchProduct[]; viewAll?: boolean }) {
   const reels = useMemo<Reel[]>(
     () => [
       ...products.map((product) => ({
         kind: "product" as const,
-        id: `product-${product.id}`,
+        id: product.reelId || `product-${product.id}`,
         product,
       })),
-      // Legacy editorial clips remain as an empty-state fallback only. Once a
-      // product reel exists, Watch & Buy shows the actual VAYZIQ catalogue.
-      ...(products.length ? [] : EDITORIAL_REELS.map((reel, index) => ({ ...reel, product: editorialProducts[index] }))),
     ],
-    [products, editorialProducts],
+    [products],
   );
   const trackRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [playingReels, setPlayingReels] = useState<string[]>([]);
   const [likedProducts, setLikedProducts] = useState<string[]>([]);
-  const [engagementCounts, setEngagementCounts] = useState(() => Object.fromEntries([...products, ...editorialProducts].map((product) => [String(product.id), { likeCount: product.likeCount, shareCount: product.shareCount }])));
+  const [engagementCounts, setEngagementCounts] = useState(() => Object.fromEntries(products.map((product) => [String(product.id), { likeCount: product.likeCount, shareCount: product.shareCount }])));
   const [shareMessage, setShareMessage] = useState("");
   const [sharingProduct, setSharingProduct] = useState<WatchProductSummary | null>(null);
   const [moreShareOpen, setMoreShareOpen] = useState(false);
@@ -392,29 +393,9 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
             {viewAll && <Sparkles className="mb-1 h-6 w-6 shrink-0 text-[#f5b400]" aria-hidden="true" />}
           </div>
           {!viewAll && <div className="flex items-center gap-2">
-            {!viewAll && (
-              <Link href="/watch-buy" className="mr-1 text-xs font-semibold text-[#9F5E5E] underline-offset-4 hover:underline sm:mr-3 sm:text-sm">
-                View all
-              </Link>
-            )}
-          <div className={`${viewAll ? "hidden" : "hidden sm:flex"} gap-2`}>
-            <button
-              type="button"
-              aria-label="Scroll videos left"
-              onClick={() => trackRef.current?.scrollBy({ left: -520, behavior: "smooth" })}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#DCCBC7] bg-white text-[#493A39] transition hover:bg-[#F4E9E6]"
-            >
-              <ArrowLeft className="h-4 w-4" />
-            </button>
-            <button
-              type="button"
-              aria-label="Scroll videos right"
-              onClick={() => trackRef.current?.scrollBy({ left: 520, behavior: "smooth" })}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#DCCBC7] bg-white text-[#493A39] transition hover:bg-[#F4E9E6]"
-            >
-              <ArrowRight className="h-4 w-4" />
-            </button>
-          </div>
+            <Link href="/watch-buy" className="mr-1 text-xs font-semibold text-[#9F5E5E] underline-offset-4 hover:underline sm:mr-3 sm:text-sm">
+              View all
+            </Link>
           </div>}
           {viewAll && <nav className="border-t border-[#eee7dc] py-3" aria-label="Watch and Buy category switch">
             <div className="inline-flex rounded-xl border border-[#e7ded2] bg-white p-1.5 shadow-sm">
@@ -427,7 +408,7 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
           ref={trackRef}
           className={viewAll
             ? "watch-reel-feed grid grid-cols-2 gap-3 pb-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4"
-            : "flex snap-x snap-mandatory gap-3 overflow-x-auto pb-3 sm:gap-5 [scrollbar-width:thin] [scrollbar-color:#D8C8C4_transparent]"}
+            : "grid grid-cols-2 gap-3 pb-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4"}
         >
           {visibleReels.map((reel, index) => {
             const product = reel.kind === "product" ? reel.product : reel.product ?? null;
@@ -437,12 +418,54 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
             const discount = product?.comparePrice && product.comparePrice > product.price
               ? Math.round((1 - product.price / product.comparePrice) * 100)
               : 0;
+            if (!viewAll) {
+              return (
+                <article
+                  key={reel.id}
+                  className="group relative aspect-[9/14] min-w-0 overflow-hidden rounded-xl bg-[#2B2525] text-white shadow-sm"
+                >
+                  <Image
+                    src={reelPoster(reel)}
+                    alt={`${reelTitle(reel)} video`}
+                    fill
+                    sizes="(max-width: 767px) 50vw, 25vw"
+                    className="object-cover transition duration-500 group-hover:scale-[1.03]"
+                  />
+                  <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/5 to-black/10" />
+                  <button
+                    type="button"
+                    onClick={() => openReel(index, reel)}
+                    aria-label={`Play ${reelTitle(reel)}`}
+                    className="absolute left-1/2 top-1/2 z-10 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/70 bg-black/35 text-white shadow-lg transition group-hover:scale-105 group-hover:bg-[#B56F6F]"
+                  >
+                    <Play className="ml-0.5 h-5 w-5 fill-current" />
+                  </button>
+                  <div className="absolute inset-x-0 bottom-0 z-10 flex items-end gap-3 p-3 text-white sm:p-4">
+                    <button
+                      type="button"
+                      onClick={() => openReel(index, reel)}
+                      className="min-w-0 flex-1 text-left"
+                    >
+                      <span className="line-clamp-2 block text-xs font-medium leading-4 sm:text-sm">{reelTitle(reel)}</span>
+                      {product && <strong className="mt-1 block text-sm font-extrabold sm:text-base">{formatPrice(product.price)}</strong>}
+                    </button>
+                    {product && (
+                      <Link
+                        href={`/product/${product.slug}`}
+                        aria-label={`Shop ${product.name}`}
+                        className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white text-[#171312] transition hover:bg-[#FBB606]"
+                      >
+                        <ShoppingBag className="h-4 w-4" />
+                      </Link>
+                    )}
+                  </div>
+                </article>
+              );
+            }
             return (
               <article
                 key={reel.id}
-                className={viewAll
-                  ? "min-w-0 overflow-hidden rounded-xl border border-[#E8DADA] bg-white shadow-sm"
-                  : "w-[min(42vw,190px)] shrink-0 snap-start overflow-hidden rounded-xl border border-[#E8DADA] bg-white shadow-sm sm:w-[205px]"}
+                className="min-w-0 overflow-hidden rounded-xl border border-[#E8DADA] bg-white shadow-sm"
               >
                 <div className="relative">
                   <button
@@ -487,7 +510,7 @@ export default function WatchAndBuy({ products, editorialProducts = [], viewAll 
                       </span>
                     )}
                   </button>
-                  {viewAll && product && (
+                  {product && (
                     <div className="absolute right-2 top-14 z-10 flex flex-col items-center gap-2 text-white">
                       <button
                         type="button"

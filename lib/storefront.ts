@@ -161,42 +161,37 @@ export const getWatchBuyProducts = cache(async (limit: number | null = 6) => {
   const { getStoreReels } = await import("@/lib/reels");
   const managedReels = (await getStoreReels()).filter((reel) => reel.enabled && reel.productId !== null);
   const managedProductIds = managedReels.flatMap((reel) => reel.productId === null ? [] : [reel.productId]);
+  if (!managedProductIds.length) return [];
   const products = await prisma.product.findMany({
-    where: { status: "active", category: { status: "active" }, OR: [{ videoUrl: { not: null } }, ...(managedProductIds.length ? [{ id: { in: managedProductIds } }] : [])] },
+    where: { status: "active", category: { status: "active" }, id: { in: managedProductIds } },
     include: {
       category: true,
       images: { orderBy: { sortOrder: "asc" }, take: 1 },
     },
     orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
-    ...(limit === null ? {} : { take: limit }),
   });
   const engagements = await getProductEngagementCounts(products.map((product) => product.id));
-
-  const mapped = products.flatMap((product) => {
-    const reel = managedReels.find((item) => item.productId === product.id);
-    const videoUrl = reel?.videoUrl || product.videoUrl;
-    return videoUrl ? [{
+  const productsById = new Map(products.map((product) => [product.id, product]));
+  const mapped = managedReels.flatMap((reel) => {
+    const product = reel.productId === null ? null : productsById.get(reel.productId);
+    return product && reel.videoUrl ? [{
+    reelId: reel.id,
     id: product.id,
     slug: product.slug,
     name: product.name,
     category: product.category.name,
     price: Number(product.price),
     comparePrice: product.comparePrice ? Number(product.comparePrice) : null,
-    image: reel?.poster || product.images[0]?.image || FALLBACK_IMAGE,
-    videoUrl,
-    reelTitle: reel?.title,
-    reelBadge: reel?.badge,
-    reelCta: reel?.cta,
+    image: reel.poster || product.images[0]?.image || FALLBACK_IMAGE,
+    videoUrl: reel.videoUrl,
+    reelTitle: reel.title,
+    reelBadge: reel.badge,
+    reelCta: reel.cta,
     likeCount: engagements.get(product.id)?.likeCount ?? 0,
     shareCount: engagements.get(product.id)?.shareCount ?? 0,
     }] : [];
   });
-  const ordered = [...mapped].sort((a, b) => {
-    const first = managedReels.findIndex((reel) => reel.productId === a.id);
-    const second = managedReels.findIndex((reel) => reel.productId === b.id);
-    return (first < 0 ? 9999 : first) - (second < 0 ? 9999 : second);
-  });
-  return limit === null ? ordered : ordered.slice(0, limit);
+  return limit === null ? mapped : mapped.slice(0, limit);
 });
 
 export const getEditorialWatchBuyProducts = cache(async () => {

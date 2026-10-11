@@ -11,25 +11,22 @@ import {
   Heart,
   Minus,
   PackageCheck,
-  Play,
   Plus,
   ShieldCheck,
-  ShoppingBag,
   Truck,
   Undo2,
-  Volume2,
-  VolumeX,
   X,
 } from "lucide-react";
 import type { BlogPost } from "@/lib/blog";
-import type { VayziqHomeData, VayziqHomeOfferBanner, VayziqHomeProduct } from "@/lib/vayziq-home-data";
+import type { VayziqHomeData, VayziqHomeOffer, VayziqHomeOfferBanner, VayziqHomeProduct } from "@/lib/vayziq-home-data";
 import type { HomepageVisibility } from "@/lib/homepage-settings";
 import type { StoreMenuSettings } from "@/lib/store-menu-settings";
-import ProductVideo from "@/components/product/ProductVideo";
 import ProductOfferBadges from "@/components/product/ProductOfferBadges";
+import WatchAndBuy from "@/components/home/WatchAndBuy";
 import HomeHeader from "./HomeHeader";
 import ProductCarousel from "./ProductCarousel";
 import styles from "./VayziqHome.module.css";
+import offerStyles from "./OfferZone.module.css";
 import wishlistStyles from "./WishlistButton.module.css";
 import sectionWidthStyles from "./HomeSectionWidth.module.css";
 
@@ -61,6 +58,40 @@ function HomeOfferStrip({ banner, alternate = false }: { banner: VayziqHomeOffer
       </span>
       <span className={styles.offerStripImage}><Image src={banner.image} alt="" fill sizes="(max-width: 767px) 42vw, 38vw" quality={85} /></span>
     </Link>
+  </section>;
+}
+
+function HomeOfferZone({ offers }: { offers: VayziqHomeOffer[] }) {
+  const [active, setActive] = useState(0);
+  if (!offers.length) return null;
+  const visibleOffers = offers.length === 1
+    ? [offers[0]]
+    : [
+        offers[(active - 1 + offers.length) % offers.length],
+        offers[active],
+        offers[(active + 1) % offers.length],
+      ];
+  return <section className={`${offerStyles.offerZone} ${sectionWidthStyles.wideMerchSection}`} aria-labelledby="offer-zone-title">
+    <div className={offerStyles.offerZonePattern} aria-hidden="true" />
+    <div className={offerStyles.offerZoneHeading}>
+      <div><h2 id="offer-zone-title">Offers Zone</h2></div>
+      <Link href="/offers">View all <ArrowRight size={15} /></Link>
+    </div>
+    <div className={offerStyles.offerTicketTrack}>
+      {visibleOffers.map((offer, index) => (
+        <Link href={`/offers?code=${encodeURIComponent(offer.code)}`} className={`${offerStyles.offerTicket} ${offerStyles[`offerTicketTone${offers.length === 1 ? 2 : index + 1}`]}`} key={`${offer.id}-${index}`}>
+          <span className={offerStyles.offerTicketMain}>
+            <strong>{offer.title}</strong>
+            <span>{offer.condition}</span>
+            {offer.description && <small>{offer.description}</small>}
+          </span>
+          <span className={offerStyles.offerTicketCode}>Code: <b>{offer.code}</b></span>
+        </Link>
+      ))}
+    </div>
+    {offers.length > 1 && <div className={offerStyles.offerDots} aria-label="Choose an offer">
+      {offers.map((offer, index) => <button type="button" key={offer.id} onClick={() => setActive(index)} className={index === active ? offerStyles.offerDotActive : ""} aria-label={`Show offer ${index + 1}`} aria-pressed={index === active} />)}
+    </div>}
   </section>;
 }
 function colorPathSegment(color: string) {
@@ -146,11 +177,13 @@ export default function VayziqHome({
   visibility,
   journalPosts,
   menuSettings,
+  watchBuyProducts,
 }: {
   initialData: VayziqHomeData;
   visibility: HomepageVisibility;
   journalPosts: BlogPost[];
   menuSettings: StoreMenuSettings;
+  watchBuyProducts: Array<{ reelId?: string; id: number; name: string; slug: string; category: string; price: number; comparePrice: number | null; image: string; videoUrl: string; reelTitle?: string; reelBadge?: "None" | "Trending" | "New" | "Bestseller" | "Must Have"; reelCta?: string; likeCount: number; shareCount: number }>;
 }) {
   const [bannerStart, setBannerStart] = useState(0);
   const [heroIndex, setHeroIndex] = useState(0);
@@ -171,11 +204,6 @@ export default function VayziqHome({
     return () => { active = false; window.removeEventListener("vayziq:auth-success", load); };
   }, []);
   const [activeTab, setActiveTab] = useState("All");
-  const [activeVideoId, setActiveVideoId] = useState<number | null>(null);
-  const [reelsMuted, setReelsMuted] = useState(() => {
-    if (typeof window === "undefined") return true;
-    return window.localStorage.getItem("vayziq-watch-buy-muted") !== "false";
-  });
   const [cartProduct, setCartProduct] = useState<VayziqHomeProduct | null>(
     null,
   );
@@ -185,13 +213,8 @@ export default function VayziqHome({
   const [cartLimitMessage, setCartLimitMessage] = useState("");
   const [cartOptions, setCartOptions] = useState<Record<string, string>>({});
   const [cartAdded, setCartAdded] = useState(false);
-  const { banners, offerBanners, categories, products, catalogProducts } = initialData;
+  const { banners, offerBanners, offers, categories, products, catalogProducts } = initialData;
   const looks = products.slice(0, 4).map((product) => product.image);
-  const watchProducts = products
-    .filter((product) => product.videoUrl)
-    .slice(0, 4);
-  const activeVideo =
-    watchProducts.find((product) => product.id === activeVideoId) ?? null;
   const tabs = [
     "All",
     "New Arrivals",
@@ -236,21 +259,6 @@ export default function VayziqHome({
       if (!response.ok) return;
       setLiked(current => wasLiked ? current.filter(item => item !== id) : [...current, id]);
     } catch { /* Keep the existing state if the request fails. */ }
-  };
-  const toggleReelSound = () => setReelsMuted((current) => {
-    const next = !current;
-    try {
-      window.localStorage.setItem("vayziq-watch-buy-muted", String(next));
-    } catch {
-      // Keep the choice for this visit if storage is unavailable.
-    }
-    return next;
-  });
-  const moveActiveVideo = (direction: number) => {
-    if (!activeVideo || watchProducts.length < 2) return;
-    const currentIndex = watchProducts.findIndex((product) => product.id === activeVideo.id);
-    const nextIndex = (currentIndex + direction + watchProducts.length) % watchProducts.length;
-    setActiveVideoId(watchProducts[nextIndex].id);
   };
 useEffect(() => {
     if (!cartProduct) return;
@@ -409,6 +417,7 @@ useEffect(() => {
             ))}
           </div>
         </section>}
+        {visibility.offerZone && <HomeOfferZone offers={offers} />}
         {visibility.bestSellers && <>
         <SectionHeading title="Best Sellers" />
         <ProductCarousel label="Best Sellers">
@@ -593,33 +602,9 @@ useEffect(() => {
             </section>
           </>
         )}
-        {visibility.watchAndBuy && <>
-        <SectionHeading title="Watch & Buy" href="/watch-buy" />
-        <section id="watch-buy" className={styles.watch}>
-          {watchProducts.map((product) => (
-            <article key={product.id}>
-              <Image
-                src={product.image}
-                alt={`${product.name} video`}
-                fill
-                sizes="(max-width: 767px) 175px, 20vw"
-                quality={100}
-              />
-              <button
-                onClick={() => setActiveVideoId(product.id)}
-                aria-label={`Play ${product.name}`}
-              >
-                <Play fill="currentColor" />
-              </button>
-              <p>
-                {product.name}
-                <strong>{product.price}</strong>
-              </p>
-              <ShoppingBag />
-            </article>
-          ))}
-        </section>
-        </>}
+        {visibility.watchAndBuy && watchBuyProducts.length > 0 && (
+          <WatchAndBuy products={watchBuyProducts} />
+        )}
         {visibility.trustBenefits && (
           <section className={styles.trust}>
             {[
@@ -687,63 +672,6 @@ useEffect(() => {
               </div>
             </div>
           </section>
-        </div>
-      )}      {activeVideo && activeVideo.videoUrl && (
-        <div
-          className="fixed inset-0 z-[240] flex items-center justify-center bg-black/75 p-3 backdrop-blur-[3px] sm:p-8"
-          onMouseDown={() => setActiveVideoId(null)}
-        >
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-label={`${activeVideo.name} video`}
-            className="relative w-[min(360px,calc(100vw-32px))] rounded-2xl bg-[#201B1B] shadow-2xl sm:w-[min(330px,calc(100vw-48px))] sm:rounded-[18px]"
-            onMouseDown={(event) => event.stopPropagation()}
-          >
-            {watchProducts.length > 1 && <button type="button" aria-label="Previous video" onClick={() => moveActiveVideo(-1)} className="absolute left-1 top-1/2 z-40 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-black/45 text-white transition hover:bg-[#B56F6F] sm:left-[-54px] sm:translate-x-0"><ArrowLeft className="h-5 w-5" /></button>}
-            <button
-              type="button"
-              onClick={() => setActiveVideoId(null)}
-              className="absolute right-3 top-3 z-30 flex h-9 w-9 items-center justify-center rounded-full bg-[#111]/90 text-white shadow-lg transition hover:bg-[#B56F6F]"
-              aria-label="Close video"
-            >
-              <X className="h-5 w-5" />
-            </button>
-            <button
-              type="button"
-              onClick={toggleReelSound}
-              aria-label={reelsMuted ? "Unmute video" : "Mute video"}
-              aria-pressed={!reelsMuted}
-              className="absolute left-3 top-3 z-30 flex h-9 w-9 items-center justify-center rounded-full bg-black/70 text-white shadow-lg transition hover:bg-[#B56F6F]"
-            >
-              {reelsMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-            </button>
-            <div className="relative aspect-[2/3] w-full overflow-hidden rounded-2xl bg-[#201B1B] sm:rounded-[18px]">
-              <ProductVideo
-                url={activeVideo.videoUrl}
-                title={`${activeVideo.name} reel`}
-                poster={activeVideo.image}
-                className="absolute inset-0 h-full w-full object-cover"
-                autoPlay
-                loop
-                muted={reelsMuted}
-                coverEmbed
-              />
-              <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black via-black/80 to-transparent px-3 pb-3 pt-12 text-white">
-                <div className="flex items-center gap-2.5">
-                  <div className="relative h-11 w-9 shrink-0 overflow-hidden rounded-md border border-white/20 bg-white/10">
-                    <Image src={activeVideo.image} alt="" fill sizes="36px" className="object-cover" />
-                  </div>
-                  <Link href={`/product/${activeVideo.slug}`} onClick={() => setActiveVideoId(null)} className="min-w-0 flex-1 rounded focus:outline-none focus:ring-2 focus:ring-white/80">
-                    <h2 className="truncate text-[13px] font-medium leading-4 text-white">{activeVideo.name}</h2>
-                    <div className="mt-0.5 flex items-center gap-1.5"><span className="text-sm font-extrabold text-white">{activeVideo.price}</span>{activeVideo.oldPrice && <span className="text-[9px] text-white/55 line-through">{activeVideo.oldPrice}</span>}</div>
-                  </Link>
-                  <Link href={`/product/${activeVideo.slug}`} onClick={() => setActiveVideoId(null)} aria-label={`Shop ${activeVideo.name}`} className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#FBB606] text-[#171312] transition hover:bg-white"><ShoppingBag className="h-4 w-4" /></Link>
-                </div>
-              </div>
-            </div>
-            {watchProducts.length > 1 && <button type="button" aria-label="Next video" onClick={() => moveActiveVideo(1)} className="absolute right-1 top-1/2 z-40 flex h-10 w-10 translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-black/45 text-white transition hover:bg-[#B56F6F] sm:right-[-54px] sm:translate-x-0"><ArrowRight className="h-5 w-5" /></button>}
-          </div>
         </div>
       )}
     </div>

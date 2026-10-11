@@ -3,7 +3,7 @@ import { getStoreBranding } from "@/lib/store-branding";
 import type { Metadata } from "next";
 import Link from "next/link";
 import WatchAndBuy from "@/components/home/WatchAndBuy";
-import { getEditorialWatchBuyProducts, getWatchBuyProducts } from "@/lib/storefront";
+import { getWatchBuyProducts } from "@/lib/storefront";
 
 export async function generateMetadata() { return pageSeo("/watch-buy", await originalMetadata()); }
 async function originalMetadata(): Promise<Metadata> {
@@ -17,12 +17,12 @@ async function originalMetadata(): Promise<Metadata> {
 }
 
 export default async function WatchBuyPage() {
-  const [products, editorialProducts] = await Promise.all([getWatchBuyProducts(null), getEditorialWatchBuyProducts()]);
+  const products = await getWatchBuyProducts(null);
 
   return (
     <main>
-      {products.length || editorialProducts.length ? (
-        <WatchAndBuy products={products} editorialProducts={editorialProducts} viewAll />
+      {products.length ? (
+        <WatchAndBuy products={products} viewAll />
       ) : (
         <section className="mx-auto max-w-3xl px-5 py-24 text-center">
           <h1 className="mt-3 font-serif text-4xl text-[#2B2525]">Watch &amp; Buy</h1>

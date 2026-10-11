@@ -1,0 +1,185 @@
+.offerZone {
+  position: relative;
+  isolation: isolate;
+  max-width: 1440px;
+  margin: 0 auto;
+  overflow: hidden;
+  padding: 24px 32px 10px;
+  background: #fff;
+  color: #0b0b0d;
+}
+
+.offerZonePattern {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.22;
+  background-image: radial-gradient(circle, #b8cada 0.8px, transparent 0.9px);
+  background-size: 11px 11px;
+  mask-image: linear-gradient(to bottom, transparent, #000 24%, #000 88%, transparent);
+}
+
+.offerZoneHeading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 0 14px;
+}
+
+.offerZoneHeading h2 {
+  margin: 0;
+  font-size: 27px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.offerZoneHeading > a {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 3px;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.offerTicketTrack {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 14px;
+  width: 100%;
+  overflow: hidden;
+  padding: 0 0 2px;
+}
+
+.offerTicket {
+  position: relative;
+  display: flex;
+  flex: 0 0 min(28vw, 360px);
+  min-height: 154px;
+  overflow: hidden;
+  border: 1px solid rgba(45, 49, 67, 0.08);
+  border-radius: 11px;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  box-shadow: 0 5px 14px rgba(44, 57, 89, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.offerTicket:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 9px 20px rgba(44, 57, 89, 0.15);
+}
+
+.offerTicket::before,
+.offerTicket::after {
+  position: absolute;
+  left: -8px;
+  top: calc(100% - 55px);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  content: "";
+}
+
+.offerTicket::after {
+  right: -8px;
+  left: auto;
+}
+
+.offerTicketMain {
+  display: flex;
+  min-height: 108px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 18px;
+  background: linear-gradient(135deg, #f3b9f1, #d899ea);
+}
+
+.offerTicketMain strong {
+  font-size: clamp(18px, 1.7vw, 24px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0.015em;
+  text-transform: uppercase;
+}
+
+.offerTicketMain > span {
+  margin-top: 7px;
+  font-size: clamp(12px, 1.15vw, 16px);
+  line-height: 1.15;
+}
+
+.offerTicketMain small {
+  margin-top: 5px;
+  color: rgba(0, 0, 0, 0.62);
+  font-size: 9px;
+}
+
+.offerTicketCode {
+  display: flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 14px;
+  background: #ffd20a;
+  font-size: clamp(13px, 1.2vw, 17px);
+}
+
+.offerTicketCode b { margin-left: 6px; font-weight: 850; }
+.offerTicketTone1 .offerTicketMain { background: linear-gradient(135deg, #f3b9f1 0%, #d899ea 100%); }
+.offerTicketTone2 .offerTicketMain { background: linear-gradient(135deg, #a9c6ff 0%, #839ceb 100%); }
+.offerTicketTone3 .offerTicketMain { background: linear-gradient(135deg, #ffc2ed 0%, #f29bd5 100%); }
+
+.offerDots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding-top: 10px;
+}
+
+.offerDots button {
+  width: 7px;
+  height: 7px;
+  border: 0;
+  border-radius: 50%;
+  background: #c7c9cf;
+  padding: 0;
+  transition: transform 0.18s ease, background 0.18s ease;
+}
+
+.offerDots button.offerDotActive { background: #101114; transform: scale(1.3); }
+
+@media (max-width: 767px) {
+  .offerZone { padding: 22px 16px 10px; }
+  .offerZoneHeading { padding: 0 0 12px; }
+  .offerZoneHeading h2 { font-size: 23px; }
+  .offerZoneHeading > a { font-size: 10px; }
+  .offerTicketTrack { justify-content: flex-start; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+  .offerTicketTrack::-webkit-scrollbar { display: none; }
+  .offerTicket { flex-basis: 72vw; min-height: 138px; border-radius: 10px; scroll-snap-align: center; }
+  .offerTicketMain { min-height: 96px; padding: 15px 13px; }
+  .offerTicketMain strong { font-size: 18px; }
+  .offerTicketMain > span { margin-top: 6px; font-size: 12px; }
+  .offerTicketMain small { display: none; }
+  .offerTicketCode { min-height: 42px; padding: 8px 12px; font-size: 13px; }
+  .offerTicket::before,
+  .offerTicket::after { top: calc(100% - 55px); width: 16px; height: 16px; }
+  .offerTicket::before { left: -8px; }
+  .offerTicket::after { right: -8px; }
+  .offerDots { padding-top: 9px; }
+}
+
+@media (min-width: 1600px) {
+  .offerZone { max-width: none; padding-right: clamp(48px, 4vw, 112px); padding-left: clamp(48px, 4vw, 112px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .offerTicket,
+  .offerDots button { transition: none; }
+}

@@ -194,3 +194,29 @@
 .footerCategoryGroup li a:hover,.footerCategoryGroup li a:focus-visible{color:#fbb606!important}
 @media(max-width:767px){.footerCategoriesInner{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 18px;padding:30px 16px 34px}.footerCategoryTitle{font-size:13px}.footerCategoryGroup ul{gap:10px;margin-top:13px}.footerCategoryGroup li a{font-size:11px}}
 .offerTicker{position:relative;z-index:39;overflow:hidden;border-bottom:1px solid #e6c552;background:#fbb606;color:#111}.offerTickerTrack{display:flex;width:max-content;animation:offerTickerScroll 28s linear infinite}.offerTickerTrack:hover{animation-play-state:paused}.offerTickerTrack a{display:flex;align-items:center;gap:10px;min-height:34px;padding:0 34px;border-right:1px solid rgba(17,17,17,.22);white-space:nowrap;font-size:11px;text-decoration:none}.offerTickerTrack strong{font-weight:800}.offerTickerTrack span{border-radius:4px;background:#111;padding:3px 6px;color:#fff;font-size:9px;font-weight:800;letter-spacing:.08em}@keyframes offerTickerScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}@media(max-width:767px){.offerTickerTrack{animation-duration:20s}.offerTickerTrack a{min-height:31px;padding:0 22px;font-size:10px}}@media(prefers-reduced-motion:reduce){.offerTicker{overflow-x:auto}.offerTickerTrack{animation:none}}
+
+.offerZone{position:relative;isolation:isolate;max-width:1440px;margin:32px auto 0;overflow:hidden;padding:27px 0 22px;background:#f8fbff;color:#0b0b0d}
+.offerZonePattern{position:absolute;inset:0;z-index:-1;opacity:.48;background-image:radial-gradient(circle,#b8cada 1.1px,transparent 1.2px);background-size:12px 12px;mask-image:linear-gradient(to bottom,#000 0 78%,transparent)}
+.offerZoneHeading{display:flex;align-items:flex-end;justify-content:space-between;padding:0 32px 19px}
+.offerZoneHeading span{display:block;margin-bottom:5px;color:#6c7787;font-size:9px;font-weight:800;letter-spacing:.18em}
+.offerZoneHeading h2{margin:0;font-size:28px;font-weight:850;letter-spacing:.03em;text-transform:uppercase}
+.offerZoneHeading>a{display:flex;align-items:center;gap:4px;border-bottom:1px solid currentColor;padding-bottom:3px;font-size:11px;font-weight:750}
+.offerTicketTrack{display:flex;align-items:stretch;justify-content:center;gap:22px;width:100%;overflow:hidden;padding:0 0 3px}
+.offerTicket{position:relative;display:flex;flex:0 0 min(51vw,610px);min-height:220px;overflow:hidden;border-radius:15px;flex-direction:column;justify-content:space-between;text-align:center;box-shadow:0 9px 24px rgba(44,57,89,.13);transition:transform .2s ease,box-shadow .2s ease}
+.offerTicket:hover{transform:translateY(-3px);box-shadow:0 13px 28px rgba(44,57,89,.18)}
+.offerTicket::before,.offerTicket::after{position:absolute;left:-10px;width:20px;height:20px;border-radius:50%;background:#f8fbff;content:""}
+.offerTicket::before{top:calc(100% - 82px)}
+.offerTicket::after{left:auto;right:-10px;top:calc(100% - 82px)}
+.offerTicketMain{display:flex;min-height:156px;flex-direction:column;align-items:center;justify-content:center;padding:24px 25px;background:linear-gradient(135deg,#f3b9f1,#d899ea)}
+.offerTicketMain strong{font-size:clamp(22px,2.4vw,34px);font-weight:900;line-height:1;letter-spacing:.015em;text-transform:uppercase}
+.offerTicketMain>span{margin-top:10px;font-size:clamp(14px,1.6vw,22px);line-height:1.15}
+.offerTicketMain small{margin-top:7px;color:rgba(0,0,0,.62);font-size:11px}
+.offerTicketCode{display:flex;min-height:64px;align-items:center;justify-content:center;padding:12px 18px;background:#ffd20a;font-size:clamp(16px,1.6vw,23px)}
+.offerTicketCode b{margin-left:6px;font-weight:850}
+.offerTicketTone2 .offerTicketMain{background:linear-gradient(135deg,#a9c6ff 0%,#839ceb 100%)}
+.offerTicketTone3 .offerTicketMain{background:linear-gradient(135deg,#ffc2ed 0%,#f29bd5 100%)}
+.offerDots{display:flex;align-items:center;justify-content:center;gap:8px;padding-top:13px}
+.offerDots button{width:9px;height:9px;border:0;border-radius:50%;background:#c7c9cf;padding:0;transition:transform .18s ease,background .18s ease}
+.offerDots button.offerDotActive{background:#101114;transform:scale(1.3)}
+@media(max-width:767px){.offerZone{margin-top:25px;padding:22px 0 18px}.offerZoneHeading{padding:0 16px 15px}.offerZoneHeading h2{font-size:23px}.offerZoneHeading>a{font-size:10px}.offerTicketTrack{gap:12px}.offerTicket{flex-basis:72vw;min-height:154px;border-radius:11px}.offerTicketMain{min-height:108px;padding:18px 14px}.offerTicketMain strong{font-size:20px}.offerTicketMain>span{margin-top:7px;font-size:13px}.offerTicketMain small{display:none}.offerTicketCode{min-height:46px;padding:9px 12px;font-size:14px}.offerTicket::before,.offerTicket::after{top:calc(100% - 55px);width:16px;height:16px}.offerTicket::before{left:-8px}.offerTicket::after{right:-8px}.offerDots{padding-top:11px}}
+@media(prefers-reduced-motion:reduce){.offerTicket,.offerDots button{transition:none}}

@@ -1,10 +1,12 @@
 import prisma from "@/lib/db";
+import { offerTitle, type ProductOffer } from "@/lib/product-offers";
 
 export type VayziqHomeBanner = { image: string; alt: string; href: string };
 export type VayziqHomeOfferBanner = { image: string; title: string; subtitle: string | null; href: string };
+export type VayziqHomeOffer = { id: number; code: string; title: string; condition: string; description: string | null };
 export type VayziqHomeCategory = { id: number; name: string; slug: string; image: string };
 export type VayziqHomeProduct = { id: number; name: string; slug: string; price: string; oldPrice: string | null; discountPercent: number | null; image: string; images: string[]; category: string; colors: string[]; options: { name: string; values: string[] }[]; rating: string; videoUrl: string | null; badge: string | null; badgeTone: string | null; inStock: boolean };
-export type VayziqHomeData = { banners: VayziqHomeBanner[]; offerBanners: VayziqHomeOfferBanner[]; categories: VayziqHomeCategory[]; products: VayziqHomeProduct[]; catalogProducts: VayziqHomeProduct[] };
+export type VayziqHomeData = { banners: VayziqHomeBanner[]; offerBanners: VayziqHomeOfferBanner[]; offers: VayziqHomeOffer[]; categories: VayziqHomeCategory[]; products: VayziqHomeProduct[]; catalogProducts: VayziqHomeProduct[] };
 
 const fallbackBanners: VayziqHomeBanner[] = [
   { image: "/vayziq/hero-paired-v2.png", alt: "VAYZIQ everyday collection", href: "/shop" },
@@ -20,9 +22,11 @@ const fallbackOfferBanners: VayziqHomeOfferBanner[] = [
 ];
 
 export async function getVayziqHomeData(): Promise<VayziqHomeData> {
-  const [banners, offerBanners, roots, products, reviewStats] = await Promise.all([
+  const now = new Date();
+  const [banners, offerBanners, coupons, roots, products, reviewStats] = await Promise.all([
     prisma.banner.findMany({ where: { active: true, placement: "home" }, orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }], take: 8 }),
     prisma.banner.findMany({ where: { active: true, placement: "offer-zone" }, orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }], take: 2, select: { id: true, image: true, title: true, subtitle: true } }),
+    prisma.coupon.findMany({ where: { active: true, AND: [{ OR: [{ startsAt: null }, { startsAt: { lte: now } }] }, { OR: [{ expiresAt: null }, { expiresAt: { gt: now } }] }] }, orderBy: { createdAt: "desc" }, take: 8 }),
     prisma.category.findMany({
       where: { status: "active", slug: { in: ["men", "women"] }, parentId: null },
       include: { children: { where: { status: "active" }, orderBy: [{ sortOrder: "asc" }, { name: "asc" }] } },
@@ -71,6 +75,21 @@ export async function getVayziqHomeData(): Promise<VayziqHomeData> {
       const banner = offerBanners[index];
       return banner ? { image: banner.image, title: banner.title.trim() || fallback.title, subtitle: banner.subtitle?.trim() || null, href: `/offers/${banner.id}` } : fallback;
     }),
+    offers: coupons.filter((coupon) => coupon.usageLimit === null || coupon.usageCount < coupon.usageLimit).map((coupon) => ({
+      id: coupon.id,
+      code: coupon.code,
+      title: offerTitle({
+        code: coupon.code,
+        description: coupon.description ?? undefined,
+        type: coupon.type,
+        value: Number(coupon.value),
+        minimum: Number(coupon.minimumOrder ?? 0),
+        maximum: coupon.maximumDiscount === null ? null : Number(coupon.maximumDiscount),
+        rules: coupon.rules as ProductOffer["rules"],
+      }).toUpperCase(),
+      condition: coupon.minimumOrder && Number(coupon.minimumOrder) > 0 ? `On Orders Above ₹${Number(coupon.minimumOrder).toLocaleString("en-IN")}` : "On Your Order",
+      description: coupon.description,
+    })),
     categories: categoryCards,
     // Keep hero merchandising intentionally compact, while the dedicated
     // catalog block below exposes every active product for an early launch.
