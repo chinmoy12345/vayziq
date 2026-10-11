@@ -2,7 +2,9 @@ import { cache } from "react";
 import prisma from "@/lib/db";
 
 export const HOMEPAGE_VISIBILITY_DEFAULTS = {
-  maintenanceMode: true,
+  // The public storefront must remain available if this setting has not yet
+  // been persisted, or if the settings read briefly fails during deployment.
+  maintenanceMode: false,
   heroSlider: true,
   campaignBanners: true,
   bestSellers: true,
