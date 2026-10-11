@@ -134,6 +134,9 @@ export default function SettingsPage() {
   const [email, setEmail] = useState("hello.vayziq@gmail.com");
   const [phone, setPhone] = useState("+91 9330755055");
   const [whatsapp, setWhatsapp] = useState("+91 9330755055");
+  const [whatsappFloatEnabled, setWhatsappFloatEnabled] = useState(true);
+  const [whatsappFloatMessage, setWhatsappFloatMessage] = useState("Hi, I need help with a product.");
+  const [whatsappFloatLabel, setWhatsappFloatLabel] = useState("Chat with us");
 
   const [address, setAddress] = useState(
     "Mumbai"
@@ -143,12 +146,15 @@ export default function SettingsPage() {
 
   useEffect(() => {
     void fetch("/api/admin/store-branding", { cache: "no-store" })
-      .then(async (response) => ({ response, body: await response.json() as { data?: { name?: string; logo?: string; email: string; phone: string; whatsapp: string; hours: string; address: string; pincode: string } } }))
+      .then(async (response) => ({ response, body: await response.json() as { data?: { name?: string; logo?: string; email: string; phone: string; whatsapp: string; whatsappFloatEnabled: boolean; whatsappFloatMessage: string; whatsappFloatLabel: string; hours: string; address: string; pincode: string } } }))
       .then(({ response, body }) => {
         if (!response.ok || !body.data) throw new Error("Unable to load settings");
         setEmail(body.data.email);
         setPhone(body.data.phone);
         setWhatsapp(body.data.whatsapp);
+        setWhatsappFloatEnabled(body.data.whatsappFloatEnabled);
+        setWhatsappFloatMessage(body.data.whatsappFloatMessage);
+        setWhatsappFloatLabel(body.data.whatsappFloatLabel);
         setHours(body.data.hours);
         setAddress(body.data.address);
         setPincode(body.data.pincode);
@@ -285,7 +291,7 @@ export default function SettingsPage() {
     setIsSaving(true);
     setStatusMessage(null);
     try {
-      const response = await fetch("/api/admin/store-branding", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: storeName, logo: storeLogo, email, phone, whatsapp, hours, address, pincode }) });
+      const response = await fetch("/api/admin/store-branding", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: storeName, logo: storeLogo, email, phone, whatsapp, whatsappFloatEnabled, whatsappFloatMessage, whatsappFloatLabel, hours, address, pincode }) });
       const body = await response.json() as { message?: string };
       if (!response.ok) throw new Error(body.message || "Unable to save settings.");
       setStatusMessage("Store name and contact details saved across the site.");

@@ -9,6 +9,7 @@ import { getStoreMenuSettings } from "@/lib/store-menu-settings";
 import MaintenancePage from "@/components/store/MaintenancePage";
 import ChannelVisitTracker from "@/components/store/ChannelVisitTracker";
 import { Suspense } from "react";
+import WhatsAppFloat from "@/components/store/WhatsAppFloat";
 
 export const dynamic = "force-dynamic";
 
@@ -47,6 +48,7 @@ export default async function StoreLayout({ children }: Readonly<{ children: Rea
       }}>
         <main className="storefront-shell min-h-screen">{children}</main>
       </ProductCardSettingsProvider>
+      <WhatsAppFloat branding={branding} />
       <Footer branding={branding} socialLinks={socialLinks} categories={footerCategories} settings={{
         newsletter: visibility.footerNewsletter,
         brand: visibility.footerBrand,

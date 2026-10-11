@@ -18,14 +18,44 @@ import prisma from "@/lib/db";
 import { formatPrice } from "@/lib/storefront";
 import { getHomepageVisibility } from "@/lib/homepage-settings";
 
-type ProductPageProps = { params: Promise<{ slug: string }> };
+type ProductPageProps = { params: Promise<{ slug: string }>; searchParams: Promise<{ color?: string }> };
+function colorPathSegment(color: string) {
+  return color.trim().toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
+
+async function resolveProductRoute(routeSlug: string) {
+  const exact = await prisma.product.findFirst({
+    where: { slug: routeSlug, status: "active", category: { status: "active" } },
+    select: { slug: true },
+  });
+  if (exact) return { productSlug: exact.slug, color: "" };
+
+  const parts = routeSlug.split("-").filter(Boolean);
+  const candidateSlugs = parts.slice(1).map((_, index) => parts.slice(0, parts.length - index - 1).join("-"));
+  if (!candidateSlugs.length) return { productSlug: routeSlug, color: "" };
+
+  const candidates = await prisma.product.findMany({
+    where: { slug: { in: candidateSlugs }, status: "active", category: { status: "active" } },
+    select: { slug: true, options: { select: { name: true, values: { select: { value: true } } } } },
+  });
+  for (const candidate of candidates.sort((a, b) => b.slug.length - a.slug.length)) {
+    const suffix = routeSlug.slice(candidate.slug.length + 1);
+    const color = candidate.options
+      .filter((option) => /colou?r/i.test(option.name))
+      .flatMap((option) => option.values)
+      .find((value) => colorPathSegment(value.value) === suffix)?.value;
+    if (color) return { productSlug: candidate.slug, color };
+  }
+  return { productSlug: routeSlug, color: "" };
+}
 
 export async function generateMetadata(props: ProductPageProps) { return pageSeo("/product/" + (await props.params).slug, await originalMetadata(props)); }
 async function originalMetadata({ params }: ProductPageProps): Promise<Metadata> {
   const branding = await getStoreBranding();
   const { slug } = await params;
+  const resolvedRoute = await resolveProductRoute(slug);
   const product = await prisma.product.findFirst({
-    where: { slug, status: "active", category: { status: "active" } },
+    where: { slug: resolvedRoute.productSlug, status: "active", category: { status: "active" } },
     select: { name: true, description: true, images: { orderBy: { sortOrder: "asc" }, take: 1 }, category: { select: { name: true } } },
   });
   if (!product) return { title: "Product not found", robots: { index: false, follow: false } };
@@ -39,11 +69,13 @@ async function originalMetadata({ params }: ProductPageProps): Promise<Metadata>
   };
 }
 
-export default async function ProductPage({ params }: ProductPageProps) {
+export default async function ProductPage({ params, searchParams }: ProductPageProps) {
   const branding = await getStoreBranding();
   const { slug } = await params;
+  const resolvedRoute = await resolveProductRoute(slug);
+  const requestedColor = (await searchParams).color?.trim() || resolvedRoute.color;
   const product = await prisma.product.findFirst({
-    where: { slug, status: "active", category: { status: "active" } },
+    where: { slug: resolvedRoute.productSlug, status: "active", category: { status: "active" } },
     include: {
       variants: { include: { variantValues: { include: { optionValue: { include: { option: true } } } } } },
       category: true,
@@ -77,6 +109,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const details = product.description?.split(/\n|\r/).map(line => line.trim()).filter(Boolean) ?? [];
   const material = optionValues("material")[0] ?? optionValues("fabric")[0] ?? "Details in description";
   const colors = [...new Set([...optionValues("color"), ...optionValues("colour")])];
+  const initialColor = colors.find((color) => color.toLowerCase() === requestedColor.toLowerCase()) ?? colors[0] ?? "";
   const colorImages = Object.fromEntries(product.options.filter((option) => /colou?r/i.test(option.name)).flatMap((option) => option.values.filter((value) => value.image).map((value) => [value.value, value.image!] as const)));
   const sizes = optionValues("size");
   const purchaseProduct = {
@@ -103,6 +136,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     material,
     sizes,
     colors,
+    initialColor,
     colorImages,
     sizeGuideImage: product.sizeGuideImage ?? product.category.sizeGuideImage ?? undefined,
     stock: product.stock,
@@ -134,7 +168,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     <div className="mx-auto max-w-[1440px] px-4 pb-10 pt-3 sm:px-8 sm:pt-6 lg:px-10">
       <section aria-label={`${product.name} purchase details`} className="grid items-start gap-5 sm:gap-8 lg:grid-cols-[minmax(0,1.16fr)_minmax(390px,0.84fr)] lg:gap-8 xl:gap-12">
         <div className="-mx-4 min-w-0 space-y-5 sm:mx-0">
-          <ProductGallery productId={product.id} images={galleryImages} initialColor={colors[0]} name={product.name} badge={product.badgeEnabled && product.badgeText ? product.badgeText : undefined} badgeTone={product.badgeTone} />
+          <ProductGallery productId={product.id} images={galleryImages} initialColor={initialColor} name={product.name} badge={product.badgeEnabled && product.badgeText ? product.badgeText : undefined} badgeTone={product.badgeTone} />
           {visibility.productDetailVideo && product.videoUrl && <section aria-labelledby="product-video-title" className="overflow-hidden rounded-xl border border-[#E8DADA] bg-white">
             <div className="px-4 py-3 sm:px-5"><h2 id="product-video-title" className="font-serif text-xl text-[#2B2525]">See this piece in motion</h2><p className="mt-1 text-xs text-[#756565]">A closer look at the fabric, finish and fit.</p></div>
             <div className="aspect-video bg-[#2B2525]"><ProductVideo url={product.videoUrl} title={`${product.name} product video`} poster={images[0]} /></div>

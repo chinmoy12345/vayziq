@@ -63,6 +63,9 @@ function HomeOfferStrip({ banner, alternate = false }: { banner: VayziqHomeOffer
     </Link>
   </section>;
 }
+function colorPathSegment(color: string) {
+  return color.trim().toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
 function ProductCard({
   product,
   liked,
@@ -83,7 +86,8 @@ function ProductCard({
     <article
       className={`${styles.productCard}${framed ? ` ${styles.framedProductCard}` : ""}`}
     >
-      <Link href={`/product/${product.slug}`} className={styles.productImage}>
+      <div className={styles.productImage}>
+        <Link href={`/product/${product.slug}`} className={styles.productImageLink} aria-label={`View ${product.name}`}>
         <Image
           src={product.image}
           alt={product.name}
@@ -91,6 +95,7 @@ function ProductCard({
           sizes="(max-width: 767px) 58vw, (max-width: 1100px) 32vw, 24vw"
           quality={100}
         />
+        </Link>
         {dynamicBadge && (
           <span className={`${styles.discountBadge} ${product.badgeTone === "new" ? styles.badgeNew : product.badgeTone === "sale" ? styles.badgeSale : product.badgeTone === "popular" ? styles.badgePopular : product.badgeTone === "neutral" ? styles.badgeNeutral : ""}`}>
             {dynamicBadge}
@@ -102,11 +107,11 @@ function ProductCard({
         )}
         {product.colors.length > 0 && (
           <span className={styles.productColorStack} aria-label={`${product.colors.length} ${product.colors.length === 1 ? "color" : "colors"} available`}>
-            {product.colors.slice(0, 3).map((color) => <i key={color} style={{ backgroundColor: color }} title={color} />)}
-            {product.colors.length > 3 && <b>+{product.colors.length - 3}</b>}
+            {product.colors.slice(0, 3).map((color) => <Link key={color} href={`/product/${product.slug}-${colorPathSegment(color)}`} className={styles.productColorLink} style={{ backgroundColor: color }} title={color} aria-label={`View ${product.name} in ${color}`} />)}
+            {product.colors.length > 3 && <Link href={`/product/${product.slug}`} className={styles.productColorMore} aria-label={`View all ${product.colors.length} colors for ${product.name}`}>+{product.colors.length - 3}</Link>}
           </span>
         )}
-      </Link>
+      </div>
       <button
         type="button"
         className={`${styles.wishlistButton} ${wishlistStyles.button}${liked ? ` ${styles.liked} ${wishlistStyles.active}` : ""}`}

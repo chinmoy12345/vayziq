@@ -37,6 +37,7 @@ interface ProductInfoData {
   sizes?: string[];
   colors?: string[];
   colorImages?: Record<string, string>;
+  initialColor?: string;
   sizeGuideImage?: string;
   stock?: number;
   min?: number;
@@ -61,7 +62,7 @@ export default function ProductInfo({
     useState(product.sizes?.[0] || "");
 
   const [selectedColor, setSelectedColor] =
-    useState(product.colors?.[0] || "");
+    useState(product.initialColor || product.colors?.[0] || "");
 
   const variant = product.variants?.find(v => (!v.values.size || v.values.size === selectedSize) && (!(v.values.color || v.values.colour) || (v.values.color || v.values.colour) === selectedColor));
   const sellingPrice = variant?.price ?? product.basePrice ?? Number(product.price.replace(/[^\d.]/g, ""));

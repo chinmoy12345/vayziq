@@ -35,12 +35,20 @@ export async function PUT(request: Request) {
     }
     contact[field] = value;
   }
+  const whatsappFloatEnabled = body?.whatsappFloatEnabled !== false;
+  const whatsappFloatMessage = typeof body?.whatsappFloatMessage === "string" ? body.whatsappFloatMessage.trim().slice(0, 500) : "";
+  const whatsappFloatLabel = typeof body?.whatsappFloatLabel === "string" ? body.whatsappFloatLabel.trim().slice(0, 50) : "";
+  if (!whatsappFloatMessage || !whatsappFloatLabel) return NextResponse.json({ success: false, message: "Enter a WhatsApp button label and default message." }, { status: 400 });
+
   await prisma.$transaction([
     ...Object.entries(contact).map(([field, value]) => prisma.storeSetting.upsert({ where: { key: "store_" + field }, update: { value }, create: { key: "store_" + field, value } })),
+    prisma.storeSetting.upsert({ where: { key: "store_whatsapp_float_enabled" }, update: { value: whatsappFloatEnabled }, create: { key: "store_whatsapp_float_enabled", value: whatsappFloatEnabled } }),
+    prisma.storeSetting.upsert({ where: { key: "store_whatsapp_float_message" }, update: { value: whatsappFloatMessage }, create: { key: "store_whatsapp_float_message", value: whatsappFloatMessage } }),
+    prisma.storeSetting.upsert({ where: { key: "store_whatsapp_float_label" }, update: { value: whatsappFloatLabel }, create: { key: "store_whatsapp_float_label", value: whatsappFloatLabel } }),
     prisma.storeSetting.upsert({ where: { key: "store_name" }, update: { value: name }, create: { key: "store_name", value: name } }),
     prisma.storeSetting.upsert({ where: { key: "store_logo" }, update: { value: logo }, create: { key: "store_logo", value: logo } }),
   ]);
 
   revalidatePath("/", "layout");
-  return NextResponse.json({ success: true, data: { name, logo, ...contact } });
+  return NextResponse.json({ success: true, data: { name, logo, ...contact, whatsappFloatEnabled, whatsappFloatMessage, whatsappFloatLabel } });
 }

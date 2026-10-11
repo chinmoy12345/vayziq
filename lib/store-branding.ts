@@ -7,6 +7,9 @@ export type StoreBranding = {
   email: string;
   phone: string;
   whatsapp: string;
+  whatsappFloatEnabled: boolean;
+  whatsappFloatMessage: string;
+  whatsappFloatLabel: string;
   hours: string;
   address: string;
   pincode: string;
@@ -17,6 +20,9 @@ export const DEFAULT_STORE_BRANDING: StoreBranding = {
   email: "hello.vayziq@gmail.com",
   phone: "+91 9330755055",
   whatsapp: "+91 9330755055",
+  whatsappFloatEnabled: true,
+  whatsappFloatMessage: "Hi, I need help with a product.",
+  whatsappFloatLabel: "Chat with us",
   hours: "24*7",
   address: "Mumbai",
   pincode: "",
@@ -30,6 +36,8 @@ const REPLACED_LOGOS = new Set([
   "/uploads/branding/tantuka-wordmark.png",
 ]);
 
+function booleanValue(value: unknown) { return typeof value === "boolean" ? value : null; }
+
 function stringValue(value: unknown) {
   return typeof value === "string" && value.trim() ? value.trim() : null;
 }
@@ -38,7 +46,7 @@ function stringValue(value: unknown) {
 export const getStoreBranding = cache(async (): Promise<StoreBranding> => {
   try {
     const settings = await prisma.storeSetting.findMany({
-      where: { key: { in: ["store_name", "store_logo", "store_email", "store_phone", "store_whatsapp", "store_hours", "store_address", "store_pincode"] } },
+      where: { key: { in: ["store_name", "store_logo", "store_email", "store_phone", "store_whatsapp", "store_hours", "store_address", "store_pincode", "store_whatsapp_float_enabled", "store_whatsapp_float_message", "store_whatsapp_float_label"] } },
       select: { key: true, value: true },
     });
     const values = new Map(settings.map((setting) => [setting.key, setting.value]));
@@ -47,6 +55,9 @@ export const getStoreBranding = cache(async (): Promise<StoreBranding> => {
       email: stringValue(values.get("store_email")) ?? DEFAULT_STORE_BRANDING.email,
       phone: stringValue(values.get("store_phone")) ?? DEFAULT_STORE_BRANDING.phone,
       whatsapp: stringValue(values.get("store_whatsapp")) ?? DEFAULT_STORE_BRANDING.whatsapp,
+      whatsappFloatEnabled: booleanValue(values.get("store_whatsapp_float_enabled")) ?? DEFAULT_STORE_BRANDING.whatsappFloatEnabled,
+      whatsappFloatMessage: stringValue(values.get("store_whatsapp_float_message")) ?? DEFAULT_STORE_BRANDING.whatsappFloatMessage,
+      whatsappFloatLabel: stringValue(values.get("store_whatsapp_float_label")) ?? DEFAULT_STORE_BRANDING.whatsappFloatLabel,
       hours: stringValue(values.get("store_hours")) ?? DEFAULT_STORE_BRANDING.hours,
       address: stringValue(values.get("store_address")) ?? DEFAULT_STORE_BRANDING.address,
       pincode: stringValue(values.get("store_pincode")) ?? "",

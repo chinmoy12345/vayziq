@@ -78,6 +78,10 @@ function productBadge(product: Product) {
   return product.badge ?? null;
 }
 
+function colorPathSegment(color: string) {
+  return color.trim().toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
+
 /* =========================================================
    PRODUCT CARD
 ========================================================= */
@@ -241,7 +245,7 @@ useEffect(() => {
           <button type="button" aria-label="Show next product image" onClick={() => setImageIndex(index => (index + 1) % galleryImages.length)} className="absolute right-2 top-1/2 z-10 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full border border-[#E8DADA] bg-white/95 text-[#514343] shadow-sm transition hover:bg-[#B56F6F] hover:text-white md:opacity-0 md:group-hover:opacity-100"><svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="m9 18 6-6-6-6" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
         </>}
         {cardSettings.productCardRating && product.rating !== undefined && (product.reviews ?? 0) > 0 && <div aria-label={`${product.rating.toFixed(1)} out of 5 from ${product.reviews} reviews`} className="absolute bottom-3 left-3 z-10 inline-flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1.5 text-[10px] font-medium text-[#4C4141] shadow-sm"><span className="text-[#B56F6F]"><StarIcon /></span><span>{product.rating.toFixed(1)}</span><span className="text-[#A89999]">|</span><span>{product.reviews}</span></div>}
-        {(product.filterValues?.colors?.length ?? 0) > 0 && <span className="absolute bottom-3 right-3 z-10 flex items-center pl-2" aria-label={`${product.filterValues?.colors.length} colors available`}>{product.filterValues!.colors.slice(0, 3).map((color) => <i key={color} title={color} style={{ backgroundColor: color }} className="-ml-2 h-4 w-4 rounded-full border-2 border-white shadow-sm" />)}{product.filterValues!.colors.length > 3 && <b className="-ml-1 grid h-[18px] min-w-[18px] place-items-center rounded-full border-2 border-white bg-[#111] px-1 text-[8px] font-extrabold leading-none text-white">+{product.filterValues!.colors.length - 3}</b>}</span>}
+        {(product.filterValues?.colors?.length ?? 0) > 0 && <span className="absolute bottom-3 right-3 z-10 flex items-center pl-2" aria-label={`${product.filterValues?.colors.length} colors available`}>{product.filterValues!.colors.slice(0, 3).map((color) => <Link key={color} href={`/product/${productSlug}-${colorPathSegment(color)}`} aria-label={`View ${product.name} in ${color}`} title={color} style={{ backgroundColor: color }} className="-ml-2 h-5 w-5 rounded-full border-2 border-white shadow-sm transition-transform hover:z-10 hover:scale-125 focus-visible:z-10 focus-visible:scale-125 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#fbb606]" />)}{product.filterValues!.colors.length > 3 && <Link href={`/product/${productSlug}`} aria-label={`View all ${product.filterValues!.colors.length} colors for ${product.name}`} className="-ml-1 grid h-5 min-w-5 place-items-center rounded-full border-2 border-white bg-[#111] px-1 text-[8px] font-extrabold leading-none text-white">+{product.filterValues!.colors.length - 3}</Link>}</span>}
         {/* View Product button hidden on request; restore by uncommenting:
         <Link href={`/product/${productSlug}`} className="absolute bottom-3 left-3 right-3 flex h-10 items-center justify-center bg-white/95 text-[9px] font-semibold tracking-[0.16em] text-[#3B3333] opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 hover:bg-[#B56F6F] hover:text-white">VIEW PRODUCT</Link>
         */}
