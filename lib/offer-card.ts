@@ -18,8 +18,8 @@ export function offerCardPreview(offer: ProductOffer, id: number, price: number,
     const discount = offerDiscount(offer.code, subtotal, [offer], [{ id, price, quantity }], now);
     if (discount <= 0) continue;
     const total = Math.round((subtotal - discount) * 100) / 100;
-    const unit = Math.ceil(total / quantity * 100) / 100;
-    const money = (value: number) => "₹" + value.toLocaleString("en-IN", { maximumFractionDigits: 2 });
+    const unit = Math.round(total / quantity);
+    const money = (value: number) => "₹" + Math.round(value).toLocaleString("en-IN");
     const label = offer.type === "buy_get" ? offerTitle(offer) : quantity > 1 ? `Buy ${quantity} for ${money(total)}` : `${offerTitle(offer)} with ${offer.code}`;
     if (!best || best.unit === null || unit < best.unit) best = { label, unit, quantity };
   }

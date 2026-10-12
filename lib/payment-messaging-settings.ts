@@ -52,7 +52,7 @@ async function writeRecord(record: CredentialsRecord) {
   await prisma.storeSetting.upsert({ where: { key: SETTINGS_KEY }, update: { value: record as unknown as Prisma.InputJsonValue }, create: { key: SETTINGS_KEY, value: record as unknown as Prisma.InputJsonValue } });
 }
 function present(provider: ProviderRecord | undefined, fields: string[]) {
-  return Boolean(provider?.enabled && fields.every(field => provider.values[field]));
+  return Boolean(provider && fields.every(field => provider.values[field]));
 }
 export async function getIntegrationStatus() {
   const record = await readRecord();

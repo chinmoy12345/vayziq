@@ -11,6 +11,7 @@ import {
 import Link from "next/link";
 import type { CategoryResponse, UploadResponse, ProductImageResponse, ProductOptionResponse, OptionValueResponse, ProductVariantResponse } from "@/lib/product-api-types";
 import ProductServicePolicy from "@/components/admin/ProductServicePolicy";
+import MerchandisingProductSelector from "@/components/admin/MerchandisingProductSelector";
 import { useParams, useRouter } from "next/navigation";
 
 // =====================================================
@@ -1088,7 +1089,9 @@ export default function EditProductPage() {
           FORM
       =============================================== */}
 
-      <ProductServicePolicy productId={String(params.id)} /><form onSubmit={handleSubmit}>
+      <ProductServicePolicy productId={String(params.id)} />
+      <MerchandisingProductSelector productId={Number(productId)} max={4} title="You may also like" description="Choose up to 4 products for this product detail page. Leave empty to use same-category and smart fallback recommendations." />
+      <form onSubmit={handleSubmit}>
 
         <div className="p-5 lg:p-8">
 

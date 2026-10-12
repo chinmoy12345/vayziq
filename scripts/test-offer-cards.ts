@@ -23,9 +23,10 @@ for (const offer of offers) {
   assert.ok(result && result.quantity && result.unit);
   const total = 999 * result.quantity;
   const discount = offerDiscount(offer.code, total, [offer], [{ id: 1, price: 999, quantity: result.quantity }]);
-  assert.equal(result.unit, Math.ceil((total - discount) / result.quantity * 100) / 100);
+  assert.equal(result.unit, Math.round((total - discount) / result.quantity));
 }
 assert.equal(offerCardPreview(offers[2], 1, 999)?.label, "Buy 2 for ₹1,099");
+assert.equal(offerCardPreview({ ...base, type: "quantity_price", rules: { productIds: [1], priceMode: "bundle", tiers: [{ quantity: 3, price: 1999 }] } }, 1, 1599)?.unit, 666);
 assert.equal(offerCardPreview({ ...base, type: "buy_get", rules: { productIds: [1, 2], freeProductIds: [2], freeRule: "specific", buyQuantity: 1, getQuantity: 1 } }, 1, 999)?.unit, null);
 const input = { code: "TEST10", type: "percentage", value: 10, active: true, rules: { productIds: [1], heading: "Weekend styles", bannerImage: "/offers/weekend.webp", priority: 10, showOnCards: false } };
 assert.equal(couponInput(input).rules.heading, "Weekend styles");

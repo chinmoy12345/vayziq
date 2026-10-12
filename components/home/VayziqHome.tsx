@@ -63,13 +63,25 @@ function HomeOfferStrip({ banner, alternate = false }: { banner: VayziqHomeOffer
 
 function HomeOfferZone({ offers }: { offers: VayziqHomeOffer[] }) {
   const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    if (offers.length < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const timer = window.setInterval(() => {
+      setActive(current => (current + 1) % offers.length);
+    }, 4500);
+
+    return () => window.clearInterval(timer);
+  }, [offers.length]);
+
   if (!offers.length) return null;
+  const activeIndex = active % offers.length;
   const visibleOffers = offers.length === 1
     ? [offers[0]]
     : [
-        offers[(active - 1 + offers.length) % offers.length],
-        offers[active],
-        offers[(active + 1) % offers.length],
+        offers[(activeIndex - 1 + offers.length) % offers.length],
+        offers[activeIndex],
+        offers[(activeIndex + 1) % offers.length],
       ];
   return <section className={`${offerStyles.offerZone} ${sectionWidthStyles.wideMerchSection}`} aria-labelledby="offer-zone-title">
     <div className={offerStyles.offerZonePattern} aria-hidden="true" />
@@ -79,7 +91,7 @@ function HomeOfferZone({ offers }: { offers: VayziqHomeOffer[] }) {
     </div>
     <div className={offerStyles.offerTicketTrack}>
       {visibleOffers.map((offer, index) => (
-        <Link href={`/offers?code=${encodeURIComponent(offer.code)}`} className={`${offerStyles.offerTicket} ${offerStyles[`offerTicketTone${offers.length === 1 ? 2 : index + 1}`]}`} key={`${offer.id}-${index}`}>
+        <Link href={`/offer/${encodeURIComponent(offer.code)}`} className={`${offerStyles.offerTicket} ${offerStyles[`offerTicketTone${offers.length === 1 ? 2 : index + 1}`]}`} key={`${offer.id}-${index}`}>
           <span className={offerStyles.offerTicketMain}>
             <strong>{offer.title}</strong>
             <span>{offer.condition}</span>
@@ -90,7 +102,7 @@ function HomeOfferZone({ offers }: { offers: VayziqHomeOffer[] }) {
       ))}
     </div>
     {offers.length > 1 && <div className={offerStyles.offerDots} aria-label="Choose an offer">
-      {offers.map((offer, index) => <button type="button" key={offer.id} onClick={() => setActive(index)} className={index === active ? offerStyles.offerDotActive : ""} aria-label={`Show offer ${index + 1}`} aria-pressed={index === active} />)}
+      {offers.map((offer, index) => <button type="button" key={offer.id} onClick={() => setActive(index)} className={index === activeIndex ? offerStyles.offerDotActive : ""} aria-label={`Show offer ${index + 1}`} aria-pressed={index === activeIndex} />)}
     </div>}
   </section>;
 }
@@ -213,7 +225,7 @@ export default function VayziqHome({
   const [cartLimitMessage, setCartLimitMessage] = useState("");
   const [cartOptions, setCartOptions] = useState<Record<string, string>>({});
   const [cartAdded, setCartAdded] = useState(false);
-  const { banners, offerBanners, offers, categories, products, catalogProducts } = initialData;
+  const { banners, offerBanners, offers, categories, products, catalogProducts, recommendedProducts } = initialData;
   const looks = products.slice(0, 4).map((product) => product.image);
   const tabs = [
     "All",
@@ -225,7 +237,7 @@ export default function VayziqHome({
   ];
   const bestSellers = products;
   const newArrivals = [...products].reverse();
-  const recommendations = [...products].reverse();
+  const recommendations = recommendedProducts;
   const featuredCategories = categories.filter(
     (category) => category.slug === "men" || category.slug === "women",
   );

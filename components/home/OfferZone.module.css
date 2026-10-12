@@ -65,7 +65,13 @@
   justify-content: space-between;
   text-align: center;
   box-shadow: 0 5px 14px rgba(44, 57, 89, 0.1);
+  animation: offerTicketSlideIn 0.35s ease;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+@keyframes offerTicketSlideIn {
+  from { opacity: 0.65; transform: translateX(18px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 .offerTicket:hover {
@@ -181,5 +187,5 @@
 
 @media (prefers-reduced-motion: reduce) {
   .offerTicket,
-  .offerDots button { transition: none; }
+  .offerDots button { animation: none; transition: none; }
 }

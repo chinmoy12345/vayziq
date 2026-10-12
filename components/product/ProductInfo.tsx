@@ -169,6 +169,44 @@ export default function ProductInfo({
     window.setTimeout(() => setActionMessage(null), 2600);
   };
 
+  const recordShare = async () => {
+    try {
+      const key = "tantuka-engagement-visitor";
+      let visitorId = window.localStorage.getItem(key);
+      if (!visitorId) {
+        visitorId = window.crypto.randomUUID();
+        window.localStorage.setItem(key, visitorId);
+      }
+      await fetch(`/api/products/${product.id}/engagement`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "share", visitorId }),
+      });
+    } catch {
+      // Sharing still succeeds when analytics or browser storage is unavailable.
+    }
+  };
+
+  const shareProduct = async () => {
+    const url = window.location.href;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: product.name, text: `Have a look at ${product.name} from Vayziq.`, url });
+        void recordShare();
+        setActionMessage("Thanks for sharing!");
+      } else {
+        await navigator.clipboard.writeText(url);
+        void recordShare();
+        setActionMessage("Product link copied");
+      }
+      window.setTimeout(() => setActionMessage(null), 2600);
+    } catch (error) {
+      if (error instanceof Error && error.name === "AbortError") return;
+      setActionMessage("Could not share this product. Please try again.");
+      window.setTimeout(() => setActionMessage(null), 3000);
+    }
+  };
+
   const buyNow = () => {
     if (!canPurchase || quantity < minimumQuantity || quantity > maximumQuantity) { setActionMessage(`Choose ${minimumQuantity}–${maximumQuantity} items.`); return; }
     if (product.variants?.length && (!variant || variant.stock < quantity)) {
@@ -559,6 +597,8 @@ export default function ProductInfo({
 
         <button
           type="button"
+          onClick={() => void shareProduct()}
+          aria-label={`Share ${product.name}`}
           className="flex items-center gap-2 text-xs text-[#6D5B5B] transition hover:text-[#B56F6F]"
         >
           <Share2

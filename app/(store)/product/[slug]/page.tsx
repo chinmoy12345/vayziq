@@ -13,6 +13,7 @@ import { effectiveQuantityLimits, getGlobalQuantityLimits } from "@/lib/quantity
 import ProductReviews from "@/components/product/ProductReviews";
 import ProductVideo from "@/components/product/ProductVideo";
 import ProductGrid from "@/components/product/ProductGrid";
+import RecentlyViewed from "@/components/product/RecentlyViewed";
 import Breadcrumbs from "@/components/store/Breadcrumbs";
 import prisma from "@/lib/db";
 import { formatPrice } from "@/lib/storefront";
@@ -86,17 +87,41 @@ export default async function ProductPage({ params, searchParams }: ProductPageP
   });
   if (!product) notFound();
 
-  const [visibility, globalCountdown] = await Promise.all([getHomepageVisibility(), getSaleCountdownSettings()]);
+  const [visibility, globalCountdown, relatedSetting] = await Promise.all([
+    getHomepageVisibility(),
+    getSaleCountdownSettings(),
+    prisma.storeSetting.findUnique({ where: { key: `product_related_products_${product.id}` }, select: { value: true } }),
+  ]);
   const countdownEndsAt = product.saleCountdownMode === "hidden" ? "" : product.saleCountdownMode === "custom" ? product.saleEndsAt?.toISOString() ?? "" : globalCountdown.enabled ? globalCountdown.endsAt : "";
-  const relatedProducts = await prisma.product.findMany({
+  const relatedInclude = {
+    images: { orderBy: { sortOrder: "asc" as const }, take: 1 },
+    reviews: { where: { approved: true }, select: { rating: true } },
+    category: { select: { name: true } },
+  };
+  const selectedRelatedIds = Array.isArray(relatedSetting?.value)
+    ? relatedSetting.value.map(Number).filter(id => Number.isSafeInteger(id) && id > 0 && id !== product.id)
+    : [];
+  const selectedRelatedRows = selectedRelatedIds.length ? await prisma.product.findMany({
+    where: { id: { in: selectedRelatedIds }, status: "active", category: { status: "active" } },
+    include: relatedInclude,
+  }) : [];
+  const selectedRelatedById = new Map(selectedRelatedRows.map(item => [item.id, item]));
+  const selectedRelatedProducts = selectedRelatedIds.flatMap(id => selectedRelatedById.get(id) ? [selectedRelatedById.get(id)!] : []).slice(0, 4);
+  const categoryRelatedProducts = selectedRelatedProducts.length ? selectedRelatedProducts : await prisma.product.findMany({
     where: { id: { not: product.id }, status: "active", categoryId: product.categoryId, category: { status: "active" } },
-    include: {
-      images: { orderBy: { sortOrder: "asc" }, take: 1 },
-      reviews: { where: { approved: true }, select: { rating: true } },
-    },
+    include: relatedInclude,
     orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
     take: 4,
   });
+  const fallbackRelatedProducts = categoryRelatedProducts.length < 4
+    ? await prisma.product.findMany({
+        where: { id: { notIn: [product.id, ...categoryRelatedProducts.map(item => item.id)] }, status: "active", category: { status: "active" } },
+        include: relatedInclude,
+        orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
+        take: 4 - categoryRelatedProducts.length,
+      })
+    : [];
+  const relatedProducts = [...categoryRelatedProducts, ...fallbackRelatedProducts];
 
   const averageRating = product.reviews.length ? product.reviews.reduce((sum, review) => sum + review.rating, 0) / product.reviews.length : 0;
   const optionValues = (name: string) => product.options.find(option => option.name.toLowerCase() === name)?.values.map(value => value.value) ?? [];
@@ -206,14 +231,14 @@ export default async function ProductPage({ params, searchParams }: ProductPageP
 
       {visibility.productDetailRelated && relatedProducts.length > 0 && <section aria-labelledby="related-products-title" className="mt-12 border-t border-[#E8DADA] pt-9 sm:mt-16 sm:pt-12">
         <div className="mb-6 flex items-end justify-between gap-4 sm:mb-8">
-          <div><p className="text-[10px] font-semibold tracking-[0.22em] text-[#9F5E5E]">CURATED FOR YOU</p><h2 id="related-products-title" className="mt-2 font-serif text-2xl text-[#2B2525] sm:text-3xl">You may also like</h2><p className="mt-2 text-sm text-[#756565]">More pieces from our {product.category.name} collection.</p></div>
+          <div><p className="text-[10px] font-semibold tracking-[0.22em] text-[#9F5E5E]">CURATED FOR YOU</p><h2 id="related-products-title" className="mt-2 font-serif text-2xl text-[#2B2525] sm:text-3xl">You may also like</h2><p className="mt-2 text-sm text-[#756565]">More pieces selected to complement this style.</p></div>
           <Link href={`/${product.category.slug}`} className="shrink-0 text-xs font-medium text-[#9F5E5E] transition hover:text-[#744646]">View collection <span aria-hidden="true">→</span></Link>
         </div>
         <ProductGrid products={relatedProducts.map(item => ({
           id: item.id,
           slug: item.slug,
           name: item.name,
-          category: product.category.name,
+          category: item.category.name,
           price: formatPrice(item.price),
           image: item.images[0]?.image ?? "/logo.png",
           oldPrice: item.comparePrice && Number(item.comparePrice) > Number(item.price) ? formatPrice(item.comparePrice) : undefined,
@@ -223,6 +248,14 @@ export default async function ProductPage({ params, searchParams }: ProductPageP
           badgeTone: item.badgeEnabled && item.badgeText ? item.badgeTone : undefined,
         }))} columns={4} />
       </section>}
+      <RecentlyViewed current={{
+        id: product.id, slug: product.slug, name: product.name, category: product.category.name,
+        price: formatPrice(product.price), image: images[0] ?? "/logo.png", images, oldPrice,
+        rating: averageRating, reviews: product.reviews.length,
+        badge: product.badgeEnabled && product.badgeText ? product.badgeText : undefined,
+        badgeTone: product.badgeEnabled && product.badgeText ? product.badgeTone : undefined,
+        inStock: product.hasVariations ? product.variants.some(variant => variant.stock > 0) : product.stock > 0,
+      }} />
     </div>
   </main>;
 }

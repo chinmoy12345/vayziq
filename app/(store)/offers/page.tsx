@@ -4,15 +4,16 @@ import Link from "next/link";
 import { ArrowRight, Check, Gift, ShoppingBag, Sparkles, Tag, TicketPercent } from "lucide-react";
 import { useOffers } from "@/lib/use-offers";
 import { offerTerms, offerTitle, type ProductOffer } from "@/lib/product-offers";
+import styles from "./OffersPage.module.css";
 
-type DealTheme = { panel: string; soft: string; ink: string; accent: string; label: string; icon: typeof Gift };
+type DealTheme = { label: string; icon: typeof Gift };
 
 function themeFor(offer: ProductOffer): DealTheme {
-  if (offer.type === "buy_get") return { panel: "from-[#ff4a57] via-[#fa654d] to-[#ffbc43]", soft: "bg-[#fff1dd]", ink: "text-[#271312]", accent: "bg-[#271312] text-white", label: "Buy & get", icon: Gift };
-  if (offer.type === "quantity_price") return { panel: "from-[#1a766d] via-[#129d88] to-[#74d8bd]", soft: "bg-[#e0f8ef]", ink: "text-[#062e29]", accent: "bg-[#062e29] text-white", label: "Bundle price", icon: ShoppingBag };
-  if (offer.type === "quantity_discount") return { panel: "from-[#171717] via-[#343434] to-[#f6b800]", soft: "bg-[#fff5cf]", ink: "text-[#171717]", accent: "bg-[#f6b800] text-[#171717]", label: "More in bag", icon: Sparkles };
-  if (offer.type === "percentage") return { panel: "from-[#402c92] via-[#7c3fd2] to-[#e55bb4]", soft: "bg-[#f3eaff]", ink: "text-[#24123e]", accent: "bg-[#24123e] text-white", label: "Limited saving", icon: TicketPercent };
-  return { panel: "from-[#075b95] via-[#1690c6] to-[#73d7ee]", soft: "bg-[#e1f6fc]", ink: "text-[#06344f]", accent: "bg-[#06344f] text-white", label: "Cart reward", icon: Tag };
+  if (offer.type === "buy_get") return { label: "Buy & get", icon: Gift };
+  if (offer.type === "quantity_price") return { label: "Bundle price", icon: ShoppingBag };
+  if (offer.type === "quantity_discount") return { label: "More in bag", icon: Sparkles };
+  if (offer.type === "percentage") return { label: "Limited saving", icon: TicketPercent };
+  return { label: "Cart reward", icon: Tag };
 }
 
 function saveOffer(code: string) { localStorage.setItem("tantuka-offer", code); }
@@ -35,8 +36,8 @@ export default function OffersPage() {
       {loading && <p className="mt-10 text-center text-sm text-[#666]">Loading offers…</p>}
       {error && <p role="alert" className="mt-10 text-center text-sm text-red-700">{error}</p>}
       {!loading && !error && !offers.length && <div className="mt-10 rounded-2xl border border-dashed border-[#ddd] bg-white p-10 text-center"><Tag className="mx-auto h-8 w-8 text-[#b77e00]" /><p className="mt-3 font-bold">No active offers right now.</p><p className="mt-1 text-sm text-[#666]">Please check back soon for new deals.</p></div>}
-      <section className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {offers.map(offer => { const theme = themeFor(offer); const Icon = theme.icon; return <article key={offer.code} className="group overflow-hidden rounded-xl border border-[#e6ddd5] bg-white shadow-[0_3px_12px_rgba(43,31,23,.06)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(43,31,23,.11)]"><div className={`relative min-h-[104px] overflow-hidden bg-gradient-to-br ${theme.panel} p-4 text-white`}><span className="absolute -right-5 -top-7 h-24 w-24 rounded-full border-[14px] border-white/20" /><Icon className="absolute bottom-[-10px] right-3 h-20 w-20 rotate-[-12deg] text-white/20" strokeWidth={1.15} /><div className="relative"><span className="inline-flex rounded-full bg-black/20 px-2 py-1 text-[8px] font-extrabold uppercase tracking-[.12em] backdrop-blur">{theme.label}</span><p className="mt-3 text-[11px] font-bold text-white/85">{offerTitle(offer)}</p><h3 className="mt-0.5 truncate text-xl font-black tracking-[-.04em]">{offer.code}</h3></div></div><div className="p-4"><p className="line-clamp-2 min-h-9 text-xs leading-[18px] text-[#514343]">{offer.description}</p><div className="mt-3 border-t border-[#eee5df] pt-2.5"><p className="line-clamp-3 flex gap-2 text-[10px] leading-4 text-[#756565]"><Check className="mt-0.5 h-3 w-3 shrink-0 text-[#b77e00]" />{offerTerms(offer)}</p></div><Link href={offerShopHref(offer)} onClick={() => saveOffer(offer.code)} className={`mt-3 flex min-h-9 items-center justify-center gap-2 rounded-lg ${theme.accent} px-3 text-[10px] font-extrabold uppercase tracking-[.06em] transition hover:brightness-110`}>Use this offer <ArrowRight className="h-3.5 w-3.5" /></Link></div></article>; })}
+      <section className={styles.offerGrid}>
+        {offers.map(offer => { const theme = themeFor(offer); const Icon = theme.icon; return <article key={offer.code} className={styles.offerCard}><div className={styles.cardTop}><span className={styles.cardAccent} /><Icon className={styles.cardIcon} aria-hidden="true" /><span className={styles.offerType}>{theme.label}</span><p className={styles.offerTitle}>{offerTitle(offer)}</p><h3 className={styles.offerCode}>{offer.code}</h3></div><div className={styles.cardBody}><p className={`${styles.description} line-clamp-2`}>{offer.description}</p><div className={styles.terms}><p className="line-clamp-3 flex gap-2"><Check className={styles.check} />{offerTerms(offer)}</p></div><Link href={offerShopHref(offer)} onClick={() => saveOffer(offer.code)} className={styles.offerAction}>Use this offer <ArrowRight className="h-3.5 w-3.5" /></Link></div></article>; })}
       </section>
     </div>
   </main>;

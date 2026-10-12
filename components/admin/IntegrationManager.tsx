@@ -11,12 +11,12 @@ export default function IntegrationManager() {
   const [twilio, setTwilio] = useState({ accountSid: "", authToken: "", fromNumber: "" });
   const [razorpay, setRazorpay] = useState({ keyId: "", keySecret: "", webhookSecret: "" });
   const [cashfree, setCashfree] = useState({ appId: "", secretKey: "", mode: "sandbox" as "sandbox" | "production" });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState<"twilio" | "razorpay" | "cashfree" | null>(null);
   const [status, setStatus] = useState("");
 
   const load = async () => { try { const response = await fetch("/api/admin/integrations", { cache: "no-store" }); const body = await response.json(); if (!response.ok) throw new Error(body.message); setData(body.data); setCashfree(current => ({ ...current, mode: body.data.cashfree.mode })); } catch (error) { setStatus(error instanceof Error ? error.message : "Unable to load integrations."); } finally { setLoading(false); } };
-  useEffect(() => { const timer = window.setTimeout(() => { void load(); }, 0); return () => window.clearTimeout(timer); }, []);
+  useEffect(() => { const timer = window.setTimeout(() => { setLoading(true); void load(); }, 0); return () => window.clearTimeout(timer); }, []);
   const save = async (provider: "twilio" | "razorpay" | "cashfree") => {
     setSaving(provider); setStatus("");
     try {

@@ -6,7 +6,7 @@ export type VayziqHomeOfferBanner = { image: string; title: string; subtitle: st
 export type VayziqHomeOffer = { id: number; code: string; title: string; condition: string; description: string | null };
 export type VayziqHomeCategory = { id: number; name: string; slug: string; image: string };
 export type VayziqHomeProduct = { id: number; name: string; slug: string; price: string; oldPrice: string | null; discountPercent: number | null; image: string; images: string[]; category: string; colors: string[]; options: { name: string; values: string[] }[]; rating: string; videoUrl: string | null; badge: string | null; badgeTone: string | null; inStock: boolean };
-export type VayziqHomeData = { banners: VayziqHomeBanner[]; offerBanners: VayziqHomeOfferBanner[]; offers: VayziqHomeOffer[]; categories: VayziqHomeCategory[]; products: VayziqHomeProduct[]; catalogProducts: VayziqHomeProduct[] };
+export type VayziqHomeData = { banners: VayziqHomeBanner[]; offerBanners: VayziqHomeOfferBanner[]; offers: VayziqHomeOffer[]; categories: VayziqHomeCategory[]; products: VayziqHomeProduct[]; catalogProducts: VayziqHomeProduct[]; recommendedProducts: VayziqHomeProduct[] };
 
 const fallbackBanners: VayziqHomeBanner[] = [
   { image: "/vayziq/hero-paired-v2.png", alt: "VAYZIQ everyday collection", href: "/shop" },
@@ -23,7 +23,7 @@ const fallbackOfferBanners: VayziqHomeOfferBanner[] = [
 
 export async function getVayziqHomeData(): Promise<VayziqHomeData> {
   const now = new Date();
-  const [banners, offerBanners, coupons, roots, products, reviewStats] = await Promise.all([
+  const [banners, offerBanners, coupons, roots, products, reviewStats, recommendationSetting] = await Promise.all([
     prisma.banner.findMany({ where: { active: true, placement: "home" }, orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }], take: 8 }),
     prisma.banner.findMany({ where: { active: true, placement: "offer-zone" }, orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }], take: 2, select: { id: true, image: true, title: true, subtitle: true } }),
     prisma.coupon.findMany({ where: { active: true, AND: [{ OR: [{ startsAt: null }, { startsAt: { lte: now } }] }, { OR: [{ expiresAt: null }, { expiresAt: { gt: now } }] }] }, orderBy: { createdAt: "desc" }, take: 8 }),
@@ -38,6 +38,7 @@ export async function getVayziqHomeData(): Promise<VayziqHomeData> {
       orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
     }),
     prisma.review.groupBy({ by: ["productId"], where: { approved: true }, _avg: { rating: true }, _count: { _all: true } }),
+    prisma.storeSetting.findUnique({ where: { key: "homepage_you_may_like_products" }, select: { value: true } }),
   ]);
 
   const ratings = new Map(reviewStats.map((item) => [item.productId, item._count._all ? `${(item._avg.rating ?? 0).toFixed(1)} (${item._count._all})` : "New"]));
@@ -68,6 +69,11 @@ export async function getVayziqHomeData(): Promise<VayziqHomeData> {
     badgeTone: product.badgeEnabled && product.badgeText ? product.badgeTone : null,
     inStock: product.hasVariations ? product.variants.some((variant) => variant.stock > 0) : product.stock > 0,
   }));
+  const selectedRecommendationIds = Array.isArray(recommendationSetting?.value)
+    ? recommendationSetting.value.map(Number).filter(id => Number.isSafeInteger(id) && id > 0)
+    : [];
+  const catalogById = new Map(catalogProducts.map(product => [product.id, product]));
+  const selectedRecommendations = selectedRecommendationIds.flatMap(id => catalogById.get(id) ? [catalogById.get(id)!] : []);
 
   return {
     banners: banners.length ? banners.map((banner) => ({ image: banner.image, alt: banner.title, href: banner.link || "/shop" })) : fallbackBanners,
@@ -95,5 +101,6 @@ export async function getVayziqHomeData(): Promise<VayziqHomeData> {
     // catalog block below exposes every active product for an early launch.
     products: catalogProducts.slice(0, 12),
     catalogProducts,
+    recommendedProducts: selectedRecommendations.length ? selectedRecommendations : [...catalogProducts.slice(0, 12)].reverse(),
   };
 }

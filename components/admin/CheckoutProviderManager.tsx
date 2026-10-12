@@ -5,19 +5,24 @@ import type { CheckoutProvider } from "@/lib/checkout-provider-settings";
 
 export default function CheckoutProviderManager() {
   const [provider, setProvider] = useState<CheckoutProvider>("native");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    void fetch("/api/admin/checkout-provider", { cache: "no-store" })
-      .then(async response => {
-        const body = await response.json() as { data?: { provider?: CheckoutProvider }; message?: string };
-        if (!response.ok) throw new Error(body.message || "Checkout provider could not be loaded.");
-        if (body.data?.provider) setProvider(body.data.provider);
-      })
-      .catch(error => setMessage(error instanceof Error ? error.message : "Checkout provider could not be loaded."))
-      .finally(() => setLoading(false));
+    const timer = window.setTimeout(() => {
+      setLoading(true);
+      void fetch("/api/admin/checkout-provider", { cache: "no-store" })
+        .then(async response => {
+          const body = await response.json() as { data?: { provider?: CheckoutProvider }; message?: string };
+          if (!response.ok) throw new Error(body.message || "Checkout provider could not be loaded.");
+          if (body.data?.provider) setProvider(body.data.provider);
+        })
+        .catch(error => setMessage(error instanceof Error ? error.message : "Checkout provider could not be loaded."))
+        .finally(() => setLoading(false));
+    }, 0);
+
+    return () => window.clearTimeout(timer);
   }, []);
 
   async function save() {

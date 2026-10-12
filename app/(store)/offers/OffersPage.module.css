@@ -1,0 +1,172 @@
+.offerGrid {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.offerCard {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #ded9cf;
+  border-radius: 12px;
+  background: #fff;
+  flex-direction: column;
+  box-shadow: 0 5px 16px rgba(20, 18, 14, 0.07);
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.offerCard:hover {
+  border-color: #beb6a7;
+  box-shadow: 0 10px 24px rgba(20, 18, 14, 0.12);
+  transform: translateY(-3px);
+}
+
+.cardTop {
+  position: relative;
+  min-height: 112px;
+  overflow: hidden;
+  padding: 14px 15px 12px;
+  background: linear-gradient(135deg, #efb1ef, #cf83e4);
+}
+
+.offerCard:nth-child(3n + 2) .cardTop { background: linear-gradient(135deg, #a9c8ff, #8199eb); }
+.offerCard:nth-child(3n) .cardTop { background: linear-gradient(135deg, #ffc2ec, #ef91cf); }
+
+.cardTop::after {
+  position: absolute;
+  right: -30px;
+  bottom: -48px;
+  width: 120px;
+  height: 120px;
+  border: 20px solid rgba(255, 255, 255, 0.24);
+  border-radius: 50%;
+  content: "";
+}
+
+.cardAccent {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.cardIcon {
+  position: absolute;
+  right: 14px;
+  top: 13px;
+  z-index: 1;
+  width: 25px;
+  height: 25px;
+  color: rgba(0, 0, 0, 0.62);
+  stroke-width: 1.35;
+}
+
+.offerType {
+  display: inline-flex;
+  position: relative;
+  z-index: 1;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 999px;
+  padding: 4px 7px;
+  color: #171312;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.offerTitle {
+  position: relative;
+  z-index: 1;
+  margin-top: 14px;
+  color: rgba(0, 0, 0, 0.68);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.offerCode {
+  position: relative;
+  z-index: 1;
+  margin-top: 3px;
+  color: #111;
+  font-size: clamp(18px, 1.45vw, 23px);
+  font-weight: 900;
+  letter-spacing: -0.045em;
+}
+
+.cardBody {
+  display: flex;
+  flex: 1;
+  padding: 13px 15px 15px;
+  flex-direction: column;
+}
+
+.description {
+  min-height: 34px;
+  color: #4e4a44;
+  font-size: 11px;
+  line-height: 17px;
+}
+
+.terms {
+  position: relative;
+  margin-top: 11px;
+  border-top: 1px dashed #d8d1c6;
+  padding-top: 10px;
+  color: #716b62;
+  font-size: 9px;
+  line-height: 15px;
+}
+
+.terms::before,
+.terms::after {
+  position: absolute;
+  top: -8px;
+  width: 14px;
+  height: 14px;
+  border: 1px solid #ded9cf;
+  border-radius: 50%;
+  background: #fff;
+  content: "";
+}
+
+.terms::before { left: -22px; }
+.terms::after { right: -22px; }
+
+.check {
+  margin-top: 3px;
+  width: 13px;
+  height: 13px;
+  flex: 0 0 auto;
+  color: #b77e00;
+}
+
+.offerAction {
+  display: flex;
+  min-height: 35px;
+  margin-top: 12px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 8px;
+  background: #ffd20a;
+  color: #111;
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.offerAction:hover { background: #111; color: #fff; }
+
+@media (min-width: 640px) { .offerGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1024px) { .offerGrid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (min-width: 1280px) { .offerGrid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .offerCard,
+  .offerAction { transition: none; }
+}
