@@ -361,9 +361,11 @@ export default function CategoryListing({
                 PRODUCT GRID
             ================================================= */}
 
-            <ProductGrid products={visibleProducts} columns={3} className={showFullFilters ? "shop-product-grid" : "collection-product-grid"} />
-
-            {sortedProducts.length === 0 && <div className="border border-dashed border-[#E8DADA] bg-white px-6 py-16 text-center"><p className="font-serif text-xl text-[#3B3333]">No products found</p><p className="mt-2 text-sm text-[#8A7777]">Try adjusting your filters.</p><button className="mt-5 text-xs font-semibold tracking-wide text-[#B56F6F] hover:underline" onClick={() => { setSelectedCategories([]); setPriceRange({ min: 0, max: defaultMaxPrice }); setSelectedSizes([]); setSelectedColors([]); }} type="button">CLEAR FILTERS</button></div>}
+            {sortedProducts.length > 0 ? (
+              <ProductGrid products={visibleProducts} columns={3} className={showFullFilters ? "shop-product-grid" : "collection-product-grid"} />
+            ) : (
+              <div className="border border-dashed border-[#E8DADA] bg-white px-6 py-16 text-center"><p className="font-serif text-xl text-[#3B3333]">No products found</p><p className="mt-2 text-sm text-[#8A7777]">Try adjusting your filters.</p><button className="mt-5 text-xs font-semibold tracking-wide text-[#B56F6F] hover:underline" onClick={() => { setSelectedCategories([]); setPriceRange({ min: 0, max: defaultMaxPrice }); setSelectedSizes([]); setSelectedColors([]); }} type="button">CLEAR FILTERS</button></div>
+            )}
 
             <div ref={loadMoreRef} className="flex min-h-20 items-center justify-center" aria-live="polite">
               {visibleCount < sortedProducts.length ? <span className="text-xs tracking-wide text-[#8A7777]">Loading more products…</span> : sortedProducts.length > PRODUCTS_PER_BATCH ? <span className="text-xs tracking-wide text-[#8A7777]">You&apos;ve reached the end of the collection.</span> : null}

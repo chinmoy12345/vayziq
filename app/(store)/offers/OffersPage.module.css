@@ -113,6 +113,7 @@
 .terms {
   position: relative;
   margin-top: 11px;
+  margin-bottom: 12px;
   border-top: 1px dashed #d8d1c6;
   padding-top: 10px;
   color: #716b62;
@@ -146,7 +147,7 @@
 .offerAction {
   display: flex;
   min-height: 35px;
-  margin-top: 12px;
+  margin-top: auto;
   align-items: center;
   justify-content: center;
   gap: 8px;

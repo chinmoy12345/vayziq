@@ -145,18 +145,6 @@ function reelPoster(reel: Reel) {
   return reel.kind === "product" ? reel.product.image : reel.image;
 }
 
-function reelDestination(reel: Reel) {
-  const product = reel.kind === "product" ? reel.product : reel.product;
-  if (product) return `/product/${product.slug}`;
-  const category = (reel.kind === "editorial" ? reel.category : reel.product.category).toLowerCase();
-  if (category.includes("saree")) return "/shop?category=sarees";
-  if (category.includes("kurti")) return "/shop?category=kurtis";
-  if (category.includes("nightwear")) return "/shop?category=nightwear";
-  if (category.includes("men")) return "/men";
-  if (category.includes("women")) return "/women";
-  return "/shop";
-}
-
 function formatEngagementCount(count: number) {
   return new Intl.NumberFormat("en", {
     notation: count >= 1_000 ? "compact" : "standard",
@@ -367,12 +355,10 @@ export default function WatchAndBuy({ products, viewAll = false }: { products: W
     setActiveIndex((activeIndex + direction + visibleReels.length) % visibleReels.length);
   }
 
-  function openReel(index: number, reel: Reel) {
-    // On mobile, a reel is a direct shopping discovery surface. It never
-    // opens a player modal: the tap takes the shopper to its linked product
-    // (or the relevant category for editorial-only clips).
+  function openReel(index: number) {
+    // Mobile reels play inline as a swipe feed; never open a modal or
+    // navigate away when the video surface itself is tapped.
     if (window.matchMedia("(max-width: 767px)").matches) {
-      window.location.assign(reelDestination(reel));
       return;
     }
     setActiveIndex(index);
@@ -384,7 +370,7 @@ export default function WatchAndBuy({ products, viewAll = false }: { products: W
       className="watch-buy-desktop bg-white py-8 sm:py-10 lg:py-12"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-10">
-        <header className={viewAll ? "watch-buy-page-header mb-3 bg-white" : "mb-6 flex items-end justify-between gap-4 sm:mb-8"}>
+        <header className={viewAll ? "watch-buy-page-header mb-3 bg-white" : "home-watch-header mb-6 flex items-end justify-between gap-4 sm:mb-8"}>
           <div className={viewAll ? "flex items-end justify-between gap-4 pb-4 pt-5" : ""}>
             <div>
               <h2 id="watch-buy-title" className={`${viewAll ? "text-[30px]" : "mt-2 text-3xl"} font-serif text-[#2B2525] sm:text-4xl`}>Watch &amp; Buy</h2>
@@ -408,7 +394,7 @@ export default function WatchAndBuy({ products, viewAll = false }: { products: W
           ref={trackRef}
           className={viewAll
             ? "watch-reel-feed grid grid-cols-2 gap-3 pb-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4"
-            : "grid grid-cols-2 gap-3 pb-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4"}
+            : "home-watch-reel-feed grid grid-cols-2 gap-3 pb-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4"}
         >
           {visibleReels.map((reel, index) => {
             const product = reel.kind === "product" ? reel.product : reel.product ?? null;
@@ -422,28 +408,38 @@ export default function WatchAndBuy({ products, viewAll = false }: { products: W
               return (
                 <article
                   key={reel.id}
+                  data-reel-id={reel.id}
                   className="group relative aspect-[9/14] min-w-0 overflow-hidden rounded-xl bg-[#2B2525] text-white shadow-sm"
                 >
-                  <Image
-                    src={reelPoster(reel)}
-                    alt={`${reelTitle(reel)} video`}
-                    fill
-                    sizes="(max-width: 767px) 50vw, 25vw"
-                    className="object-cover transition duration-500 group-hover:scale-[1.03]"
-                  />
+                  {isPlaying ? <ProductVideo
+                    url={reelVideoUrl(reel)}
+                    title={`${reelTitle(reel)} preview`}
+                    poster={reelPoster(reel)}
+                    autoPlay
+                    loop
+                    controls={false}
+                    muted={reelsMuted}
+                    className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+                  /> : <Image
+                      src={reelPoster(reel)}
+                      alt={`${reelTitle(reel)} video`}
+                      fill
+                      sizes="(max-width: 767px) 76vw, 25vw"
+                      className="object-cover transition duration-500 group-hover:scale-[1.03]"
+                    />}
                   <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/5 to-black/10" />
                   <button
                     type="button"
-                    onClick={() => openReel(index, reel)}
+                    onClick={() => openReel(index)}
                     aria-label={`Play ${reelTitle(reel)}`}
-                    className="absolute left-1/2 top-1/2 z-10 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/70 bg-black/35 text-white shadow-lg transition group-hover:scale-105 group-hover:bg-[#B56F6F]"
+                    className={`absolute left-1/2 top-1/2 z-10 h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/70 bg-black/35 text-white shadow-lg transition group-hover:scale-105 group-hover:bg-[#B56F6F] ${isPlaying ? "hidden md:flex" : "flex"}`}
                   >
                     <Play className="ml-0.5 h-5 w-5 fill-current" />
                   </button>
                   <div className="absolute inset-x-0 bottom-0 z-10 flex items-end gap-3 p-3 text-white sm:p-4">
                     <button
                       type="button"
-                      onClick={() => openReel(index, reel)}
+                      onClick={() => openReel(index)}
                       className="min-w-0 flex-1 text-left"
                     >
                       <span className="line-clamp-2 block text-xs font-medium leading-4 sm:text-sm">{reelTitle(reel)}</span>
@@ -453,9 +449,9 @@ export default function WatchAndBuy({ products, viewAll = false }: { products: W
                       <Link
                         href={`/product/${product.slug}`}
                         aria-label={`Shop ${product.name}`}
-                        className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white text-[#171312] transition hover:bg-[#FBB606]"
+                        className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#FBB606] text-black shadow-md transition hover:bg-white"
                       >
-                        <ShoppingBag className="h-4 w-4" />
+                        <ShoppingBag className="h-4 w-4 text-black" strokeWidth={2.25} aria-hidden="true" />
                       </Link>
                     )}
                   </div>
@@ -471,7 +467,7 @@ export default function WatchAndBuy({ products, viewAll = false }: { products: W
                   <button
                     type="button"
                     data-reel-id={reel.id}
-                    onClick={() => openReel(index, reel)}
+                    onClick={() => openReel(index)}
                     aria-label={`Open ${reelTitle(reel)}`}
                     className="group relative block aspect-[9/14] w-full overflow-hidden bg-[#2B2525] text-left"
                   >

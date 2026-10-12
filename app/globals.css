@@ -268,6 +268,29 @@ body { min-width: 320px; background: var(--vayziq-paper); color: var(--vayziq-in
 /* Mobile Watch & Buy is a direct-discovery carousel: autoplay the visible
    reel and use the entire video surface as the product/category link. */
 @media (max-width: 767px) { .watch-buy-desktop .watch-play-overlay { display: none !important; } }
+@media (max-width: 767px) {
+  .watch-buy-desktop .home-watch-reel-feed {
+    display: flex !important;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    gap: 12px !important;
+    margin-right: -16px;
+    margin-left: -16px;
+    padding: 0 12vw 8px !important;
+    scrollbar-width: none;
+  }
+  .watch-buy-desktop .home-watch-reel-feed::-webkit-scrollbar { display: none; }
+  .watch-buy-desktop .home-watch-reel-feed > article {
+    width: 76vw;
+    min-width: 76vw;
+    aspect-ratio: 9 / 16 !important;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    border-radius: 18px !important;
+  }
+}
 
 /* Desktop cards use the same compact Watch & Buy treatment as the homepage. */
 @media (min-width: 768px) {
@@ -368,7 +391,7 @@ body { min-width: 320px; background: var(--vayziq-paper); color: var(--vayziq-in
   .watch-buy-desktop article a { margin-top: 8px !important; min-height: 32px !important; border-radius: 7px !important; background:#fff !important; color:#111 !important; font-size:10px !important; }
 }
 
-/* Mobile Watch & Buy is a one-reel-per-screen, vertically swipable feed. */
+/* Mobile Watch & Buy is a one-reel-at-a-time horizontal swipe feed. */
 @media (max-width: 767px) {
   .watch-buy-desktop { padding: 12px 0 24px !important; background: linear-gradient(145deg,#fff0d2,#ffdfe7 52%,#e4d4ff) !important; }
   .watch-buy-desktop > div { padding: 0 !important; }
@@ -411,6 +434,28 @@ body { min-width: 320px; background: var(--vayziq-paper); color: var(--vayziq-in
 @media (max-width: 767px) {
   .watch-buy-desktop { background: #fff !important; }
   .watch-buy-desktop > div > div:first-child { margin: 0 !important; padding: 20px 16px 8px !important; }
+  .watch-buy-desktop .home-watch-header {
+    min-height: 0;
+    margin: 0 !important;
+    padding: 8px 16px 12px !important;
+    gap: 10px !important;
+  }
+  .watch-buy-desktop .home-watch-header h2 {
+    margin: 0 !important;
+    font-size: 28px !important;
+    line-height: 1 !important;
+    letter-spacing: -1.2px !important;
+  }
+  .watch-buy-desktop .home-watch-header p {
+    margin-top: 4px !important;
+    font-size: 11px !important;
+    line-height: 1.35 !important;
+  }
+  .watch-buy-desktop .home-watch-header a {
+    margin-right: 0 !important;
+    padding-bottom: 2px;
+    white-space: nowrap;
+  }
   .watch-buy-desktop [aria-label="Watch and Buy filters"] { margin: 0 !important; padding-left: 16px !important; padding-right: 16px !important; }
   .watch-buy-desktop .watch-reel-feed { padding-left: 16px !important; padding-right: 16px !important; }
   /* The mobile reel action stays as one compact bag button. */
