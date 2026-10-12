@@ -14,6 +14,14 @@ function load(file, imports = {}) {
 
 const media = load('lib/reel-media.ts');
 
+test('product details use the first enabled Reel Manager video linked to that product', () => {
+  const { getProductReel } = load('lib/reels.ts', { react: { cache: fn => fn }, '@/lib/db': { default: {} } });
+  const reel = (id, productId, enabled, videoUrl) => ({ id, productId, enabled, videoUrl, title: id, videoSource: 'upload', poster: '', badge: 'None', cta: 'Shop Now', description: '', sortOrder: 1 });
+  const rows = [reel('disabled', 7, false, '/disabled.mp4'), reel('other-product', 8, true, '/other.mp4'), reel('empty', 7, true, ''), reel('linked', 7, true, '/api/reel-media/linked.mp4')];
+  assert.equal(getProductReel(rows, 7).id, 'linked');
+  assert.equal(getProductReel(rows, 99), null);
+});
+
 test('reel upload checks actual video bytes and format', () => {
   const mp4 = Buffer.from([0, 0, 0, 16, 102, 116, 121, 112, 105, 115, 111, 109]);
   const webm = Buffer.from([0x1a, 0x45, 0xdf, 0xa3]);

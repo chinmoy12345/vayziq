@@ -4,6 +4,9 @@ import prisma from "@/lib/db";
 export const REELS_SETTING_KEY = "watch_buy_reels";
 export type StoreReel = { id: string; title: string; videoUrl: string; videoSource: "upload" | "url"; poster: string; badge: "None" | "Trending" | "New" | "Bestseller" | "Must Have"; productId: number | null; cta: string; description: string; enabled: boolean; sortOrder: number };
 export const emptyReel = (): StoreReel => ({ id: crypto.randomUUID(), title: "", videoUrl: "", videoSource: "upload", poster: "", badge: "None", productId: null, cta: "Shop Now", description: "", enabled: true, sortOrder: 1 });
+export function getProductReel(reels: readonly StoreReel[], productId: number) {
+  return reels.find(reel => reel.enabled && reel.productId === productId && Boolean(reel.videoUrl.trim())) ?? null;
+}
 const demoReels: StoreReel[] = [
   { id: "demo-elegant-look", title: "Elegant Everyday Look", videoUrl: "", videoSource: "upload", poster: "/vayziq/category-women.png", badge: "Trending", productId: null, cta: "Shop Now", description: "Modern everyday style.", enabled: true, sortOrder: 1 },
   { id: "demo-oversized-hoodie", title: "Oversized Hoodie", videoUrl: "", videoSource: "upload", poster: "/vayziq/category-women.png", badge: "New", productId: null, cta: "Shop Now", description: "Relaxed layers for every day.", enabled: true, sortOrder: 2 },

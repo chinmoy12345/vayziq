@@ -1,9 +1,17 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Heart } from "lucide-react";
 import ProductImageDialog from "./ProductImageDialog";
+import ProductVideo from "./ProductVideo";
 import ProgressiveImage from "@/components/ui/ProgressiveImage";
+
+function HeartIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" className="h-5 w-5" aria-hidden="true">
+      <path d="M20.8 8.7c0 5.5-8.8 10.3-8.8 10.3S3.2 14.2 3.2 8.7A4.7 4.7 0 0 1 12 6.1a4.7 4.7 0 0 1 8.8 2.6Z" strokeLinejoin="round" />
+    </svg>
+  );
+}
 
 interface ProductGalleryProps {
   productId: number;
@@ -12,6 +20,8 @@ interface ProductGalleryProps {
   name: string;
   badge?: string;
   badgeTone?: string;
+  videoUrl?: string | null;
+  videoPoster?: string | null;
 }
 
 export default function ProductGallery({
@@ -21,6 +31,8 @@ export default function ProductGallery({
   name,
   badge,
   badgeTone,
+  videoUrl,
+  videoPoster,
 }: ProductGalleryProps) {
   const [wishlist, setWishlist] = useState(false);
   const [wishAnimating, setWishAnimating] = useState(false);
@@ -103,7 +115,7 @@ export default function ProductGallery({
     setIsModalOpen(false);
   };
 
-  if (galleryImages.length === 0) {
+  if (galleryImages.length === 0 && !videoUrl) {
     return (
       <div className="flex aspect-[4/5] items-center justify-center bg-[#F8EFEC]">
         <p className="text-sm text-[#8A7777]">
@@ -124,7 +136,7 @@ export default function ProductGallery({
         <div ref={track} onScroll={(event) => {
           const element = event.currentTarget;
           setSlide(Math.round(element.scrollLeft / element.clientWidth));
-        }} className={`flex snap-x snap-mandatory overflow-x-auto bg-white [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:grid lg:gap-2 ${galleryImages.length === 1 ? "lg:grid-cols-1" : "lg:grid-cols-2"}`}>
+        }} className={`flex snap-x snap-mandatory overflow-x-auto bg-white [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:grid lg:gap-2 ${galleryImages.length + (videoUrl ? 1 : 0) === 1 ? "lg:grid-cols-1" : "lg:grid-cols-2"}`}>
 
           {galleryImages.map((image, index) => (
             <button
@@ -181,9 +193,21 @@ export default function ProductGallery({
             </button>
           ))}
 
+          {videoUrl && (
+            <div className="relative aspect-[4/5] w-full shrink-0 snap-center overflow-hidden bg-[#171312]" aria-label={`${name} product video`}>
+              <ProductVideo
+                url={videoUrl}
+                title={`${name} product video`}
+                poster={videoPoster || galleryImages[0]?.src}
+                className="h-full w-full object-cover"
+              />
+              <span className="pointer-events-none absolute left-3 top-3 rounded-full bg-black/65 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.12em] text-white backdrop-blur-sm">Product video</span>
+            </div>
+          )}
+
         </div>
-        {galleryImages.length > 1 && <div className="flex justify-center gap-1 py-3 lg:hidden" aria-label="Product images">
-          {galleryImages.map((_, index) => <button key={index} type="button" aria-label={`Show image ${index + 1}`} aria-current={slide === index ? "true" : undefined} onClick={() => track.current?.scrollTo({ left: index * track.current.clientWidth, behavior: "smooth" })} className="grid h-7 w-7 place-items-center"><span className={`h-1.5 rounded-full transition-all ${slide === index ? "w-5 bg-black" : "w-1.5 bg-gray-300"}`} /></button>)}
+        {galleryImages.length + (videoUrl ? 1 : 0) > 1 && <div className="flex justify-center gap-1 py-3 lg:hidden" aria-label="Product media">
+          {Array.from({ length: galleryImages.length + (videoUrl ? 1 : 0) }, (_, index) => <button key={index} type="button" aria-label={index < galleryImages.length ? `Show image ${index + 1}` : "Show product video"} aria-current={slide === index ? "true" : undefined} onClick={() => track.current?.scrollTo({ left: index * track.current.clientWidth, behavior: "smooth" })} className="grid h-7 w-7 place-items-center"><span className={`h-1.5 rounded-full transition-all ${slide === index ? "w-5 bg-black" : "w-1.5 bg-gray-300"}`} /></button>)}
         </div>}
 
         {/* =====================================================
@@ -212,24 +236,16 @@ export default function ProductGallery({
             rounded-full
             border
             border-white/80
-            bg-white/95
             shadow-[0_2px_8px_rgba(0,0,0,0.14)]
             backdrop-blur-sm
             transition-all
             duration-300
             hover:bg-[#B56F6F]
             hover:text-white
-            ${wishlist ? "bg-[#B56F6F] text-white hover:bg-[#9f5e5e]" : ""}
+            ${wishlist ? "bg-[#B56F6F] text-white hover:bg-[#9f5e5e]" : "bg-white/95 text-[#5A4B4B]"}
           `}
         >
-          <Heart
-            className={`h-5 w-5 transition ${wishAnimating ? "wishlist-heart-pop" : ""} ${
-              wishlist
-                ? "fill-current text-white"
-                : "text-[#4F4444]"
-            }`}
-            strokeWidth={1.4}
-          />
+          <span className={wishAnimating ? "wishlist-heart-pop" : undefined}><HeartIcon /></span>
         </button>
 
       </div>

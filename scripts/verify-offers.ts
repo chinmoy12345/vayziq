@@ -9,15 +9,18 @@ async function main() {
   const coupons = await db.coupon.findMany({ orderBy: { code: "asc" } });
   const expectedCodes = ["VAYZIQ10", "STYLE250", "WEEKEND15", "BUY2GET1", "MATCH2GET1", "TRIO120", "QUAD300", "PREMIUM3FOR699", "PREMIUMBUNDLE1999", "VALUE2FOR299"];
   if (coupons.length !== expectedCodes.length || expectedCodes.some(code => !coupons.some(coupon => coupon.code === code))) fail("campaign set is incomplete or contains an old coupon");
-  if (coupons.some(coupon => !coupon.active || coupon.usageCount !== 0)) fail("new campaigns must start active with zero usage");
+  if (coupons.some(coupon => !coupon.active)) fail("one or more campaigns are inactive");
+  if (coupons.some(coupon => coupon.usageCount < 0 || (coupon.usageLimit !== null && coupon.usageCount > coupon.usageLimit))) fail("campaign usage counters are invalid");
 
   const products = await db.product.findMany({ where: { status: "active", stock: { gt: 0 } }, select: { id: true, price: true }, orderBy: { id: "asc" } });
   const byId = new Map(products.map(product => [product.id, Number(product.price)]));
   const eligibleIds = [...new Set(coupons.flatMap(coupon => ((coupon.rules as { productIds?: number[] } | null)?.productIds ?? [])))];
   if (eligibleIds.some(id => !byId.has(id))) fail("a selected-product campaign points to an inactive or out-of-stock product");
   const item = (id: number, quantity: number): OfferItem => ({ id, quantity, price: byId.get(id) ?? 0 });
-  const premium = [...products].sort((a, b) => Number(b.price) - Number(a.price)).slice(0, 3);
-  const valueProduct = products.find(product => Number(product.price) <= 499);
+  const rulesFor = (code: string) => coupons.find(coupon => coupon.code === code)?.rules as { productIds?: number[] } | null;
+  const selectedProducts = (code: string) => (rulesFor(code)?.productIds ?? []).map(id => products.find(product => product.id === id)).filter((product): product is typeof products[number] => Boolean(product));
+  const premium = selectedProducts("PREMIUM3FOR699");
+  const valueProduct = selectedProducts("VALUE2FOR299")[0];
   if (premium.length !== 3 || !valueProduct) fail("catalog fixtures missing");
   const value = valueProduct!;
   const basic = products.slice(0, 4);

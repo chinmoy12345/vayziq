@@ -11,13 +11,13 @@ import SaleCountdown from "@/components/product/SaleCountdown";
 import { getSaleCountdownSettings } from "@/lib/sale-countdown-settings";
 import { effectiveQuantityLimits, getGlobalQuantityLimits } from "@/lib/quantity-limits";
 import ProductReviews from "@/components/product/ProductReviews";
-import ProductVideo from "@/components/product/ProductVideo";
 import ProductGrid from "@/components/product/ProductGrid";
 import RecentlyViewed from "@/components/product/RecentlyViewed";
 import Breadcrumbs from "@/components/store/Breadcrumbs";
 import prisma from "@/lib/db";
 import { formatPrice } from "@/lib/storefront";
 import { getHomepageVisibility } from "@/lib/homepage-settings";
+import { getProductReel, getStoreReels } from "@/lib/reels";
 
 type ProductPageProps = { params: Promise<{ slug: string }>; searchParams: Promise<{ color?: string }> };
 function colorPathSegment(color: string) {
@@ -87,11 +87,13 @@ export default async function ProductPage({ params, searchParams }: ProductPageP
   });
   if (!product) notFound();
 
-  const [visibility, globalCountdown, relatedSetting] = await Promise.all([
+  const [visibility, globalCountdown, relatedSetting, reels] = await Promise.all([
     getHomepageVisibility(),
     getSaleCountdownSettings(),
     prisma.storeSetting.findUnique({ where: { key: `product_related_products_${product.id}` }, select: { value: true } }),
+    getStoreReels(),
   ]);
+  const productReel = getProductReel(reels, product.id);
   const countdownEndsAt = product.saleCountdownMode === "hidden" ? "" : product.saleCountdownMode === "custom" ? product.saleEndsAt?.toISOString() ?? "" : globalCountdown.enabled ? globalCountdown.endsAt : "";
   const relatedInclude = {
     images: { orderBy: { sortOrder: "asc" as const }, take: 1 },
@@ -193,11 +195,7 @@ export default async function ProductPage({ params, searchParams }: ProductPageP
     <div className="mx-auto max-w-[1440px] px-4 pb-10 pt-3 sm:px-8 sm:pt-6 lg:px-10">
       <section aria-label={`${product.name} purchase details`} className="grid items-start gap-5 sm:gap-8 lg:grid-cols-[minmax(0,1.16fr)_minmax(390px,0.84fr)] lg:gap-8 xl:gap-12">
         <div className="-mx-4 min-w-0 space-y-5 sm:mx-0">
-          <ProductGallery productId={product.id} images={galleryImages} initialColor={initialColor} name={product.name} badge={product.badgeEnabled && product.badgeText ? product.badgeText : undefined} badgeTone={product.badgeTone} />
-          {visibility.productDetailVideo && product.videoUrl && <section aria-labelledby="product-video-title" className="overflow-hidden rounded-xl border border-[#E8DADA] bg-white">
-            <div className="px-4 py-3 sm:px-5"><h2 id="product-video-title" className="font-serif text-xl text-[#2B2525]">See this piece in motion</h2><p className="mt-1 text-xs text-[#756565]">A closer look at the fabric, finish and fit.</p></div>
-            <div className="aspect-video bg-[#2B2525]"><ProductVideo url={product.videoUrl} title={`${product.name} product video`} poster={images[0]} /></div>
-          </section>}
+          <ProductGallery productId={product.id} images={galleryImages} initialColor={initialColor} name={product.name} badge={product.badgeEnabled && product.badgeText ? product.badgeText : undefined} badgeTone={product.badgeTone} videoUrl={visibility.productDetailVideo ? productReel?.videoUrl : null} videoPoster={productReel?.poster} />
         </div>
         <aside className="min-w-0 overflow-hidden rounded-2xl border border-[#ece8e4] bg-white shadow-[0_18px_55px_rgba(25,20,18,0.07)] lg:sticky lg:top-24">
           {countdownEndsAt && <SaleCountdown endsAt={countdownEndsAt} />}
