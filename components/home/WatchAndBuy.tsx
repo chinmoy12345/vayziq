@@ -312,25 +312,39 @@ export default function WatchAndBuy({ products, viewAll = false }: { products: W
   useEffect(() => {
     const track = trackRef.current;
     if (!track || typeof IntersectionObserver === "undefined") return;
-    // Desktop cards are previews only; videos start only after an explicit click.
-    if (window.matchMedia("(min-width: 768px)").matches) {
-      return;
-    }
+    const mobile = window.matchMedia("(max-width: 767px)");
     const observer = new IntersectionObserver((entries) => {
       setPlayingReels((current) => {
         const next = new Set(current);
         entries.forEach((entry) => {
           const id = (entry.target as HTMLElement).dataset.reelId;
           if (!id) return;
-          if (entry.isIntersecting && entry.intersectionRatio >= 0.55) next.add(id);
+          if (mobile.matches && document.visibilityState === "visible" && entry.isIntersecting && entry.intersectionRatio >= 0.55) next.add(id);
           else next.delete(id);
         });
         return [...next];
       });
-    }, { root: track, threshold: [0, 0.55] });
-    track.querySelectorAll<HTMLElement>("[data-reel-id]").forEach((card) => observer.observe(card));
-    return () => observer.disconnect();
-  }, [reels]);
+    // The viewport root accounts for vertical page scrolling AND clipping by
+    // the horizontal feed. A feed root alone starts videos below the screen.
+    }, { root: null, threshold: [0, 0.55] });
+    function monitorVisibleCards() {
+      observer.disconnect();
+      if (!mobile.matches || document.visibilityState !== "visible") {
+        setPlayingReels([]);
+        return;
+      }
+      track!.querySelectorAll<HTMLElement>("[data-reel-id]").forEach((card) => observer.observe(card));
+    }
+    const frame = window.requestAnimationFrame(monitorVisibleCards);
+    mobile.addEventListener("change", monitorVisibleCards);
+    document.addEventListener("visibilitychange", monitorVisibleCards);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      observer.disconnect();
+      mobile.removeEventListener("change", monitorVisibleCards);
+      document.removeEventListener("visibilitychange", monitorVisibleCards);
+    };
+  }, [visibleReels]);
 
   useEffect(() => {
     if (activeIndex === null) return;
