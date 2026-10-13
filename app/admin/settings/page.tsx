@@ -113,6 +113,12 @@ export default function SettingsPage() {
   const [activeTab, setActiveTab] =
     useState<SettingsTab>("store");
 
+  useEffect(() => {
+    if (window.location.hash !== "#floating-contact") return;
+    const frame = window.requestAnimationFrame(() => setActiveTab("contact"));
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
   const [storeName, setStoreName] = useState(
     "Tantuka"
   );
@@ -561,6 +567,16 @@ export default function SettingsPage() {
                   </div>
 
                   <div className="sm:col-span-2">
+                    <div id="floating-contact" className="mb-5 rounded-lg border border-[#eee6e1] p-4">
+                      <label className="flex cursor-pointer items-center justify-between gap-4">
+                        <span><span className="block text-sm font-medium text-[#403936]">Floating contact button</span><span className="mt-1 block text-xs text-[#857974]">Show the WhatsApp contact button across the storefront using the number above.</span></span>
+                        <input type="checkbox" role="switch" aria-label="Show floating contact button" checked={whatsappFloatEnabled} onChange={event => setWhatsappFloatEnabled(event.target.checked)} className="h-5 w-9 shrink-0 accent-[#9b5c5c]" />
+                      </label>
+                      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                        <div><label htmlFor="floating-contact-label" className="mb-2 block text-sm font-medium text-[#403936]">Button text</label><input id="floating-contact-label" value={whatsappFloatLabel} onChange={event => setWhatsappFloatLabel(event.target.value)} className="h-11 w-full rounded-lg border border-[#ddd4cf] px-3.5 text-sm" /></div>
+                        <div><label htmlFor="floating-contact-message" className="mb-2 block text-sm font-medium text-[#403936]">WhatsApp message</label><textarea id="floating-contact-message" rows={2} value={whatsappFloatMessage} onChange={event => setWhatsappFloatMessage(event.target.value)} className="w-full rounded-lg border border-[#ddd4cf] px-3.5 py-3 text-sm" /></div>
+                      </div>
+                    </div>
                     <label htmlFor="opening-hours" className="mb-2 block text-sm font-medium text-[#403936]">Opening Hours</label>
                     <input id="opening-hours" value={hours} onChange={(e) => setHours(e.target.value)} className="h-11 w-full rounded-lg border border-[#ddd4cf] px-3.5 text-sm" />
                   </div>

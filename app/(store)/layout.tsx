@@ -10,6 +10,8 @@ import MaintenancePage from "@/components/store/MaintenancePage";
 import ChannelVisitTracker from "@/components/store/ChannelVisitTracker";
 import { Suspense } from "react";
 import WhatsAppFloat from "@/components/store/WhatsAppFloat";
+import ShoppingChat from "@/components/store/ShoppingChat";
+import { getChatbotSettings } from "@/lib/chatbot-settings";
 
 export const dynamic = "force-dynamic";
 
@@ -49,6 +51,7 @@ export default async function StoreLayout({ children }: Readonly<{ children: Rea
         <main className="storefront-shell min-h-screen">{children}</main>
       </ProductCardSettingsProvider>
       <WhatsAppFloat branding={branding} />
+      <StoreShoppingChat whatsapp={branding.whatsapp} />
       <Footer branding={branding} socialLinks={socialLinks} categories={footerCategories} settings={{
         newsletter: visibility.footerNewsletter,
         brand: visibility.footerBrand,
@@ -59,4 +62,9 @@ export default async function StoreLayout({ children }: Readonly<{ children: Rea
       }} />
     </>
   );
+}
+
+async function StoreShoppingChat({ whatsapp }: { whatsapp: string }) {
+  const { config } = await getChatbotSettings();
+  return <ShoppingChat enabled={config.enabled} name={config.name} greeting={config.greeting} supportUrl={`https://wa.me/${whatsapp.replace(/\D/g, "")}`} />;
 }

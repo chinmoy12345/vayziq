@@ -968,6 +968,7 @@ export default function EditCategoryPage() {
                   <div className="border-b border-[#eee6e1] px-5 py-4">
                     <h2 className="text-sm font-semibold text-[#292321]">Category Size Guide</h2>
                     <p className="mt-1 text-xs text-[#958b86]">Used automatically by products in this category unless a product has its own guide.</p>
+                    <Link href={`/admin/size-guides?categoryId=${id}`} className="mt-3 inline-block text-xs font-semibold text-[#9b5c5c] underline underline-offset-4">Add / edit size measurement table</Link>
                   </div>
                   <div className="p-5">
                     <label htmlFor="categorySizeGuideImage" className="mb-2 block text-xs font-medium text-[#514945]">Size chart image URL</label>

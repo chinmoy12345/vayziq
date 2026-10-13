@@ -541,6 +541,7 @@ export default function NewCategoryPage() {
                 <section className="rounded-xl border border-[#eee6e1] bg-white">
                   <div className="border-b border-[#eee6e1] px-5 py-4">
                     <h2 className="text-sm font-semibold text-[#292321]">Category Size Guide</h2>
+                    <p className="mt-2 text-xs text-[#958b86]">After creating this category, add its measurement table from Admin → Size Guides.</p>
                     <p className="mt-1 text-xs text-[#958b86]">Used automatically by products in this category unless a product has its own guide.</p>
                   </div>
                   <div className="p-5">

@@ -30,6 +30,7 @@ export const HOMEPAGE_VISIBILITY_DEFAULTS = {
   productCardRating: true,
   productCardCarousel: true,
   productDetailRating: true,
+  productDetailViewers: true,
   productDetailOffers: true,
   productDetailVideo: true,
   productDetailDelivery: true,

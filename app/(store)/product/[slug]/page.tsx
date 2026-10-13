@@ -7,6 +7,8 @@ import { Check, RefreshCw, RotateCcw, Truck } from "lucide-react";
 
 import ProductGallery from "@/components/product/ProductGallery";
 import ProductInfo from "@/components/product/ProductInfo";
+import ProductViewers from "@/components/product/ProductViewers";
+import { getCategorySizeGuide } from "@/lib/category-size-guide";
 import SaleCountdown from "@/components/product/SaleCountdown";
 import { getSaleCountdownSettings } from "@/lib/sale-countdown-settings";
 import { effectiveQuantityLimits, getGlobalQuantityLimits } from "@/lib/quantity-limits";
@@ -166,6 +168,7 @@ export default async function ProductPage({ params, searchParams }: ProductPageP
     initialColor,
     colorImages,
     sizeGuideImage: product.sizeGuideImage ?? product.category.sizeGuideImage ?? undefined,
+    sizeGuide: product.sizeGuideImage ? null : await getCategorySizeGuide(product.categoryId),
     stock: product.stock,
   };
 
@@ -200,6 +203,7 @@ export default async function ProductPage({ params, searchParams }: ProductPageP
         <aside className="min-w-0 overflow-hidden rounded-2xl border border-[#ece8e4] bg-white shadow-[0_18px_55px_rgba(25,20,18,0.07)] lg:sticky lg:top-24">
           {countdownEndsAt && <SaleCountdown endsAt={countdownEndsAt} />}
           <div className="px-4 pb-5 pt-4 sm:px-6 sm:pb-7 sm:pt-5 xl:px-8">
+            <ProductViewers productId={product.id} showCount={visibility.productDetailViewers} />
             <ProductInfo product={purchaseProduct} showRating={visibility.productDetailRating} showOffers={visibility.productDetailOffers} />
           </div>
         </aside>

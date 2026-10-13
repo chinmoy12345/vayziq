@@ -20,6 +20,9 @@ const permissionByHref: Record<string, string> = {
   "/admin/delivery-zips": "delivery-zips.view", "/admin/customers": "customers.view",
   "/admin/homepage": "storefront.view", "/admin/brands": "brands.view", "/admin/coupons": "coupons.view",
   "/admin/product-feeds": "storefront.view",
+  "/admin/product-views": "storefront.view",
+  "/admin/chatbot": "storefront.view",
+  "/admin/size-guides": "categories.view",
   "/admin/banners": "banners.view", "/admin/reels": "storefront.view", "/admin/blog": "blog.view", "/admin/reviews": "reviews.view",
   "/admin/settings": "settings.view",
   "/admin/integrations": "settings.view",
@@ -141,6 +144,9 @@ const menuItems: MenuItem[] = [
 ];
 
 const marketingItems: MenuItem[] = [
+  { label: "AI Assistant", href: "/admin/chatbot", icon: <span aria-hidden="true">✦</span> },
+  { label: "Size Guides", href: "/admin/size-guides", icon: <span aria-hidden="true">↔</span> },
+  { label: "Product Views", href: "/admin/product-views", icon: <span aria-hidden="true">◉</span> },
   {
     label: "Channel Reports",
     href: "/admin/channel-reports",
