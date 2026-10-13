@@ -1,4 +1,4 @@
-import type { Prisma } from "@/lib/generated/prisma-suppliers";
+import type { Prisma } from "@prisma/client";
 import prisma from "@/lib/db";
 
 const SETTINGS_KEY = "checkout_provider_v1";

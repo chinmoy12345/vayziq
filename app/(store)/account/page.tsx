@@ -1,6 +1,7 @@
 import OrderStatusBadge from "@/components/account/OrderStatusBadge";
 import Link from "next/link";
-import { ChevronRight, Heart, MapPin, Package, ShoppingBag, User } from "lucide-react";
+import { ChevronRight, MapPin, Package, ShoppingBag, User } from "lucide-react";
+import WishlistHeart from "@/components/icons/WishlistHeart";
 
 import { getCurrentUser } from "@/lib/auth";
 import prisma from "@/lib/db";
@@ -31,7 +32,7 @@ export default async function AccountPage() {
 
     <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
       <AccountCard href="/account/orders" icon={<ShoppingBag className="h-5 w-5" />} title="My Orders" description="View your orders" />
-      <AccountCard href="/account/wishlist" icon={<Heart className="h-5 w-5" />} title="Wishlist" description="Saved products" />
+      <AccountCard href="/account/wishlist" icon={<WishlistHeart />} title="Wishlist" description="Saved products" />
       <AccountCard href="/account/profile" icon={<User className="h-5 w-5" />} title="My Profile" description="Personal information" />
       <AccountCard href="/account/addresses" icon={<MapPin className="h-5 w-5" />} title="Addresses" description="Manage addresses" />
     </div>

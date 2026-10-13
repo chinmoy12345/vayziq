@@ -248,10 +248,35 @@ body:has(.vayziq-home) > header {
 .storefront-shell :where([class~="text-[#756565]"], [class~="text-[#8A7777]"], [class~="text-[#756c67]"], [class~="text-[#625a56]"], [class~="text-[#9A8888]"]) { color: #666 !important; }
 .storefront-shell :where([class~="border-[#E8DADA]"], [class~="border-[#eee6e1]"], [class~="border-[#e8ddd8]"], [class~="border-[#d8b4a0]"]) { border-color: #e8e8e8 !important; }
 
+/* Wishlist controls keep the same rose, circular treatment as the home cards. */
+.storefront-shell button[data-wishlist-button] {
+  border-color: rgba(255, 255, 255, .8) !important;
+  border-radius: 9999px !important;
+  background: rgba(255, 255, 255, .95) !important;
+  color: #5a4b4b !important;
+}
+.storefront-shell button[data-wishlist-button]:hover,
+.storefront-shell button[data-wishlist-button][aria-pressed="true"] {
+  border-color: #b56f6f !important;
+  background: #b56f6f !important;
+  color: #fff !important;
+}
+.storefront-shell button[data-wishlist-button][aria-pressed="true"]:hover {
+  background: #9f5e5e !important;
+}
+.storefront-shell button[data-wishlist-button] :where(svg, span) {
+  color: inherit !important;
+}
+.storefront-shell button[data-wishlist-button][aria-pressed="true"] svg {
+  color: #fff !important;
+  fill: #fff !important;
+  stroke: #fff !important;
+}
+
 /* Final Vayziq premium finish: shared depth, rhythm and interaction quality. */
 :root { --vayziq-ink: #151515; --vayziq-paper: #fffdf9; --vayziq-line: #e9e5df; --vayziq-gold: #fbb606; --vayziq-mint: #10d9a0; }
-html { scroll-behavior: smooth; }
-body { min-width: 320px; background: var(--vayziq-paper); color: var(--vayziq-ink); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+html { scroll-behavior: smooth; overflow-x: clip; }
+body { min-width: 0; overflow-x: clip; background: var(--vayziq-paper); color: var(--vayziq-ink); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
 ::selection { background: #ffe08a; color: #111; }
 :where(a, button, input, select, textarea):focus-visible { outline: 3px solid rgba(251,182,6,.72); outline-offset: 3px; }
 .storefront-shell { background: radial-gradient(circle at 100% 0%, rgba(16,217,160,.05), transparent 24rem), linear-gradient(180deg, #fff 0%, var(--vayziq-paper) 100%); }
@@ -385,10 +410,10 @@ body { min-width: 320px; background: var(--vayziq-paper); color: var(--vayziq-in
   .watch-buy-desktop [aria-label="Watch and Buy filters"] button { box-shadow: 0 1px 3px rgba(0,0,0,.08); }
   .watch-buy-desktop [aria-label="Watch and Buy filters"] + div { padding: 12px 30px 24px; border-radius: 0 0 12px 12px; background: linear-gradient(105deg,#fff0d2 0%,#ffdfe7 52%,#e4d4ff 100%); }
   .watch-buy-desktop article { border: 0 !important; border-radius: 12px !important; background: #161616 !important; box-shadow: 0 5px 12px rgba(0,0,0,.14) !important; }
-  .watch-buy-desktop article > div:first-child button { aspect-ratio: 9/13 !important; }
-  .watch-buy-desktop article > div:last-child { min-height: 0 !important; margin-top: -78px; position: relative; z-index: 2; padding: 10px !important; color: #fff; background: linear-gradient(transparent,rgba(0,0,0,.93) 38%); }
-  .watch-buy-desktop article h3,.watch-buy-desktop article div span { color:#fff !important; }
-  .watch-buy-desktop article a { margin-top: 8px !important; min-height: 32px !important; border-radius: 7px !important; background:#fff !important; color:#111 !important; font-size:10px !important; }
+  .watch-buy-desktop .watch-reel-feed article > div:first-child button { aspect-ratio: 9/13 !important; }
+  .watch-buy-desktop .watch-reel-feed article > div:last-child { min-height: 0 !important; margin-top: -78px; position: relative; z-index: 2; padding: 10px !important; color: #fff; background: linear-gradient(transparent,rgba(0,0,0,.93) 38%); }
+  .watch-buy-desktop .watch-reel-feed article h3,.watch-buy-desktop .watch-reel-feed article div span { color:#fff !important; }
+  .watch-buy-desktop .watch-reel-feed article a { margin-top: 8px !important; min-height: 32px !important; border-radius: 7px !important; background:#fff !important; color:#111 !important; font-size:10px !important; }
 }
 
 /* Mobile Watch & Buy is a one-reel-at-a-time horizontal swipe feed. */

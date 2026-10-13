@@ -244,7 +244,7 @@ export default async function ProductPage({ params, searchParams }: ProductPageP
           reviews: item.reviews.length,
           badge: item.badgeEnabled && item.badgeText ? item.badgeText : undefined,
           badgeTone: item.badgeEnabled && item.badgeText ? item.badgeTone : undefined,
-        }))} columns={4} />
+        }))} columns={4} hideCategory />
       </section>}
       <RecentlyViewed current={{
         id: product.id, slug: product.slug, name: product.name, category: product.category.name,

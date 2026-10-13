@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { Category } from "@/lib/generated/prisma-suppliers";
+import type { Category } from "@prisma/client";
 import ProgressiveImage from "@/components/ui/ProgressiveImage";
 
 export default function Categories({ categories }: { categories: Category[] }) {

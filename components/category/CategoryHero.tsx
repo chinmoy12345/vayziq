@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 interface CategoryHeroProps {
   title: string;
@@ -177,9 +178,11 @@ export default function CategoryHero({
             "
           >
 
-            <img
+            <Image
               src={image}
               alt={`${title} collection`}
+              fill
+              sizes="(min-width: 1024px) 50vw, 100vw"
               className="
                 absolute
                 inset-0

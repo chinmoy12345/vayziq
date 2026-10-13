@@ -2,6 +2,15 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   typescript: { ignoreBuildErrors: true },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/**",
+      },
+    ],
+  },
   async redirects() {
     // Legacy Tantuka icon routes are still cached by browsers and Android shortcuts.
     // Serve Vayziq's permanent assets for every old entry point.

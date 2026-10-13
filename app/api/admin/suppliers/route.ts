@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
-import { Prisma } from "@/lib/generated/prisma-suppliers";
+import { Prisma } from "@prisma/client";
 import { requireAdminPermission } from "@/lib/auth";
 import prisma from "@/lib/db";
 

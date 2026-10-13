@@ -4,6 +4,7 @@ import Link from "next/link";
 import ProductOfferBadges from "./ProductOfferBadges";
 import { useEffect, useState } from "react";
 import ProgressiveImage from "@/components/ui/ProgressiveImage";
+import WishlistHeart from "@/components/icons/WishlistHeart";
 import { useProductCardSettings } from "@/components/product/ProductCardSettings";
 import styles from "./ProductCard.module.css";
 
@@ -39,24 +40,6 @@ export interface Product {
    HEART ICON
 ========================================================= */
 
-function HeartIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      className="h-5 w-5"
-      aria-hidden="true"
-    >
-      <path
-        d="M20.8 8.7c0 5.5-8.8 10.3-8.8 10.3S3.2 14.2 3.2 8.7A4.7 4.7 0 0 1 12 6.1a4.7 4.7 0 0 1 8.8 2.6Z"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
 /* =========================================================
    STAR ICON
 ========================================================= */
@@ -88,8 +71,10 @@ function colorPathSegment(color: string) {
 
 export default function ProductCard({
   product,
+  hideCategory = false,
 }: {
   product: Product;
+  hideCategory?: boolean;
 }) {
   const cardSettings = useProductCardSettings();
   const [saved, setSaved] = useState(false);
@@ -286,6 +271,7 @@ useEffect(() => {
 
         <button
           type="button"
+          data-wishlist-button
           aria-label={`${saved ? "Remove" : "Add"} ${product.name} ${saved ? "from" : "to"} wishlist`}
           aria-pressed={saved}
           onClick={() => void toggleWishlist()}
@@ -311,7 +297,7 @@ useEffect(() => {
             ${saved ? "bg-[#B56F6F] text-white hover:bg-[#9f5e5e]" : "bg-white/95"}
           `}
         >
-          <span className={wishAnimating ? "wishlist-heart-pop" : undefined}><HeartIcon /></span>
+          <span className={wishAnimating ? "wishlist-heart-pop" : undefined}><WishlistHeart active={saved} /></span>
         </button>
 
       </div>
@@ -329,7 +315,7 @@ useEffect(() => {
       <div className="flex min-w-0 flex-1 flex-col px-1 pt-3 sm:pt-4">
 
         {/* Category */}
-        <p
+        {!hideCategory && <p
           className={`${styles.category}
             text-[9px]
             font-medium
@@ -339,13 +325,13 @@ useEffect(() => {
           `}
         >
           {product.category}
-        </p>
+        </p>}
 
         {/* Product Name */}
         <Link href={`/product/${productSlug}`} title={product.name} className={styles.nameLink}>
           <h3
-            className={`${styles.name}
-              mt-1.5
+            className={`${styles.name} ${hideCategory ? styles.compactName : ""}
+              ${hideCategory ? "mt-0" : "mt-1.5"}
               text-[15px] sm:text-[17px]
               text-[#2B2525]
               transition-colors

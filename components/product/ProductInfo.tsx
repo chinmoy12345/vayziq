@@ -2,7 +2,6 @@
 
 import {
   Check,
-  Heart,
   MapPin,
   Minus,
   Plus,
@@ -19,6 +18,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import ProductOffers from "./ProductOffers";
 import ProductOfferBadges from "./ProductOfferBadges";
+import WishlistHeart from "@/components/icons/WishlistHeart";
 
 interface ProductInfoData {
   id: number | string;
@@ -580,14 +580,9 @@ export default function ProductInfo({
           onClick={toggleWishlist}
           className="flex items-center gap-2 text-xs text-[#6D5B5B] transition hover:text-[#B56F6F]"
         >
-          <Heart
+          <WishlistHeart
+            active={wishlist}
             className={`h-4 w-4 ${wishAnimating ? "wishlist-heart-pop" : ""}`}
-            fill={
-              wishlist
-                ? "currentColor"
-                : "none"
-            }
-            strokeWidth={1.5}
           />
 
           {wishlist

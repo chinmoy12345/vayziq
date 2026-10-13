@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, ShoppingBag, Search } from "lucide-react";
+import { ArrowLeft, ShoppingBag } from "lucide-react";
 
 export default function NotFound() {
   return (

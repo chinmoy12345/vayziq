@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import type { Prisma } from "@/lib/generated/prisma-suppliers";
+import type { Prisma } from "@prisma/client";
 import { requireAdminPermission } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { DELIVERY_ZIP_SETTING_KEY, getDeliveryZipSettings } from "@/lib/delivery-zip-settings";

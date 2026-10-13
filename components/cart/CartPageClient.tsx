@@ -310,7 +310,7 @@ export default function CartPageClient({ visibility }: { visibility: HomepageVis
 
                   <div
                     key={cartLineKey(item)}
-                    className="cart-line flex gap-4 py-6 sm:gap-6"
+                    className={`cart-line flex gap-4 py-6 sm:gap-6 ${stockStatus[cartLineKey(item)]?.stock === 0 ? "my-2 rounded-xl border border-rose-300 bg-rose-50/70 px-3 shadow-[0_4px_16px_rgba(190,24,93,.08)] sm:px-4" : ""}`}
                   >
 
                     {/* IMAGE */}
@@ -330,11 +330,7 @@ export default function CartPageClient({ visibility }: { visibility: HomepageVis
 
                     <div className="cart-line-info flex min-w-0 flex-1 flex-col">
 
-                      <p className="text-[10px] font-semibold tracking-[0.15em] text-[#B56F6F]">
-                        {item.category}
-                      </p>
-
-                      <h2 className="mt-2 font-serif text-lg leading-tight text-[#2B2525] sm:text-xl">
+                      <h2 className="font-serif text-lg leading-tight text-[#2B2525] sm:text-xl">
                         {item.name}
                       </h2>
 
@@ -370,7 +366,11 @@ export default function CartPageClient({ visibility }: { visibility: HomepageVis
 
                       {stockStatus[cartLineKey(item)]?.available === false && (
                         <p role="alert" className="mt-2 inline-flex w-fit items-center rounded-full bg-rose-50 px-2.5 py-1 text-[10px] font-bold tracking-[0.08em] text-rose-700">
-                          {stockStatus[cartLineKey(item)]?.stock === 0 ? "OUT OF STOCK" : `ONLY ${stockStatus[cartLineKey(item)]?.stock} AVAILABLE`}
+                          {stockStatus[cartLineKey(item)]?.stock === 0
+                            ? "OUT OF STOCK"
+                            : stockStatus[cartLineKey(item)]!.stock <= 5
+                              ? `ONLY ${stockStatus[cartLineKey(item)]!.stock} LEFT`
+                              : `ONLY ${stockStatus[cartLineKey(item)]!.stock} AVAILABLE`}
                         </p>
                       )}
                       {stockStatus[cartLineKey(item)]?.available && stockStatus[cartLineKey(item)]?.stock <= 5 && (

@@ -1,4 +1,4 @@
-import { PrismaClient } from "../lib/generated/prisma-suppliers";
+import { PrismaClient } from "@prisma/client";
 import { publicOffer, reserveCoupon } from "../lib/coupons";
 import { offerDiscount, type OfferItem } from "../lib/product-offers";
 

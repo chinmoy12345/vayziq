@@ -1,4 +1,4 @@
-import type { OrderStatus } from "@/lib/generated/prisma-suppliers";
+import type { OrderStatus } from "@prisma/client";
 
 const labels: Record<OrderStatus, string> = {
   pending: "Pending", confirmed: "Confirmed", processing: "Processing",

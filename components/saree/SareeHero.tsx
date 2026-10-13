@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function SareeHero() {
   return (
@@ -155,9 +156,11 @@ export default function SareeHero() {
             "
           >
 
-            <img
+            <Image
               src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=90"
               alt="Saree collection"
+              fill
+              sizes="(min-width: 1024px) 50vw, 100vw"
               className="
                 absolute
                 inset-0

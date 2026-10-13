@@ -9,6 +9,12 @@ const eslintConfig = defineConfig([
     files: ["**/*.cjs"],
     rules: { "@typescript-eslint/no-require-imports": "off" },
   },
+  {
+    // Admin previews accept freshly uploaded blob/data URLs and arbitrary merchant
+    // image URLs, so they intentionally bypass the storefront image optimizer.
+    files: ["app/admin/**/*.{ts,tsx}", "components/admin/**/*.{ts,tsx}"],
+    rules: { "@next/next/no-img-element": "off" },
+  },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:

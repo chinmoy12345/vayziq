@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { BlogContent, BlogPost, BlogSection } from "@/lib/blog";
 
@@ -8,6 +9,7 @@ const blankPost = (): BlogPost => ({ slug: "", title: "", excerpt: "", category:
 const slugify = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
 export default function BlogEditor({ slug }: { slug: string }) {
+  const router = useRouter();
   const [content, setContent] = useState<BlogContent | null>(null);
   const [post, setPost] = useState<BlogPost | null>(null);
   const [saving, setSaving] = useState(false);
@@ -31,7 +33,7 @@ export default function BlogEditor({ slug }: { slug: string }) {
     if (!content || !post) return;
     setSaving(true); setError(""); setMessage("");
     const next = { ...post, title: post.title.trim(), slug: slugify(post.slug || post.title) };
-    try { const posts = isNew ? [...content.posts, next] : content.posts.map(item => item.slug === slug ? next : item); const response = await fetch("/api/admin/blog", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...content, posts }) }); const payload = await response.json() as { message?: string }; if (!response.ok) throw new Error(payload.message || "Could not save the article."); if (isNew) { window.location.assign(`/admin/blog/${next.slug}`); return; } setMessage("Article saved."); } catch (reason) { setError(reason instanceof Error ? reason.message : "Could not save the article."); } finally { setSaving(false); }
+    try { const posts = isNew ? [...content.posts, next] : content.posts.map(item => item.slug === slug ? next : item); const response = await fetch("/api/admin/blog", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...content, posts }) }); const payload = await response.json() as { message?: string }; if (!response.ok) throw new Error(payload.message || "Could not save the article."); if (isNew) { router.replace(`/admin/blog/${next.slug}`); return; } setMessage("Article saved."); } catch (reason) { setError(reason instanceof Error ? reason.message : "Could not save the article."); } finally { setSaving(false); }
   }
 
   if (!post) return <main className="min-h-[calc(100vh-72px)] bg-[#faf8f6] p-6 text-sm text-[#857974]">{error || "Loading article editor…"}</main>;

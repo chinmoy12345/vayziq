@@ -439,7 +439,6 @@ export default function SettingsPage() {
 
                   <div className="sm:col-span-2">
                     <div className="flex min-h-24 items-center rounded-lg border border-[#eee6e1] bg-[#2b2525] p-4">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={storeLogo} alt={`${storeName || "Store"} logo preview`} className="max-h-20 max-w-[240px] object-contain brightness-0 invert" />
                     </div>
                     <p className="mt-2 text-xs text-[#958b86]">This logo is used across the storefront header and footer.</p>

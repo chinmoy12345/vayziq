@@ -584,7 +584,7 @@ async function main() {
   // CUSTOMER USER
   // =====================================================
 
-  const customer = await prisma.user.upsert({
+  await prisma.user.upsert({
     where: {
       email: "customer@example.com",
     },

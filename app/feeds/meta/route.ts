@@ -1,6 +1,5 @@
-import bcrypt from "bcryptjs";
 import { type NextRequest } from "next/server";
-import { getMetaFeeds, renderMetaFeed } from "@/lib/meta-product-feed";
+import { feedCredentialsValid, feedRequiresAuth, getMetaFeeds, renderMetaFeed } from "@/lib/meta-product-feed";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -17,16 +16,12 @@ function denied(request: Request) {
 export async function GET(request: NextRequest) {
   const slug = request.nextUrl.searchParams.get("slug");
   const feed = slug ? (await getMetaFeeds()).find(candidate => candidate.slug === slug && candidate.active) : undefined;
-  const header = request.headers.get("authorization");
-  if (!feed || !header?.startsWith("Basic ")) return denied(request);
-  let username = "", password = "";
-  try {
-    const decoded = Buffer.from(header.slice(6), "base64").toString("utf8");
-    const divider = decoded.indexOf(":");
-    if (divider < 1) return denied(request);
-    username = decoded.slice(0, divider); password = decoded.slice(divider + 1);
-  } catch { return denied(request); }
-  if (username !== feed.username || !password || !(await bcrypt.compare(password, feed.passwordHash))) return denied(request);
+  if (!feed) return denied(request);
+  if (!feedRequiresAuth(feed)) {
+    const xml = await renderMetaFeed(feed);
+    return new Response(xml, { headers: { "Content-Type": "application/rss+xml; charset=utf-8", "Cache-Control": "public, max-age=300", "X-Robots-Tag": "noindex, nofollow" } });
+  }
+  if (!(await feedCredentialsValid(feed, request.headers.get("authorization")))) return denied(request);
   const xml = await renderMetaFeed(feed);
   return new Response(xml, { headers: { "Content-Type": "application/rss+xml; charset=utf-8", "Cache-Control": "private, max-age=0, no-store", "X-Robots-Tag": "noindex, nofollow" } });
 }

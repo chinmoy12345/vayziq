@@ -1,5 +1,5 @@
 import { loadEnvConfig } from "@next/env";
-import { PrismaClient } from "../lib/generated/prisma-suppliers";
+import { PrismaClient } from "@prisma/client";
 
 loadEnvConfig(process.cwd());
 const db = new PrismaClient();

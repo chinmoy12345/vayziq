@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Prisma } from "@/lib/generated/prisma-suppliers";
+import { Prisma } from "@prisma/client";
 import prisma from "@/lib/db";
 import { requireAdminPermission } from "@/lib/auth";
 import { getSaleCountdownSettings, SALE_COUNTDOWN_KEY } from "@/lib/sale-countdown-settings";

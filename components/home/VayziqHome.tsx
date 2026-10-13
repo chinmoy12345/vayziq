@@ -8,7 +8,6 @@ import {
   ArrowRight,
   ChevronRight,
   Clock3,
-  Heart,
   Minus,
   PackageCheck,
   Plus,
@@ -22,6 +21,7 @@ import type { VayziqHomeData, VayziqHomeOffer, VayziqHomeOfferBanner, VayziqHome
 import type { HomepageVisibility } from "@/lib/homepage-settings";
 import type { StoreMenuSettings } from "@/lib/store-menu-settings";
 import ProductOfferBadges from "@/components/product/ProductOfferBadges";
+import WishlistHeart from "@/components/icons/WishlistHeart";
 import WatchAndBuy from "@/components/home/WatchAndBuy";
 import HomeHeader from "./HomeHeader";
 import ProductCarousel from "./ProductCarousel";
@@ -157,11 +157,11 @@ function ProductCard({
       </div>
       <button
         type="button"
-        className={`${styles.wishlistButton} ${wishlistStyles.button}${liked ? ` ${styles.liked} ${wishlistStyles.active}` : ""}`}
+        className={`${styles.wishlistButton} ${wishlistStyles.button}${liked ? ` ${wishlistStyles.active}` : ""}`}
         onClick={onLike}
         aria-label={`Add ${product.name} to wishlist`}
       >
-        <Heart fill={liked ? "currentColor" : "none"} />
+        <WishlistHeart active={liked} />
       </button>
       <h3>{product.name}</h3>
       <div className={styles.priceRow}>
@@ -358,6 +358,7 @@ useEffect(() => {
     <div className={`${styles.home} vayziq-home`}>
       <HomeHeader menuSettings={menuSettings} />
       <main>
+        <h1 className="sr-only">Vayziq everyday streetwear for men and women</h1>
         {visibility.heroSlider && activeHeroBanner && (
           <section
             className={styles.heroSlider}

@@ -436,20 +436,22 @@ export default function WatchAndBuy({ products, viewAll = false }: { products: W
                   >
                     <Play className="ml-0.5 h-5 w-5 fill-current" />
                   </button>
-                  <div className="absolute inset-x-0 bottom-0 z-10 flex items-end gap-3 p-3 text-white sm:p-4">
-                    <button
-                      type="button"
-                      onClick={() => openReel(index)}
-                      className="min-w-0 flex-1 text-left"
+                  <div className="absolute inset-x-0 bottom-0 z-10 flex items-center gap-2.5 bg-gradient-to-t from-black/95 to-transparent px-3 pb-3 pt-6 text-white sm:px-4 sm:pb-4">
+                    {product && <Link href={`/product/${product.slug}`} aria-label={`View ${product.name}`} className="relative block h-9 w-7 shrink-0 overflow-hidden rounded bg-white/10">
+                      <Image src={product.image} alt="" fill sizes="28px" className="object-cover" />
+                    </Link>}
+                    <Link
+                      href={product ? `/product/${product.slug}` : "/watch-buy"}
+                      className="min-w-0 flex-1 text-left text-white"
                     >
                       <span className="line-clamp-2 block text-xs font-medium leading-4 sm:text-sm">{reelTitle(reel)}</span>
                       {product && <strong className="mt-1 block text-sm font-extrabold sm:text-base">{formatPrice(product.price)}</strong>}
-                    </button>
+                    </Link>
                     {product && (
                       <Link
                         href={`/product/${product.slug}`}
                         aria-label={`Shop ${product.name}`}
-                        className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#FBB606] text-black shadow-md transition hover:bg-white"
+                        className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-[#FBB606] text-black shadow-md transition hover:bg-white"
                       >
                         <ShoppingBag className="h-4 w-4 text-black" strokeWidth={2.25} aria-hidden="true" />
                       </Link>

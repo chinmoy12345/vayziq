@@ -7,13 +7,13 @@ import Link from "next/link";
 import {
   LayoutDashboard,
   ShoppingBag,
-  Heart,
   User,
   MapPin,
 } from "lucide-react";
 import LogoutButton from "@/components/auth/LogoutButton";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
+import WishlistHeart from "@/components/icons/WishlistHeart";
 
 const menuItems = [
   {
@@ -29,7 +29,7 @@ const menuItems = [
   {
     href: "/account/wishlist",
     label: "Wishlist",
-    icon: Heart,
+    icon: WishlistHeart,
   },
   {
     href: "/account/profile",

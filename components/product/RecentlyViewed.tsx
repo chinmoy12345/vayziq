@@ -32,6 +32,6 @@ export default function RecentlyViewed({ current }: { current: Product }) {
   if (!products.length) return null;
   return <section aria-labelledby="recently-viewed-title" className="mt-12 border-t border-[#E8DADA] pt-9 sm:mt-16 sm:pt-12">
     <div className="mb-6 sm:mb-8"><p className="text-[10px] font-semibold tracking-[0.22em] text-[#9F5E5E]">PICK UP WHERE YOU LEFT OFF</p><h2 id="recently-viewed-title" className="mt-2 font-serif text-2xl text-[#2B2525] sm:text-3xl">Recently viewed</h2><p className="mt-2 text-sm text-[#756565]">Styles you explored recently on this device.</p></div>
-    <ProductGrid products={products} columns={4} />
+    <ProductGrid products={products} columns={4} hideCategory />
   </section>;
 }

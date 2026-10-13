@@ -4,14 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import ProductImageDialog from "./ProductImageDialog";
 import ProductVideo from "./ProductVideo";
 import ProgressiveImage from "@/components/ui/ProgressiveImage";
-
-function HeartIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" className="h-5 w-5" aria-hidden="true">
-      <path d="M20.8 8.7c0 5.5-8.8 10.3-8.8 10.3S3.2 14.2 3.2 8.7A4.7 4.7 0 0 1 12 6.1a4.7 4.7 0 0 1 8.8 2.6Z" strokeLinejoin="round" />
-    </svg>
-  );
-}
+import WishlistHeart from "@/components/icons/WishlistHeart";
 
 interface ProductGalleryProps {
   productId: number;
@@ -216,6 +209,7 @@ export default function ProductGallery({
 
         <button
           type="button"
+          data-wishlist-button
           onClick={() => void toggleWishlist()}
           aria-label={
             wishlist
@@ -245,7 +239,7 @@ export default function ProductGallery({
             ${wishlist ? "bg-[#B56F6F] text-white hover:bg-[#9f5e5e]" : "bg-white/95 text-[#5A4B4B]"}
           `}
         >
-          <span className={wishAnimating ? "wishlist-heart-pop" : undefined}><HeartIcon /></span>
+          <span className={wishAnimating ? "wishlist-heart-pop" : undefined}><WishlistHeart active={wishlist} /></span>
         </button>
 
       </div>

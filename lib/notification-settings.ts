@@ -1,6 +1,6 @@
 import { createCipheriv, createDecipheriv, createHash, randomBytes } from "crypto";
 import prisma from "@/lib/db";
-import type { Prisma } from "@/lib/generated/prisma-suppliers";
+import type { Prisma } from "@prisma/client";
 const KEY="customer_notification_settings_v1";
 export type NotificationSettings={emailEnabled:boolean;smsEnabled:boolean;welcome:boolean;orderPlaced:boolean;orderStatus:boolean;smtpHost:string;smtpPort:number;smtpSecure:boolean;smtpUser:string;smtpPassword?:string;fromName:string;fromEmail:string};
 const defaults:NotificationSettings={emailEnabled:false,smsEnabled:false,welcome:true,orderPlaced:true,orderStatus:true,smtpHost:"",smtpPort:587,smtpSecure:false,smtpUser:"",fromName:"Vayziq",fromEmail:""};

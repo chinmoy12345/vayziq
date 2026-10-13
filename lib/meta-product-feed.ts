@@ -1,12 +1,12 @@
 import bcrypt from "bcryptjs";
-import type { Prisma } from "@/lib/generated/prisma-suppliers";
+import type { Prisma } from "@prisma/client";
 import prisma from "@/lib/db";
 import { SITE_URL } from "@/lib/seo";
 
 export const META_FEEDS_KEY = "meta_product_feeds_v1";
 export type FeedSelection = { productIds: number[]; categoryIds: number[]; featured: boolean; badged: boolean; inStockOnly: boolean };
 export type MetaFeed = { id: string; name: string; slug: string; username: string; passwordHash: string; active: boolean; selection: FeedSelection; country: string; language: string; currency: "INR"; lastGeneratedAt?: string };
-export type PublicMetaFeed = Omit<MetaFeed, "passwordHash"> & { url: string; productCount?: number };
+export type PublicMetaFeed = Omit<MetaFeed, "passwordHash"> & { url: string; protected: boolean; productCount?: number };
 type RecordValue = Record<string, unknown>;
 
 const isRecord = (value: unknown): value is RecordValue => typeof value === "object" && value !== null && !Array.isArray(value);
@@ -20,7 +20,7 @@ export function parseFeeds(value: unknown): MetaFeed[] {
     if (!isRecord(item)) return [];
     const id = text(item.id, 100), name = text(item.name, 100), slug = slugify(text(item.slug, 100));
     const username = text(item.username, 100), passwordHash = text(item.passwordHash, 200), country = text(item.country, 2).toUpperCase(), language = text(item.language, 8).toLowerCase();
-    if (!id || !name || !slug || !username || !passwordHash || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) || !/^[A-Z]{2}$/.test(country) || !/^[a-z]{2,8}$/.test(language)) return [];
+    if (!id || !name || !slug || Boolean(username) !== Boolean(passwordHash) || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) || !/^[A-Z]{2}$/.test(country) || !/^[a-z]{2,8}$/.test(language)) return [];
     const selectionValue = isRecord(item.selection) ? item.selection : {};
     return [{ id, name, slug, username, passwordHash, active: item.active === true,
       selection: { productIds: ids(selectionValue.productIds), categoryIds: ids(selectionValue.categoryIds), featured: selectionValue.featured === true, badged: selectionValue.badged === true, inStockOnly: selectionValue.inStockOnly !== false },
@@ -38,7 +38,7 @@ export async function saveMetaFeeds(feeds: MetaFeed[]) {
 }
 
 export function publicFeed(feed: MetaFeed): PublicMetaFeed {
-  return { id: feed.id, name: feed.name, slug: feed.slug, username: feed.username, active: feed.active,
+  return { id: feed.id, name: feed.name, slug: feed.slug, username: feed.username, protected: feedRequiresAuth(feed), active: feed.active,
     selection: feed.selection, country: feed.country, language: feed.language, currency: feed.currency,
     lastGeneratedAt: feed.lastGeneratedAt, url: `${SITE_URL}/feeds/meta/${feed.slug}.xml` };
 }
@@ -47,17 +47,39 @@ export async function buildFeedFromInput(value: unknown, existing?: MetaFeed): P
   if (!isRecord(value)) throw new Error("Enter valid feed details.");
   const name = text(value.name, 100), slug = slugify(text(value.slug || value.name, 100)), username = text(value.username, 100);
   const password = typeof value.password === "string" ? value.password : "";
+  const authEnabled = value.authEnabled === true;
   const country = (text(value.country, 2) || "IN").toUpperCase(), language = (text(value.language, 8) || "en").toLowerCase();
-  if (!name || !slug || !username || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) throw new Error("Feed name, URL slug and username are required.");
+  if (!name || !slug || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) throw new Error("Feed name and URL slug are required.");
   if (!/^[A-Z]{2}$/.test(country) || !/^[a-z]{2,8}$/.test(language)) throw new Error("Use a two-letter country and valid language code.");
-  if (!existing && password.length < 12) throw new Error("Set a feed password with at least 12 characters.");
-  if (password && password.length < 12) throw new Error("Feed passwords must be at least 12 characters.");
+  if (authEnabled && !username) throw new Error("Enter a username when password protection is enabled.");
+  if (authEnabled && !password && !existing?.passwordHash) throw new Error("Set a feed password with at least 12 characters.");
+  if (authEnabled && password && password.length < 12) throw new Error("Feed passwords must be at least 12 characters.");
   const selectionValue = isRecord(value.selection) ? value.selection : {};
-  return { id: existing?.id ?? crypto.randomUUID(), name, slug, username,
-    passwordHash: password ? await bcrypt.hash(password, 12) : existing!.passwordHash,
+  return { id: existing?.id ?? crypto.randomUUID(), name, slug, username: authEnabled ? username : "",
+    passwordHash: authEnabled ? (password ? await bcrypt.hash(password, 12) : existing?.passwordHash ?? "") : "",
     active: value.active !== false,
     selection: { productIds: ids(selectionValue.productIds), categoryIds: ids(selectionValue.categoryIds), featured: selectionValue.featured === true, badged: selectionValue.badged === true, inStockOnly: selectionValue.inStockOnly !== false },
     country, language, currency: "INR", lastGeneratedAt: existing?.lastGeneratedAt };
+}
+
+export function feedRequiresAuth(feed: Pick<MetaFeed, "username" | "passwordHash">) {
+  return Boolean(feed.username && feed.passwordHash);
+}
+
+export async function feedCredentialsValid(feed: Pick<MetaFeed, "username" | "passwordHash">, authorization: string | null) {
+  if (!feedRequiresAuth(feed)) return true;
+  const encoded = authorization?.match(/^Basic\s+([^\s]+)$/i)?.[1];
+  if (!encoded) return false;
+  try {
+    const decoded = Buffer.from(encoded, "base64").toString("utf8");
+    const divider = decoded.indexOf(":");
+    if (divider < 1) return false;
+    const username = decoded.slice(0, divider);
+    const password = decoded.slice(divider + 1);
+    return username === feed.username && Boolean(password) && await bcrypt.compare(password, feed.passwordHash);
+  } catch {
+    return false;
+  }
 }
 
 export async function getEligibleProducts(feed: MetaFeed) {

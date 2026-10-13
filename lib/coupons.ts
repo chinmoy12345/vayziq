@@ -1,4 +1,4 @@
-import type { Coupon, Prisma } from "@/lib/generated/prisma-suppliers";
+import type { Coupon, Prisma } from "@prisma/client";
 import { offerDiscount, type ProductOffer, type OfferRules, type OfferItem } from "@/lib/product-offers";
 
 export function publicOffer(coupon: Coupon): ProductOffer {

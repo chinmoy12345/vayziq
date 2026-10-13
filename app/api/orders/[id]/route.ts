@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
-import { Prisma } from "@/lib/generated/prisma-suppliers";
-import type { OrderStatus, PaymentStatus } from "@/lib/generated/prisma-suppliers";
+import { Prisma } from "@prisma/client";
+import type { OrderStatus, PaymentStatus } from "@prisma/client";
 import { requireAdminPermission } from "@/lib/auth";
 import { notifyOrder } from "@/lib/customer-notifications";
 

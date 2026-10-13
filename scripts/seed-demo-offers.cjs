@@ -1,7 +1,7 @@
 // Explicit merchandising reset. It replaces every live coupon with the
 // current VAYZIQ campaign set; historical Order.couponCode values are not changed.
 require("@next/env").loadEnvConfig(process.cwd());
-const { PrismaClient } = require("../lib/generated/prisma-suppliers");
+const { PrismaClient } = require("@prisma/client");
 const db = new PrismaClient();
 
 async function main() {

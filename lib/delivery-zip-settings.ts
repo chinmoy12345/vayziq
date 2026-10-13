@@ -1,5 +1,5 @@
 import { cache } from "react";
-import type { Prisma } from "@/lib/generated/prisma-suppliers";
+import type { Prisma } from "@prisma/client";
 import prisma from "@/lib/db";
 
 export const DELIVERY_ZIP_SETTING_KEY = "delivery_zip_settings";

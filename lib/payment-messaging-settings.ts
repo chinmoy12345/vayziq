@@ -1,5 +1,5 @@
 import { createCipheriv, createDecipheriv, createHash, randomBytes } from "crypto";
-import type { Prisma } from "@/lib/generated/prisma-suppliers";
+import type { Prisma } from "@prisma/client";
 import prisma from "@/lib/db";
 
 const SETTINGS_KEY = "payment_messaging_credentials_v1";

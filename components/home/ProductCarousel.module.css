@@ -1,4 +1,4 @@
-.carousel{max-width:1440px;width:100%;min-width:0;margin:0 auto;padding:0 32px;position:relative}
+.carousel{max-width:1440px;width:100%;min-width:0;margin:0 auto;padding:0 32px;position:relative;overflow-x:clip}
 .controls{display:flex;justify-content:flex-end;gap:8px;margin-bottom:10px}
 .controls[hidden]{display:none}
 .controls button{display:grid;place-items:center;width:36px;height:36px;border:1px solid #e5e5e5;border-radius:50%;background:white;color:#111;transition:background .2s}

@@ -13,29 +13,10 @@ function slugify(value: string) {
   return value.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
 
-function newPost(): BlogPost {
-  return {
-    slug: "",
-    title: "",
-    excerpt: "",
-    category: "Style Notes",
-    date: new Date().toLocaleDateString("en-CA"),
-    readTime: "4 min read",
-    image: "",
-    imageAlt: "",
-    seoTitle: "",
-    seoDescription: "",
-    seoKeywords: "",
-    published: false,
-    sections: [{ title: "", body: [""] }],
-  };
-}
-
 export default function BlogManagement() {
   const [content, setContent] = useState<BlogContent>(emptyContent);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
@@ -69,14 +50,6 @@ export default function BlogManagement() {
     const post = content.posts[index];
     const sections = post.sections.map((section, currentIndex) => currentIndex === sectionIndex ? { ...section, ...patch } : section);
     updatePost(index, { sections });
-  }
-
-  function addPost() {
-    const posts = [...content.posts, newPost()];
-    setContent((current) => ({ ...current, posts }));
-    setActiveIndex(posts.length - 1);
-    setError("");
-    setMessage("");
   }
 
   function deletePost(index: number) {
@@ -122,27 +95,6 @@ export default function BlogManagement() {
       setError(uploadError instanceof Error ? uploadError.message : "Inline image upload failed.");
     } finally {
       setUploading(false);
-    }
-  }
-
-  async function save() {
-    setSaving(true);
-    setError("");
-    setMessage("");
-    try {
-      const response = await fetch("/api/admin/blog", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(content),
-      });
-      const payload = await response.json() as { success?: boolean; data?: BlogContent; message?: string };
-      if (!response.ok || !payload.success || !payload.data) throw new Error(payload.message || "Blog changes could not be saved.");
-      setContent(payload.data);
-      setMessage("Blog content and SEO settings saved.");
-    } catch (saveError) {
-      setError(saveError instanceof Error ? saveError.message : "Blog changes could not be saved.");
-    } finally {
-      setSaving(false);
     }
   }
 

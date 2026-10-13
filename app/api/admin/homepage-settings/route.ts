@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import type { Prisma } from "@/lib/generated/prisma-suppliers";
+import type { Prisma } from "@prisma/client";
 import { requireAdminPermission } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { getHomepageVisibility, HOMEPAGE_VISIBILITY_DEFAULTS, type HomepageVisibility } from "@/lib/homepage-settings";

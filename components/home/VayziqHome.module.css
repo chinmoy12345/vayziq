@@ -134,6 +134,9 @@
 .badgeNew{background:#6d28d9!important}.badgeSale{background:#f97316!important}.badgePopular{background:#e11d48!important}.badgeNeutral{background:#e2e8f0!important;color:#334155!important}
 .outOfStockBadge{position:absolute;right:9px;bottom:9px;z-index:3;border-radius:5px;background:rgba(17,17,17,.82);padding:6px 8px;color:#fff;font-size:9px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;backdrop-filter:blur(4px)}.addToCartButton.addToCartDisabled{border-color:#e3dfdc!important;background:#e9e6e3!important;color:#8c8580!important;cursor:not-allowed}.addToCartButton.addToCartDisabled:hover{background:#e9e6e3!important}
 
+/* Keep compact mobile prices inside their card instead of widening the page. */
+.priceRow{min-width:0;flex-wrap:wrap;gap:4px 7px}
+
 /* Consistent premium label treatment across desktop and mobile product cards. */
 .productImage .discountBadge{top:9px;left:9px;z-index:2;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:#292321;padding:6px 9px;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 2px 8px rgba(0,0,0,.18)}
 

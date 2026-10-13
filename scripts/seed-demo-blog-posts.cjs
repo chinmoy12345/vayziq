@@ -1,5 +1,5 @@
 require('@next/env').loadEnvConfig(process.cwd());
-const { PrismaClient } = require('../lib/generated/prisma-suppliers');
+const { PrismaClient } = require('@prisma/client');
 const db = new PrismaClient();
 const image = '/vayziq/fashion-grid.png';
 const posts = [

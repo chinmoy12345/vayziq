@@ -6,12 +6,14 @@ interface ProductGridProps {
   products: Product[];
   columns?: 2 | 3 | 4;
   className?: string;
+  hideCategory?: boolean;
 }
 
 export default function ProductGrid({
   products,
   columns = 3,
   className = "",
+  hideCategory = false,
 }: ProductGridProps) {
   const gridColumns = {
     2: "grid-cols-2",
@@ -51,6 +53,7 @@ export default function ProductGrid({
         <ProductCard
           key={product.id}
           product={product}
+          hideCategory={hideCategory}
         />
       ))}
     </div>

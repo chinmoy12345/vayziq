@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import type { Prisma } from "@/lib/generated/prisma-suppliers";
+import type { Prisma } from "@prisma/client";
 import { requireAdminPermission } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { BLOG_CONTENT_KEY, type BlogContent, type BlogPost, type BlogSection, type BlogSettings } from "@/lib/blog";

@@ -1,6 +1,6 @@
 import { productColors } from "@/lib/product-colors";
 import { getStoreMenuSettings } from "@/lib/store-menu-settings";
-import type { Prisma } from "@/lib/generated/prisma-suppliers";
+import type { Prisma } from "@prisma/client";
 type StoreProduct = Prisma.ProductGetPayload<{ include: { category: { include: { parent: { select: { slug: true } } } }; images: true; options: { include: { values: true } }; variants: { include: { variantValues: { include: { optionValue: { include: { option: true } } } } } } } }>;
 type StoreCardProduct = StoreProduct & { cardRating?: number; cardReviewCount?: number };
 import { cache } from "react";
