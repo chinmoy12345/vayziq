@@ -21,8 +21,9 @@
 
 .offerZoneHeading {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
+  gap: 16px;
   padding: 0 0 14px;
 }
 
@@ -41,6 +42,7 @@
   padding-bottom: 3px;
   font-size: 11px;
   font-weight: 750;
+  white-space: nowrap;
 }
 
 .offerTicketTrack {
@@ -50,13 +52,15 @@
   gap: 14px;
   width: 100%;
   overflow: hidden;
-  padding: 0 0 2px;
+  padding: 4px 0 14px;
 }
 
 .offerTicket {
   position: relative;
   display: flex;
-  flex: 0 0 min(28vw, 360px);
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 440px;
   min-height: 154px;
   overflow: hidden;
   border: 1px solid rgba(45, 49, 67, 0.08);
@@ -109,7 +113,8 @@
 .offerTicketMain strong {
   font-size: clamp(18px, 1.7vw, 24px);
   font-weight: 900;
-  line-height: 1;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
   letter-spacing: 0.015em;
   text-transform: uppercase;
 }
@@ -117,13 +122,14 @@
 .offerTicketMain > span {
   margin-top: 7px;
   font-size: clamp(12px, 1.15vw, 16px);
-  line-height: 1.15;
+  line-height: 1.4;
 }
 
 .offerTicketMain small {
   margin-top: 5px;
-  color: rgba(0, 0, 0, 0.62);
-  font-size: 9px;
+  color: rgba(0, 0, 0, 0.72);
+  font-size: 11px;
+  line-height: 1.4;
 }
 
 .offerTicketCode {
@@ -131,12 +137,14 @@
   min-height: 46px;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
+  border-top: 1px dashed rgba(0, 0, 0, 0.2);
   padding: 9px 14px;
   background: #ffd20a;
   font-size: clamp(13px, 1.2vw, 17px);
 }
 
-.offerTicketCode b { margin-left: 6px; font-weight: 850; }
+.offerTicketCode b { margin-left: 6px; font-weight: 850; overflow-wrap: anywhere; }
 .offerTicketTone1 .offerTicketMain { background: linear-gradient(135deg, #f3b9f1 0%, #d899ea 100%); }
 .offerTicketTone2 .offerTicketMain { background: linear-gradient(135deg, #a9c6ff 0%, #839ceb 100%); }
 .offerTicketTone3 .offerTicketMain { background: linear-gradient(135deg, #ffc2ed 0%, #f29bd5 100%); }
@@ -150,16 +158,22 @@
 }
 
 .offerDots button {
-  width: 7px;
-  height: 7px;
+  width: 24px;
+  height: 24px;
   border: 0;
   border-radius: 50%;
-  background: #c7c9cf;
+  background: radial-gradient(circle, #c7c9cf 3.5px, transparent 4px);
   padding: 0;
   transition: transform 0.18s ease, background 0.18s ease;
 }
 
-.offerDots button.offerDotActive { background: #101114; transform: scale(1.3); }
+.offerDots button.offerDotActive { background: radial-gradient(circle, #101114 4.5px, transparent 5px); }
+
+.offerTicket:focus-visible,
+.offerDots button:focus-visible {
+  outline: 2px solid #101114;
+  outline-offset: 2px;
+}
 
 @media (max-width: 767px) {
   .offerZone { padding: 22px 16px 10px; }
@@ -168,11 +182,11 @@
   .offerZoneHeading > a { font-size: 10px; }
   .offerTicketTrack { justify-content: flex-start; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
   .offerTicketTrack::-webkit-scrollbar { display: none; }
-  .offerTicket { flex-basis: 72vw; min-height: 138px; border-radius: 10px; scroll-snap-align: center; }
+  .offerTicket { flex: 0 0 85%; max-width: none; min-height: 138px; border-radius: 10px; scroll-snap-align: start; }
   .offerTicketMain { min-height: 96px; padding: 15px 13px; }
   .offerTicketMain strong { font-size: 18px; }
   .offerTicketMain > span { margin-top: 6px; font-size: 12px; }
-  .offerTicketMain small { display: none; }
+  .offerTicketMain small { font-size: 10px; }
   .offerTicketCode { min-height: 42px; padding: 8px 12px; font-size: 13px; }
   .offerTicket::before,
   .offerTicket::after { top: calc(100% - 55px); width: 16px; height: 16px; }

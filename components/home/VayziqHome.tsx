@@ -78,6 +78,8 @@ function HomeOfferZone({ offers }: { offers: VayziqHomeOffer[] }) {
   const activeIndex = active % offers.length;
   const visibleOffers = offers.length === 1
     ? [offers[0]]
+    : offers.length === 2
+    ? [offers[activeIndex], offers[(activeIndex + 1) % offers.length]]
     : [
         offers[(activeIndex - 1 + offers.length) % offers.length],
         offers[activeIndex],
